@@ -5,7 +5,7 @@ import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import React, {Suspense} from 'react';
-import {SafeAreaView, View, ScrollView, ActivityIndicator} from 'react-native';
+import {SafeAreaView, View, ScrollView, ActivityIndicator, StyleSheet} from 'react-native';
 import Home from './Home/Home';
 import KeywordAlarm from './Home/KeywordAlarm';
 const Stack = createStackNavigator();
@@ -52,13 +52,7 @@ const withScrollView = (WrappedComponent: any) => {
         <SafeAreaView style={{flex: 1}}>
           <View style={{flex: 1, backgroundColor: Theme.color.white}}>
             <WrappedComponent {...props} />
-            <View
-              style={{
-                position: 'absolute',
-                top: 0,
-                right: 0,
-                zIndex: 3000,
-              }}>
+            <View style={styles.position}>
               <Text>{props.route.name}</Text>
               <Button
                 width={50}
@@ -360,3 +354,12 @@ export const RouterSetting: RouterTypes[] = [
     component: React.lazy(() => import('./Setting/ToU')),
   },
 ];
+
+const styles = StyleSheet.create({
+  position: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    zIndex: 3000,
+  },
+});
