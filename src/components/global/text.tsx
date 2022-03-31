@@ -1,7 +1,7 @@
 import Theme from 'assets/global/Theme';
 import styled from 'styled-components/native';
-import {DefaultTextProps} from 'types/components/global';
-import pixelChange from 'util/pixelChange';
+import {DefaultTextProps} from 'Types/Components/global';
+import pixelChange from 'Util/pixelChange';
 
 export const Text = styled.Text<DefaultTextProps>`
   color: ${p => p.color ?? Theme.color.black};

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import {DefaultButtonProps} from 'types/components/global';
+import {DefaultButtonProps} from 'Types/Components/global';
 import {Text} from './text';
 
 const ButtonStyle = styled.TouchableOpacity<any>``;

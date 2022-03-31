@@ -1,7 +1,7 @@
 import {NavigationContainer, useIsFocused, useNavigation} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Theme from 'assets/global/Theme';
-import {Text} from 'components/global/text';
+import {Text} from 'Components/global/text';
 import React from 'react';
 import {SafeAreaView, View} from 'react-native';
 const Stack = createStackNavigator();

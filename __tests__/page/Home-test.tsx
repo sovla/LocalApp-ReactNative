@@ -5,7 +5,7 @@
 import 'react-native';
 import React from 'react';
 
-import Home, {HomeProp} from '../../src/page/Home';
+import Home, {HomeProp} from '../../src/Page/Home';
 import {fireEvent, render} from '@testing-library/react-native';
 
 function getHome(innerProps: HomeProp) {
