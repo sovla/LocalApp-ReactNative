@@ -1,6 +1,6 @@
 import Theme from '@/assets/global/Theme';
 import {DefaultTextProps} from '@/Types/Components/global';
-import styled from 'styled-components/native';
+import styled, {css} from 'styled-components/native';
 import pixelChange from 'Util/pixelChange';
 
 export const Text = styled.Text<DefaultTextProps>`
@@ -12,4 +12,20 @@ export const Text = styled.Text<DefaultTextProps>`
   padding: ${p => pixelChange(p.pd) ?? '0px'};
   margin: ${p => pixelChange(p.mg) ?? '0px'};
   text-decoration: ${p => p.textDecoration ?? 'none'};
+  font-family: 'NotoSansKR-Regular';
+  ${p =>
+    p.textAlign &&
+    css`
+      text-align: ${p.textAlign};
+    `};
+  include-font-padding: false;
+  text-align-vertical: center;
+`;
+
+export const BoldText = styled(Text)`
+  font-family: 'NotoSansKR-Bold';
+`;
+
+export const MediumText = styled(Text)`
+  font-family: 'NotoSansKR-Medium';
 `;
