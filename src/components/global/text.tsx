@@ -1,6 +1,6 @@
-import Theme from 'assets/global/Theme';
+import Theme from '@/assets/global/Theme';
+import {DefaultTextProps} from '@/Types/Components/global';
 import styled from 'styled-components/native';
-import {DefaultTextProps} from 'Types/Components/global';
 import pixelChange from 'Util/pixelChange';
 
 export const Text = styled.Text<DefaultTextProps>`

@@ -2,10 +2,10 @@ import {TextProps, TouchableOpacityProps} from 'react-native';
 import {AnyStyledComponent} from 'styled-components';
 
 export interface DefaultButtonProps extends TouchableOpacityProps {
-  width: number;
-  height: number;
-  onPress: any;
-  content: string;
+  width?: number;
+  height?: number;
+  onPress?: any;
+  content?: string;
 }
 
 export interface DefaultTextProps {

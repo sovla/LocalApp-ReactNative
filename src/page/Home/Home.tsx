@@ -3,8 +3,21 @@ import React from 'react';
 
 export default function Home() {
   return (
-    <View>
-      <Text>Home</Text>
+    <View style={{flex: 1, backgroundColor: '#000'}}>
+      <Text>asdsad</Text>
+      <Text>asdsad</Text>
+      <Text>asdsad</Text>
+      <Text>asdsad</Text>
+      <Text>asdsad</Text>
+      <Text>asdsad</Text>
+      <Text>asdsad</Text>
+      <Text>asdsad</Text>
+      <Text>asdsad</Text>
+      <Text>asdsad</Text>
+      <Text>asdsad</Text>
+      <Text>asdsad</Text>
+      <Text>asdsad</Text>
+      <Text>asdsad</Text>
     </View>
   );
 }
