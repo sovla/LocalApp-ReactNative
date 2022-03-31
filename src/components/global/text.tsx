@@ -4,7 +4,7 @@ import {DefaultTextProps} from 'types/components/global';
 import pixelChange from 'util/pixelChange';
 
 export const Text = styled.Text<DefaultTextProps>`
-  color: ${p => p.color ?? Theme.color.white};
+  color: ${p => p.color ?? Theme.color.black};
   font-size: ${p => pixelChange(p.fontSize) ?? `${Theme.fontSize.fs16}px`};
   width: ${p => pixelChange(p.width) ?? 'auto'};
   height: ${p => pixelChange(p.height) ?? 'auto'};
