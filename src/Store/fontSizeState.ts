@@ -1,4 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {Dimensions} from 'react-native';
 import type {RootState} from './store';
 
 // Define a type for the slice state
@@ -8,7 +9,7 @@ interface fontSizeState {
 
 // Define the initial state using that type
 const initialState: fontSizeState = {
-  value: 1,
+  value: 1 / Dimensions.get('window').fontScale,
 };
 
 export const fontSizeSlice = createSlice({

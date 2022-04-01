@@ -4,7 +4,7 @@ import {Text} from '@/Components/Global/text';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import React, {Suspense} from 'react';
+import React, {Suspense, useEffect} from 'react';
 import {SafeAreaView, View, ScrollView, ActivityIndicator, StyleSheet} from 'react-native';
 import Home from './Home/Home';
 import KeywordAlarm from './Home/KeywordAlarm';
@@ -12,6 +12,7 @@ import KeywordAlarm from './Home/KeywordAlarm';
 import i18n from 'i18next';
 import {useTranslation, initReactI18next, I18nextProvider} from 'react-i18next';
 import {en, ko, es, br} from '@/assets/lang/lang';
+import {useAppSelector} from '@/Hooks/CustomHook';
 
 const resources = {
   en,
@@ -44,6 +45,10 @@ const forFade = ({current}: any) => {
 };
 
 export default function Router() {
+  const lang = useAppSelector(state => state.lang.value);
+  useEffect(() => {
+    i18n.changeLanguage(lang);
+  }, [lang]);
   return (
     <Suspense fallback={<View></View>}>
       <NavigationContainer>

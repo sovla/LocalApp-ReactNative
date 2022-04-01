@@ -1,9 +1,14 @@
 import {configureStore} from '@reduxjs/toolkit';
+import fontSizeState from './fontSizeState';
+import langState from './langState';
+
 const store = configureStore({
   reducer: {
     // the convention is to name this photos rather than photosStore but photosStore is clearer to me.
     // anyOtherStore: anyOtherSlice,
     // middleware: ['array of middlewares'],
+    fontSize: fontSizeState,
+    lang: langState,
   },
 });
 

@@ -1,4 +1,4 @@
-import {View, StyleSheet, Image, TextInput} from 'react-native';
+import {View, StyleSheet, Image, TextInput, Dimensions} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {MediumText, Text} from '@/Components/Global/text';
 import Theme from '@/assets/global/Theme';
@@ -8,23 +8,22 @@ import AutoHeightImage from 'react-native-auto-height-image';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {useTranslation} from 'react-i18next';
 import {Button} from '@/Components/Global/button';
+import {useAppSelector} from '@/Hooks/CustomHook';
+import {selectFontSize} from '@/Store/fontSizeState';
 
 export default function LoginComplete() {
   const {t} = useTranslation();
-  console.log(getPixel(14), getPixel(16));
+  const fontSize = useAppSelector(state => state.fontSize.value);
   return (
     <View style={styles.mainContainer}>
-      <Box
-        style={{
-          padding: 0,
-        }}>
+      <Box>
         <AutoHeightImage source={CheckIcon} width={getPixel(50)} style={styles.image} />
-        <MediumText fontSize={`${Theme.fontSize.fs24}px`} style={styles.mainText}>
+        <MediumText fontSize={`${Theme.fontSize.fs24 * fontSize}px`} style={styles.mainText}>
           {t('loginComplete')}
         </MediumText>
 
-        <Text fontSize={`${Theme.fontSize.fs14}px`}>{t('loginCompleteText')}</Text>
-        <Text fontSize={`${Theme.fontSize.fs14}px`}>{t('loginCompleteText2')}</Text>
+        <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`}>{t('loginCompleteText')}</Text>
+        <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`}>{t('loginCompleteText2')}</Text>
       </Box>
       <Box style={{position: 'absolute', bottom: getHeightPixel(34), left: getPixel(36)}}>
         <Button content={t('startButton')} width="288px" height="48px" />

@@ -1,4 +1,5 @@
 import Theme from '@/assets/global/Theme';
+import {useAppSelector} from '@/Hooks/CustomHook';
 import pixelChange, {pixelHeightChange} from '@/Util/pixelChange';
 import React from 'react';
 import styled from 'styled-components/native';
@@ -16,10 +17,11 @@ const ButtonStyle = styled.TouchableOpacity<any>`
 
 export const Button: React.FC<DefaultButtonProps> = props => {
   const {content} = props;
+  const fontSize = useAppSelector(state => state.fontSize.value);
 
   return (
     <ButtonStyle {...props}>
-      <Text color={Theme.color.white} fontSize={`${Theme.fontSize.fs16}px`}>
+      <Text color={Theme.color.white} fontSize={`${Theme.fontSize.fs16 * fontSize}px`}>
         {content}
       </Text>
     </ButtonStyle>
