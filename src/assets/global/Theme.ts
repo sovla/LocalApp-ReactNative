@@ -5,6 +5,7 @@ const Theme = {
     blue: '#3D56F0',
     gray: '#B9B9B9',
     red: '#FF6767',
+    pinkRed: '#F62E63',
   },
   borderColor: {
     gray: '#E5E5E5',

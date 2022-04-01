@@ -13,7 +13,9 @@ import i18n from 'i18next';
 import {useTranslation, initReactI18next, I18nextProvider} from 'react-i18next';
 import {en, ko, es, br} from '@/assets/lang/lang';
 import {useAppSelector} from '@/Hooks/CustomHook';
-const ROUTING = 'SignUpForm';
+
+const ROUTING = 'Home';
+
 const resources = {
   en,
   ko,
@@ -84,7 +86,7 @@ const withScrollView = (WrappedComponent: any) => {
         <SafeAreaView style={{flex: 1}}>
           <View style={{flex: 1, backgroundColor: Theme.color.white}}>
             <WrappedComponent {...props} />
-            <View style={styles.position}>
+            {/* <View style={styles.position}>
               <Text>{props.route.name}</Text>
               <Button
                 width="50px"
@@ -94,7 +96,7 @@ const withScrollView = (WrappedComponent: any) => {
                 }}
                 content="menu"
               />
-            </View>
+            </View> */}
           </View>
         </SafeAreaView>
         <SafeAreaView style={{flex: 0, backgroundColor: '#fff'}} />

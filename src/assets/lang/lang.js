@@ -20,6 +20,7 @@ export const ko = {
     signUpErrorPhone: '* 본인인증에 실패하였습니다.',
     signUpErrorEmail: '* 사용할 수 없는 이메일입니다.',
     signUpComplete: '회원가입이 완료 되었습니다.',
+    locationCheck: '현재 위치가 맞나요?',
   },
 };
 export const es = {

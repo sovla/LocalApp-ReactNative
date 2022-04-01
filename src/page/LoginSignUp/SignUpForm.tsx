@@ -109,7 +109,7 @@ export default function SignUpForm() {
         height="48px"
         style={{
           position: 'absolute',
-          top: getHeightPixel(658),
+          top: getHeightPixel(640),
           left: getPixel(36),
         }}
         content={t('signUp')}

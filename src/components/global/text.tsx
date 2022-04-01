@@ -22,6 +22,12 @@ export const Text = styled.Text<DefaultTextProps>`
 export const RedText = styled(Text)`
   color: ${Theme.color.red};
 `;
+export const WhiteText = styled(Text)`
+  color: ${Theme.color.white};
+`;
+export const GrayText = styled(Text)`
+  color: ${Theme.color.gray};
+`;
 
 export const BoldText = styled(Text)`
   font-family: 'NotoSansKR-Bold';
