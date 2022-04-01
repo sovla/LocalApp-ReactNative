@@ -19,6 +19,7 @@ export const ko = {
     signUp: '등록하기',
     signUpErrorPhone: '* 본인인증에 실패하였습니다.',
     signUpErrorEmail: '* 사용할 수 없는 이메일입니다.',
+    signUpComplete: '회원가입이 완료 되었습니다.',
   },
 };
 export const es = {

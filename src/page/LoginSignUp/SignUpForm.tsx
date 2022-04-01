@@ -30,8 +30,13 @@ export default function SignUpForm() {
         PlaceHolderComponent={() => {
           return (
             <>
-              <Text color={Theme.color.gray}>{t('signUpFormPhone')}</Text>
-              <Text color={Theme.color.red}> * </Text>
+              <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.gray}>
+                {t('signUpFormPhone')}
+              </Text>
+              <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.red}>
+                {' '}
+                *{' '}
+              </Text>
             </>
           );
         }}
@@ -44,9 +49,16 @@ export default function SignUpForm() {
         PlaceHolderComponent={() => {
           return (
             <>
-              <Text color={Theme.color.gray}>{t('signUpFormDate')}</Text>
-              <Text color={Theme.color.red}> * </Text>
-              <Text color={Theme.color.gray}>{t('signUpFormDateGuide')}</Text>
+              <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.gray}>
+                {t('signUpFormDate')}
+              </Text>
+              <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.red}>
+                {' '}
+                *{' '}
+              </Text>
+              <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.gray}>
+                {t('signUpFormDateGuide')}
+              </Text>
             </>
           );
         }}
@@ -57,8 +69,13 @@ export default function SignUpForm() {
         PlaceHolderComponent={() => {
           return (
             <>
-              <Text color={Theme.color.gray}>{t('signUpFormSex')}</Text>
-              <Text color={Theme.color.red}> * </Text>
+              <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.gray}>
+                {t('signUpFormSex')}
+              </Text>
+              <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.red}>
+                {' '}
+                *{' '}
+              </Text>
             </>
           );
         }}
@@ -69,8 +86,13 @@ export default function SignUpForm() {
         PlaceHolderComponent={() => {
           return (
             <>
-              <Text color={Theme.color.gray}>{t('signUpFormEmail')}</Text>
-              <Text color={Theme.color.red}> * </Text>
+              <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.gray}>
+                {t('signUpFormEmail')}
+              </Text>
+              <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.red}>
+                {' '}
+                *{' '}
+              </Text>
             </>
           );
         }}

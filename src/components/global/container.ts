@@ -7,8 +7,6 @@ export const Box = styled.View<ContainerProps>`
   justify-content: ${p => p.justifyContent ?? 'center'};
   align-items: ${p => p.alignItems ?? 'center'};
   background-color: ${p => p.backgroundColor ?? '#0000'};
-  padding: ${p => pixelChange(p.padding) ?? '0px'};
-  margin: ${p => pixelChange(p.margin) ?? '0px'};
   ${p =>
     p.width &&
     css`
