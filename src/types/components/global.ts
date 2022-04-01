@@ -1,4 +1,5 @@
-import {TextProps, TouchableOpacityProps} from 'react-native';
+import React from 'react';
+import {TextInputProps, TextProps, TouchableOpacityProps} from 'react-native';
 import {AnyStyledComponent} from 'styled-components';
 
 export interface DefaultButtonProps extends TouchableOpacityProps {
@@ -28,4 +29,11 @@ export interface ContainerProps {
   backgroundColor?: string;
   width?: string;
   height?: string;
+}
+
+export interface InputProps {
+  value?: string;
+  onChange?: (text: string) => void;
+  PlaceHolderComponent?: any;
+  errorText?: string;
 }

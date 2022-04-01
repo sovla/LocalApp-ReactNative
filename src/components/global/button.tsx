@@ -8,7 +8,7 @@ import {Text} from './text';
 
 const ButtonStyle = styled.TouchableOpacity<any>`
   width: ${p => pixelChange(p.width) ?? pixelChange('288px')};
-  height: ${p => pixelHeightChange(p.height) ?? pixelChange('48px')};
+  height: ${p => pixelHeightChange(p.height) ?? pixelHeightChange('48px')};
   background-color: ${Theme.color.blue};
   border-radius: 8px;
   justify-content: center;

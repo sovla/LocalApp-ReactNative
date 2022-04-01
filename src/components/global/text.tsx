@@ -9,8 +9,6 @@ export const Text = styled.Text<DefaultTextProps>`
   width: ${p => pixelChange(p.width) ?? 'auto'};
   height: ${p => pixelChange(p.height) ?? 'auto'};
   letter-spacing: ${p => p.letterSpacing ?? '-0.84px'};
-  padding: ${p => pixelChange(p.pd) ?? '0px'};
-  margin: ${p => pixelChange(p.mg) ?? '0px'};
   text-decoration: ${p => p.textDecoration ?? 'none'};
   font-family: 'NotoSansKR-Regular';
   ${p =>
@@ -20,6 +18,9 @@ export const Text = styled.Text<DefaultTextProps>`
     `};
   include-font-padding: false;
   text-align-vertical: center;
+`;
+export const RedText = styled(Text)`
+  color: ${Theme.color.red};
 `;
 
 export const BoldText = styled(Text)`

@@ -1,5 +1,5 @@
-import {View, StyleSheet, Image, TextInput, Dimensions} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import {View, StyleSheet} from 'react-native';
+import React from 'react';
 import {MediumText, Text} from '@/Components/Global/text';
 import Theme from '@/assets/global/Theme';
 import {Box} from '@/Components/Global/container';
@@ -9,7 +9,6 @@ import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {useTranslation} from 'react-i18next';
 import {Button} from '@/Components/Global/button';
 import {useAppSelector} from '@/Hooks/CustomHook';
-import {selectFontSize} from '@/Store/fontSizeState';
 
 export default function LoginComplete() {
   const {t} = useTranslation();

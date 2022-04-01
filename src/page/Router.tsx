@@ -13,7 +13,7 @@ import i18n from 'i18next';
 import {useTranslation, initReactI18next, I18nextProvider} from 'react-i18next';
 import {en, ko, es, br} from '@/assets/lang/lang';
 import {useAppSelector} from '@/Hooks/CustomHook';
-
+const ROUTING = 'SignUpForm';
 const resources = {
   en,
   ko,
@@ -52,7 +52,7 @@ export default function Router() {
   return (
     <Suspense fallback={<View></View>}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName={'LoginComplete'}>
+        <Stack.Navigator initialRouteName={ROUTING}>
           {RouterSetting.map((item, index) => (
             <Stack.Screen
               name={item.name}

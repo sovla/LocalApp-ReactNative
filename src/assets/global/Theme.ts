@@ -3,6 +3,8 @@ const Theme = {
     white: '#FFFFFF',
     black: '#333333',
     blue: '#3D56F0',
+    gray: '#B9B9B9',
+    red: '#FF6767',
   },
   borderColor: {
     gray: '#E5E5E5',
