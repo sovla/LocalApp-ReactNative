@@ -9,111 +9,117 @@ import Photo from '@/Components/LoginSignUp/Photo';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import Input from '@/Components/Global/input';
 import {Button} from '@/Components/Global/button';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 export default function SignUpForm() {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   return (
-    <KeyboardAvoidingView style={styles.mainContainer} behavior="padding">
-      <Header />
-      <MediumText fontSize={`${20 * fontSize}px`} style={{marginTop: getHeightPixel(10)}}>
-        {t('signUpFormTitle')}
-      </MediumText>
-      <Text fontSize={`${14 * fontSize}px`} color={Theme.color.gray} style={{marginVertical: getHeightPixel(20)}}>
-        {t('signUpFormSubTitle')}
-      </Text>
-      <Photo />
-      <View style={{height: getHeightPixel(50)}} />
-      <Input
-        value=""
-        onChange={() => {}}
-        PlaceHolderComponent={() => {
-          return (
-            <>
-              <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.gray}>
-                {t('signUpFormPhone')}
-              </Text>
-              <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.red}>
-                {' '}
-                *{' '}
-              </Text>
-            </>
-          );
-        }}
-        errorText={t('signUpErrorPhone')}
-      />
+    <View style={styles.mainContainer}>
+      <KeyboardAwareScrollView
+        style={{flex: 1}}
+        contentContainerStyle={{
+          alignItems: 'center',
+        }}>
+        <Header />
+        <MediumText fontSize={`${20 * fontSize}px`} style={{marginTop: getHeightPixel(10)}}>
+          {t('signUpFormTitle')}
+        </MediumText>
+        <Text fontSize={`${14 * fontSize}px`} color={Theme.color.gray} style={{marginVertical: getHeightPixel(20)}}>
+          {t('signUpFormSubTitle')}
+        </Text>
+        <Photo />
+        <View style={{height: getHeightPixel(50)}} />
+        <Input
+          value=""
+          onChange={() => {}}
+          PlaceHolderComponent={() => {
+            return (
+              <>
+                <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.gray}>
+                  {t('signUpFormPhone')}
+                </Text>
+                <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.red}>
+                  {' '}
+                  *{' '}
+                </Text>
+              </>
+            );
+          }}
+          errorText={t('signUpErrorPhone')}
+        />
 
-      <Input
-        value=""
-        onChange={() => {}}
-        PlaceHolderComponent={() => {
-          return (
-            <>
-              <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.gray}>
-                {t('signUpFormDate')}
-              </Text>
-              <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.red}>
-                {' '}
-                *{' '}
-              </Text>
-              <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.gray}>
-                {t('signUpFormDateGuide')}
-              </Text>
-            </>
-          );
-        }}
-      />
-      <Input
-        value=""
-        onChange={() => {}}
-        PlaceHolderComponent={() => {
-          return (
-            <>
-              <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.gray}>
-                {t('signUpFormSex')}
-              </Text>
-              <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.red}>
-                {' '}
-                *{' '}
-              </Text>
-            </>
-          );
-        }}
-      />
-      <Input
-        value=""
-        onChange={() => {}}
-        PlaceHolderComponent={() => {
-          return (
-            <>
-              <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.gray}>
-                {t('signUpFormEmail')}
-              </Text>
-              <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.red}>
-                {' '}
-                *{' '}
-              </Text>
-            </>
-          );
-        }}
-        errorText={t('signUpErrorEmail')}
-      />
+        <Input
+          value=""
+          onChange={() => {}}
+          PlaceHolderComponent={() => {
+            return (
+              <>
+                <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.gray}>
+                  {t('signUpFormDate')}
+                </Text>
+                <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.red}>
+                  {' '}
+                  *{' '}
+                </Text>
+                <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.gray}>
+                  {t('signUpFormDateGuide')}
+                </Text>
+              </>
+            );
+          }}
+        />
+        <Input
+          value=""
+          onChange={() => {}}
+          PlaceHolderComponent={() => {
+            return (
+              <>
+                <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.gray}>
+                  {t('signUpFormSex')}
+                </Text>
+                <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.red}>
+                  {' '}
+                  *{' '}
+                </Text>
+              </>
+            );
+          }}
+        />
+        <Input
+          value=""
+          onChange={() => {}}
+          PlaceHolderComponent={() => {
+            return (
+              <>
+                <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.gray}>
+                  {t('signUpFormEmail')}
+                </Text>
+                <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.red}>
+                  {' '}
+                  *{' '}
+                </Text>
+              </>
+            );
+          }}
+          errorText={t('signUpErrorEmail')}
+        />
+      </KeyboardAwareScrollView>
       <Button
         height="48px"
         style={{
           position: 'absolute',
-          bottom: getHeightPixel(34),
+          top: getHeightPixel(658),
           left: getPixel(36),
         }}
         content={t('signUp')}
       />
-    </KeyboardAvoidingView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   mainContainer: {
-    alignItems: 'center',
     flex: 1,
   },
 });
