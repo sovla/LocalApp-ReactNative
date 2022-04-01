@@ -10,13 +10,14 @@
 
 import Router from './src/Page/Router';
 import React from 'react';
-import {Text} from '@/Components/Global/text';
+import {Provider} from 'react-redux';
+import store from '@/Store/store';
 
 const App = () => {
   return (
-    <>
+    <Provider store={store}>
       <Router />
-    </>
+    </Provider>
   );
 };
 

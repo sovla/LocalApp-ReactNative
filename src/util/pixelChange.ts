@@ -24,7 +24,7 @@ export default function pixelChange(px?: string) {
 }
 
 export function getPixel(px: number) {
-  return (px * Dimensions.get('window').width) / 412;
+  return (px * Dimensions.get('window').width) / 360;
 }
 
 export function pixelHeightChange(px: string) {
@@ -49,7 +49,7 @@ export function pixelHeightChange(px: string) {
 }
 
 export function getHeightPixel(px: number) {
-  return (px * Dimensions.get('window').height) / 734;
+  return (px * Dimensions.get('window').height) / 740;
 }
 
 export function fontSizeChange(fontSize: string) {
