@@ -19,6 +19,8 @@ export interface DefaultTextProps extends TextProps {
   mg?: string;
   textDecoration?: string;
   textAlign?: string;
+  bold?: boolean;
+  medium?: boolean;
 }
 
 export interface ContainerProps {

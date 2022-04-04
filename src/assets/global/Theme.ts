@@ -2,10 +2,19 @@ const Theme = {
   color: {
     white: '#FFFFFF',
     black: '#333333',
+
     blue: '#3D56F0',
-    gray: '#B9B9B9',
+    darkBlue: '#012DAF',
+
     red: '#FF6767',
     pinkRed: '#F62E63',
+
+    gray: '#B9B9B9',
+    whiteGray: '#F6F6F6',
+    darkGray: '#787C84',
+    whiteGray_B7: '#B7B7B7',
+
+    aqua: '#04DFFF',
   },
   borderColor: {
     gray: '#E5E5E5',

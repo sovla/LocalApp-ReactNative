@@ -18,6 +18,16 @@ export const Text = styled.Text<DefaultTextProps>`
     `};
   include-font-padding: false;
   text-align-vertical: center;
+  ${p =>
+    p.bold &&
+    css`
+      font-family: 'NotoSansKR-Bold';
+    `}
+  ${p =>
+    p.medium &&
+    css`
+      font-family: 'NotoSansKR-Medium';
+    `}
 `;
 export const RedText = styled(Text)`
   color: ${Theme.color.red};
@@ -27,6 +37,10 @@ export const WhiteText = styled(Text)`
 `;
 export const GrayText = styled(Text)`
   color: ${Theme.color.gray};
+`;
+
+export const DarkBlueText = styled(Text)`
+  color: ${Theme.color.darkBlue};
 `;
 
 export const BoldText = styled(Text)`
