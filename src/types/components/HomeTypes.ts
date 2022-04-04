@@ -1,3 +1,5 @@
+import React from 'react';
+
 export interface CategoryCardProps {
   name: string;
   image?: any;
@@ -14,4 +16,17 @@ export interface ProductProps {
   isLike: boolean;
   status?: string;
   isList: boolean;
+}
+
+export interface MenuBoxProps {
+  onImage: any;
+  OffImage: any;
+  selectMenu: string;
+  name: string;
+  setSelectMenu: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export interface HeaderProps {
+  setIsModal: React.Dispatch<React.SetStateAction<boolean>>;
+  isModal: boolean;
 }

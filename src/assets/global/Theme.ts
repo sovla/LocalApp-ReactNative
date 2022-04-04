@@ -5,11 +5,13 @@ const Theme = {
 
     blue: '#3D56F0',
     darkBlue: '#012DAF',
+    darkBlue_0F: '#0F185F',
 
     red: '#FF6767',
     pinkRed: '#F62E63',
 
     gray: '#B9B9B9',
+    gray_F5: '#F5F5F5',
     whiteGray: '#F6F6F6',
     darkGray: '#787C84',
     whiteGray_B7: '#B7B7B7',
@@ -34,8 +36,8 @@ const Theme = {
     fs96: 55,
   },
   fontWeight: {
-    bold: 'bold',
-    medium: 600,
+    bold: 'NotoSansKR-Bold',
+    medium: 'NotoSansKR-Medium',
   },
 };
 

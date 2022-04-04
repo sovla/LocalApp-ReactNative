@@ -45,6 +45,10 @@ export const ko = {
     buy: '삽니다',
     HomeTitle: '우리 동네 주민들과',
     HomeTitle1: '지금 거래를 시작해보세요!',
+    locationChange: '지역을 변경해 보세요',
+    locationPlaceholder: '(예) Bom retiro, Brás, Liberdade....',
+    nowLocation: '현재 위치 설정',
+    areaUsed: '이용한 지역',
   },
 };
 export const es = {

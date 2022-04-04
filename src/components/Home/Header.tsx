@@ -13,15 +13,15 @@ import LocationWhiteIcon from '@assets/image/location_white.png';
 import SearchIcon from '@assets/image/search_white.png';
 import MenuIcon from '@assets/image/bar_white.png';
 import AlarmIcon from '@assets/image/notice_white.png';
-import RedBoxImage from '@assets/image/box_red.png';
 import {Box, RowBox} from '../Global/container';
-import {Text, WhiteText} from '../Global/text';
+import {WhiteText} from '../Global/text';
 import {useAppSelector} from '@/Hooks/CustomHook';
 import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
 import TrianglePinkIcon from '@assets/image/triangle_pink.png';
+import {HeaderProps} from '@/Types/Components/HomeTypes';
 
-const Header: React.FC = () => {
+const Header: React.FC<HeaderProps> = ({setIsModal, isModal}) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   return (
@@ -37,7 +37,11 @@ const Header: React.FC = () => {
             </WhiteText>
           </View>
         </Box>
-        <TouchableOpacity style={styles.locationTouch}>
+        <TouchableOpacity
+          onPress={() => {
+            setIsModal(prev => !prev);
+          }}
+          style={styles.locationTouch}>
           <WhiteText fontSize={`${18 * fontSize}`}>Bom Retiro</WhiteText>
         </TouchableOpacity>
       </RowBox>

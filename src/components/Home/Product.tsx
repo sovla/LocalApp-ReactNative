@@ -120,7 +120,7 @@ const Product: React.FC<ProductProps> = ({
             style={[
               styles.statusTextView,
               {
-                left: status === '예약중' ? getPixel(57.4) : getPixel(49.4),
+                left: status === '예약중' ? getPixel(57.4) : getPixel(47.4),
                 width: status === '예약중' ? getPixel(45.2) : getPixel(64.2),
                 backgroundColor:
                   status === '예약중'
@@ -208,6 +208,7 @@ const styles = StyleSheet.create({
     borderRadius: getPixel(21),
     overflow: 'hidden',
     backgroundColor: Theme.color.white,
+    marginBottom: getHeightPixel(10),
   },
 });
 

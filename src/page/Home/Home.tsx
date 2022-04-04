@@ -1,4 +1,4 @@
-import {View, Text, ScrollView, FlatList} from 'react-native';
+import {View, Text, ScrollView, FlatList, Modal} from 'react-native';
 import React, {Fragment, useState} from 'react';
 import Header from '@/Components/Home/Header';
 import CategoryScroll from '@/Components/Home/CategoryScroll';
@@ -6,14 +6,17 @@ import HomeList from '@/Components/Home/HomeList';
 import Theme from '@/assets/global/Theme';
 import Product from '@/Components/Home/Product';
 import dummy from '@assets/image/dummy.png';
-import {getPixel} from '@/Util/pixelChange';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
+import Footer from '@/Components/Home/Footer';
+import Location from '@/Components/Modal/Location';
 
 export default function Home(): JSX.Element {
   const [isList, setIsList] = useState(false);
+  const [isModal, setIsModal] = useState(false);
 
   return (
     <View style={{flex: 1, backgroundColor: Theme.color.whiteGray}}>
-      <Header />
+      <Header isModal={isModal} setIsModal={setIsModal} />
       <FlatList
         key={isList ? 'firstFlatList' : 'isListFlatList'}
         ListHeaderComponent={
@@ -56,7 +59,17 @@ export default function Home(): JSX.Element {
             </Fragment>
           );
         }}
+        ListFooterComponentStyle={{marginBottom: getHeightPixel(60)}}
       />
+      <Footer />
+      {isModal && (
+        <Modal
+          animationType="slide"
+          transparent
+          onRequestClose={() => setIsModal(false)}>
+          <Location setIsModal={setIsModal} />
+        </Modal>
+      )}
     </View>
   );
 }
