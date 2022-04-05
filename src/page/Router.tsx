@@ -1,20 +1,18 @@
 import Theme from '@/assets/global/Theme';
 import {Button} from '@/Components/Global/button';
 import {Text} from '@/Components/Global/text';
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import React, {Suspense, useEffect} from 'react';
-import {SafeAreaView, View, ScrollView, ActivityIndicator, StyleSheet} from 'react-native';
-import Home from './Home/Home';
-import KeywordAlarm from './Home/KeywordAlarm';
+import {SafeAreaView, View, ActivityIndicator, StyleSheet} from 'react-native';
 
 import i18n from 'i18next';
-import {useTranslation, initReactI18next, I18nextProvider} from 'react-i18next';
+import {initReactI18next} from 'react-i18next';
 import {en, ko, es, br} from '@/assets/lang/lang';
 import {useAppSelector} from '@/Hooks/CustomHook';
 
-const ROUTING = 'Home';
+const ROUTING = 'LocationChange';
 
 const resources = {
   en,
@@ -86,7 +84,7 @@ const withScrollView = (WrappedComponent: any) => {
         <SafeAreaView style={{flex: 1}}>
           <View style={{flex: 1, backgroundColor: Theme.color.white}}>
             <WrappedComponent {...props} />
-            {/* <View style={styles.position}>
+            <View style={styles.position}>
               <Text>{props.route.name}</Text>
               <Button
                 width="50px"
@@ -96,7 +94,7 @@ const withScrollView = (WrappedComponent: any) => {
                 }}
                 content="menu"
               />
-            </View> */}
+            </View>
           </View>
         </SafeAreaView>
         <SafeAreaView style={{flex: 0, backgroundColor: '#fff'}} />

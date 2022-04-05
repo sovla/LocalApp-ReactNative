@@ -49,6 +49,11 @@ export const ko = {
     locationPlaceholder: '(예) Bom retiro, Brás, Liberdade....',
     nowLocation: '현재 위치 설정',
     areaUsed: '이용한 지역',
+    locationChangeTitle: '지역 변경하기',
+    locationAreaSelect: '지역 범위 설정',
+    at: '에서',
+    range: '범위',
+    by: '까지',
   },
 };
 export const es = {

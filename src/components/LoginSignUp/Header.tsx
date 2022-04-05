@@ -5,8 +5,14 @@ import AutoHeightImage from 'react-native-auto-height-image';
 import backArrowBlackIcon from '@assets/image/back_black.png';
 import {TouchBox} from '../Global/container';
 import {useNavigation} from '@react-navigation/native';
+import {NavigationHeaderProps} from '@/Types/Components/HomeTypes';
+import {MediumText} from '../Global/text';
+import {useTranslation} from 'react-i18next';
+import {useAppSelector} from '@/Hooks/CustomHook';
 
-const Header: React.FC = props => {
+const Header: React.FC<NavigationHeaderProps> = ({title}) => {
+  const {t} = useTranslation();
+  const fontSize = useAppSelector(state => state.fontSize.value);
   const navigation = useNavigation();
   const onPressBack = () => {
     if (navigation.canGoBack()) {
@@ -16,30 +22,31 @@ const Header: React.FC = props => {
   return (
     <View style={styles.headerView}>
       <TouchableOpacity style={styles.touch} onPress={onPressBack}>
-        <AutoHeightImage
-          source={backArrowBlackIcon}
-          width={getPixel(30)}
-          maxHeight={getPixel(30)}
-          style={styles.image}
-        />
+        <Image source={backArrowBlackIcon} style={styles.image} />
       </TouchableOpacity>
+      <MediumText fontSize={`${18 * fontSize}`}>{title}</MediumText>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   touch: {
+    marginLeft: getPixel(16),
+    marginRight: getPixel(10),
     width: getPixel(30),
-    justifyContent: 'flex-end',
-    height: getPixel(30),
-    marginLeft: getPixel(10),
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   headerView: {
     height: getHeightPixel(40),
     width: '100%',
-    justifyContent: 'flex-end',
+    flexDirection: 'row',
+    alignContent: 'center',
   },
-  image: {},
+  image: {
+    width: getPixel(20),
+    height: getPixel(12.5),
+  },
 });
 
 export default Header;

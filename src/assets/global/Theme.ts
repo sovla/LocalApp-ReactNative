@@ -12,7 +12,9 @@ const Theme = {
 
     gray: '#B9B9B9',
     gray_F5: '#F5F5F5',
+
     whiteGray: '#F6F6F6',
+    whiteGray_EE: '#EEEEEE',
     darkGray: '#787C84',
     whiteGray_B7: '#B7B7B7',
 

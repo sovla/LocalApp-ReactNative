@@ -30,3 +30,7 @@ export interface HeaderProps {
   setIsModal: React.Dispatch<React.SetStateAction<boolean>>;
   isModal: boolean;
 }
+
+export interface NavigationHeaderProps {
+  title?: string;
+}
