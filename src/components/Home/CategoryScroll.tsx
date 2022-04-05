@@ -3,6 +3,7 @@ import {
   Image,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  ScrollView,
   StyleSheet,
   View,
 } from 'react-native';
@@ -16,7 +17,7 @@ import {useAppSelector} from '@/Hooks/CustomHook';
 import Theme from '@/assets/global/Theme';
 
 const CategoryScroll = () => {
-  const ref = useRef<FlatList>(null);
+  const ref = useRef<ScrollView>(null);
   const [dotList, setDotList] = useState(
     new Array(Math.floor(categoryMenu.length / 5 + 1)).fill(0),
   );
@@ -28,12 +29,12 @@ const CategoryScroll = () => {
 
   return (
     <View style={styles.scrollContainer}>
-      <FlatList
+      <ScrollView
         ref={ref}
-        keyExtractor={item => item.name}
-        data={categoryMenu}
         horizontal
-        renderItem={({item, index}) => {
+        pagingEnabled
+        onMomentumScrollEnd={e => onScrollSlide(e)}>
+        {categoryMenu.map((item, index) => {
           return (
             <>
               <CategoryCard name={item.name} image={item.image} />
@@ -44,17 +45,13 @@ const CategoryScroll = () => {
               />
             </>
           );
-        }}
-        pagingEnabled
-        onMomentumScrollEnd={e => onScrollSlide(e)}
-        ListFooterComponent={
-          <View
-            style={{
-              width: getPixel((5 - (categoryMenu.length % 5)) * 66),
-            }}
-          />
-        }
-      />
+        })}
+        <View
+          style={{
+            width: getPixel((5 - (categoryMenu.length % 5)) * 66),
+          }}
+        />
+      </ScrollView>
       <View style={styles.dotContainer}>
         {dotList.map((item, index) => {
           return <Dot isOn={dotNumber === index} />;

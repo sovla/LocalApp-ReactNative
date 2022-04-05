@@ -56,8 +56,9 @@ const styles = StyleSheet.create({
   },
   menuImage: {width: getPixel(24), height: getPixel(24)},
   mainContainer: {
-    marginHorizontal: getPixel(16),
-    marginVertical: getHeightPixel(20),
+    paddingHorizontal: getPixel(16),
+    paddingVertical: getHeightPixel(20),
+    width: getPixel(360),
   },
   titleBetween: {
     flexDirection: 'row',

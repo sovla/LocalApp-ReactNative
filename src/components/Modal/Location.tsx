@@ -1,19 +1,22 @@
 import {
   View,
-  Text,
   StyleSheet,
-  TouchableWithoutFeedback,
   TextInput,
   Image,
+  ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 import React, {useState} from 'react';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import Theme from '@/assets/global/Theme';
-import {BoldText, GrayText, MediumText} from '../Global/text';
+import {BoldText, GrayText, MediumText, Text} from '../Global/text';
 import {useTranslation} from 'react-i18next';
 import {useAppSelector} from '@/Hooks/CustomHook';
 import SearchIcon from '@assets/image/search.png';
 import MyLocationIcon from '@assets/image/my-location.png';
+import CloseIcon from '@assets/image/close.png';
+import {getHitSlop} from '@/Util/Util';
+import CloseBlackIcon from '@assets/image/close_black.png';
 
 export default function Location({
   setIsModal,
@@ -23,10 +26,11 @@ export default function Location({
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
 
-  const [isFocus, setIsFocus] = useState(false);
-  const [value, setValue] = useState('');
+  const [isFocus, setIsFocus] = useState<boolean>(false);
+  const [value, setValue] = useState<string>('');
+  const [usedList, setUsedList] = useState(['Bom retiro', 'Bras']);
   return (
-    <View style={{flex: 1, backgroundColor: '#0003'}}>
+    <View style={{flex: 1}}>
       <View style={styles.space} />
       <View style={styles.whiteBox}>
         <BoldText fontSize={`${20 * fontSize}`}>{t('locationChange')}</BoldText>
@@ -40,7 +44,8 @@ export default function Location({
               },
             ]}
             onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}>
+            onBlur={() => setIsFocus(false)}
+            onChangeText={setValue}>
             {!isFocus && value?.length === 0 && (
               <GrayText fontSize={`${11 * fontSize}`}>
                 {t('locationPlaceholder')}
@@ -56,21 +61,64 @@ export default function Location({
           </MediumText>
         </View>
         <View style={styles.line} />
-        <BoldText fontSize={`${14 * fontSize}`}>{t('areaUsed')}</BoldText>
+        {!isFocus && (
+          <BoldText fontSize={`${14 * fontSize}`}>{t('areaUsed')}</BoldText>
+        )}
+
+        <ScrollView>
+          {!isFocus &&
+            usedList.map(item => {
+              return (
+                <TouchableOpacity style={styles.usedLocationView}>
+                  <Text fontSize={`${14 * fontSize}`}>{item}</Text>
+                  <TouchableOpacity hitSlop={getHitSlop(5)}>
+                    <Image source={CloseIcon} style={styles.deleteIcon} />
+                  </TouchableOpacity>
+                </TouchableOpacity>
+              );
+            })}
+        </ScrollView>
+        <TouchableOpacity
+          style={styles.closeBlackTouch}
+          onPress={() => setIsModal(false)}
+          hitSlop={getHitSlop(5)}>
+          <Image source={CloseBlackIcon} style={styles.closeBlackImage} />
+        </TouchableOpacity>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  closeBlackImage: {
+    width: getPixel(15),
+    height: getPixel(15),
+  },
+  closeBlackTouch: {
+    position: 'absolute',
+    top: getHeightPixel(21),
+    right: getPixel(16),
+  },
+  usedLocationView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: getPixel(328),
+    marginTop: 10,
+  },
+  deleteIcon: {
+    width: getPixel(20),
+    height: getPixel(20),
+  },
   locationImage: {
     width: getPixel(13.2),
     height: getPixel(13.2),
+    marginRight: 5,
   },
   line: {
     backgroundColor: Theme.color.gray,
     height: 0.4,
     marginTop: getHeightPixel(8.7),
+    marginBottom: getHeightPixel(20),
   },
   locationView: {
     flexDirection: 'row',
