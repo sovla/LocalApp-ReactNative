@@ -58,6 +58,8 @@ export const ko = {
     ReportPost: '게시물 신고하기',
     allView: '모두 보기',
     saleProduct: '님 판매상품',
+    nego: '가격제안가능',
+    tradeInChat: '채팅으로 거래하기',
   },
 };
 export const es = {

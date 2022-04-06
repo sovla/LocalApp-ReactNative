@@ -18,7 +18,7 @@ const ProductList: React.FC<ProductListProps> = ({isList, list, isBorder}) => {
       }>
       {list.map((item, index) => {
         return (
-          <Fragment key={index}>
+          <Fragment key={index + 'Product'}>
             {!isList && (
               <View
                 style={{
