@@ -37,5 +37,10 @@
     "scope": "javascript,typescript,React,typescriptreact,javascriptreact",
     "prefix": "h",
     "body": ["height: getHeightPixel($1),"]
+  },
+  "ImageWidthHeight": {
+    "scope": "javascript,typescript,React,typescriptreact,javascriptreact",
+    "prefix": "is",
+    "body": ["width: getPixel($1),", "height: getPixel($1),"]
   }
 }

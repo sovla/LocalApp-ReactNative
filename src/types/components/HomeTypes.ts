@@ -10,12 +10,13 @@ export interface ProductProps {
   location: string;
   time: string;
   viewCount: string;
-  likeCount: string;
+  likeCount?: string;
   price: string;
   image: any;
   isLike: boolean;
   status?: string;
   isList: boolean;
+  isBorder?: boolean;
 }
 
 export interface MenuBoxProps {
@@ -33,4 +34,22 @@ export interface HeaderProps {
 
 export interface NavigationHeaderProps {
   title?: string;
+}
+
+export interface ImageSwiperProps {
+  imageArray: Array<any>;
+  setImageArray: React.Dispatch<React.SetStateAction<Array<any>>>;
+  width: number;
+  height: number;
+}
+
+export interface ProductDetailShopProps {
+  shopName: string;
+  shopSubTitle: string;
+}
+
+export interface ProductListProps {
+  isList: boolean;
+  list: Array<any>;
+  isBorder?: boolean;
 }

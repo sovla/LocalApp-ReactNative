@@ -23,26 +23,26 @@ export default function LocationChange(): JSX.Element {
   const selectArea = '20km';
   const [selectRange, setSelectRange] = useState(0);
 
-  const pan = useRef(new Animated.ValueXY()).current;
+  // const pan = useRef(new Animated.ValueXY()).current;
 
-  const panResponder = PanResponder.create({
-    onStartShouldSetPanResponder: () => true,
-    onPanResponderMove: Animated.event([
-      null,
-      {
-        dx: pan.x, // x,y are Animated.Value
-      },
-    ]),
-    onPanResponderRelease: () => {
-      Animated.spring(
-        pan, // Auto-multiplexed
-        {
-          toValue: {x: 100, y: 0},
-          useNativeDriver: false,
-        }, // Back to zero
-      ).start();
-    },
-  });
+  // const panResponder = PanResponder.create({
+  //   onStartShouldSetPanResponder: () => true,
+  //   onPanResponderMove: Animated.event([
+  //     null,
+  //     {
+  //       dx: pan.x, // x,y are Animated.Value
+  //     },
+  //   ]),
+  //   onPanResponderRelease: () => {
+  //     Animated.spring(
+  //       pan, // Auto-multiplexed
+  //       {
+  //         toValue: {x: 100, y: 0},
+  //         useNativeDriver: false,
+  //       }, // Back to zero
+  //     ).start();
+  //   },
+  // });
   return (
     <View>
       <Header title={t('locationChangeTitle')} />
@@ -87,12 +87,7 @@ export default function LocationChange(): JSX.Element {
             height: getHeightPixel(10),
             backgroundColor: Theme.color.whiteGray_EE,
             borderRadius: getPixel(8),
-          }}>
-          <Animated.View
-            {...panResponder.panHandlers}
-            style={[pan.getLayout(), styles.progressIcon]}
-          />
-        </View>
+          }}></View>
       </View>
     </View>
   );

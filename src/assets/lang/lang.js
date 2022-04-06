@@ -54,6 +54,10 @@ export const ko = {
     at: '에서',
     range: '범위',
     by: '까지',
+    tierGuide: '등급 기준에 대하여',
+    ReportPost: '게시물 신고하기',
+    allView: '모두 보기',
+    saleProduct: '님 판매상품',
   },
 };
 export const es = {

@@ -15,17 +15,14 @@ import {Text} from '../Global/text';
 import {useTranslation} from 'react-i18next';
 import {useAppSelector} from '@/Hooks/CustomHook';
 import Theme from '@/assets/global/Theme';
+import {onScrollSlide} from '@/Util/Util';
 
 const CategoryScroll = () => {
   const ref = useRef<ScrollView>(null);
-  const [dotList, setDotList] = useState(
+  const [dotList, setDotList] = useState<Array<number>>(
     new Array(Math.floor(categoryMenu.length / 5 + 1)).fill(0),
   );
-  const [dotNumber, setDotNumber] = useState(0);
-
-  const onScrollSlide = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-    setDotNumber(Math.round(e.nativeEvent.contentOffset.x / getPixel(328)));
-  };
+  const [dotNumber, setDotNumber] = useState<number>(0);
 
   return (
     <View style={styles.scrollContainer}>
@@ -33,7 +30,7 @@ const CategoryScroll = () => {
         ref={ref}
         horizontal
         pagingEnabled
-        onMomentumScrollEnd={e => onScrollSlide(e)}>
+        onMomentumScrollEnd={e => onScrollSlide(e, setDotNumber)}>
         {categoryMenu.map((item, index) => {
           return (
             <>

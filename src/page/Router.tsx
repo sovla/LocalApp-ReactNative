@@ -12,7 +12,7 @@ import {initReactI18next} from 'react-i18next';
 import {en, ko, es, br} from '@/assets/lang/lang';
 import {useAppSelector} from '@/Hooks/CustomHook';
 
-const ROUTING = 'LocationChange';
+const ROUTING = 'ProductDetail';
 
 const resources = {
   en,

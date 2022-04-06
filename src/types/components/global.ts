@@ -39,3 +39,9 @@ export interface InputProps {
   PlaceHolderComponent?: any;
   errorText?: string;
 }
+
+export interface LineProps {
+  width?: number;
+  height?: number;
+  backgroundColor?: string;
+}

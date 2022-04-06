@@ -17,7 +17,7 @@ import ViewIcon from '@assets/image/view.png';
 import LikeIcon from '@assets/image/heart.png';
 import LikeEmptyIcon from '@assets/image/unlike.png';
 import LikeFillIcon from '@assets/image/love_pink.png';
-import AutoHeightImage from 'react-native-auto-height-image';
+import dummy from '@assets/image/dummy.png';
 import {getHitSlop} from '@/Util/Util';
 
 const Product: React.FC<ProductProps> = ({
@@ -31,6 +31,7 @@ const Product: React.FC<ProductProps> = ({
   isLike,
   status,
   isList,
+  isBorder,
 }) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
@@ -99,14 +100,25 @@ const Product: React.FC<ProductProps> = ({
           <View style={stylesNoneList.rowView}>
             <Image source={ViewIcon} style={stylesNoneList.viewImage} />
             <GrayText fontSize={`${10 * fontSize}`}>{viewCount}</GrayText>
-            <Image source={LikeIcon} style={stylesNoneList.likeImage} />
-            <GrayText fontSize={`${10 * fontSize}`}>{likeCount}</GrayText>
+            {typeof likeCount === 'string' && (
+              <>
+                <Image source={LikeIcon} style={stylesNoneList.likeImage} />
+                <GrayText fontSize={`${10 * fontSize}`}>{likeCount}</GrayText>
+              </>
+            )}
           </View>
         </View>
       </View>
     </View>
   ) : (
-    <View style={styles.isListMainContainer}>
+    <View
+      style={[
+        styles.isListMainContainer,
+        isBorder && {
+          borderWidth: 1,
+          borderColor: Theme.color.whiteGray_EE,
+        },
+      ]}>
       <View style={[stylesNoneList.centerView, {borderRadius: 0}]}>
         <Image source={image} style={styles.isListMainImage} />
         <TouchableOpacity hitSlop={getHitSlop(5)} style={styles.likeTouch}>
@@ -157,13 +169,29 @@ const Product: React.FC<ProductProps> = ({
           <View style={stylesNoneList.rowView}>
             <Image source={ViewIcon} style={stylesNoneList.viewImage} />
             <GrayText fontSize={`${10 * fontSize}`}>{viewCount}</GrayText>
-            <Image source={LikeIcon} style={stylesNoneList.likeImage} />
-            <GrayText fontSize={`${10 * fontSize}`}>{likeCount}</GrayText>
+            {typeof likeCount === 'string' && (
+              <>
+                <Image source={LikeIcon} style={stylesNoneList.likeImage} />
+                <GrayText fontSize={`${10 * fontSize}`}>{likeCount}</GrayText>
+              </>
+            )}
           </View>
         </View>
       </View>
     </View>
   );
+};
+
+Product.defaultProps = {
+  isLike: false,
+  image: dummy,
+  status: '',
+  viewCount: '999+',
+  price: 'R$ 24.00',
+  time: '. 50분전 ',
+  location: 'Bom Retiro . 1km이내 ',
+  title: '13,000Pa 초강력흡입력 [샤오미] 차량용 무선 핸디 청소기',
+  isList: false,
 };
 
 export default Product;
