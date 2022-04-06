@@ -60,6 +60,7 @@ export const ko = {
     saleProduct: '님 판매상품',
     nego: '가격제안가능',
     tradeInChat: '채팅으로 거래하기',
+    searchPlaceholder: '원하시는 물품을 검색',
   },
 };
 export const es = {

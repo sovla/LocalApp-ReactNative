@@ -4,7 +4,7 @@ import {Text} from '@/Components/Global/text';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import React, {Suspense, useEffect} from 'react';
+import React, {Suspense, useEffect, useState} from 'react';
 import {SafeAreaView, View, ActivityIndicator, StyleSheet} from 'react-native';
 
 import i18n from 'i18next';
@@ -12,7 +12,7 @@ import {initReactI18next} from 'react-i18next';
 import {en, ko, es, br} from '@/assets/lang/lang';
 import {useAppSelector} from '@/Hooks/CustomHook';
 
-const ROUTING = 'ProductDetail';
+const ROUTING = 'Search';
 
 const resources = {
   en,
@@ -73,6 +73,7 @@ export default function Router() {
 
 const withScrollView = (WrappedComponent: any) => {
   return (props: any) => {
+    const [isShow, setIsShow] = useState(false);
     return (
       <Suspense
         fallback={
@@ -84,15 +85,23 @@ const withScrollView = (WrappedComponent: any) => {
         <SafeAreaView style={{flex: 1}}>
           <View style={{flex: 1, backgroundColor: Theme.color.white}}>
             <WrappedComponent {...props} />
-            <View style={styles.position}>
+            <View style={[styles.position]}>
               <Text>{props.route.name}</Text>
               <Button
                 width="50px"
                 height="50px"
+                style={{
+                  backgroundColor: !isShow ? '#0000' : Theme.color.blue,
+                }}
                 onPress={() => {
+                  console.log(first);
                   props.navigation.navigate('Menu');
                 }}
-                content="menu"
+                onLongPress={() => {
+                  setIsShow(p => !p);
+                  console.log('longPress');
+                }}
+                content=""
               />
             </View>
           </View>
