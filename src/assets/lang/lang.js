@@ -64,6 +64,7 @@ export const ko = {
     searchTitle: '카테고리',
     searchSubTitle: '원하시는 카테고리를 선택해 주세요.',
     popularSearch: '인기 검색어',
+    more: '더보기',
   },
 };
 export const es = {

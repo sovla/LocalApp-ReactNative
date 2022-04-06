@@ -15,10 +15,13 @@ import {categoryMenu} from '@/assets/global/dummy';
 import {CategoryCardProps} from '@/Types/Components/HomeTypes';
 import Theme from '@/assets/global/Theme';
 import AutoHeightImage from 'react-native-auto-height-image';
+import Line from '@/Components/Global/Line';
+import ArrowDownIcon from '@assets/image/arrow_down_gray.png';
 
 export default function Search(): JSX.Element {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const [isMore, setIsMore] = useState<boolean>(false);
   const [popularList, setPopularList] = useState<Array<string>>([
     '자전거',
     '의자',
@@ -36,19 +39,41 @@ export default function Search(): JSX.Element {
 
       <ScrollView>
         <View style={styles.subContainer}>
-          <BoldText fontSize={`${24 * fontSize}`}>{t('searchTitle')}</BoldText>
-          <GrayText fontSize={`${14 * fontSize}`}>
-            {t('searchSubTitle')}
-          </GrayText>
-          <View style={styles.categoryView}>
-            {categoryMenu.map((item, index) => {
-              return (
-                <Fragment>
-                  <CategoryCard name={item.name} image={item.image} />
-                </Fragment>
-              );
-            })}
+          <View style={{paddingHorizontal: getPixel(20)}}>
+            <BoldText fontSize={`${24 * fontSize}`}>
+              {t('searchTitle')}
+            </BoldText>
+            <GrayText fontSize={`${14 * fontSize}`}>
+              {t('searchSubTitle')}
+            </GrayText>
+            <View style={styles.categoryView}>
+              {categoryMenu.map((item, index) => {
+                if (!isMore && index > 7) {
+                  return;
+                }
+                return (
+                  <Fragment>
+                    <CategoryCard name={item.name} image={item.image} />
+                  </Fragment>
+                );
+              })}
+            </View>
           </View>
+          {!isMore && (
+            <>
+              <Line backgroundColor={Theme.color.gray} width={getPixel(360)} />
+              <TouchableOpacity
+                onPress={() => setIsMore(prev => !prev)}
+                style={styles.moreTouch}>
+                <GrayText fontSize={`${12 * fontSize}`}>{t('more')}</GrayText>
+                <AutoHeightImage
+                  source={ArrowDownIcon}
+                  width={getPixel(10)}
+                  style={{marginLeft: getPixel(3)}}
+                />
+              </TouchableOpacity>
+            </>
+          )}
         </View>
         <View style={styles.popularContainer}>
           <BoldText fontSize={`${16 * fontSize}`}>
@@ -83,6 +108,12 @@ const CategoryCard: React.FC<CategoryCardProps> = ({name, image}) => {
 };
 
 const styles = StyleSheet.create({
+  moreTouch: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: getHeightPixel(36),
+  },
   categoryCardView: {
     width: getPixel(46),
     height: getPixel(46),
@@ -100,7 +131,7 @@ const styles = StyleSheet.create({
   mainContainer: {flex: 1, backgroundColor: Theme.color.whiteGray_F6},
   subContainer: {
     width: getPixel(360),
-    paddingHorizontal: getPixel(20),
+
     paddingTop: getHeightPixel(26),
     borderBottomLeftRadius: getPixel(20),
     borderBottomRightRadius: getPixel(20),
