@@ -13,7 +13,7 @@ export default function Home(): JSX.Element {
   const [isModal, setIsModal] = useState(false);
 
   return (
-    <View style={{flex: 1, backgroundColor: Theme.color.whiteGray}}>
+    <View style={{flex: 1, backgroundColor: Theme.color.whiteGray_F6}}>
       <Header isModal={isModal} setIsModal={setIsModal} />
       <ScrollView>
         <CategoryScroll key="CategoryScroll" />

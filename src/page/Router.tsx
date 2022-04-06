@@ -94,7 +94,6 @@ const withScrollView = (WrappedComponent: any) => {
                   backgroundColor: !isShow ? '#0000' : Theme.color.blue,
                 }}
                 onPress={() => {
-                  console.log(first);
                   props.navigation.navigate('Menu');
                 }}
                 onLongPress={() => {

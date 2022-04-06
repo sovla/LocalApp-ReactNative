@@ -61,6 +61,9 @@ export const ko = {
     nego: '가격제안가능',
     tradeInChat: '채팅으로 거래하기',
     searchPlaceholder: '원하시는 물품을 검색',
+    searchTitle: '카테고리',
+    searchSubTitle: '원하시는 카테고리를 선택해 주세요.',
+    popularSearch: '인기 검색어',
   },
 };
 export const es = {
