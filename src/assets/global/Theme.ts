@@ -18,7 +18,7 @@ const Theme = {
     darkGray: '#787C84',
     whiteGray_B7: '#B7B7B7',
 
-    aqua: '#04DFFF',
+    aqua_04: '#04DFFF',
     aqua_00: '#00BCD8',
   },
   borderColor: {

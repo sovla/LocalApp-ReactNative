@@ -13,14 +13,22 @@ import {useAppSelector} from '@/Hooks/CustomHook';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {categoryMenu} from '@/assets/global/dummy';
 import {CategoryCardProps} from '@/Types/Components/HomeTypes';
-import Theme from '@/assets/global/Theme';
+
 import AutoHeightImage from 'react-native-auto-height-image';
 import Line from '@/Components/Global/Line';
+import SearchKeyword from '@/Components/Home/SearchKeyword';
+
+import Theme from '@/assets/global/Theme';
 import ArrowDownIcon from '@assets/image/arrow_down_gray.png';
+import checkboxIcon from '@assets/image/checkbox.png';
+import MenuOffIcon from '@assets/image/menu_ver.png';
+import MenuOnIcon from '@assets/image/menu_ver1.png';
+import ProductList from '@/Components/Home/ProductList';
 
 export default function Search(): JSX.Element {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const [isList, setIsList] = useState<boolean>(false);
   const [isMore, setIsMore] = useState<boolean>(false);
   const [popularList, setPopularList] = useState<Array<string>>([
     '자전거',
@@ -33,62 +41,108 @@ export default function Search(): JSX.Element {
     '아이패드',
     '애플워치',
   ]);
+  const [searchText, setSearchText] = useState<string>('asd');
+  const isSearch = searchText.length > 0;
   return (
     <View style={styles.mainContainer}>
-      <SearchHeader />
+      <SearchHeader text={searchText} setText={setSearchText} />
 
       <ScrollView>
-        <View style={styles.subContainer}>
-          <View style={{paddingHorizontal: getPixel(20)}}>
-            <BoldText fontSize={`${24 * fontSize}`}>
-              {t('searchTitle')}
-            </BoldText>
-            <GrayText fontSize={`${14 * fontSize}`}>
-              {t('searchSubTitle')}
-            </GrayText>
-            <View style={styles.categoryView}>
-              {categoryMenu.map((item, index) => {
-                if (!isMore && index > 7) {
-                  return;
-                }
-                return (
-                  <Fragment>
-                    <CategoryCard name={item.name} image={item.image} />
-                  </Fragment>
-                );
-              })}
-            </View>
-          </View>
-          {!isMore && (
-            <>
-              <Line backgroundColor={Theme.color.gray} width={getPixel(360)} />
+        {isSearch ? (
+          <>
+            <SearchKeyword />
+            <View
+              style={{
+                width: getPixel(360),
+                paddingHorizontal: getPixel(16),
+                marginVertical: getHeightPixel(10),
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                flexDirection: 'row',
+              }}>
+              <View style={styles.checkboxView}>
+                <Image source={checkboxIcon} style={styles.checkboxImage} />
+                <Text fontSize={`${14 * fontSize}`}>{t('searchSale')}</Text>
+              </View>
               <TouchableOpacity
-                onPress={() => setIsMore(prev => !prev)}
-                style={styles.moreTouch}>
-                <GrayText fontSize={`${12 * fontSize}`}>{t('more')}</GrayText>
-                <AutoHeightImage
-                  source={ArrowDownIcon}
-                  width={getPixel(10)}
-                  style={{marginLeft: getPixel(3)}}
+                onPress={() => {
+                  setIsList(prev => !prev);
+                }}>
+                <Image
+                  source={!isList ? MenuOnIcon : MenuOffIcon}
+                  style={{
+                    width: getPixel(20),
+                    height: getPixel(20),
+                  }}
                 />
               </TouchableOpacity>
-            </>
-          )}
-        </View>
-        <View style={styles.popularContainer}>
-          <BoldText fontSize={`${16 * fontSize}`}>
-            {t('popularSearch')}
-          </BoldText>
-          <View style={styles.popularListContainer}>
-            {popularList.map(item => (
-              <TouchableOpacity style={styles.popularListView}>
-                <MediumText fontSize={`${12 * fontSize}`} letterSpacing="0px">
-                  {item}
-                </MediumText>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
+            </View>
+            <ProductList list={[1, 2, 3, 4, 5]} isList={isList} />
+          </>
+        ) : (
+          <>
+            <View style={styles.subContainer}>
+              <View style={{paddingHorizontal: getPixel(20)}}>
+                <BoldText fontSize={`${24 * fontSize}`}>
+                  {t('searchTitle')}
+                </BoldText>
+                <GrayText fontSize={`${14 * fontSize}`}>
+                  {t('searchSubTitle')}
+                </GrayText>
+                <View style={styles.categoryView}>
+                  {categoryMenu.map((item, index) => {
+                    if (!isMore && index > 7) {
+                      return;
+                    }
+                    return (
+                      <Fragment key={item.name + index}>
+                        <CategoryCard name={item.name} image={item.image} />
+                      </Fragment>
+                    );
+                  })}
+                </View>
+              </View>
+              {!isMore && (
+                <>
+                  <Line
+                    backgroundColor={Theme.color.gray}
+                    width={getPixel(360)}
+                  />
+                  <TouchableOpacity
+                    onPress={() => setIsMore(prev => !prev)}
+                    style={styles.moreTouch}>
+                    <GrayText fontSize={`${12 * fontSize}`}>
+                      {t('more')}
+                    </GrayText>
+                    <AutoHeightImage
+                      source={ArrowDownIcon}
+                      width={getPixel(10)}
+                      style={{marginLeft: getPixel(3)}}
+                    />
+                  </TouchableOpacity>
+                </>
+              )}
+            </View>
+            <View style={styles.popularContainer}>
+              <BoldText fontSize={`${16 * fontSize}`}>
+                {t('popularSearch')}
+              </BoldText>
+              <View style={styles.popularListContainer}>
+                {popularList.map((item, index) => (
+                  <TouchableOpacity
+                    key={item + index}
+                    style={styles.popularListView}>
+                    <MediumText
+                      fontSize={`${12 * fontSize}`}
+                      letterSpacing="0px">
+                      {item}
+                    </MediumText>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+          </>
+        )}
       </ScrollView>
     </View>
   );
@@ -108,6 +162,12 @@ const CategoryCard: React.FC<CategoryCardProps> = ({name, image}) => {
 };
 
 const styles = StyleSheet.create({
+  checkboxView: {flexDirection: 'row'},
+  checkboxImage: {
+    width: getPixel(18),
+    height: getPixel(18),
+    marginRight: getPixel(4),
+  },
   moreTouch: {
     flexDirection: 'row',
     justifyContent: 'center',

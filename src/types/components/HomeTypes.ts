@@ -50,6 +50,11 @@ export interface ProductDetailShopProps {
 
 export interface ProductListProps {
   isList: boolean;
-  list: Array<any>;
+  list?: Array<any>;
   isBorder?: boolean;
+}
+
+export interface SearchHeaderProps {
+  text: string;
+  setText: React.Dispatch<React.SetStateAction<string>>;
 }

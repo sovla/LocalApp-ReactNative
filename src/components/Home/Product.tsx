@@ -61,7 +61,7 @@ const Product: React.FC<ProductProps> = ({
                 width: status === '예약중' ? getPixel(45.2) : getPixel(64.2),
                 backgroundColor:
                   status === '예약중'
-                    ? Theme.color.aqua
+                    ? Theme.color.aqua_04
                     : Theme.color.whiteGray_B7,
               },
             ]}>
@@ -136,7 +136,7 @@ const Product: React.FC<ProductProps> = ({
                 width: status === '예약중' ? getPixel(45.2) : getPixel(64.2),
                 backgroundColor:
                   status === '예약중'
-                    ? Theme.color.aqua
+                    ? Theme.color.aqua_04
                     : Theme.color.whiteGray_B7,
               },
             ]}>

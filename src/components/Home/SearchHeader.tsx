@@ -16,8 +16,9 @@ import {useAppSelector} from '@/Hooks/CustomHook';
 import Theme from '@/assets/global/Theme';
 import SearchBlackIcon from '@assets/image/search_black.png';
 import CloseGrayIcon from '@assets/image/close_gray.png';
+import {SearchHeaderProps} from '@/Types/Components/HomeTypes';
 
-const SearchHeader = () => {
+const SearchHeader: React.FC<SearchHeaderProps> = ({text, setText}) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   return (
@@ -35,6 +36,8 @@ const SearchHeader = () => {
           ]}
           placeholderTextColor={Theme.color.gray}
           placeholder={t('searchPlaceholder')}
+          value={text}
+          onChangeText={setText}
         />
 
         <Image source={SearchBlackIcon} style={styles.searchBlackImage} />

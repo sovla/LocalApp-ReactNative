@@ -65,6 +65,9 @@ export const ko = {
     searchSubTitle: '원하시는 카테고리를 선택해 주세요.',
     popularSearch: '인기 검색어',
     more: '더보기',
+    searchKeyword: '키워드 알림 등록',
+    searchFilter: '필터',
+    searchSale: '판매중',
   },
 };
 export const es = {
