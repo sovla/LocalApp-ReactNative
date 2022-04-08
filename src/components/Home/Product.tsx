@@ -33,7 +33,6 @@ const Product: React.FC<ProductProps> = ({
   isList,
   isBorder,
 }) => {
-  const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
 
   return isList ? (

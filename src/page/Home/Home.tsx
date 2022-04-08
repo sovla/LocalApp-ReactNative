@@ -26,7 +26,7 @@ export default function Home(): JSX.Element {
 
         <ProductList isList={isList} list={[1, 2, 3, 4, 5]} />
       </ScrollView>
-      <Footer />
+      <Footer menu="home" />
       {isModal && (
         <Modal
           animationType="slide"

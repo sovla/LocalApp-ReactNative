@@ -89,6 +89,11 @@ export const ko = {
     KeywordAlarmText2: '알림 설정',
     KeywordAlarmText3: '알림 받을 키워드 ',
     KeywordAlarmPlaceHolder: '(예: 커피머신기)',
+    likeListTitle: '관심목록',
+    likeListEdit: '편집',
+    likeListDelete: '삭제',
+    likeListSave: '저장',
+    likeListSelectAll: '전체 선택',
   },
 };
 export const es = {

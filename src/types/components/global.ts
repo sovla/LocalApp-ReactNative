@@ -59,6 +59,12 @@ export interface CheckBoxProps {
   text: string;
   isBox?: boolean;
 }
+export interface CheckBoxImageProps {
+  isOn?: boolean;
+  isBox?: boolean;
+  width?: number;
+  height?: number;
+}
 
 export interface ToggleProps {
   setIsOn: React.Dispatch<React.SetStateAction<boolean>>;

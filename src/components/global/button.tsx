@@ -11,6 +11,7 @@ import React from 'react';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import styled from 'styled-components/native';
 import {
+  CheckBoxImageProps,
   CheckBoxProps,
   DefaultButtonProps,
   ToggleProps,
@@ -64,6 +65,30 @@ export const CheckBox: React.FC<CheckBoxProps> = ({
       />
       <Text fontSize={`${14 * fontSize}`}>{text}</Text>
     </TouchableOpacity>
+  );
+};
+export const CheckBoxImage: React.FC<CheckBoxImageProps> = ({
+  isOn,
+  isBox,
+  width = getPixel(18),
+  height = getPixel(18),
+}) => {
+  return (
+    <Image
+      source={
+        isOn
+          ? isBox
+            ? require('@assets/image/checkbox_on.png')
+            : require('@assets/image/radio_on.png')
+          : isBox
+          ? require('@assets/image/checkbox_off.png')
+          : require('@assets/image/radio_off.png')
+      }
+      style={{
+        width,
+        height,
+      }}
+    />
   );
 };
 

@@ -1,22 +1,26 @@
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import Theme from '@/assets/global/Theme';
 import {Text} from '../Global/text';
 import HomeOnIcon from '@/assets/image/home_color.png';
-import HomeOffIcon from '@/assets/image/home.png';
+import HomeOffIcon from '@/assets/image/home_gray.png';
 import FavoriteOnIcon from '@/assets/image/favorite_color.png';
 import FavoriteOffIcon from '@/assets/image/favorite_gray.png';
 import ChatOnIcon from '@/assets/image/chat_color.png';
 import ChatOffIcon from '@/assets/image/chat_gray.png';
 import ProfileOnIcon from '@/assets/image/profile_color.png';
 import ProfileOffIcon from '@/assets/image/profile_gray.png';
-import {MenuBoxProps} from '@/Types/Components/HomeTypes';
+import {FooterProps, MenuBoxProps} from '@/Types/Components/HomeTypes';
 import {useTranslation} from 'react-i18next';
-import {useAppSelector} from '@/Hooks/CustomHook';
+import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 
-const Footer = () => {
-  const [selectMenu, setSelectMenu] = useState('home');
+const Footer: React.FC<FooterProps> = ({menu}) => {
+  const [selectMenu, setSelectMenu] = useState<FooterProps['menu']>(menu);
+  useEffect(() => {
+    setSelectMenu(menu);
+  }, [menu]);
+
   return (
     <View style={styles.footerContainer}>
       <MenuBox
@@ -60,8 +64,26 @@ const MenuBox: React.FC<MenuBoxProps> = ({
 }) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const navigation = useAppNavigation();
   const onPress = () => {
     setSelectMenu(name);
+    switch (name) {
+      case 'chat':
+        navigation.navigate('ChattingHome');
+        break;
+      case 'favorite':
+        navigation.navigate('LikeList');
+        break;
+      case 'home':
+        navigation.navigate('Home');
+        break;
+      case 'profile':
+        navigation.navigate('ProfileHome');
+        break;
+
+      default:
+        break;
+    }
   };
   return (
     <TouchableOpacity onPress={onPress} style={styles.viewCenter}>

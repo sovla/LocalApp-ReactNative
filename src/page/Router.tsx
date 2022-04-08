@@ -2,10 +2,7 @@ import Theme from '@/assets/global/Theme';
 import {Button} from '@/Components/Global/button';
 import {Text} from '@/Components/Global/text';
 import {NavigationContainer} from '@react-navigation/native';
-import {
-  createStackNavigator,
-  StackNavigationProp,
-} from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 
 import React, {Suspense, useEffect, useState} from 'react';
 import {SafeAreaView, View, ActivityIndicator, StyleSheet} from 'react-native';
@@ -15,8 +12,9 @@ import {initReactI18next} from 'react-i18next';
 import {en, ko, es, br} from '@/assets/lang/lang';
 import {useAppSelector} from '@/Hooks/CustomHook';
 import Screen from '@/Types/Screen/Screen';
+import {API} from '@/API/API';
 
-const ROUTING: keyof Screen = 'KeywordAlarm';
+const ROUTING: keyof Screen = 'LikeList';
 
 const resources = {
   en,
@@ -24,21 +22,6 @@ const resources = {
   es,
   br,
 };
-
-i18n
-  .use(initReactI18next) // passes i18n down to react-i18next
-  .init({
-    // the translations
-    // (tip move them in a JSON file and import them,
-    // or even better, manage them via a UI: https://react.i18next.com/guides/multiple-translation-files#manage-your-translations-with-a-management-gui)
-    resources: resources,
-    lng: 'ko', // if you're using a language detector, do not define the lng option
-    fallbackLng: 'ko',
-    compatibilityJSON: 'v3',
-    interpolation: {
-      escapeValue: false, // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
-    },
-  });
 
 const Stack = createStackNavigator<Screen>();
 
@@ -49,9 +32,36 @@ const forFade = ({current}: any) => {
 };
 
 export default function Router() {
+  const [isChange, setIsChange] = useState<boolean>(false);
   const lang = useAppSelector(state => state.lang.value);
+
   useEffect(() => {
+    i18n
+      .use(initReactI18next) // passes i18n down to react-i18next
+      .init({
+        // the translations
+        // (tip move them in a JSON file and import them,
+        // or even better, manage them via a UI: https://react.i18next.com/guides/multiple-translation-files#manage-your-translations-with-a-management-gui)
+        resources: resources,
+        lng: 'ko', // if you're using a language detector, do not define the lng option
+        fallbackLng: 'ko',
+        compatibilityJSON: 'v3',
+        interpolation: {
+          escapeValue: false, // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
+        },
+      });
     i18n.changeLanguage(lang);
+    API.post('lang_content.php')
+      .then(res => {
+        if (res.data?.result === 'true') {
+          Object.keys(res?.data?.data).forEach(v => {
+            i18n.addResources(v, 'translation', res.data.data[v].translation);
+          });
+        }
+      })
+      .finally(() => {
+        setIsChange(p => !p);
+      });
   }, [lang]);
   return (
     <Suspense fallback={<View></View>}>
@@ -91,7 +101,7 @@ const withScrollView = (WrappedComponent: any) => {
             <WrappedComponent {...props} />
             <View style={[styles.position]}>
               <Text>{props.route.name}</Text>
-              <Button
+              {/* <Button
                 width="50px"
                 height="50px"
                 style={{
@@ -105,7 +115,7 @@ const withScrollView = (WrappedComponent: any) => {
                   console.log('longPress');
                 }}
                 content=""
-              />
+              /> */}
             </View>
           </View>
         </SafeAreaView>

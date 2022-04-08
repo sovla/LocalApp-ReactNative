@@ -14,7 +14,7 @@ export interface ProductProps {
   viewCount: string;
   likeCount?: string;
   price: string;
-  image: any;
+  image?: any;
   isLike: boolean;
   status?: string;
   isList: boolean;
@@ -25,8 +25,8 @@ export interface MenuBoxProps {
   onImage: any;
   OffImage: any;
   selectMenu: string;
-  name: string;
-  setSelectMenu: React.Dispatch<React.SetStateAction<string>>;
+  name: FooterProps['menu'];
+  setSelectMenu: React.Dispatch<React.SetStateAction<FooterProps['menu']>>;
 }
 
 export interface HeaderProps {
@@ -76,4 +76,17 @@ export interface ProductState {
 
 export interface ModalKeywordProps extends ModalProps {
   keyword: string;
+}
+
+export interface LikeProductProps {
+  title: string;
+  price: string;
+  image?: any;
+  status?: string;
+  isEdit: boolean;
+  isSelectEdit?: boolean;
+}
+
+export interface FooterProps {
+  menu: 'home' | 'favorite' | 'chat' | 'profile';
 }
