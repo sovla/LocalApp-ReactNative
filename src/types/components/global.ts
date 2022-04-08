@@ -1,11 +1,17 @@
 import React from 'react';
-import {TextInputProps, TextProps, TouchableOpacityProps} from 'react-native';
+import {
+  GestureResponderEvent,
+  TextInputProps,
+  TextProps,
+  TouchableOpacityProps,
+  ViewStyle,
+} from 'react-native';
 import {AnyStyledComponent} from 'styled-components';
 
 export interface DefaultButtonProps extends TouchableOpacityProps {
   width?: string;
   height?: string;
-  onPress?: any;
+  onPress?: () => void;
   content?: string;
 }
 
@@ -44,4 +50,16 @@ export interface LineProps {
   width?: number;
   height?: number;
   backgroundColor?: string;
+  style?: ViewStyle;
+}
+
+export interface CheckBoxProps {
+  setIsOn: (event: GestureResponderEvent) => void;
+  isOn: boolean;
+  text: string;
+  isBox?: boolean;
+}
+
+export interface ModalProps {
+  onClose: (event?: GestureResponderEvent) => void | (() => void);
 }

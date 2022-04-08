@@ -8,6 +8,7 @@ export default function Line({
   width,
   height,
   backgroundColor,
+  style,
 }: LineProps): JSX.Element {
   return (
     <View
@@ -15,6 +16,7 @@ export default function Line({
         width: width ?? getPixel(360),
         height: height ?? 0.4,
         backgroundColor: backgroundColor ?? Theme.color.gray_F5,
+        ...style,
       }}
     />
   );

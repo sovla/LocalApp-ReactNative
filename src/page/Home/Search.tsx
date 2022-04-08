@@ -4,6 +4,7 @@ import {
   ScrollView,
   TouchableOpacity,
   StyleSheet,
+  Modal,
 } from 'react-native';
 import React, {Fragment, useState} from 'react';
 import SearchHeader from '@/Components/Home/SearchHeader';
@@ -24,12 +25,18 @@ import checkboxIcon from '@assets/image/checkbox.png';
 import MenuOffIcon from '@assets/image/menu_ver.png';
 import MenuOnIcon from '@assets/image/menu_ver1.png';
 import ProductList from '@/Components/Home/ProductList';
+import ModalFilter from '../../Components/Home/ModalFilter';
+import useBoolean from '@/Hooks/useBoolean';
+import ModalKeyword from '@/Components/Home/ModalKeyword';
 
 export default function Search(): JSX.Element {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const [isList, setIsList] = useState<boolean>(false);
   const [isMore, setIsMore] = useState<boolean>(false);
+  const [isFilter, setIsFilter, onIsFilter, offIsFilter] = useBoolean(false);
+  const [isKeyword, setIsKeyword, onIsKeyword, offIsKeyword] =
+    useBoolean(false);
   const [popularList, setPopularList] = useState<Array<string>>([
     '자전거',
     '의자',
@@ -50,7 +57,10 @@ export default function Search(): JSX.Element {
       <ScrollView>
         {isSearch ? (
           <>
-            <SearchKeyword />
+            <SearchKeyword
+              onPressFilter={onIsFilter}
+              onPressKeyword={onIsKeyword}
+            />
             <View
               style={{
                 width: getPixel(360),
@@ -78,6 +88,18 @@ export default function Search(): JSX.Element {
               </TouchableOpacity>
             </View>
             <ProductList list={[1, 2, 3, 4, 5]} isList={isList} />
+            <Modal visible={isFilter} transparent onRequestClose={offIsFilter}>
+              {isFilter && <ModalFilter onClose={offIsFilter} />}
+            </Modal>
+            <Modal
+              visible={isKeyword}
+              transparent
+              animationType="slide"
+              onRequestClose={offIsKeyword}>
+              {isKeyword && (
+                <ModalKeyword onClose={offIsKeyword} keyword={searchText} />
+              )}
+            </Modal>
           </>
         ) : (
           <>
@@ -162,7 +184,11 @@ const CategoryCard: React.FC<CategoryCardProps> = ({name, image}) => {
 };
 
 const styles = StyleSheet.create({
-  checkboxView: {flexDirection: 'row'},
+  checkboxView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: getHeightPixel(10),
+  },
   checkboxImage: {
     width: getPixel(18),
     height: getPixel(18),

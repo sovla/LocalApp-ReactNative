@@ -2,7 +2,10 @@ import Theme from '@/assets/global/Theme';
 import {Button} from '@/Components/Global/button';
 import {Text} from '@/Components/Global/text';
 import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  StackNavigationProp,
+} from '@react-navigation/stack';
 
 import React, {Suspense, useEffect, useState} from 'react';
 import {SafeAreaView, View, ActivityIndicator, StyleSheet} from 'react-native';
@@ -11,6 +14,7 @@ import i18n from 'i18next';
 import {initReactI18next} from 'react-i18next';
 import {en, ko, es, br} from '@/assets/lang/lang';
 import {useAppSelector} from '@/Hooks/CustomHook';
+import Screen from '@/Types/Screen/Screen';
 
 const ROUTING = 'Search';
 
@@ -36,7 +40,7 @@ i18n
     },
   });
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<Screen>();
 
 const forFade = ({current}: any) => {
   return {
@@ -112,7 +116,7 @@ const withScrollView = (WrappedComponent: any) => {
 };
 
 interface RouterTypes {
-  name: string;
+  name: keyof Screen;
   component: any;
 }
 

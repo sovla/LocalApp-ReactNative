@@ -1,9 +1,15 @@
 import Theme from '@/assets/global/Theme';
 import {useAppSelector} from '@/Hooks/CustomHook';
-import pixelChange, {pixelHeightChange} from '@/Util/pixelChange';
+import pixelChange, {
+  getHeightPixel,
+  getPixel,
+  pixelHeightChange,
+} from '@/Util/pixelChange';
+import {t} from 'i18next';
 import React from 'react';
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import styled from 'styled-components/native';
-import {DefaultButtonProps} from 'Types/Components/global';
+import {CheckBoxProps, DefaultButtonProps} from 'Types/Components/global';
 import {Text} from './text';
 
 const ButtonStyle = styled.TouchableOpacity<any>`
@@ -21,9 +27,50 @@ export const Button: React.FC<DefaultButtonProps> = props => {
 
   return (
     <ButtonStyle {...props}>
-      <Text color={Theme.color.white} fontSize={`${Theme.fontSize.fs16 * fontSize}px`}>
+      <Text
+        color={Theme.color.white}
+        fontSize={`${Theme.fontSize.fs16 * fontSize}px`}>
         {content}
       </Text>
     </ButtonStyle>
   );
 };
+
+export const CheckBox: React.FC<CheckBoxProps> = ({
+  setIsOn,
+  isOn,
+  text,
+  isBox,
+}) => {
+  const fontSize = useAppSelector(state => state.fontSize.value);
+  return (
+    <TouchableOpacity onPress={setIsOn} style={styles.checkBoxView}>
+      <Image
+        source={
+          isOn
+            ? isBox
+              ? require('@assets/image/checkbox_on.png')
+              : require('@assets/image/radio_on.png')
+            : isBox
+            ? require('@assets/image/checkbox_off.png')
+            : require('@assets/image/radio_off.png')
+        }
+        style={styles.checkBoxImage}
+      />
+      <Text fontSize={`${14 * fontSize}`}>{text}</Text>
+    </TouchableOpacity>
+  );
+};
+
+const styles = StyleSheet.create({
+  checkBoxImage: {
+    marginRight: getPixel(10),
+    width: getPixel(18),
+    height: getPixel(18),
+  },
+  checkBoxView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: getHeightPixel(10),
+  },
+});

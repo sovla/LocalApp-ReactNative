@@ -1,4 +1,6 @@
 import React from 'react';
+import {GestureResponderEvent} from 'react-native';
+import {ModalProps} from './global';
 
 export interface CategoryCardProps {
   name: string;
@@ -57,4 +59,21 @@ export interface ProductListProps {
 export interface SearchHeaderProps {
   text: string;
   setText: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export interface SearchKeywordProps {
+  onPressFilter: (event?: GestureResponderEvent) => void;
+  onPressKeyword: (event?: GestureResponderEvent) => void;
+}
+
+export interface ModalFilterProps extends ModalProps {}
+export interface ProductState {
+  newProduct: boolean;
+  Reaper: boolean;
+  used: boolean;
+  forParts: boolean;
+}
+
+export interface ModalKeywordProps extends ModalProps {
+  keyword: string;
 }

@@ -8,14 +8,18 @@ import Theme from '@/assets/global/Theme';
 import Line from '@/Components/Global/Line';
 import BellIcon from '@assets/image/bell.png';
 import filterIcon from '@assets/image/filter.png';
+import {SearchKeywordProps} from '@/Types/Components/HomeTypes';
 
-const SearchKeyword = () => {
+const SearchKeyword: React.FC<SearchKeywordProps> = ({
+  onPressFilter,
+  onPressKeyword,
+}) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   return (
     <>
       <View style={styles.searchMainContainer}>
-        <TouchableOpacity style={styles.rowView}>
+        <TouchableOpacity style={styles.rowView} onPress={onPressKeyword}>
           <Image source={BellIcon} style={styles.bellImage} />
           <View>
             <MediumText
@@ -32,7 +36,7 @@ const SearchKeyword = () => {
             </View>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.rowView}>
+        <TouchableOpacity onPress={onPressFilter} style={styles.rowView}>
           <Image source={filterIcon} style={styles.filterImage} />
           <Text fontSize={`${14 * fontSize}`}>{t('searchFilter')}</Text>
         </TouchableOpacity>

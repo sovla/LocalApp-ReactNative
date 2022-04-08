@@ -271,11 +271,13 @@ const stylesNoneList = StyleSheet.create({
     height: getPixel(8.57),
     marginLeft: getPixel(5),
     marginRight: getPixel(3),
+    marginTop: 2,
   },
   viewImage: {
     width: getPixel(12.33),
     height: getPixel(9.36),
     marginRight: getPixel(3),
+    marginTop: 2,
   },
   rowView: {
     flexDirection: 'row',
