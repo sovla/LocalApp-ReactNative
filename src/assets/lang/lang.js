@@ -94,6 +94,7 @@ export const ko = {
     likeListDelete: '삭제',
     likeListSave: '저장',
     likeListSelectAll: '전체 선택',
+    chattingHomeAll: '전체보기',
   },
 };
 export const es = {
