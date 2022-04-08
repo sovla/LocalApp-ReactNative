@@ -60,6 +60,13 @@ export interface CheckBoxProps {
   isBox?: boolean;
 }
 
+export interface ToggleProps {
+  setIsOn: React.Dispatch<React.SetStateAction<boolean>>;
+  isOn: boolean;
+  width?: number;
+  height?: number;
+}
+
 export interface ModalProps {
   onClose: (event?: GestureResponderEvent) => void | (() => void);
 }

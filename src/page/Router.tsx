@@ -16,7 +16,7 @@ import {en, ko, es, br} from '@/assets/lang/lang';
 import {useAppSelector} from '@/Hooks/CustomHook';
 import Screen from '@/Types/Screen/Screen';
 
-const ROUTING = 'Search';
+const ROUTING: keyof Screen = 'KeywordAlarm';
 
 const resources = {
   en,

@@ -5,11 +5,16 @@ import pixelChange, {
   getPixel,
   pixelHeightChange,
 } from '@/Util/pixelChange';
+import {getHitSlop} from '@/Util/Util';
 import {t} from 'i18next';
 import React from 'react';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import styled from 'styled-components/native';
-import {CheckBoxProps, DefaultButtonProps} from 'Types/Components/global';
+import {
+  CheckBoxProps,
+  DefaultButtonProps,
+  ToggleProps,
+} from 'Types/Components/global';
 import {Text} from './text';
 
 const ButtonStyle = styled.TouchableOpacity<any>`
@@ -58,6 +63,32 @@ export const CheckBox: React.FC<CheckBoxProps> = ({
         style={styles.checkBoxImage}
       />
       <Text fontSize={`${14 * fontSize}`}>{text}</Text>
+    </TouchableOpacity>
+  );
+};
+
+export const Toggle: React.FC<ToggleProps> = ({
+  isOn,
+  setIsOn,
+  width = getPixel(40),
+  height = getPixel(22),
+}) => {
+  const onToggle = () => {
+    setIsOn(prev => !prev);
+  };
+  return (
+    <TouchableOpacity onPress={onToggle} hitSlop={getHitSlop(5)}>
+      <Image
+        source={
+          isOn
+            ? require('@assets/image/toggle_on.png')
+            : require('@assets/image/toggle_off.png')
+        }
+        style={{
+          width,
+          height,
+        }}
+      />
     </TouchableOpacity>
   );
 };

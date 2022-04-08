@@ -83,6 +83,12 @@ export const ko = {
     searchModalProductState4: '사용불가/부품용',
     searchModalKeyword: '키워드 알림을 등록하시겠습니까?',
     searchModalButton: '등록',
+    KeywordAlarm: '키워드 알림',
+    KeywordAlarmText1:
+      '찾는 물건이 없을때는 키워드를 등록해 보세요.\n앱이 꺼져 있어도 해당 물건이 올라오면 바로 푸시 알림을 받게 됩니다.',
+    KeywordAlarmText2: '알림 설정',
+    KeywordAlarmText3: '알림 받을 키워드 ',
+    KeywordAlarmPlaceHolder: '(예: 커피머신기)',
   },
 };
 export const es = {
