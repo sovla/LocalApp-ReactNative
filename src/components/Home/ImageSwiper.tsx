@@ -20,7 +20,8 @@ export default function ImageSwiper({
   height,
 }: ImageSwiperProps): JSX.Element {
   const [dotNumber, setDotNumber] = useState(0);
-  const dotArray = new Array(imageArray.length).fill(1);
+
+  const dotArray = new Array(imageArray?.length).fill(1);
 
   return (
     <View style={styles.mainContainer}>

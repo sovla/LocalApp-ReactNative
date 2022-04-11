@@ -116,6 +116,15 @@ export const ko = {
     reviewWriteSubTitle: '나에겐 기록, 다른 사람에겐 큰 도움이 됩니다.',
     reviewWriteContent: '평점을 입력해 주세요',
     reviewWritePlaceHolder: '한줄평을 입력해 주세요',
+    businessProfileTitle: '프로필',
+    mon: '월요일',
+    tue: '화요일',
+    wed: '수요일',
+    thu: '목요일',
+    fri: '금요일',
+    sat: '토요일',
+    sun: '일요일',
+    businessProfileOpen: 'OPEN',
   },
 };
 export const es = {

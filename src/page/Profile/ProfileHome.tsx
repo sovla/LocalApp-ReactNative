@@ -20,7 +20,7 @@ import StarIcon from '@assets/image/star.png';
 import LikeIcon from '@assets/image/like.png';
 import TelIcon from '@assets/image/tel.png';
 import joinDateIcon from '@assets/image/join_date.png';
-import BagIcon from '@assets/image/bag.png';
+import BagIcon from '@assets/image/handbag.png';
 import ChatOffIcon from '@assets/image/chat.png';
 import MultiStarIcon from '@assets/image/review.png';
 
