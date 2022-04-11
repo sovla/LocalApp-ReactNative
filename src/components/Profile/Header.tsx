@@ -1,4 +1,4 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {CloseIconImage} from '../Global/image';
@@ -6,17 +6,33 @@ import {WhiteText} from '../Global/text';
 import {useTranslation} from 'react-i18next';
 import {useAppSelector} from '@/Hooks/CustomHook';
 import {getHitSlop} from '@/Util/Util';
+import BackWhiteIcon from '@assets/image/back_white.png';
 
 const Header: React.FC<{
   title: string;
-}> = ({title, children}) => {
+  isBack?: boolean;
+}> = ({title, isBack, children}) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   return (
     <View style={styles.headerContainer}>
       <View style={styles.headerView}>
         <TouchableOpacity onPress={() => {}} hitSlop={getHitSlop(5)}>
-          <CloseIconImage isWhite width={getPixel(20)} height={getPixel(20)} />
+          {isBack ? (
+            <Image
+              source={BackWhiteIcon}
+              style={{
+                width: getPixel(30),
+                height: getPixel(30),
+              }}
+            />
+          ) : (
+            <CloseIconImage
+              isWhite
+              width={getPixel(20)}
+              height={getPixel(20)}
+            />
+          )}
         </TouchableOpacity>
         <WhiteText
           style={{marginLeft: getPixel(16.5)}}

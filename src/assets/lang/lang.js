@@ -103,6 +103,13 @@ export const ko = {
     profileHomeSaleProduct: '판매상품',
     profileHomeChat: '1:1대화',
     profileDetailTitle: '내 정보 관리',
+    profileDetailName: '사용자명',
+    profileDetailState: '상태 메시지',
+    profileDetailTel: '핸드폰 번호',
+    profileDetailTelOpen: '번호 공개',
+    profileDetailEmail: '이메일',
+    profileDetailSex: '성별',
+    profileDetailDate: '생년월일',
   },
 };
 export const es = {

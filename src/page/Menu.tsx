@@ -11,7 +11,7 @@ export default function Menu(props: {
     API.post('member_join.php', {
       //debug_jwt:{{jwt}}
       mt_country: '55',
-      mt_hp: '01088085722',
+      mt_hp: '01088085754',
       mt_app_token: 'azxczxcqwdsad',
       mt_name: 'kyoujin',
       mt_birth: '1993-07-20',

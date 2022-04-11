@@ -3,7 +3,10 @@ import jwt_encode from 'jwt-encode';
 import jwtDecode from 'jwt-decode';
 import {Platform} from 'react-native';
 
-const SECRETKEY = 'L0FONYcvjajULdjnaKpBP';
+const SECRETKEY =
+  'AAAAB3NzaC1yc2EAAAABJQAAAQEAv6+cPJDNZvvR7zuLo9vK8xHt/ucEMdZhBxbiVow/Gopl0y+GSpHic01rUqIoj/XortnJWekObyeAqSGTHDXOOGxl7/9xJdtXpe2WIW1voIAgX6xwNcIPoLpdPat7g5CkrWWJ+k5JUYHycV+ue3HgMII0OCKC4ira0hURNohGiac22IfO5+XIjn8uPQdg4dpmgxJbokB4DjO2uO5e9EMU4wF1ucxpKF0FANYmvjijUpdjnfKmBA/dg/9Go4d9rUfnhmcv5QaVxUDFouveW9e';
+
+const JWT_TOKEN = 'L0FONYcvjajULdjnaKpBP';
 
 const baseURL = 'https://dmonster1786.cafe24.com/api/';
 
@@ -57,12 +60,12 @@ export const API = axios.create({
               jwt_data,
             },
             {
-              secretKey: SECRETKEY,
+              debug_jwt: JWT_TOKEN,
             },
           )
         : {
             // 데이터가 없는경우
-            secretKey: SECRETKEY,
+            debug_jwt: JWT_TOKEN,
           },
     );
     console.log('formData result :::\n', result);
@@ -75,6 +78,8 @@ export const API = axios.create({
     }
     try {
       const jsonParseData = JSON.parse(data);
+      console.log(jsonParseData, '가공전');
+
       if (jsonParseData.result === 'true') {
         const jwtDecodeData: any = jwtDecode(jsonParseData?.data);
 
