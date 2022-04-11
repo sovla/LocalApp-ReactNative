@@ -125,6 +125,9 @@ export const ko = {
     sat: '토요일',
     sun: '일요일',
     businessProfileOpen: 'OPEN',
+    BusinessProfileMenuTitle: '비즈니스 프로필 관리',
+    businessProfileMenu1: '기본 정보 관리',
+    businessProfileMenu2: '광고 배너 관리',
   },
 };
 export const es = {
