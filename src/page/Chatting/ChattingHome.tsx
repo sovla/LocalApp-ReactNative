@@ -7,13 +7,14 @@ import Line from '@/Components/Global/Line';
 import Theme from '@/assets/global/Theme';
 import {ChattingProps} from '@/Types/Components/ChattingTypes';
 import Chatting from '@/Components/Chatting/Chatting';
+import Footer from '@/Components/Home/Footer';
 
 export default function ChattingHome() {
-  const [chattingList, setChattingList] = useState<Array<ChattingProps>>([
+  const [chattingList, setChattingList] = useState<Array<ChattingProps | any>>([
     1, 2, 3, 4, 5,
   ]);
   return (
-    <View>
+    <View style={{flex: 1}}>
       <Header />
       <FlatList
         data={chattingList}
@@ -36,9 +37,11 @@ export default function ChattingHome() {
           );
         }}
         style={{
+          marginTop: getHeightPixel(5),
           marginHorizontal: getPixel(16),
         }}
       />
+      <Footer menu="chat" />
     </View>
   );
 }

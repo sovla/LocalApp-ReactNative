@@ -95,6 +95,14 @@ export const ko = {
     likeListSave: '저장',
     likeListSelectAll: '전체 선택',
     chattingHomeAll: '전체보기',
+    profileHomeTitle: '내 계정',
+    profileHomeSellerReviews: '판매자 후기',
+    profileHomeCount: '개',
+    profileHomeHp: '판매자 연락처',
+    profileHomeJoinDate: '가입일자',
+    profileHomeSaleProduct: '판매상품',
+    profileHomeChat: '1:1대화',
+    profileDetailTitle: '내 정보 관리',
   },
 };
 export const es = {

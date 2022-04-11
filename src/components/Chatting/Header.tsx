@@ -27,6 +27,7 @@ const Header: React.FC = () => {
       <RowBox>
         <TouchableOpacity style={styles.locationTouch}>
           <WhiteText fontSize={`${18 * fontSize}`}>Bom Retiro</WhiteText>
+          {/* 수정필요 이쪽에 드롭다운 넣을 예정 */}
         </TouchableOpacity>
       </RowBox>
       <RowBox>

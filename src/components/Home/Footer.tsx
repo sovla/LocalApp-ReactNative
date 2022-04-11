@@ -14,6 +14,7 @@ import ProfileOffIcon from '@/assets/image/profile_gray.png';
 import {FooterProps, MenuBoxProps} from '@/Types/Components/HomeTypes';
 import {useTranslation} from 'react-i18next';
 import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
+import {Shadow} from 'react-native-shadow-2';
 
 const Footer: React.FC<FooterProps> = ({menu}) => {
   const [selectMenu, setSelectMenu] = useState<FooterProps['menu']>(menu);
@@ -22,36 +23,38 @@ const Footer: React.FC<FooterProps> = ({menu}) => {
   }, [menu]);
 
   return (
-    <View style={styles.footerContainer}>
-      <MenuBox
-        OffImage={HomeOffIcon}
-        onImage={HomeOnIcon}
-        name="home"
-        selectMenu={selectMenu}
-        setSelectMenu={setSelectMenu}
-      />
-      <MenuBox
-        OffImage={FavoriteOffIcon}
-        onImage={FavoriteOnIcon}
-        name="favorite"
-        selectMenu={selectMenu}
-        setSelectMenu={setSelectMenu}
-      />
-      <MenuBox
-        OffImage={ChatOffIcon}
-        onImage={ChatOnIcon}
-        name="chat"
-        selectMenu={selectMenu}
-        setSelectMenu={setSelectMenu}
-      />
-      <MenuBox
-        OffImage={ProfileOffIcon}
-        onImage={ProfileOnIcon}
-        name="profile"
-        selectMenu={selectMenu}
-        setSelectMenu={setSelectMenu}
-      />
-    </View>
+    <Shadow distance={4}>
+      <View style={styles.footerContainer}>
+        <MenuBox
+          OffImage={HomeOffIcon}
+          onImage={HomeOnIcon}
+          name="home"
+          selectMenu={selectMenu}
+          setSelectMenu={setSelectMenu}
+        />
+        <MenuBox
+          OffImage={FavoriteOffIcon}
+          onImage={FavoriteOnIcon}
+          name="favorite"
+          selectMenu={selectMenu}
+          setSelectMenu={setSelectMenu}
+        />
+        <MenuBox
+          OffImage={ChatOffIcon}
+          onImage={ChatOnIcon}
+          name="chat"
+          selectMenu={selectMenu}
+          setSelectMenu={setSelectMenu}
+        />
+        <MenuBox
+          OffImage={ProfileOffIcon}
+          onImage={ProfileOnIcon}
+          name="profile"
+          selectMenu={selectMenu}
+          setSelectMenu={setSelectMenu}
+        />
+      </View>
+    </Shadow>
   );
 };
 
