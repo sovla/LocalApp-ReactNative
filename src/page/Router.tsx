@@ -14,7 +14,7 @@ import {useAppSelector} from '@/Hooks/CustomHook';
 import Screen from '@/Types/Screen/Screen';
 import {API} from '@/API/API';
 
-const ROUTING: keyof Screen = 'ProfileSellerReview';
+const ROUTING: keyof Screen = 'ProfileSellProduct';
 
 const resources = {
   en,

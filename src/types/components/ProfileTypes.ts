@@ -5,3 +5,9 @@ export interface ReviewProps {
   date: string;
   review: string;
 }
+
+export interface MenuProps {
+  menuList: Array<string>;
+  selectMenu: string;
+  setSelectMenu: React.Dispatch<React.SetStateAction<string>>;
+}

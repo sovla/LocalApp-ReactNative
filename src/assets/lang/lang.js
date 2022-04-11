@@ -110,6 +110,8 @@ export const ko = {
     profileDetailEmail: '이메일',
     profileDetailSex: '성별',
     profileDetailDate: '생년월일',
+    ProfileSellProduct: '판매중',
+    ProfileSellProductComplete: '판매완료',
   },
 };
 export const es = {

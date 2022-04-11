@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerView: {
-    height: getHeightPixel(40),
+    height: getHeightPixel(50),
     width: '100%',
     flexDirection: 'row',
     alignContent: 'center',
