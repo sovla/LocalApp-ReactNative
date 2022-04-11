@@ -8,6 +8,7 @@ import pixelChange, {
 import {getHitSlop} from '@/Util/Util';
 import {t} from 'i18next';
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import styled from 'styled-components/native';
 import {
@@ -28,7 +29,8 @@ const ButtonStyle = styled.TouchableOpacity<any>`
 `;
 
 export const Button: React.FC<DefaultButtonProps> = props => {
-  const {content} = props;
+  const {t} = useTranslation();
+  const {content = t('signUp')} = props;
   const fontSize = useAppSelector(state => state.fontSize.value);
 
   return (

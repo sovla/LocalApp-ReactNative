@@ -112,6 +112,10 @@ export const ko = {
     profileDetailDate: '생년월일',
     ProfileSellProduct: '판매중',
     ProfileSellProductComplete: '판매완료',
+    reviewWriteTitle: '구매후기 남기기',
+    reviewWriteSubTitle: '나에겐 기록, 다른 사람에겐 큰 도움이 됩니다.',
+    reviewWriteContent: '평점을 입력해 주세요',
+    reviewWritePlaceHolder: '한줄평을 입력해 주세요',
   },
 };
 export const es = {
