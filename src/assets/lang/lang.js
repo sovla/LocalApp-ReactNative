@@ -144,6 +144,12 @@ export const ko = {
     businessProfileSettingShopFacebook: '페이스북 주소',
     businessProfileSettingShopInstagram: '인스타그램 주소',
     businessProfileSettingShopWhatsApp: 'WhatsApp 주소',
+    save: '저장',
+    businessProfileBannerTitle: '광고 배너 관리',
+    businessProfileBannerSubTitle: '광고 배너 추가',
+    businessProfileBannerGuideText1:
+      '자신의 비즈니스 프로필 상단에 광고 배너를 삽입합니다.',
+    businessProfileBannerGuideText2: '사이즈: 288x130px  ( 최대 3개까지 )',
   },
 };
 export const es = {
