@@ -173,6 +173,18 @@ export const ko = {
     settingMenu3: '대화',
     settingMenu4: '차단 사용자 관리',
     settingMenu5: '언어설정',
+    settingPrivacyTitle: '개인정보/보안',
+    settingPrivacySubTitle: '개인 정보',
+    settingPrivacySubTitle2: '계정 삭제',
+    settingPrivacyExit: '탈퇴하기',
+    deleteAccountGuide: 'LocalApp에서 탈퇴시',
+    deleteAccountGuide1: 'LocalApp 계정 삭제',
+    deleteAccountGuide2: '친구 목록, 대화내용 기록 삭제',
+    deleteAccountGuide3:
+      '대화방에서 주고 받은 사진 또는 파일 등 정보가 즉시 삭제되오니, 탈퇴 전에 저장해 주세요.',
+    deleteAccountGuide4:
+      '사용자 계정이 30일간 비활성화되며,비활성화 동안 사용자 계정은 대중에게 표시되지 않습니다. 30일 후에 사용자 계정은 영구적으로 삭제됩니다.',
+    deleteAccountGuide5: '모든 정보를 삭제하는 것에 동의합니까?',
   },
 };
 export const es = {
