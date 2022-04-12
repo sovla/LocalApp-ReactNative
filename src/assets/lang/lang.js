@@ -185,6 +185,12 @@ export const ko = {
     deleteAccountGuide4:
       '사용자 계정이 30일간 비활성화되며,비활성화 동안 사용자 계정은 대중에게 표시되지 않습니다. 30일 후에 사용자 계정은 영구적으로 삭제됩니다.',
     deleteAccountGuide5: '모든 정보를 삭제하는 것에 동의합니까?',
+    message: '메시지',
+    messageAlarm: '메시지 알림',
+    vibration: '진동',
+    alarmShow: '알림표시',
+    alarmShowGuide: '화면 상단에 알림 미리보기 표시',
+    alarmSettingDefault: '기본',
   },
 };
 export const es = {
