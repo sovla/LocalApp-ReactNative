@@ -163,6 +163,7 @@ export const ko = {
     modalMyPageLogin: 'LOGIN',
     modalMyPageLogout: 'LOGOUT',
     modalMyPageLoginGuide: 'Login to your Account',
+    noticeTitle: '공지사항',
   },
 };
 export const es = {
