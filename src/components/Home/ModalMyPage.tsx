@@ -141,17 +141,18 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
   );
 };
 
-const ImageWithView: React.FC<{
+export const ImageWithView: React.FC<{
   image: any;
   imageWidth?: number;
   fontSize?: number;
   content: string;
-}> = ({image, imageWidth = getPixel(20), fontSize, content}) => {
+  onPress?: () => void;
+}> = ({image, imageWidth = getPixel(20), fontSize, content, onPress}) => {
   const fontSizeState = useAppSelector(state => state.fontSize.value);
   const applyFontSize = fontSize ?? 16 * fontSizeState;
   return (
     <>
-      <TouchableOpacity style={styles.imageWithViewTouch}>
+      <TouchableOpacity onPress={onPress} style={styles.imageWithViewTouch}>
         <View style={styles.imageWithViewView}>
           <AutoHeightImage source={image} width={imageWidth} />
         </View>

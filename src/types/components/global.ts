@@ -50,7 +50,7 @@ export interface InputProps {
 }
 
 export interface LineProps {
-  width?: number;
+  width?: number | 'auto' | '100%';
   height?: number;
   backgroundColor?: string;
   style?: ViewStyle;

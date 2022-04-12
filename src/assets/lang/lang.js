@@ -167,6 +167,12 @@ export const ko = {
     AlarmListTitle: '알림 목록',
     keywordAlarm: '키워드 알림',
     alarm: '알림',
+    settingTitle: '환경설정',
+    settingMenu1: '개인정보/보안',
+    settingMenu2: '알림/소리',
+    settingMenu3: '대화',
+    settingMenu4: '차단 사용자 관리',
+    settingMenu5: '언어설정',
   },
 };
 export const es = {
