@@ -9,13 +9,15 @@ export default function Line({
   height,
   backgroundColor,
   style,
+  isGray,
 }: LineProps): JSX.Element {
   return (
     <View
       style={{
         width: width ?? getPixel(360),
         height: height ?? 0.4,
-        backgroundColor: backgroundColor ?? Theme.color.gray_F5,
+        backgroundColor:
+          backgroundColor ?? isGray ? Theme.color.gray : Theme.color.gray_F5,
         ...style,
       }}
     />

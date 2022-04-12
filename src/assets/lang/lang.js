@@ -128,6 +128,22 @@ export const ko = {
     BusinessProfileMenuTitle: '비즈니스 프로필 관리',
     businessProfileMenu1: '기본 정보 관리',
     businessProfileMenu2: '광고 배너 관리',
+    businessProfileSettingShopName: '상호명',
+    businessProfileSettingShopNamePh: '상호명 입력',
+    businessProfileSettingShopIntroduction: '소개문구',
+    businessProfileSettingShopIntroductionPh:
+      '간단한 업체 소개 문구를 작성해주세요',
+    businessProfileSettingShopTel: '핸드폰 번호',
+    businessProfileSettingShopTelOpen: '핸드폰 정보 공개',
+    businessProfileSettingShopEmail: '이메일',
+    businessProfileSettingShopAddress: '업체 주소 등록',
+    businessProfileSettingShopHp: '전화번호 등록',
+    businessProfileSettingShopTelPh: '핸드폰 번호 등록',
+    businessProfileSettingShopOpeningTime: '영업시간 설정',
+    businessProfileSettingShopWebSite: '웹사이트',
+    businessProfileSettingShopFacebook: '페이스북 주소',
+    businessProfileSettingShopInstagram: '인스타그램 주소',
+    businessProfileSettingShopWhatsApp: 'WhatsApp 주소',
   },
 };
 export const es = {

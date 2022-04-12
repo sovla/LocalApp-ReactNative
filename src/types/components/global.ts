@@ -44,6 +44,9 @@ export interface InputProps {
   onChange?: (text: string) => void;
   PlaceHolderComponent?: any;
   errorText?: string;
+  width?: number;
+  height?: number;
+  isLine?: boolean;
 }
 
 export interface LineProps {
@@ -51,6 +54,7 @@ export interface LineProps {
   height?: number;
   backgroundColor?: string;
   style?: ViewStyle;
+  isGray?: boolean;
 }
 
 export interface CheckBoxProps {

@@ -8,25 +8,47 @@ import {useAppSelector} from '@/Hooks/CustomHook';
 import {InputProps} from '@/Types/Components/global';
 import {Box} from './container';
 
-export default function Input({value, onChange, PlaceHolderComponent, errorText}: InputProps) {
-  const {t} = useTranslation();
+export default function Input({
+  value,
+  onChange,
+  PlaceHolderComponent,
+  errorText,
+  width = getPixel(288),
+  height = getHeightPixel(40),
+  isLine = true,
+}: InputProps) {
   const fontSize = useAppSelector(state => state.fontSize.value);
   const [isFocus, setIsFocus] = useState(false);
   return (
-    <Box width="288px" alignItems="flex-start" style={styles.boxStyle}>
+    <Box
+      alignItems="flex-start"
+      style={[
+        styles.boxStyle,
+        {
+          width,
+          height,
+        },
+        isLine && {borderBottomColor: Theme.color.gray, borderBottomWidth: 0.4},
+      ]}>
       <TextInput
         style={[
           styles.textInput,
           {
             fontSize: 12 * fontSize,
+            width,
+            height,
           },
         ]}
         onChangeText={onChange}
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}>
-        {!isFocus && !value?.length && <PlaceHolderComponent />}
+        {!isFocus && !value?.length && PlaceHolderComponent !== undefined ? (
+          <PlaceHolderComponent />
+        ) : null}
       </TextInput>
-      {errorText && errorText?.length > 0 && <RedText fontSize={`${12 * fontSize}px`}>{errorText}</RedText>}
+      {errorText && errorText?.length > 0 && (
+        <RedText fontSize={`${12 * fontSize}px`}>{errorText}</RedText>
+      )}
     </Box>
   );
 }
@@ -34,10 +56,6 @@ export default function Input({value, onChange, PlaceHolderComponent, errorText}
 const styles = StyleSheet.create({
   boxStyle: {marginBottom: getHeightPixel(5)},
   textInput: {
-    width: getPixel(288),
-    height: getHeightPixel(40),
-    borderBottomColor: Theme.color.gray,
-    borderBottomWidth: 0.4,
     color: Theme.color.black,
     marginBottom: getHeightPixel(5),
   },

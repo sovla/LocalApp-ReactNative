@@ -7,7 +7,7 @@ import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
 import Photo from '@/Components/LoginSignUp/Photo';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import Input from '@/Components/Global/input';
+import Input from '@/Components/Global/Input';
 import {Button} from '@/Components/Global/button';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
@@ -22,10 +22,15 @@ export default function SignUpForm() {
           alignItems: 'center',
         }}>
         <Header />
-        <MediumText fontSize={`${20 * fontSize}px`} style={{marginTop: getHeightPixel(10)}}>
+        <MediumText
+          fontSize={`${20 * fontSize}px`}
+          style={{marginTop: getHeightPixel(10)}}>
           {t('signUpFormTitle')}
         </MediumText>
-        <Text fontSize={`${14 * fontSize}px`} color={Theme.color.gray} style={{marginVertical: getHeightPixel(20)}}>
+        <Text
+          fontSize={`${14 * fontSize}px`}
+          color={Theme.color.gray}
+          style={{marginVertical: getHeightPixel(20)}}>
           {t('signUpFormSubTitle')}
         </Text>
         <Photo />
@@ -36,10 +41,14 @@ export default function SignUpForm() {
           PlaceHolderComponent={() => {
             return (
               <>
-                <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.gray}>
+                <Text
+                  fontSize={`${Theme.fontSize.fs14 * fontSize}px`}
+                  color={Theme.color.gray}>
                   {t('signUpFormPhone')}
                 </Text>
-                <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.red}>
+                <Text
+                  fontSize={`${Theme.fontSize.fs14 * fontSize}px`}
+                  color={Theme.color.red}>
                   {' '}
                   *{' '}
                 </Text>
@@ -55,14 +64,20 @@ export default function SignUpForm() {
           PlaceHolderComponent={() => {
             return (
               <>
-                <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.gray}>
+                <Text
+                  fontSize={`${Theme.fontSize.fs14 * fontSize}px`}
+                  color={Theme.color.gray}>
                   {t('signUpFormDate')}
                 </Text>
-                <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.red}>
+                <Text
+                  fontSize={`${Theme.fontSize.fs14 * fontSize}px`}
+                  color={Theme.color.red}>
                   {' '}
                   *{' '}
                 </Text>
-                <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.gray}>
+                <Text
+                  fontSize={`${Theme.fontSize.fs14 * fontSize}px`}
+                  color={Theme.color.gray}>
                   {t('signUpFormDateGuide')}
                 </Text>
               </>
@@ -75,10 +90,14 @@ export default function SignUpForm() {
           PlaceHolderComponent={() => {
             return (
               <>
-                <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.gray}>
+                <Text
+                  fontSize={`${Theme.fontSize.fs14 * fontSize}px`}
+                  color={Theme.color.gray}>
                   {t('signUpFormSex')}
                 </Text>
-                <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.red}>
+                <Text
+                  fontSize={`${Theme.fontSize.fs14 * fontSize}px`}
+                  color={Theme.color.red}>
                   {' '}
                   *{' '}
                 </Text>
@@ -92,10 +111,14 @@ export default function SignUpForm() {
           PlaceHolderComponent={() => {
             return (
               <>
-                <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.gray}>
+                <Text
+                  fontSize={`${Theme.fontSize.fs14 * fontSize}px`}
+                  color={Theme.color.gray}>
                   {t('signUpFormEmail')}
                 </Text>
-                <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`} color={Theme.color.red}>
+                <Text
+                  fontSize={`${Theme.fontSize.fs14 * fontSize}px`}
+                  color={Theme.color.red}>
                   {' '}
                   *{' '}
                 </Text>

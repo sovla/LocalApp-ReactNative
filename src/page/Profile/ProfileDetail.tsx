@@ -1,4 +1,10 @@
-import {View, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  TextStyle,
+} from 'react-native';
 import React, {useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useAppSelector} from '@/Hooks/CustomHook';
@@ -99,23 +105,33 @@ export default function ProfileDetail() {
   );
 }
 
-const BetweenText: React.FC<{
+export const BetweenText: React.FC<{
   leftText: string;
   rightText?: string;
   isLine?: boolean;
-}> = ({leftText, rightText, isLine = true}) => {
+  rightTextStyle?: TextStyle;
+}> = ({
+  leftText,
+  rightText,
+  isLine = true,
+  rightTextStyle = {
+    color: Theme.color.black,
+  },
+}) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   return (
     <>
       <View style={styles.betweenTextView}>
         <Text fontSize={`${16 * fontSize}`}>{leftText}</Text>
-        <Text fontSize={`${16 * fontSize}`}>{rightText}</Text>
+        <Text fontSize={`${16 * fontSize}`} style={rightTextStyle}>
+          {rightText}
+        </Text>
       </View>
       {isLine && (
         <Line
           backgroundColor={Theme.color.gray}
-          height={0.6}
+          height={0.4}
           width={getPixel(320)}
         />
       )}

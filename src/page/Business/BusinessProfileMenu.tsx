@@ -16,8 +16,13 @@ import AutoHeightImage from 'react-native-auto-height-image';
 import Line from '@/Components/Global/Line';
 import ArrowRightIcon from '@assets/image/arrow_right.png';
 import Theme from '@/assets/global/Theme';
+import {StackScreenProps} from '@react-navigation/stack';
+import Screen from 'Types/Screen/Screen';
 
-export default function BusinessProfileMenu() {
+export default function BusinessProfileMenu({
+  navigation,
+  route,
+}: StackScreenProps<Screen>) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   return (
@@ -52,7 +57,11 @@ export default function BusinessProfileMenu() {
         </View>
       </View>
       <View style={styles.menuContainer}>
-        <TouchableOpacity style={styles.menuTouch}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('BusinessProfileSetting');
+          }}
+          style={styles.menuTouch}>
           <View style={styles.menuView}>
             <AutoHeightImage source={StoreIcon} width={getPixel(20)} />
             <Text fontSize={`${16 * fontSize}`} style={styles.menuText}>
@@ -67,7 +76,11 @@ export default function BusinessProfileMenu() {
         </TouchableOpacity>
       </View>
       <View style={styles.menuContainer}>
-        <TouchableOpacity style={styles.menuTouch}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('BusinessProfileBanner');
+          }}
+          style={styles.menuTouch}>
           <View style={styles.menuView}>
             <AutoHeightImage source={AdIcon} width={getPixel(20)} />
             <Text fontSize={`${16 * fontSize}`} style={styles.menuText}>
