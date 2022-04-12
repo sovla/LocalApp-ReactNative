@@ -18,11 +18,7 @@ import CloseIcon from '@assets/image/close.png';
 import {getHitSlop} from '@/Util/Util';
 import CloseBlackIcon from '@assets/image/close_black.png';
 
-export default function Location({
-  setIsModal,
-}: {
-  setIsModal: React.Dispatch<React.SetStateAction<boolean>>;
-}): JSX.Element {
+export default function Location({offIsModal}: {offIsModal: any}): JSX.Element {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
 
@@ -80,7 +76,7 @@ export default function Location({
         </ScrollView>
         <TouchableOpacity
           style={styles.closeBlackTouch}
-          onPress={() => setIsModal(false)}
+          onPress={offIsModal}
           hitSlop={getHitSlop(5)}>
           <Image source={CloseBlackIcon} style={styles.closeBlackImage} />
         </TouchableOpacity>

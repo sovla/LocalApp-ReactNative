@@ -34,9 +34,18 @@ export default function Search(): JSX.Element {
   const fontSize = useAppSelector(state => state.fontSize.value);
   const [isList, setIsList] = useState<boolean>(false);
   const [isMore, setIsMore] = useState<boolean>(false);
-  const [isFilter, setIsFilter, onIsFilter, offIsFilter] = useBoolean(false);
-  const [isKeyword, setIsKeyword, onIsKeyword, offIsKeyword] =
-    useBoolean(false);
+  const {
+    value: isFilter,
+    setValue: setIsFilter,
+    on: onIsFilter,
+    off: offIsFilter,
+  } = useBoolean(false);
+  const {
+    value: isKeyword,
+    setValue: setIsKeyword,
+    on: onIsKeyword,
+    off: offIsKeyword,
+  } = useBoolean(false);
   const [popularList, setPopularList] = useState<Array<string>>([
     '자전거',
     '의자',

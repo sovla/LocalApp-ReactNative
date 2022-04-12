@@ -1,5 +1,5 @@
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import Theme from '@/assets/global/Theme';
 import {Text} from '../Global/text';
@@ -17,11 +17,6 @@ import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import {Shadow} from 'react-native-shadow-2';
 
 const Footer: React.FC<FooterProps> = ({menu}) => {
-  const [selectMenu, setSelectMenu] = useState<FooterProps['menu']>(menu);
-  useEffect(() => {
-    setSelectMenu(menu);
-  }, [menu]);
-
   return (
     <Shadow distance={4}>
       <View style={styles.footerContainer}>
@@ -29,29 +24,25 @@ const Footer: React.FC<FooterProps> = ({menu}) => {
           OffImage={HomeOffIcon}
           onImage={HomeOnIcon}
           name="home"
-          selectMenu={selectMenu}
-          setSelectMenu={setSelectMenu}
+          selectMenu={menu}
         />
         <MenuBox
           OffImage={FavoriteOffIcon}
           onImage={FavoriteOnIcon}
           name="favorite"
-          selectMenu={selectMenu}
-          setSelectMenu={setSelectMenu}
+          selectMenu={menu}
         />
         <MenuBox
           OffImage={ChatOffIcon}
           onImage={ChatOnIcon}
           name="chat"
-          selectMenu={selectMenu}
-          setSelectMenu={setSelectMenu}
+          selectMenu={menu}
         />
         <MenuBox
           OffImage={ProfileOffIcon}
           onImage={ProfileOnIcon}
           name="profile"
-          selectMenu={selectMenu}
-          setSelectMenu={setSelectMenu}
+          selectMenu={menu}
         />
       </View>
     </Shadow>
@@ -62,14 +53,12 @@ const MenuBox: React.FC<MenuBoxProps> = ({
   onImage,
   OffImage,
   selectMenu,
-  setSelectMenu,
   name,
 }) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const navigation = useAppNavigation();
   const onPress = () => {
-    setSelectMenu(name);
     switch (name) {
       case 'chat':
         navigation.navigate('ChattingHome');
@@ -96,7 +85,7 @@ const MenuBox: React.FC<MenuBoxProps> = ({
       />
       <Text
         bold={selectMenu === name}
-        color={selectMenu === name ? Theme.color.blue : Theme.color.gray}
+        color={selectMenu === name ? Theme.color.blue_3D : Theme.color.gray}
         fontSize={`${12 * fontSize}`}>
         {t(name)}
       </Text>

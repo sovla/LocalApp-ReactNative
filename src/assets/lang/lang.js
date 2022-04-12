@@ -150,6 +150,19 @@ export const ko = {
     businessProfileBannerGuideText1:
       '자신의 비즈니스 프로필 상단에 광고 배너를 삽입합니다.',
     businessProfileBannerGuideText2: '사이즈: 288x130px  ( 최대 3개까지 )',
+    modalMyPageLoginGuide: 'Login to your Account',
+    modalMyPageNotice: '공지사항',
+    modalMyPageAlarm: '알림',
+    modalMyPageBusiness: '비즈니스 계정 전환',
+    modalMyPageProduct: '판매상품',
+    modalMyPageLike: '관심목록',
+    modalMyPageCategory: '관심 카테고리 설정',
+    modalMyPageKeyword: '키워드 알림 설정',
+    modalMyPageSettings: '환경설정',
+    modalMyPageServiceCenter: '고객센터',
+    modalMyPageLogin: 'LOGIN',
+    modalMyPageLogout: 'LOGOUT',
+    modalMyPageLoginGuide: 'Login to your Account',
   },
 };
 export const es = {

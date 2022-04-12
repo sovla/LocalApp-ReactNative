@@ -10,11 +10,10 @@ import ProductList from '@/Components/Home/ProductList';
 
 export default function Home(): JSX.Element {
   const [isList, setIsList] = useState(false);
-  const [isModal, setIsModal] = useState(false);
 
   return (
     <View style={{flex: 1, backgroundColor: Theme.color.whiteGray_F6}}>
-      <Header isModal={isModal} setIsModal={setIsModal} />
+      <Header />
       <ScrollView>
         <CategoryScroll key="CategoryScroll" />
         <HomeList
@@ -27,15 +26,6 @@ export default function Home(): JSX.Element {
         <ProductList isList={isList} list={[1, 2, 3, 4, 5]} />
       </ScrollView>
       <Footer menu="home" />
-      {isModal && (
-        <Modal
-          animationType="slide"
-          transparent
-          style={{flex: 1, backgroundColor: '#0006'}}
-          onRequestClose={() => setIsModal(false)}>
-          <Location setIsModal={setIsModal} />
-        </Modal>
-      )}
     </View>
   );
 }

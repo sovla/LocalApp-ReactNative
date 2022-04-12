@@ -364,7 +364,7 @@ const styles = StyleSheet.create({
     borderRadius: getPixel(15),
   },
   headerBackgroundImage: {
-    backgroundColor: Theme.color.blue,
+    backgroundColor: Theme.color.blue_3D,
   },
   headerView: {
     position: 'absolute',

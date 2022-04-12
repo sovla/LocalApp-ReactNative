@@ -14,7 +14,7 @@ import {useAppSelector} from '@/Hooks/CustomHook';
 import Screen from '@/Types/Screen/Screen';
 import {API} from '@/API/API';
 
-const ROUTING: keyof Screen = 'BusinessProfileMenu';
+const ROUTING: keyof Screen = 'Home';
 
 const resources = {
   en,
@@ -105,7 +105,7 @@ const withScrollView = (WrappedComponent: any) => {
                 width="50px"
                 height="50px"
                 style={{
-                  backgroundColor: !isShow ? '#0000' : Theme.color.blue,
+                  backgroundColor: !isShow ? '#0000' : Theme.color.blue_3D,
                 }}
                 onPress={() => {
                   props.navigation.navigate('Menu');

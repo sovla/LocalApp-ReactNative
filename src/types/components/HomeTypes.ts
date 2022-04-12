@@ -26,13 +26,9 @@ export interface MenuBoxProps {
   OffImage: any;
   selectMenu: string;
   name: FooterProps['menu'];
-  setSelectMenu: React.Dispatch<React.SetStateAction<FooterProps['menu']>>;
 }
 
-export interface HeaderProps {
-  setIsModal: React.Dispatch<React.SetStateAction<boolean>>;
-  isModal: boolean;
-}
+export interface HeaderProps {}
 
 export interface NavigationHeaderProps {
   title?: string;
@@ -90,3 +86,5 @@ export interface LikeProductProps {
 export interface FooterProps {
   menu: 'home' | 'favorite' | 'chat' | 'profile';
 }
+
+export interface ModalMyPageProps extends ModalProps {}

@@ -19,6 +19,7 @@ import {useAppSelector} from '@/Hooks/CustomHook';
 import CloseBlackIcon from '@assets/image/close_black.png';
 import {ModalFilterProps, ProductState} from '@/Types/Components/HomeTypes';
 import {CheckBox} from '../Global/button';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const ModalFilter: React.FC<ModalFilterProps> = ({onClose}) => {
   const [selectFilter, setSelectFilter] = useState<string>(
@@ -33,8 +34,6 @@ const ModalFilter: React.FC<ModalFilterProps> = ({onClose}) => {
 
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
-
-  const xPosition = useRef(new Animated.Value(getPixel(310))).current;
 
   const menu = [
     'searchModalSortItem1',
@@ -64,7 +63,119 @@ const ModalFilter: React.FC<ModalFilterProps> = ({onClose}) => {
     },
   ];
 
-  const pan = useRef(new Animated.ValueXY()).current;
+  return (
+    <View style={styles.dim}>
+      <SlideRightModal onClose={onClose}>
+        <KeyboardAwareScrollView>
+          <View style={styles.subContainer}>
+            <View style={styles.titleView}>
+              <MediumText fontSize={`${20 * fontSize}`}>
+                {t('searchModalFilter')}
+              </MediumText>
+              <TouchableOpacity onPress={onClose}>
+                <Image source={CloseBlackIcon} style={styles.titleCloseImage} />
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                marginTop: getHeightPixel(40),
+              }}>
+              <MediumText fontSize={`${18 * fontSize}`}>
+                {t('searchModalsort')}
+              </MediumText>
+              {Array.isArray(menu) &&
+                menu.map(v => {
+                  return (
+                    <CheckBox
+                      key={v + 'CheckBox'}
+                      setIsOn={() => {
+                        setSelectFilter(v);
+                      }}
+                      isOn={selectFilter === v}
+                      text={t(v)}
+                    />
+                  );
+                })}
+            </View>
+            <Line
+              backgroundColor={Theme.color.gray}
+              style={styles.lineMargin}
+            />
+            <View>
+              <MediumText fontSize={`${18 * fontSize}`}>
+                {t('searchModalPriceRange')}
+              </MediumText>
+              <View style={styles.priceText}>
+                <TextInput
+                  keyboardType="numeric"
+                  placeholder="0"
+                  style={[
+                    styles.priceTextInput,
+                    {
+                      fontSize: fontSize * 14,
+                    },
+                  ]}
+                  placeholderTextColor={Theme.color.gray}
+                />
+                <MediumText fontSize={`${16 * fontSize}`}>~</MediumText>
+                <TextInput
+                  keyboardType="numeric"
+                  placeholder={t('searchModalTextInputPlaceHolder')}
+                  style={[
+                    styles.priceTextInput,
+                    {
+                      fontSize: fontSize * 14,
+                    },
+                  ]}
+                  placeholderTextColor={Theme.color.gray}
+                />
+              </View>
+            </View>
+            <View
+              style={{
+                marginTop: getHeightPixel(40),
+              }}>
+              <MediumText fontSize={`${18 * fontSize}`}>
+                {t('searchModalProductState')}
+              </MediumText>
+              <View style={styles.checkboxView}>
+                {menu1.map(item => {
+                  return (
+                    <View
+                      key={item.name}
+                      style={{
+                        width: getPixel(100),
+                      }}>
+                      <CheckBox
+                        setIsOn={() => {
+                          setProductState(p => ({
+                            ...p,
+                            [item.name]: !p[item.name],
+                          }));
+                        }}
+                        isOn={productState[item.name]}
+                        text={t(item.text)}
+                        isBox
+                      />
+                    </View>
+                  );
+                })}
+              </View>
+            </View>
+          </View>
+        </KeyboardAwareScrollView>
+      </SlideRightModal>
+    </View>
+  );
+};
+
+export default ModalFilter;
+
+export const SlideRightModal: React.FC<ModalFilterProps> = ({
+  children,
+  onClose,
+}) => {
+  const pan = useRef(new Animated.ValueXY({x: getPixel(310), y: 0})).current;
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
@@ -77,20 +188,24 @@ const ModalFilter: React.FC<ModalFilterProps> = ({onClose}) => {
 
     onPanResponderRelease: (e, g) => {
       if (g.dx > 150) {
-        pan.setValue({
-          x: getPixel(310),
-          y: 0,
-        });
-
+        Animated.spring(
+          pan, // Auto-multiplexed
+          {
+            toValue: {x: getPixel(310), y: 0},
+            useNativeDriver: true,
+            bounciness: 0,
+          }, // Back to zero
+        ).start();
         setTimeout(() => {
           onClose();
-        }, 5);
+        }, 250);
       } else {
         Animated.spring(
           pan, // Auto-multiplexed
           {
             toValue: {x: 0, y: 0},
             useNativeDriver: true,
+            bounciness: 0,
           }, // Back to zero
         ).start();
       }
@@ -98,124 +213,24 @@ const ModalFilter: React.FC<ModalFilterProps> = ({onClose}) => {
   });
 
   useEffect(() => {
-    Animated.timing(xPosition, {
-      toValue: 0,
-      duration: 250,
-      easing: Easing.linear,
-      useNativeDriver: true,
-    }).start();
+    Animated.spring(
+      pan, // Auto-multiplexed
+      {
+        toValue: {x: 0, y: 0},
+        useNativeDriver: true,
+        bounciness: 0,
+      }, // Back to zero
+    ).start();
   }, []);
 
   return (
-    <View style={styles.dim}>
-      <Animated.View
-        {...panResponder.panHandlers}
-        style={[
-          styles.animatedContainer,
-          {
-            transform: [{translateX: xPosition}],
-          },
-          pan.getTranslateTransform(),
-        ]}>
-        <View style={styles.subContainer}>
-          <View style={styles.titleView}>
-            <MediumText fontSize={`${20 * fontSize}`}>
-              {t('searchModalFilter')}
-            </MediumText>
-            <TouchableOpacity onPress={onClose}>
-              <Image source={CloseBlackIcon} style={styles.titleCloseImage} />
-            </TouchableOpacity>
-          </View>
-          <View
-            style={{
-              marginTop: getHeightPixel(40),
-            }}>
-            <MediumText fontSize={`${18 * fontSize}`}>
-              {t('searchModalsort')}
-            </MediumText>
-            {Array.isArray(menu) &&
-              menu.map(v => {
-                return (
-                  <CheckBox
-                    key={v + 'CheckBox'}
-                    setIsOn={() => {
-                      setSelectFilter(v);
-                    }}
-                    isOn={selectFilter === v}
-                    text={t(v)}
-                  />
-                );
-              })}
-          </View>
-          <Line backgroundColor={Theme.color.gray} style={styles.lineMargin} />
-          <View>
-            <MediumText fontSize={`${18 * fontSize}`}>
-              {t('searchModalPriceRange')}
-            </MediumText>
-            <View style={styles.priceText}>
-              <TextInput
-                keyboardType="numeric"
-                placeholder="0"
-                style={[
-                  styles.priceTextInput,
-                  {
-                    fontSize: fontSize * 14,
-                  },
-                ]}
-                placeholderTextColor={Theme.color.gray}
-              />
-              <MediumText fontSize={`${16 * fontSize}`}>~</MediumText>
-              <TextInput
-                keyboardType="numeric"
-                placeholder={t('searchModalTextInputPlaceHolder')}
-                style={[
-                  styles.priceTextInput,
-                  {
-                    fontSize: fontSize * 14,
-                  },
-                ]}
-                placeholderTextColor={Theme.color.gray}
-              />
-            </View>
-          </View>
-          <View
-            style={{
-              marginTop: getHeightPixel(40),
-            }}>
-            <MediumText fontSize={`${18 * fontSize}`}>
-              {t('searchModalProductState')}
-            </MediumText>
-            <View style={styles.checkboxView}>
-              {menu1.map(item => {
-                return (
-                  <View
-                    key={item.name}
-                    style={{
-                      width: getPixel(100),
-                    }}>
-                    <CheckBox
-                      setIsOn={() => {
-                        setProductState(p => ({
-                          ...p,
-                          [item.name]: !p[item.name],
-                        }));
-                      }}
-                      isOn={productState[item.name]}
-                      text={t(item.text)}
-                      isBox
-                    />
-                  </View>
-                );
-              })}
-            </View>
-          </View>
-        </View>
-      </Animated.View>
-    </View>
+    <Animated.View
+      {...panResponder.panHandlers}
+      style={[styles.animatedContainer, pan.getTranslateTransform()]}>
+      {children}
+    </Animated.View>
   );
 };
-
-export default ModalFilter;
 
 const styles = StyleSheet.create({
   checkboxView: {

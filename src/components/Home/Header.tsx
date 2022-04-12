@@ -1,11 +1,12 @@
 import {
   Image,
   ImageBackground,
+  Modal,
   StyleSheet,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 
 import BackGroundImage from '@assets/image/BG.png';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
@@ -20,10 +21,27 @@ import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
 import TrianglePinkIcon from '@assets/image/triangle_pink.png';
 import {HeaderProps} from '@/Types/Components/HomeTypes';
+import Location from '../Modal/Location';
+import useBoolean from '@/Hooks/useBoolean';
+import ModalFilter from './ModalFilter';
+import ModalMyPage from './ModalMyPage';
 
-const Header: React.FC<HeaderProps> = ({setIsModal, isModal}) => {
+const Header: React.FC<HeaderProps> = () => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const {
+    value: isModal,
+    on: onIsModal,
+    off: offIsModal,
+    toggle: toggleIsModal,
+  } = useBoolean(false);
+  const {
+    value: isMenu,
+    on: onIsMenu,
+    off: offIsMenu,
+    toggle: toggleIsMenu,
+  } = useBoolean(true);
+
   return (
     <ImageBackground style={styles.headerContainer} source={BackGroundImage}>
       <RowBox>
@@ -37,11 +55,7 @@ const Header: React.FC<HeaderProps> = ({setIsModal, isModal}) => {
             </WhiteText>
           </View>
         </Box>
-        <TouchableOpacity
-          onPress={() => {
-            setIsModal(prev => !prev);
-          }}
-          style={styles.locationTouch}>
+        <TouchableOpacity onPress={toggleIsModal} style={styles.locationTouch}>
           <WhiteText fontSize={`${18 * fontSize}`}>Bom Retiro</WhiteText>
         </TouchableOpacity>
       </RowBox>
@@ -49,13 +63,27 @@ const Header: React.FC<HeaderProps> = ({setIsModal, isModal}) => {
         <TouchableOpacity>
           <Image style={styles.icon} source={SearchIcon} />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={onIsMenu}>
           <Image style={styles.icon} source={MenuIcon} />
         </TouchableOpacity>
         <TouchableOpacity>
           <Image style={styles.icon} source={AlarmIcon} />
         </TouchableOpacity>
       </RowBox>
+      {isModal && (
+        <Modal
+          animationType="slide"
+          transparent
+          style={{flex: 1, backgroundColor: '#0006'}}
+          onRequestClose={offIsModal}>
+          <Location offIsModal={offIsModal} />
+        </Modal>
+      )}
+      {isMenu && (
+        <Modal visible={isMenu} transparent onRequestClose={offIsMenu}>
+          {isMenu && <ModalMyPage onClose={offIsMenu} />}
+        </Modal>
+      )}
     </ImageBackground>
   );
 };
