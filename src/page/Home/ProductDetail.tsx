@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: getPixel(8),
-    backgroundColor: Theme.color.blue,
+    backgroundColor: Theme.color.blue_3D,
   },
   footerLeftView: {flexDirection: 'row', alignItems: 'center'},
   pressLikeImage: {

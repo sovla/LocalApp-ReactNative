@@ -3,3 +3,10 @@ export interface NoticeProps {
   isNew?: boolean;
   date: string;
 }
+
+export interface AlarmContentProps {
+  title: string;
+  date: string;
+  isDelete?: boolean;
+  onPress: () => void;
+}

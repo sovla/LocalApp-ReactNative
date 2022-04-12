@@ -22,7 +22,7 @@ import {Text} from './text';
 const ButtonStyle = styled.TouchableOpacity<any>`
   width: ${p => pixelChange(p.width) ?? pixelChange('288px')};
   height: ${p => pixelHeightChange(p.height) ?? pixelHeightChange('48px')};
-  background-color: ${Theme.color.blue};
+  background-color: ${Theme.color.blue_3D};
   border-radius: 8px;
   justify-content: center;
   align-items: center;
@@ -49,10 +49,14 @@ export const CheckBox: React.FC<CheckBoxProps> = ({
   isOn,
   text,
   isBox,
+  disabled,
 }) => {
   const fontSize = useAppSelector(state => state.fontSize.value);
   return (
-    <TouchableOpacity onPress={setIsOn} style={styles.checkBoxView}>
+    <TouchableOpacity
+      disabled={disabled}
+      onPress={setIsOn}
+      style={styles.checkBoxView}>
       <Image
         source={
           isOn

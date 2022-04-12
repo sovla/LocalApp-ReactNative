@@ -62,6 +62,7 @@ export interface CheckBoxProps {
   isOn: boolean;
   text: string;
   isBox?: boolean;
+  disabled?: boolean;
 }
 export interface CheckBoxImageProps {
   isOn?: boolean;

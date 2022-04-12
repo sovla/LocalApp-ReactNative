@@ -22,14 +22,16 @@ const Menu: React.FC<MenuProps> = ({menuList, selectMenu, setSelectMenu}) => {
             style={{
               width: getPixel(360 / menuList.length),
               borderBottomColor:
-                selectMenu === item ? Theme.color.blue : Theme.color.gray,
+                selectMenu === item ? Theme.color.blue_3D : Theme.color.gray,
               borderBottomWidth: selectMenu === item ? 2 : 1,
               height: getHeightPixel(50),
               justifyContent: 'center',
               alignItems: 'center',
             }}>
             <Text
-              color={selectMenu === item ? Theme.color.blue : Theme.color.gray}>
+              color={
+                selectMenu === item ? Theme.color.blue_3D : Theme.color.gray
+              }>
               {item}
             </Text>
           </TouchableOpacity>

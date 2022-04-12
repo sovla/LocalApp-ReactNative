@@ -164,6 +164,9 @@ export const ko = {
     modalMyPageLogout: 'LOGOUT',
     modalMyPageLoginGuide: 'Login to your Account',
     noticeTitle: '공지사항',
+    AlarmListTitle: '알림 목록',
+    keywordAlarm: '키워드 알림',
+    alarm: '알림',
   },
 };
 export const es = {

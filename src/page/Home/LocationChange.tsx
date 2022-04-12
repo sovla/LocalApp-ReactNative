@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     height: getPixel(20),
     backgroundColor: Theme.color.white,
     borderWidth: 3,
-    borderColor: Theme.color.blue,
+    borderColor: Theme.color.blue_3D,
     borderRadius: 100,
   },
   locationTextView: {
