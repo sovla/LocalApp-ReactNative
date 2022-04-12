@@ -5,11 +5,13 @@ import type {RootState} from './store';
 // Define a type for the slice state
 interface fontSizeState {
   value: number;
+  size: string;
 }
 
 // Define the initial state using that type
 const initialState: fontSizeState = {
   value: 1 / Dimensions.get('window').fontScale,
+  size: 'Medium',
 };
 
 export const fontSizeSlice = createSlice({
@@ -17,13 +19,13 @@ export const fontSizeSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    change: (state, action: PayloadAction<number>) => {
-      state.value = action.payload;
+    fontChange: (state, action: PayloadAction<fontSizeState>) => {
+      state = action.payload;
     },
   },
 });
 
-export const {change} = fontSizeSlice.actions;
+export const {fontChange} = fontSizeSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectFontSize = (state: RootState) => state.lang.value;

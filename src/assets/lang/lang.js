@@ -191,6 +191,11 @@ export const ko = {
     alarmShow: '알림표시',
     alarmShowGuide: '화면 상단에 알림 미리보기 표시',
     alarmSettingDefault: '기본',
+    settingChattingTitle: '배경화면 설정',
+    fontSize: '글꼴 크기',
+    fontSizeMedium: '중간',
+    fontSizeLarge: '크게',
+    fontSizeSmall: '작게',
   },
 };
 export const es = {

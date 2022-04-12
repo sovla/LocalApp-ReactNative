@@ -14,7 +14,7 @@ import {useAppSelector} from '@/Hooks/CustomHook';
 import Screen from '@/Types/Screen/Screen';
 import {API} from '@/API/API';
 
-const ROUTING: keyof Screen = 'SettingAlarm';
+const ROUTING: keyof Screen = 'SettingChatting';
 
 const resources = {
   en,
