@@ -200,6 +200,15 @@ export const ko = {
     settingLanguageGuide1: '설정된 언어 변경 시 자동으로 앱이 실행됩니다.',
 
     productRegistration: '상품등록',
+    MyProductMenu1: '예약중으로 변경',
+    MyProductMenu2: '판매완료로 변경',
+    bumpUp: 'Bump-up',
+    postUpdate: '게시글 수정',
+    postDelete: '게시글 삭제',
+    bumpUpModalGuide1: 'Bump-up을 하기 전에 \n가격도 함께 낮춰 보세요',
+    bumpUpModalGuide2: '가격을 낮추시면 판매 확율이 더 올라갑니다.',
+    bumpUpModalGuide3: '다음 Bump-up은',
+    bumpUpModalGuide4: '이후에 이용 가능합니다.',
   },
 };
 export const es = {
