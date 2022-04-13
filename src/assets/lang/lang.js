@@ -216,6 +216,13 @@ export const ko = {
     Btier: 'B등급',
     Ctier: 'C등급',
     Ftier: '사용불가/부품용',
+    NtierContent: '비닐도 뜯지 않은 완전한 새 상품',
+    RtierContent: '전시 또는 제품을 정비하여 신품 수준으로 내 놓은 제품',
+    StierContent: '외관이 깨끗하고 미사용 제품에 가까운 최상급 상태',
+    AtierContent: '사용횟수 적고 전체적으로 깨끗한 상품',
+    BtierContent: '중고 느낌 있는 편으로 스크래치, 마모감 등 사용흔적 있음 ',
+    CtierContent: '스크래치, 마모감 등 사용흔적이 많이 느껴지는 상태',
+    FtierContent: '정상 사용이 어려우며 부품사용, 교체용으로 추천',
     noPriceOffer: '가격제안불가',
     tradeLocaition: '거래 지역',
     detailDescription: '상세 설명',
@@ -231,6 +238,7 @@ export const ko = {
       '상품과 직접 관련이 없는 다른 상품명, 브랜드, 스팸성 키워드 등을 입력하면 노출이 중단되거나 상품이 삭제 될 수 있습니다.',
     confirm: '확인',
     tierNone: '해당사항 없음',
+    tierGuideTitle: '등급 기준',
   },
 };
 export const es = {

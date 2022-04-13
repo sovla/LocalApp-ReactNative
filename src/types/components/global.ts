@@ -122,4 +122,5 @@ export interface tierTypes {
   name: 'Ntier' | 'Rtier' | 'Stier' | 'Atier' | 'Btier' | 'Ctier' | 'Ftier';
   title: string;
   content: string;
+  image?: any;
 }

@@ -13,7 +13,7 @@ import Line from '@/Components/Global/Line';
 import {tierList} from '@/assets/global/dummy';
 import ArrowRightIcon from '@assets/image/arrow_right.png';
 
-const ProductTier = () => {
+const ProductTier: React.FC = () => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   return (
@@ -45,7 +45,7 @@ const ProductTier = () => {
 
 export default ProductTier;
 
-const TierGuideText = () => {
+export const TierGuideText: React.FC = () => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const navigation = useAppNavigation();

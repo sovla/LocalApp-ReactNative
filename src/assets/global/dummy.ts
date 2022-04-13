@@ -107,31 +107,37 @@ export const tierList: tierTypes[] = [
     name: 'Ntier',
     title: 'NtierTitle',
     content: 'NtierContent',
+    image: require('@assets/image/n_tier.png'),
   },
   {
     name: 'Rtier',
     title: 'RtierTitle',
     content: 'RtierContent',
+    image: require('@assets/image/r_tier.png'),
   },
   {
     name: 'Stier',
     title: 'StierTitle',
     content: 'StierContent',
+    image: require('@assets/image/s_tier.png'),
   },
   {
     name: 'Atier',
     title: 'AtierTitle',
     content: 'AtierContent',
+    image: require('@assets/image/a_tier.png'),
   },
   {
     name: 'Btier',
     title: 'BtierTitle',
     content: 'BtierContent',
+    image: require('@assets/image/b_tier.png'),
   },
   {
     name: 'Ctier',
     title: 'CtierTitle',
     content: 'CtierContent',
+    image: require('@assets/image/c_tier.png'),
   },
   {
     name: 'Ftier',
