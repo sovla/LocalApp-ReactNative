@@ -67,6 +67,7 @@ import {ProductTypes} from '@/Types/Components/global';
 export default function ProductUpdate() {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const navigation = useAppNavigation();
   const [imageArray, setImageArray] = useState<Array<any>>([
     1, 2, 3, 4, 5, 6, 7, 8, 9, 0,
   ]);
@@ -119,7 +120,11 @@ export default function ProductUpdate() {
           <Line isGray />
 
           {/* 카테고리 */}
-          <TouchableOpacity style={styles.boxTouch}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('ProductCategory');
+            }}
+            style={styles.boxTouch}>
             <View style={styles.row}>
               <AutoHeightImage
                 source={
@@ -139,7 +144,11 @@ export default function ProductUpdate() {
           <Line isGray />
 
           {/* 태그 */}
-          <TouchableOpacity style={styles.boxTouch}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('ProductTag');
+            }}
+            style={styles.boxTouch}>
             <View style={styles.row}>
               <Text fontSize={`${14 * fontSize}`} medium>
                 {product.tag}
@@ -150,7 +159,11 @@ export default function ProductUpdate() {
           <Line isGray />
 
           {/* 등급 */}
-          <TouchableOpacity style={styles.boxTouch}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('ProductTier');
+            }}
+            style={styles.boxTouch}>
             <View style={styles.row}>
               <Text fontSize={`${14 * fontSize}`} medium>
                 {typeof product.tier === 'string' && t(product.tier)}
@@ -186,7 +199,11 @@ export default function ProductUpdate() {
           <Line isGray />
 
           {/* 거래지역 */}
-          <TouchableOpacity style={styles.boxTouch}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('ProductLocation');
+            }}
+            style={styles.boxTouch}>
             <View style={styles.row}>
               <Text fontSize={`${14 * fontSize}`} medium>
                 {t('tradeLocaition')}

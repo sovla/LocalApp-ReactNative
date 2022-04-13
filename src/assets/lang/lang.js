@@ -220,6 +220,8 @@ export const ko = {
     tradeLocaition: '거래 지역',
     detailDescription: '상세 설명',
     complete: '완료',
+    categoryUpdate: '카테고리 수정',
+    categorySelect: '카테고리 선택',
   },
 };
 export const es = {
