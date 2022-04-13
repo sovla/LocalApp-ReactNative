@@ -196,6 +196,8 @@ export const ko = {
     fontSizeMedium: '중간',
     fontSizeLarge: '크게',
     fontSizeSmall: '작게',
+    settingLanguageTitle: '언어설정',
+    settingLanguageGuide1: '설정된 언어 변경 시 자동으로 앱이 실행됩니다.',
   },
 };
 export const es = {

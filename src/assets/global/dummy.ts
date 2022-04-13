@@ -90,3 +90,5 @@ export const categoryMenu = [
 ];
 
 export const dayList = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+
+export const languageList = ['br', 'es', 'en', 'ko'];
