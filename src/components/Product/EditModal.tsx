@@ -84,7 +84,7 @@ const EditModal: React.FC<EditModalProps> = ({onClose, isBump}) => {
     onClose();
   };
   return (
-    <Modal visible transparent animationType="slide" onRequestClose={onClose}>
+    <Modal visible transparent animationType="fade" onRequestClose={onClose}>
       <View style={styles.dim}>
         <View style={styles.absoluteView}>
           {!isBumpUp ? (

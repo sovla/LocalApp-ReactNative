@@ -67,7 +67,7 @@ const MyProduct = () => {
     on: onIsEditProduct,
     off: offIsEditProduct,
     toggle,
-  } = useBoolean(true);
+  } = useBoolean(false);
   const [selectMenu, setSelectMenu] = useState<string>(t('ProfileSellProduct'));
 
   return (

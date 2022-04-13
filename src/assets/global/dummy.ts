@@ -1,4 +1,13 @@
-export const categoryMenu = [
+import {
+  categoryMenuTypes,
+  ProductTypes,
+  tierTypes,
+} from '@/Types/Components/global';
+
+export const categoryMenu: {
+  name: categoryMenuTypes['menu'];
+  image: any;
+}[] = [
   {
     name: 'digital',
     image: require('@assets/image/digital_color.png'),
@@ -92,3 +101,57 @@ export const categoryMenu = [
 export const dayList = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 
 export const languageList = ['br', 'es', 'en', 'ko'];
+
+export const tierList: tierTypes[] = [
+  {
+    name: 'Ntier',
+    title: 'NtierTitle',
+    content: 'NtierContent',
+  },
+  {
+    name: 'Rtier',
+    title: 'RtierTitle',
+    content: 'RtierContent',
+  },
+  {
+    name: 'Stier',
+    title: 'StierTitle',
+    content: 'StierContent',
+  },
+  {
+    name: 'Atier',
+    title: 'AtierTitle',
+    content: 'AtierContent',
+  },
+  {
+    name: 'Btier',
+    title: 'BtierTitle',
+    content: 'BtierContent',
+  },
+  {
+    name: 'Ctier',
+    title: 'CtierTitle',
+    content: 'CtierContent',
+  },
+  {
+    name: 'Ftier',
+    title: 'FtierTitle',
+    content: 'FtierContent',
+  },
+];
+
+export const productDummy: ProductTypes = {
+  title: 'Mac book Air 2020',
+  categoryMenu: 'accessory',
+  price: 'R$ 4.500,00',
+  tier: 'Atier',
+  tag: '#Apple  #Mac Book  # Mac book Air',
+  content: '하이',
+  imageArray: [
+    require('@assets/image/dummy.png'),
+    require('@assets/image/dummy.png'),
+    require('@assets/image/dummy.png'),
+  ],
+  isNego: false,
+  location: 'Bom Retiro',
+};

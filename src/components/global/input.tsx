@@ -41,7 +41,8 @@ export default function Input({
         ]}
         onChangeText={onChange}
         onFocus={() => setIsFocus(true)}
-        onBlur={() => setIsFocus(false)}>
+        onBlur={() => setIsFocus(false)}
+        value={PlaceHolderComponent === undefined ? value : undefined}>
         {!isFocus && !value?.length && PlaceHolderComponent !== undefined ? (
           <PlaceHolderComponent />
         ) : null}

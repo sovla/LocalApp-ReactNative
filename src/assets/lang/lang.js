@@ -198,7 +198,6 @@ export const ko = {
     fontSizeSmall: '작게',
     settingLanguageTitle: '언어설정',
     settingLanguageGuide1: '설정된 언어 변경 시 자동으로 앱이 실행됩니다.',
-
     productRegistration: '상품등록',
     MyProductMenu1: '예약중으로 변경',
     MyProductMenu2: '판매완료로 변경',
@@ -209,6 +208,18 @@ export const ko = {
     bumpUpModalGuide2: '가격을 낮추시면 판매 확율이 더 올라갑니다.',
     bumpUpModalGuide3: '다음 Bump-up은',
     bumpUpModalGuide4: '이후에 이용 가능합니다.',
+    productUpdateTitle: '상품 정보 수정',
+    Ntier: '새상품',
+    Rtier: '리퍼 / 전시제품',
+    Stier: 'S등급',
+    Atier: 'A등급',
+    Btier: 'B등급',
+    Ctier: 'C등급',
+    Ftier: '사용불가/부품용',
+    noPriceOffer: '가격제안불가',
+    tradeLocaition: '거래 지역',
+    detailDescription: '상세 설명',
+    complete: '완료',
   },
 };
 export const es = {

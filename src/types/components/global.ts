@@ -81,3 +81,45 @@ export interface ToggleProps {
 export interface ModalProps {
   onClose: (event?: GestureResponderEvent) => void | (() => void);
 }
+
+export interface ProductTypes {
+  title: string;
+  categoryMenu: categoryMenuTypes['menu'];
+  price: string;
+  tag?: string;
+  imageArray?: Array<any>;
+  tier?: tierTypes['name'];
+  location?: string;
+  content?: string;
+  isNego?: boolean;
+}
+export interface categoryMenuTypes {
+  menu:
+    | 'digital'
+    | 'homeAppliances'
+    | 'furniture'
+    | 'baby'
+    | 'householdGoods'
+    | 'sports'
+    | 'bag'
+    | 'shoes'
+    | 'watch'
+    | 'accessory'
+    | 'womanClothes'
+    | 'manClothes'
+    | 'game'
+    | 'beauty'
+    | 'pet'
+    | 'book'
+    | 'plant'
+    | 'car'
+    | 'motorcycle'
+    | 'other'
+    | 'donation'
+    | 'buy';
+}
+export interface tierTypes {
+  name: 'Ntier' | 'Rtier' | 'Stier' | 'Atier' | 'Btier' | 'Ctier' | 'Ftier';
+  title: string;
+  content: string;
+}
