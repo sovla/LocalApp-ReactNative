@@ -239,6 +239,9 @@ export const ko = {
     confirm: '확인',
     tierNone: '해당사항 없음',
     tierGuideTitle: '등급 기준',
+    tradingLocationUpdate: '거래 지역 수정',
+    locationUpdateGuide1: '판매를 원하시는 지역을\n검색해주세요',
+    myLocation: '현재 위치로 주소 찾기',
   },
 };
 export const es = {
