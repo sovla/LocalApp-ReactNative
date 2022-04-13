@@ -222,6 +222,14 @@ export const ko = {
     complete: '완료',
     categoryUpdate: '카테고리 수정',
     categorySelect: '카테고리 선택',
+    tagUpdate: '연관 Tag 수정',
+    tagGuide1:
+      '띄어쓰기를 통해 태그를 연속적으로 입력할수 있으며 최대 10자까지 입력가능합니다.',
+    tagGuide2:
+      '태그는 검색의 부가정보로 사용 되지만, 검색 결과 노출을 보장하지는 않습니다.',
+    tagGuide3:
+      '상품과 직접 관련이 없는 다른 상품명, 브랜드, 스팸성 키워드 등을 입력하면 노출이 중단되거나 상품이 삭제 될 수 있습니다.',
+    confirm: '확인',
   },
 };
 export const es = {
