@@ -1,4 +1,5 @@
 import {
+  Dimensions,
   Image,
   ImageBackground,
   Modal,
@@ -10,7 +11,7 @@ import {
 import React, {useState} from 'react';
 
 import BackGroundImage from '@assets/image/BG.png';
-import {getHeightPixel, getPixel} from '@/Util/pixelChange';
+import {fontSizeChange, getHeightPixel, getPixel} from '@/Util/pixelChange';
 import LocationWhiteIcon from '@assets/image/location_white.png';
 import SearchIcon from '@assets/image/search_white.png';
 import MenuIcon from '@assets/image/bar_white.png';
@@ -37,14 +38,27 @@ import NoticeOn from '@assets/image/notice_on.png';
 import SettingsIcon from '@assets/image/settings.png';
 import ServiceCenterIcon from '@assets/image/service_center.png';
 import Header from '@/Components/LoginSignUp/Header';
-import {Toggle} from '@/Components/Global/button';
+import {CheckBox, Toggle} from '@/Components/Global/button';
 import Line from '@/Components/Global/Line';
 import {Shadow} from 'react-native-shadow-2';
+import {useDispatch} from 'react-redux';
+import {fontChange, fontSizeState} from '@/Store/fontSizeState';
 
 export default function SettingChatting() {
   const {t} = useTranslation();
   const {value: fontSize, size} = useAppSelector(state => state.fontSize);
+  const dispatch = useDispatch();
   const [isOn, setIsOn] = useState(false);
+
+  const onPressCheckBox = (selectSize: fontSizeState['size']) => {
+    dispatch(
+      fontChange({
+        size: selectSize,
+        value: fontNameToValue(selectSize) / Dimensions.get('window').fontScale,
+      }),
+    );
+    return;
+  };
 
   return (
     <View>
@@ -53,7 +67,11 @@ export default function SettingChatting() {
         style={{
           marginHorizontal: getPixel(16),
         }}>
-        <GrayText fontSize={`${12 * fontSize}`}>
+        <GrayText
+          style={{
+            marginTop: getHeightPixel(45),
+          }}
+          fontSize={`${12 * fontSize}`}>
           {t('settingChattingTitle')}
         </GrayText>
         <View style={styles.betweenView}>
@@ -65,34 +83,67 @@ export default function SettingChatting() {
             <Text color={Theme.color.blue_3D} fontSize={`${16 * fontSize}`}>
               {t('fontSizeMedium')}
             </Text>
-            {isOn && (
-              <View
-                style={{
-                  position: 'absolute',
-                  top: getHeightPixel(25),
-                  left: -getPixel(90),
-                }}>
-                <Shadow>
-                  <View
-                    style={{
-                      width: getPixel(107),
-                      height: getHeightPixel(190),
-                      backgroundColor: '#fff',
-                    }}></View>
-                  <Text medium fontSize={`${16 * fontSize}`}>
-                    {t('fontSize')}
-                  </Text>
-                </Shadow>
-              </View>
-            )}
           </TouchableOpacity>
         </View>
         <Line isGray width={getPixel(328)} />
       </View>
+      {isOn && (
+        <Modal transparent animationType="fade" visible>
+          <View style={styles.modalContainer}>
+            <Shadow distance={5}>
+              <View style={styles.modalView}>
+                <Text
+                  medium
+                  fontSize={`${16 * fontSize}`}
+                  style={{
+                    marginTop: getHeightPixel(20),
+                    marginBottom: getHeightPixel(10),
+                  }}>
+                  {t('fontSize')}
+                </Text>
+                <CheckBox
+                  isOn={size === 'Small'}
+                  setIsOn={() => {
+                    onPressCheckBox('Small');
+                  }}
+                  text={t('fontSizeSmall')}
+                />
+                <CheckBox
+                  isOn={size === 'Medium'}
+                  setIsOn={() => {
+                    onPressCheckBox('Medium');
+                  }}
+                  text={t('fontSizeMedium')}
+                />
+                <CheckBox
+                  isOn={size === 'Large'}
+                  setIsOn={() => {
+                    onPressCheckBox('Large');
+                  }}
+                  text={t('fontSizeLarge')}
+                />
+              </View>
+            </Shadow>
+          </View>
+        </Modal>
+      )}
     </View>
   );
 }
 const styles = StyleSheet.create({
+  modalContainer: {
+    position: 'absolute',
+    top: getHeightPixel(155),
+    right: getPixel(16),
+  },
+  modalView: {
+    borderRadius: getPixel(10),
+
+    width: getPixel(107),
+    height: getHeightPixel(190),
+    backgroundColor: '#fff',
+    alignItems: 'center',
+  },
   container: {
     width: getPixel(328),
     marginHorizontal: getPixel(16),
@@ -106,3 +157,15 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.4,
   },
 });
+
+const fontNameToValue = (str: string) => {
+  if (str === 'Medium') {
+    return 1;
+  } else if (str === 'Large') {
+    return 1.2;
+  } else if (str === 'Small') {
+    return 0.8;
+  } else {
+    return 1;
+  }
+};

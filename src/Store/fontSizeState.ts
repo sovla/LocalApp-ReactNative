@@ -3,9 +3,9 @@ import {Dimensions} from 'react-native';
 import type {RootState} from './store';
 
 // Define a type for the slice state
-interface fontSizeState {
+export interface fontSizeState {
   value: number;
-  size: string;
+  size: 'Small' | 'Medium' | 'Large';
 }
 
 // Define the initial state using that type
@@ -20,7 +20,8 @@ export const fontSizeSlice = createSlice({
   initialState,
   reducers: {
     fontChange: (state, action: PayloadAction<fontSizeState>) => {
-      state = action.payload;
+      state.value = action.payload.value;
+      state.size = action.payload.size;
     },
   },
 });
