@@ -53,8 +53,8 @@ export default function Router() {
     i18n.changeLanguage(lang);
     API.post('lang_content.php')
       .then(res => {
-        if (res.data?.result === 'true') {
-          Object.keys(res?.data?.data).forEach(v => {
+        if (res.data?.result === 'true' && res?.data?.data) {
+          Object.keys(res.data.data).forEach(v => {
             i18n.addResources(v, 'translation', res.data.data[v].translation);
           });
         }
@@ -346,6 +346,10 @@ export const RouterSetting: RouterTypes[] = [
   {
     name: 'ProductUpdate',
     component: React.lazy(() => import('./Product/ProductUpdate')),
+  },
+  {
+    name: 'MyProduct',
+    component: React.lazy(() => import('./Product/MyProduct')),
   },
   {
     name: 'ProfileDetail',

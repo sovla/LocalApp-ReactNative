@@ -40,7 +40,7 @@ const Header: React.FC<HeaderProps> = () => {
     on: onIsMenu,
     off: offIsMenu,
     toggle: toggleIsMenu,
-  } = useBoolean(true);
+  } = useBoolean(false);
 
   return (
     <ImageBackground style={styles.headerContainer} source={BackGroundImage}>

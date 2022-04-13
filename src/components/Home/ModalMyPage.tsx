@@ -84,6 +84,7 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
           <ImageWithView
             image={AnnouncementIcon}
             content={t('modalMyPageNotice')}
+            width={getPixel(290)}
           />
           <ImageWithView
             image={NoticeColorIcon}
@@ -118,6 +119,7 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
             image={ServiceCenterIcon}
             content={t('modalMyPageServiceCenter')}
           />
+          <View style={styles.touchBlockView}></View>
         </View>
         <TouchableOpacity style={styles.loginView}>
           <AutoHeightImage
@@ -146,13 +148,23 @@ export const ImageWithView: React.FC<{
   imageWidth?: number;
   fontSize?: number;
   content: string;
+  width?: number;
   onPress?: () => void;
-}> = ({image, imageWidth = getPixel(20), fontSize, content, onPress}) => {
+}> = ({
+  image,
+  imageWidth = getPixel(20),
+  fontSize,
+  content,
+  onPress,
+  width = getPixel(310),
+}) => {
   const fontSizeState = useAppSelector(state => state.fontSize.value);
   const applyFontSize = fontSize ?? 16 * fontSizeState;
   return (
     <>
-      <TouchableOpacity onPress={onPress} style={styles.imageWithViewTouch}>
+      <TouchableOpacity
+        onPress={onPress}
+        style={[styles.imageWithViewTouch, {width}]}>
         <View style={styles.imageWithViewView}>
           <AutoHeightImage source={image} width={imageWidth} />
         </View>
@@ -171,6 +183,13 @@ export const modalDim: ViewStyle = {
 export default ModalMyPage;
 
 const styles = StyleSheet.create({
+  touchBlockView: {
+    position: 'absolute',
+    left: 0,
+    top: getHeightPixel(60),
+    width: getPixel(20),
+    height: getHeightPixel(700),
+  },
   loginImage: {
     width: getPixel(56),
     height: getPixel(56),
@@ -202,8 +221,6 @@ const styles = StyleSheet.create({
     height: getPixel(30),
   },
   imageWithViewTouch: {
-    width: getPixel(310),
-
     height: getHeightPixel(50),
     flexDirection: 'row',
     alignItems: 'center',

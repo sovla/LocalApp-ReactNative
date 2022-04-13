@@ -18,7 +18,7 @@ import {Shadow} from 'react-native-shadow-2';
 
 const Footer: React.FC<FooterProps> = ({menu}) => {
   return (
-    <Shadow distance={4}>
+    <Shadow distance={5} finalColor={'#0000'} startColor={'#0001'}>
       <View style={styles.footerContainer}>
         <MenuBox
           OffImage={HomeOffIcon}
