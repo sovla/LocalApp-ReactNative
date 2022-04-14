@@ -21,6 +21,8 @@ const Theme = {
     whiteGray_F6: '#F6F6F6',
     whiteGray_EE: '#EEEEEE',
     whiteGray_F3: '#F7F7F3',
+    whiteGray_FA: '#FAFAFA',
+    whiteGray_F2: '#F2F2F2',
     darkGray_78: '#787C84',
     whiteGray_B7: '#B7B7B7',
 
