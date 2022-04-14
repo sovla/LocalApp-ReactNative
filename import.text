@@ -4,14 +4,12 @@ import {
   Image,
   ImageBackground,
   Modal,
-  ScrollView,
   StyleSheet,
-  TextInput,
   TouchableOpacity,
   View,
   ViewStyle,
 } from 'react-native';
-import React, {Fragment, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import BackGroundImage from '@assets/image/BG.png';
 import {fontSizeChange, getHeightPixel, getPixel} from '@/Util/pixelChange';
@@ -38,12 +36,12 @@ import DummyProfileImage from '@assets/image/dummy_profile.png';
 import AnnouncementIcon from '@assets/image/announcement.png';
 import NoticeColorIcon from '@assets/image/notice_color.png';
 import StoreIcon from '@assets/image/store.png';
-import CloseGrayIcon from '@assets/image/close_gray.png';
-import MoreIcon from '@assets/image/more.png';
-import UploadWhiteIcon from '@assets/image/upload_white.png';
+import WriteIcon from '@assets/image/write.png';
+import TrashWhiteIcon from '@assets/image/trash_white.png';
+import BackWhiteIcon from '@assets/image/back_white.png';
 import NoticeOn from '@assets/image/notice_on.png';
 import SettingsIcon from '@assets/image/settings.png';
-import ArrowRightGrayIcon from '@assets/image/arrow_right_gray.png';
+import ServiceCenterIcon from '@assets/image/service_center.png';
 import Header from '@/Components/LoginSignUp/Header';
 import {
   Button,
@@ -55,18 +53,8 @@ import Line from '@/Components/Global/Line';
 import {Shadow} from 'react-native-shadow-2';
 import {useDispatch} from 'react-redux';
 import {fontChange, fontSizeState} from '@/Store/fontSizeState';
-import i18next, {t} from 'i18next';
-import {
-  categoryMenu,
-  languageList,
-  productDummy,
-  tierList,
-} from '@/assets/global/dummy';
+import i18next from 'i18next';
+import {languageList} from '@/assets/global/dummy';
 import Menu from '@/Components/Profile/Menu';
-import {ModalAlertProps, ProductWhiteBoxProps} from '@/Types/Components/ProductTypes';
-import CameraImage from '@/Components/Product/CameraImage';
-import {getHitSlop} from '@/Util/Util';
-import Input from '@/Components/Global/Input';
-import {ProductTypes} from '@/Types/Components/global';
-import LocationGrayIcon from '@assets/image/location_gray.png';
-import WarningIcon from '@assets/image/warning.png';
+import ProductWhiteBox from '@/Components/Product/ProductWhiteBox';
+import EditModal from '@/Components/Product/EditModal';
