@@ -9,7 +9,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 
 import BackGroundImage from '@assets/image/BG.png';
 import {fontSizeChange, getHeightPixel, getPixel} from '@/Util/pixelChange';
@@ -58,3 +58,13 @@ import {languageList} from '@/assets/global/dummy';
 import Menu from '@/Components/Profile/Menu';
 import ProductWhiteBox from '@/Components/Product/ProductWhiteBox';
 import EditModal from '@/Components/Product/EditModal';
+import Screen from '@/Types/Screen/Screen';
+import ArrowRightIcon from '@assets/image/arrow_right.png';
+import ArrowUpGrayIcon from '@assets/image/arrow_up_gray.png';
+import ArrowDownGrayIcon from '@assets/image/arrow_down_gray.png';
+import BangBlackIcon from '@assets/image/bang_black.png';
+import {TextInput} from 'react-native-gesture-handler';
+
+import QuetionIcon from '@assets/image/quetion.png';
+import AnswerIcon from '@assets/image/answer.png';
+import {FAQItemProps} from '@/Types/Components/SettingTypes';
