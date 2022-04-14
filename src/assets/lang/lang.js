@@ -201,6 +201,8 @@ export const ko = {
     productRegistration: '상품등록',
     MyProductMenu1: '예약중으로 변경',
     MyProductMenu2: '판매완료로 변경',
+    MyProductMenu3: '재판매',
+    MyProductMenu4: '구매후기 요청',
     bumpUp: 'Bump-up',
     postUpdate: '게시글 수정',
     postDelete: '게시글 삭제',
@@ -242,6 +244,12 @@ export const ko = {
     tradingLocationUpdate: '거래 지역 수정',
     locationUpdateGuide1: '판매를 원하시는 지역을\n검색해주세요',
     myLocation: '현재 위치로 주소 찾기',
+    photoUpdate: '사진 수정',
+    imageWarningTitle1: '등록 개수 초과',
+    imageWarning1: '판매 사진은 최대 10개까지 등록 가능합니다.',
+    ModalReviewRequestGuide: '구매자를 선택하여 후기 요청하기',
+    ModalReviewRequestMenu: '요청하지 않음',
+    ModalReviewRequestGuide1: '에게\n구매후기가 성공적으로\n요청 되었습니다.',
   },
 };
 export const es = {

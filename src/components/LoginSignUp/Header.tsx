@@ -10,7 +10,7 @@ import {MediumText} from '../Global/text';
 import {useTranslation} from 'react-i18next';
 import {useAppSelector} from '@/Hooks/CustomHook';
 
-const Header: React.FC<NavigationHeaderProps> = ({title}) => {
+const Header: React.FC<NavigationHeaderProps> = ({title, children}) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const navigation = useNavigation();
@@ -25,11 +25,19 @@ const Header: React.FC<NavigationHeaderProps> = ({title}) => {
         <Image source={backArrowBlackIcon} style={styles.image} />
       </TouchableOpacity>
       <MediumText fontSize={`${18 * fontSize}`}>{title}</MediumText>
+      <View style={styles.rightView}>{children}</View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  rightView: {
+    position: 'absolute',
+    right: getPixel(16),
+    height: getHeightPixel(50),
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   touch: {
     marginLeft: getPixel(16),
     marginRight: getPixel(10),
@@ -41,6 +49,7 @@ const styles = StyleSheet.create({
     height: getHeightPixel(50),
     width: '100%',
     flexDirection: 'row',
+
     alignContent: 'center',
   },
   image: {

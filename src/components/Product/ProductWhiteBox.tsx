@@ -10,22 +10,47 @@ import AutoHeightImage from 'react-native-auto-height-image';
 
 import MoreIcon from '@assets/image/more.png';
 import {ProductWhiteBoxProps} from '@/Types/Components/ProductTypes';
+import useBoolean from '@/Hooks/useBoolean';
+import EditModal from './EditModal';
+import ModalReviewRequest from './ModalReviewRequest';
 
 const ProductWhiteBox: React.FC<ProductWhiteBoxProps> = ({
   title = '나이키 운동화 슬립온 240 여성상의/여름블라우스/펀칭...',
   price = '$24.00',
-  onIsEditProduct,
+  isComplete,
+  selectMenu,
 }) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+
+  const {
+    value: isEditProduct,
+    on: onIsEditProduct,
+    off: offIsEditProduct,
+    toggle,
+  } = useBoolean(false);
+
+  const {value: isReview, on: onIsReview, off: offIsReview} = useBoolean(false);
+
   return (
     <View style={styles.container}>
       <View style={styles.contentContainer}>
         <Image
           source={require('@assets/image/dummy.png')}
-          style={styles.image}
+          style={[
+            styles.image,
+            isComplete && {
+              opacity: 0.5,
+            },
+          ]}
         />
-        <View style={styles.contentView}>
+        <View
+          style={[
+            styles.contentView,
+            isComplete && {
+              opacity: 0.5,
+            },
+          ]}>
           <Text numberOfLines={2} fontSize={`${14 * fontSize}`}>
             {title}
           </Text>
@@ -39,12 +64,25 @@ const ProductWhiteBox: React.FC<ProductWhiteBoxProps> = ({
       </View>
       <View style={styles.menuView}>
         <TouchableOpacity style={styles.menuLeftTouch}>
-          <Text fontSize={`${12 * fontSize}`}>{t('MyProductMenu1')}</Text>
+          <Text fontSize={`${12 * fontSize}`}>
+            {t(isComplete ? 'MyProductMenu3' : 'MyProductMenu1')}
+          </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.menuRightTouch}>
-          <Text fontSize={`${12 * fontSize}`}>{t('MyProductMenu2')}</Text>
+        <TouchableOpacity
+          onPress={isComplete ? onIsReview : () => {}}
+          style={styles.menuRightTouch}>
+          <Text fontSize={`${12 * fontSize}`}>
+            {t(isComplete ? 'MyProductMenu4' : 'MyProductMenu2')}
+          </Text>
         </TouchableOpacity>
       </View>
+      {isEditProduct && (
+        <EditModal
+          onClose={offIsEditProduct}
+          isBump={selectMenu === t('ProfileSellProduct')}
+        />
+      )}
+      {isReview && <ModalReviewRequest onClose={offIsReview} />}
     </View>
   );
 };

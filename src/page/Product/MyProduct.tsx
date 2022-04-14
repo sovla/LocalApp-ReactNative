@@ -62,12 +62,6 @@ const MyProduct = () => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
 
-  const {
-    value: isEditProduct,
-    on: onIsEditProduct,
-    off: offIsEditProduct,
-    toggle,
-  } = useBoolean(false);
   const [selectMenu, setSelectMenu] = useState<string>(t('ProfileSellProduct'));
 
   return (
@@ -96,18 +90,15 @@ const MyProduct = () => {
           </>
         }
         renderItem={({item, index}) => {
-          return <ProductWhiteBox onIsEditProduct={onIsEditProduct} />;
+          return (
+            <ProductWhiteBox
+              selectMenu={selectMenu}
+              isComplete={selectMenu === t('ProfileSellProductComplete')}
+            />
+          );
         }}
         data={[1, 2, 3, 4, 5, 6]}
       />
-      {isEditProduct && (
-        <>
-          <EditModal
-            onClose={offIsEditProduct}
-            isBump={selectMenu === t('ProfileSellProduct')}
-          />
-        </>
-      )}
     </View>
   );
 };
