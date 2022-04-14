@@ -148,7 +148,7 @@ export const tierList: tierTypes[] = [
 
 export const productDummy: ProductTypes = {
   title: 'Mac book Air 2020',
-  categoryMenu: 'accessory',
+  categoryMenu: 'car',
   price: 'R$ 4.500,00',
   tier: 'Atier',
   tag: '#Apple  #Mac Book  # Mac book Air',

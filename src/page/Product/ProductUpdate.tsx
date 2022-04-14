@@ -40,14 +40,14 @@ export default function ProductUpdate() {
       setProduct(prev => ({...prev, [key]: value}));
     }
   };
+
+  const onPressConfirm = () => {
+    navigation.navigate('ProductCompleteConfirm');
+  };
   return (
     <View>
       <Header title={t('productUpdateTitle')} />
-      <View
-        style={{
-          width: getPixel(360),
-          marginTop: getHeightPixel(36),
-        }}>
+      <View style={styles.viewMainContainer}>
         <ScrollView horizontal>
           <View style={{width: getPixel(16)}} />
           <CameraImage />
@@ -72,11 +72,7 @@ export default function ProductUpdate() {
             );
           })}
         </ScrollView>
-        <View
-          style={{
-            width: getPixel(328),
-            marginHorizontal: getPixel(16),
-          }}>
+        <View style={styles.contentContainer}>
           <TextInput />
           <Line isGray />
 
@@ -196,7 +192,11 @@ export default function ProductUpdate() {
             {t('detailDescription')}
           </Text>
           <TextInput multiline style={styles.textAreaInput} />
-          <Button content={t('complete')} width="328px" />
+          <Button
+            content={t('complete')}
+            width="328px"
+            onPress={onPressConfirm}
+          />
         </View>
       </View>
     </View>
@@ -204,6 +204,14 @@ export default function ProductUpdate() {
 }
 
 const styles = StyleSheet.create({
+  contentContainer: {
+    width: getPixel(328),
+    marginHorizontal: getPixel(16),
+  },
+  viewMainContainer: {
+    width: getPixel(360),
+    marginTop: getHeightPixel(36),
+  },
   textAreaInput: {
     marginBottom: getHeightPixel(30),
     width: getPixel(328),

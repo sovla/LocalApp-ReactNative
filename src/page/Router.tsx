@@ -1,5 +1,4 @@
 import Theme from '@/assets/global/Theme';
-import {Button} from '@/Components/Global/button';
 import {Text} from '@/Components/Global/text';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -14,7 +13,7 @@ import {useAppSelector} from '@/Hooks/CustomHook';
 import Screen from '@/Types/Screen/Screen';
 import {API} from '@/API/API';
 
-const ROUTING: keyof Screen = 'ServiceCenter';
+const ROUTING: keyof Screen = 'Home';
 
 const resources = {
   en,

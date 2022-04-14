@@ -68,3 +68,4 @@ import {TextInput} from 'react-native-gesture-handler';
 import QuetionIcon from '@assets/image/quetion.png';
 import AnswerIcon from '@assets/image/answer.png';
 import {FAQItemProps} from '@/Types/Components/SettingTypes';
+import SuccessIcon from '@assets/image/success.png';
