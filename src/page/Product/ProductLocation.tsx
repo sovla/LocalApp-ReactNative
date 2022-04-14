@@ -68,7 +68,7 @@ import CameraImage from '@/Components/Product/CameraImage';
 import {getHitSlop} from '@/Util/Util';
 import Input from '@/Components/Global/Input';
 import {ProductTypes} from '@/Types/Components/global';
-import MenuBulletIcon from '@assets/image/menu_bullet.png';
+import LocationGrayIcon from '@assets/image/location_gray.png';
 import MyLocationIcon from '@assets/image/my_location.png';
 
 const ProductLocation = () => {
@@ -85,10 +85,7 @@ const ProductLocation = () => {
               <Text
                 medium
                 fontSize={`${20 * fontSize}`}
-                style={{
-                  marginTop: getHeightPixel(30),
-                  marginBottom: getHeightPixel(20),
-                }}>
+                style={styles.headerText}>
                 {t('locationUpdateGuide1')}
               </Text>
               <View>
@@ -113,27 +110,10 @@ const ProductLocation = () => {
         }
         renderItem={({item, index}) => {
           return (
-            <View style={styles.boxContainer}>
-              <Shadow distance={5}>
-                <View style={styles.boxView}>
-                  <Text fontSize={`${16 * fontSize}`} medium>
-                    {t(item.name)}
-                  </Text>
-                  <GrayText
-                    fontSize={`${14 * fontSize}`}
-                    style={styles.contentText}>
-                    {t(item.content)}
-                  </GrayText>
-                  <View style={styles.tierImageView}>
-                    <Image
-                      source={item.image}
-                      style={styles.tierImage}
-                      resizeMode="contain"
-                    />
-                  </View>
-                </View>
-              </Shadow>
-            </View>
+            <LocationSelect
+              locationTitle="Rua. Tres Rios"
+              locationSubTitle="Bom Retiro, São Paulo - SP,Brasil "
+            />
           );
         }}
         ListFooterComponent={
@@ -150,7 +130,47 @@ const ProductLocation = () => {
 
 export default ProductLocation;
 
+const LocationSelect: React.FC<{
+  locationTitle: string;
+  locationSubTitle: string;
+}> = ({locationTitle, locationSubTitle}) => {
+  const fontSize = useAppSelector(state => state.fontSize.value);
+  return (
+    <>
+      <TouchableOpacity style={styles.locationTouch}>
+        <AutoHeightImage
+          source={LocationGrayIcon}
+          width={getPixel(14)}
+          style={{
+            marginTop: getHeightPixel(5),
+          }}
+        />
+        <View
+          style={{
+            marginLeft: getPixel(16),
+          }}>
+          <Text fontSize={`${16 * fontSize}`}>{locationTitle}</Text>
+          <GrayText fontSize={`${12 * fontSize}`}>{locationSubTitle}</GrayText>
+        </View>
+      </TouchableOpacity>
+      <Line isGray />
+    </>
+  );
+};
+
 const styles = StyleSheet.create({
+  headerText: {
+    marginTop: getHeightPixel(30),
+    marginBottom: getHeightPixel(20),
+  },
+  locationTouch: {
+    width: getPixel(328),
+    marginHorizontal: getPixel(16),
+    height: getHeightPixel(70),
+    flexDirection: 'row',
+    paddingTop: getHeightPixel(14),
+    alignItems: 'flex-start',
+  },
   headerView: {
     marginHorizontal: getPixel(16),
     width: getPixel(328),

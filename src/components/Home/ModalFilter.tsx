@@ -179,12 +179,15 @@ export const SlideRightModal: React.FC<ModalFilterProps> = ({
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
-    onPanResponderMove: Animated.event([
-      null,
-      {
-        dx: pan.x, // x,y are Animated.Value
-      },
-    ]),
+    onPanResponderMove: Animated.event(
+      [
+        null,
+        {
+          dx: pan.x, // x,y are Animated.Value
+        },
+      ],
+      {useNativeDriver: true},
+    ),
 
     onPanResponderRelease: (e, g) => {
       if (g.dx > 150) {

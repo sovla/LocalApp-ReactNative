@@ -1,15 +1,17 @@
 import {
+  Dimensions,
   Image,
+  StatusBar,
   StyleSheet,
   TouchableOpacity,
   View,
   ViewStyle,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {GrayText, Text} from '@Components/Global/text';
-import {useAppSelector} from '@/Hooks/CustomHook';
+import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
 import {ModalMyPageProps} from '@/Types/Components/HomeTypes';
@@ -32,11 +34,16 @@ import ServiceCenterIcon from '@assets/image/service_center.png';
 const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const navigation = useAppNavigation();
   const isLogin = true;
   const login = {
     name: 'Leandro',
     statusMessage: 'Love what you have',
     image: require('@assets/image/dummy.png'),
+  };
+  const onPressSaleProduct = () => {
+    //  판매상품 눌럿을 때
+    navigation.navigate('MyProduct');
   };
 
   return (
@@ -99,6 +106,7 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
           <ImageWithView
             image={DocumentIcon}
             content={t('modalMyPageProduct')}
+            onPress={onPressSaleProduct}
           />
           <ImageWithView image={HeartBlueIcon} content={t('modalMyPageLike')} />
           <ImageWithView
@@ -121,14 +129,27 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
           />
           <View style={styles.touchBlockView}></View>
         </View>
-        <TouchableOpacity style={styles.loginView}>
-          <AutoHeightImage
+        <TouchableOpacity
+          style={[
+            styles.loginView,
+            Dimensions.get('window').height > 800
+              ? {
+                  flex: 1,
+                }
+              : {
+                  height: getHeightPixel(83),
+                },
+          ]}>
+          <Image
             source={
               isLogin
                 ? require('@assets/image/logout.png')
                 : require('@assets/image/login.png')
             }
-            width={getPixel(20)}
+            style={{
+              width: getPixel(20),
+              height: getPixel(20),
+            }}
           />
           <Text
             fontSize={`${18 * fontSize}`}
@@ -166,7 +187,14 @@ export const ImageWithView: React.FC<{
         onPress={onPress}
         style={[styles.imageWithViewTouch, {width}]}>
         <View style={styles.imageWithViewView}>
-          <AutoHeightImage source={image} width={imageWidth} />
+          <Image
+            source={image}
+            style={{
+              width: imageWidth,
+              height: getHeightPixel(20),
+            }}
+            resizeMode="contain"
+          />
         </View>
         <Text fontSize={`${applyFontSize}`}>{content}</Text>
       </TouchableOpacity>
@@ -192,17 +220,16 @@ const styles = StyleSheet.create({
   },
   loginImage: {
     width: getPixel(56),
-    height: getPixel(56),
+    height: getHeightPixel(56),
   },
   loginImageView: {
     width: getPixel(56),
-    height: getPixel(56),
+    height: getHeightPixel(56),
     borderRadius: getPixel(20),
     overflow: 'hidden',
     marginRight: getPixel(12),
   },
   loginView: {
-    flex: 1,
     alignItems: 'center',
     flexDirection: 'row',
     marginLeft: getPixel(25),
@@ -210,8 +237,7 @@ const styles = StyleSheet.create({
   profileView: {
     flexDirection: 'row',
     marginLeft: getPixel(19),
-    marginTop: getHeightPixel(20),
-    marginBottom: getHeightPixel(20),
+    marginVertical: getHeightPixel(20),
     alignItems: 'center',
   },
   backImage: {
@@ -229,7 +255,7 @@ const styles = StyleSheet.create({
     width: getPixel(30),
     justifyContent: 'center',
     alignItems: 'center',
-    marginHorizontal: getPixel(20),
+    marginLeft: getPixel(20),
     marginRight: getPixel(10),
   },
 });

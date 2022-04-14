@@ -64,9 +64,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     flexDirection: 'row',
     paddingHorizontal: getPixel(10),
-    paddingBottom: getHeightPixel(18.5),
-    borderBottomColor: Theme.color.whiteGray_EE,
-    borderBottomWidth: 1,
+    paddingBottom: getHeightPixel(10.5),
   },
   image: {
     width: getPixel(64),
@@ -80,9 +78,15 @@ const styles = StyleSheet.create({
   menuView: {
     height: getHeightPixel(36.5),
     flexDirection: 'row',
+    borderTopColor: Theme.color.whiteGray_EE,
+    borderTopWidth: 1,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
   },
   menuLeftTouch: {
     width: '50%',
+    height: '100%',
     borderRightColor: Theme.color.whiteGray_EE,
     borderRightWidth: 1,
     justifyContent: 'center',
@@ -90,6 +94,7 @@ const styles = StyleSheet.create({
   },
   menuRightTouch: {
     width: '50%',
+    height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
   },
