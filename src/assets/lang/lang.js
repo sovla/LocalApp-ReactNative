@@ -282,6 +282,27 @@ export const ko = {
     chattingDownloadGuideAlert: '대화 내용을 내보내시겠습니까?',
     cancle: '취소',
     deleteChattingContentGuide: '대화 내용을 삭제 하시겠습니까?',
+    userReport: '사용자 신고',
+    reportGuide: '님을 신고하는 이유를 선택해주세요',
+    prohibitedItem: '판매금지 품목',
+    unmannedUser: '비매너사용자',
+    scamUser: '사기 사용자',
+    lifeTrade: '생명 거래: 장기, 신체',
+    weapon: '무기, 탄약 및 폭발물',
+    drugs: '마약 및 금지약물',
+    privacy: '개인정보: 신분증, 통장, 계정',
+    charityProduct: '정부 기관의 자선 제품',
+
+    medicalEquipment: '의료장비',
+    reportGuide2: '신고 내용을 입력해 주세요.',
+    reportGuide3: '판매금지 품목입니다.',
+    reportGuide4: '비매너 사용자 입니다.',
+    reportGuide5: '님을 신고하는 이유를 간략하게 알려주세요.',
+    reportGuide6:
+      '어떤 상황에서든 상대방을 비하/조롱/모욕 등의 언행을 하면 이용 제재를 받을 수 있습니다.',
+    reportGuide7: '사기 사용자입니다.',
+    reportGuide8:
+      '불법상품 또는 상품 정보 오류, 부정한 거래를 요구하는 판매자를 발견하셨을 경우 상품 상세화면 하단에 있는 신고하기를 통해 신고하실수 있으며, 신고하실 때는 상품 또는 판매자명과 함께 위반한 내용을 상세하게 기재하여 주시기 바랍니다.',
   },
 };
 export const es = {
