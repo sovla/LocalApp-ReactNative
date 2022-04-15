@@ -70,9 +70,24 @@ import AnswerIcon from '@assets/image/answer.png';
 import {FAQItemProps} from '@/Types/Components/SettingTypes';
 import SuccessIcon from '@assets/image/success.png';
 const Date = () => {
+  const {t} = useTranslation();
+  const fontSize = useAppSelector(state => state.fontSize.value);
   return (
-    <View>
-      <Text>Date</Text>
+    <View
+      style={{
+        height: getHeightPixel(50),
+        width: getPixel(360),
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+      <Text
+        color={Theme.color.darkBlue_AE}
+        fontSize={`${11 * fontSize}`}
+        style={{
+          letterSpacing: getPixel(1),
+        }}>
+        Today at 03:50 PM
+      </Text>
     </View>
   );
 };

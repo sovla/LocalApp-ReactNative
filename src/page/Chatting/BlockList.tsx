@@ -69,65 +69,67 @@ import QuetionIcon from '@assets/image/quetion.png';
 import AnswerIcon from '@assets/image/answer.png';
 import {FAQItemProps} from '@/Types/Components/SettingTypes';
 import SuccessIcon from '@assets/image/success.png';
-import {MyChattingProps} from '@/Types/Components/ChattingTypes';
 
-const MyChatting: React.FC<MyChattingProps> = ({date, content, isCheck}) => {
+const BlockList = () => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   return (
-    <View style={styles.container}>
-      <View style={styles.dateView}>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          {isCheck && isCheck > 0 && (
+    <View>
+      <Header title={t('blockUserManagement')} />
+      <View style={styles.container}>
+        <View style={styles.rowCenter}>
+          <View style={styles.imageView}>
             <Image
-              source={
-                isCheck === 1
-                  ? require('@assets/image/check.png')
-                  : require('@assets/image/check_double.png')
-              }
-              style={{
-                width: getPixel(24),
-                height: getPixel(24),
-              }}
+              source={require('@assets/image/dummy.png')}
+              style={styles.image}
+              resizeMode="contain"
             />
-          )}
-
-          <Text fontSize={`${11 * fontSize}`} color="#59636C">
-            {date}
-          </Text>
+          </View>
+          <Text fontSize={`${16 * fontSize}`}>카롱소녀</Text>
         </View>
+        <TouchableOpacity style={styles.touch}>
+          <WhiteText fontSize={`${12 * fontSize}`}>{t('unBlock')}</WhiteText>
+        </TouchableOpacity>
       </View>
-      <View style={styles.chattingView}>
-        <WhiteText fontSize={`${14 * fontSize}`}>{content}</WhiteText>
-      </View>
+      <Line isGray />
     </View>
   );
 };
 
-export default MyChatting;
+export default BlockList;
 
 const styles = StyleSheet.create({
   container: {
-    minHeight: getHeightPixel(44),
+    width: getPixel(328),
+    marginHorizontal: getPixel(16),
+    height: getHeightPixel(70),
     flexDirection: 'row',
-    justifyContent: 'flex-end',
-    width: getPixel(360),
-    paddingHorizontal: getPixel(16),
-    marginTop: getHeightPixel(15),
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
-  dateView: {
-    marginRight: getPixel(5),
-    justifyContent: 'flex-end',
-    marginBottom: getHeightPixel(3),
+  rowCenter: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-  chattingView: {
-    maxWidth: getPixel(220),
-    minHeight: getHeightPixel(44),
-    borderRadius: getPixel(15),
-    borderBottomRightRadius: 0,
+  imageView: {
+    width: getPixel(48),
+    height: getPixel(48),
+    borderRadius: getPixel(18),
+    marginRight: getPixel(14),
+
+    overflow: 'hidden',
+  },
+  touch: {
     backgroundColor: Theme.color.blue_3D,
+    width: getPixel(64),
+    height: getHeightPixel(25),
+    borderRadius: getPixel(4),
     justifyContent: 'center',
-    paddingHorizontal: getPixel(14),
-    paddingVertical: getHeightPixel(14),
+    alignItems: 'center',
+  },
+
+  image: {
+    width: getPixel(48),
+    height: getPixel(48),
   },
 });

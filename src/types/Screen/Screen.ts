@@ -72,6 +72,7 @@ type Screen = {
   Menu: StackScreenProps<Screen> | undefined;
   SignUpToS: StackScreenProps<Screen> | undefined;
   ProductTierGuide: StackScreenProps<Screen> | undefined;
+  BlockList: StackScreenProps<Screen> | undefined;
 };
 
 export default Screen;

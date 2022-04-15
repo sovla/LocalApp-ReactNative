@@ -70,7 +70,11 @@ export default function Router() {
             <Stack.Screen
               name={item.name}
               key={item.name + index}
-              component={withScrollView(item.component)}
+              component={
+                item.name !== 'ChattingDetail'
+                  ? withScrollView(item.component)
+                  : item.component
+              }
               options={{
                 headerShown: false,
                 cardStyleInterpolator: forFade,
@@ -409,6 +413,10 @@ export const RouterSetting: RouterTypes[] = [
   {
     name: 'ToU',
     component: React.lazy(() => import('./Setting/ToU')),
+  },
+  {
+    name: 'BlockList',
+    component: React.lazy(() => import('./Chatting/BlockList')),
   },
 ];
 

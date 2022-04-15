@@ -186,7 +186,7 @@ export const SlideRightModal: React.FC<ModalFilterProps> = ({
           dx: pan.x, // x,y are Animated.Value
         },
       ],
-      {useNativeDriver: true},
+      {useNativeDriver: false},
     ),
 
     onPanResponderRelease: (e, g) => {

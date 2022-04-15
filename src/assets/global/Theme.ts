@@ -6,6 +6,7 @@ const Theme = {
     blue_3D: '#3D56F0',
     blue_B3: '#B3B6DA32',
     darkBlue: '#012DAF',
+    darkBlue_AE: '#AEB5C0',
     darkBlue_0F: '#0F185F',
     whiteBlue_2F: '#F2F3F6',
 
@@ -18,6 +19,7 @@ const Theme = {
     gray_F1: '#F1F1F1',
     gray_BB: '#BBBBBB',
 
+    whiteGray_DC: '#DCDCDC',
     whiteGray_F6: '#F6F6F6',
     whiteGray_EE: '#EEEEEE',
     whiteGray_F3: '#F7F7F3',

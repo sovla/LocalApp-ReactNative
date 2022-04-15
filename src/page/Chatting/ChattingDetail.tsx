@@ -4,12 +4,18 @@ import {
   FlatList,
   Image,
   ImageBackground,
+  Keyboard,
   KeyboardAvoidingView,
   Modal,
+  Platform,
+  SafeAreaView,
+  ScrollView,
   StyleSheet,
   TouchableOpacity,
   View,
   ViewStyle,
+  TextInput,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import React, {Fragment, useEffect, useRef, useState} from 'react';
 
@@ -58,7 +64,7 @@ import {Shadow} from 'react-native-shadow-2';
 import {useDispatch} from 'react-redux';
 import {fontChange, fontSizeState} from '@/Store/fontSizeState';
 import i18next from 'i18next';
-import {languageList} from '@/assets/global/dummy';
+import {categoryMenu, languageList} from '@/assets/global/dummy';
 import Menu from '@/Components/Profile/Menu';
 import ProductWhiteBox from '@/Components/Product/ProductWhiteBox';
 import EditModal from '@/Components/Product/EditModal';
@@ -67,7 +73,6 @@ import ArrowRightIcon from '@assets/image/arrow_right.png';
 import ArrowUpGrayIcon from '@assets/image/arrow_up_gray.png';
 import ArrowDownGrayIcon from '@assets/image/arrow_down_gray.png';
 import BangBlackIcon from '@assets/image/bang_black.png';
-import {TextInput} from 'react-native-gesture-handler';
 
 import QuetionIcon from '@assets/image/quetion.png';
 import AnswerIcon from '@assets/image/answer.png';
@@ -89,154 +94,267 @@ import PlusMenuIcon from '@assets/image/plus_menu.png';
 import GalleryPurpleIcon from '@assets/image/gallery_purple.png';
 import CameraSkyIcon from '@assets/image/camera_sky.png';
 import LocationOrangeIcon from '@assets/image/location_orange.png';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
+import LocationChatting from '@/Components/Chatting/LocationChatting';
+import ModalChattingSetting from '@/Components/Chatting/ModalChattingSetting';
 
 export default function ChattingDetail() {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
-  const [isOn, setIsOn] = useState(false);
+  const {
+    value: isSetting,
+    on: onIsSetting,
+    off: offIsSetting,
+  } = useBoolean(false);
+  const [isOn, setIsOn] = useState<boolean>(false);
+
+  const [chatting, setChatting] = useState<string>('');
+
   const name = 'Designplus';
   const viewRef = useRef<View>(null);
 
   return (
-    <View style={{flex: 1}} behavior="padding">
-      <ImageBackground
-        style={styles.headerImageBackground}
-        source={ChattingBgImage}>
-        <View style={styles.rowCenter}>
-          <AutoHeightImage source={BackWhiteIcon} width={getPixel(30)} />
-          <WhiteText
-            bold
-            fontSize={`${16 * fontSize}`}
-            style={styles.marginLeft}>
-            {name}
-          </WhiteText>
-        </View>
-        <View style={styles.rowCenter}>
-          <TouchableOpacity hitSlop={getHitSlop(5)} style={styles.marginRight}>
-            <AutoHeightImage width={getPixel(18)} source={StoreWhiteIcon} />
-          </TouchableOpacity>
-          <TouchableOpacity hitSlop={getHitSlop(5)} style={styles.marginRight}>
-            <AutoHeightImage width={getPixel(20)} source={SearchWhiteIcon} />
-          </TouchableOpacity>
-          <TouchableOpacity hitSlop={getHitSlop(5)}>
-            <AutoHeightImage width={getPixel(20)} source={MoreWhiteIcon} />
-          </TouchableOpacity>
-        </View>
-      </ImageBackground>
-      <FlatList
-        renderItem={({item, index}) => {
-          return (
-            <>
-              {index === 0 && <Date />}
-              {index === 1 && <OtherChatting />}
-              {index === 2 && <MyChatting />}
-              {index === 3 && <OtherChatting />}
-              {index === 4 && <ProductChatting />}
-              {index === 5 && <ProductChatting />}
-              {index > 5 && <ProductChatting />}
-            </>
-          );
-        }}
-        data={[
-          1, 2, 3, 4, 5, 6, 7, 81, 2, 3, 4, 5, 6, 7, 81, 2, 3, 4, 5, 6, 7, 81,
-          2, 3, 4, 5, 6, 7, 81, 2, 3, 4, 5, 6, 7, 8,
-        ]}
-      />
-      <View>
-        <Shadow>
+    <>
+      <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
+        <TouchableWithoutFeedback>
           <>
             <View
-              ref={viewRef}
               style={{
-                width: getPixel(360),
-                height: getHeightPixel(55),
-                paddingHorizontal: getPixel(16),
-                flexDirection: 'row',
-                alignItems: 'center',
+                maxHeight: getHeightPixel(50),
+                height: getHeightPixel(50),
               }}>
-              <TouchableOpacity
-                onPress={() => {
-                  setIsOn(prev => !prev);
-                }}>
-                <Image
-                  source={PlusMenuIcon}
-                  style={{
-                    width: getPixel(24),
-                    height: getPixel(24),
-                    marginRight: getPixel(10),
-                  }}
-                  resizeMode="contain"
-                />
-              </TouchableOpacity>
-              <View
-                style={{
-                  backgroundColor: 'red',
-                  height: '100%',
-                  justifyContent: 'center',
-                }}>
-                <TextInput
-                  // autoFocus={false}
-                  // showSoftInputOnFocus={false}
-
-                  style={{
-                    width: getPixel(254),
-                    height: getHeightPixel(40),
-                    includeFontPadding: false,
-
-                    backgroundColor: Theme.color.whiteGray_FA,
-                    borderColor: Theme.color.whiteGray_F2,
-                    borderWidth: 1,
-                    borderRadius: getPixel(10),
-                    paddingBottom: getHeightPixel(5),
-                  }}
-                />
-              </View>
-              <TouchableOpacity>
-                <Image
-                  source={SendGrayIcon}
-                  style={{
-                    width: getPixel(30),
-                    height: getPixel(30),
-                    marginLeft: getPixel(10),
-                  }}
-                  resizeMode="contain"
-                />
-              </TouchableOpacity>
+              <ImageBackground
+                style={styles.headerImageBackground}
+                source={ChattingBgImage}>
+                <View style={styles.rowCenter}>
+                  <AutoHeightImage
+                    source={BackWhiteIcon}
+                    width={getPixel(30)}
+                  />
+                  <WhiteText
+                    bold
+                    fontSize={`${16 * fontSize}`}
+                    style={styles.marginLeft}>
+                    {name}
+                  </WhiteText>
+                </View>
+                <View style={styles.rowCenter}>
+                  <TouchableOpacity
+                    hitSlop={getHitSlop(5)}
+                    style={styles.marginRight}>
+                    <AutoHeightImage
+                      width={getPixel(18)}
+                      source={StoreWhiteIcon}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    hitSlop={getHitSlop(5)}
+                    style={styles.marginRight}>
+                    <AutoHeightImage
+                      width={getPixel(20)}
+                      source={SearchWhiteIcon}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={onIsSetting}
+                    hitSlop={getHitSlop(5)}>
+                    <AutoHeightImage
+                      width={getPixel(20)}
+                      source={MoreWhiteIcon}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </ImageBackground>
             </View>
-            {isOn && (
-              <View style={[styles.footerOnContainer]}>
-                <TouchableOpacity
-                  style={[styles.footerImageTouch, styles.footerMarginRight]}>
-                  <Image
-                    source={GalleryPurpleIcon}
-                    style={styles.footerOnImage}
-                  />
-                  <Text fontSize={`${14 * fontSize}`}>{t('album')}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.footerImageTouch, styles.footerMarginRight]}>
-                  <Image source={CameraSkyIcon} style={styles.footerOnImage} />
-                  <Text fontSize={`${14 * fontSize}`}>{t('camera')}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.footerImageTouch}>
-                  <Image
-                    source={LocationOrangeIcon}
-                    style={styles.footerOnImage}
-                  />
-                  <Text fontSize={`${14 * fontSize}`}>
-                    {t('locationInformation')}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            )}
+            <View
+              style={{
+                maxHeight: getHeightPixel(740 - 55 - 50),
+                flex: 1,
+              }}>
+              <KeyboardAwareScrollView style={{flex: 1}}>
+                {[
+                  1, 2, 3, 4, 5, 6, 7, 81, 2, 3, 4, 5, 6, 7, 81, 2, 3, 4, 5, 6,
+                  7, 81, 2, 3, 4, 5, 6, 7, 81, 2, 3, 4, 5, 6, 7, 8,
+                ].map((v, index) => {
+                  return (
+                    <>
+                      {index === 0 && <Date />}
+                      {index === 1 && (
+                        <OtherChatting
+                          date="11:20"
+                          content="Neque porro quisquam est."
+                        />
+                      )}
+                      {index === 2 && (
+                        <MyChatting
+                          date="11:20"
+                          isCheck={2}
+                          content="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque."
+                        />
+                      )}
+                      {index === 3 && (
+                        <OtherChatting date="11:30" content="Error sit?" />
+                      )}
+                      {index === 4 && (
+                        <MyChatting
+                          date="11:20"
+                          isCheck={2}
+                          content="Error sit?"
+                        />
+                      )}
+                      {index === 5 && (
+                        <LocationChatting
+                          date="11:20"
+                          isCheck={2}
+                          content="R. Guarani, 266 - Bom Retiro
+                          São Paulo - SP, 01123-040"
+                          isMy={index % 2 === 1}
+                        />
+                      )}
+                      {index === 6 && (
+                        <LocationChatting
+                          date="11:20"
+                          isCheck={2}
+                          content="R. Guarani, 266 - Bom Retiro
+                          São Paulo - SP, 01123-040"
+                          isMy={index % 2 === 1}
+                        />
+                      )}
+                      {index === 7 && (
+                        <MyChatting
+                          date="11:20"
+                          isCheck={2}
+                          content="Unde omnis iste natus.."
+                        />
+                      )}
+                      {index > 8 && (
+                        <ProductChatting
+                          isMyProduct={index % 2 === 1}
+                          content={''}
+                          date={''}
+                        />
+                      )}
+                    </>
+                  );
+                })}
+              </KeyboardAwareScrollView>
+            </View>
+            <View ref={viewRef}>
+              <>
+                <View style={styles.footerView}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setIsOn(prev => !prev);
+                      Keyboard.dismiss();
+                    }}>
+                    <Image
+                      source={PlusMenuIcon}
+                      style={styles.footerPlusImage}
+                      resizeMode="contain"
+                    />
+                  </TouchableOpacity>
+                  <View style={styles.footerInputView}>
+                    <TextInput
+                      // autoFocus={false}
+                      // disableFullscreenUI={true}
+                      // showSoftInputOnFocus={false}
+                      onFocus={() => {
+                        viewRef.current?.focus();
+                      }}
+                      onChangeText={setChatting}
+                      style={{
+                        ...styles.footerTextInput,
+                        fontSize: fontSize * 16,
+                      }}
+                    />
+                  </View>
+                  <TouchableOpacity>
+                    <Image
+                      source={SendGrayIcon}
+                      style={styles.footerSendGray}
+                      resizeMode="contain"
+                    />
+                  </TouchableOpacity>
+                </View>
+                {isOn && (
+                  <View style={[styles.footerOnContainer]}>
+                    <TouchableOpacity
+                      style={[
+                        styles.footerImageTouch,
+                        styles.footerMarginRight,
+                      ]}>
+                      <Image
+                        source={GalleryPurpleIcon}
+                        style={styles.footerOnImage}
+                      />
+                      <Text fontSize={`${14 * fontSize}`}>{t('album')}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[
+                        styles.footerImageTouch,
+                        styles.footerMarginRight,
+                      ]}>
+                      <Image
+                        source={CameraSkyIcon}
+                        style={styles.footerOnImage}
+                      />
+                      <Text fontSize={`${14 * fontSize}`}>{t('camera')}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.footerImageTouch}>
+                      <Image
+                        source={LocationOrangeIcon}
+                        style={styles.footerOnImage}
+                      />
+                      <Text fontSize={`${14 * fontSize}`}>
+                        {t('locationInformation')}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+              </>
+            </View>
           </>
-        </Shadow>
-      </View>
-    </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+      {isSetting && <ModalChattingSetting onClose={offIsSetting} />}
+    </>
   );
 }
 
 const styles = StyleSheet.create({
+  footerSendGray: {
+    width: getPixel(30),
+    height: getPixel(30),
+    marginLeft: getPixel(10),
+  },
+  footerTextInput: {
+    width: getPixel(254),
+    height: getHeightPixel(40),
+
+    borderRadius: getPixel(10),
+    backgroundColor: Theme.color.whiteGray_FA,
+    borderColor: Theme.color.whiteGray_F2,
+    borderWidth: 1,
+    color: Theme.color.black,
+    // color: Theme.color.black,
+    // paddingBottom: getHeightPixel(5),
+  },
+  footerInputView: {
+    height: '100%',
+    justifyContent: 'center',
+  },
+  footerPlusImage: {
+    width: getPixel(24),
+    height: getPixel(24),
+    marginRight: getPixel(10),
+  },
+  footerView: {
+    paddingHorizontal: getPixel(16),
+    height: getHeightPixel(55),
+    flexDirection: 'row',
+    paddingVertical: getHeightPixel(7.5),
+    alignItems: 'center',
+  },
   footerMarginRight: {
     marginRight: getPixel(55),
   },
