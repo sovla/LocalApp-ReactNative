@@ -2,7 +2,7 @@ import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
 import {categoryMenuTypes, ProductTypes, tierTypes} from '../Components/global';
 
 type Screen = {
-  OnBoarding1: StackScreenProps<Screen> | undefined;
+  OnBoarding: StackScreenProps<Screen> | undefined;
   OnBoarding2: StackScreenProps<Screen> | undefined;
   OnBoarding3: StackScreenProps<Screen> | undefined;
   AppPermission: StackScreenProps<Screen> | undefined;
@@ -91,7 +91,7 @@ type Screen = {
 export default Screen;
 
 export type ProfileScreenNavigationProp = StackNavigationProp<Screen>;
-export type OnBoarding1Props = StackScreenProps<Screen, 'OnBoarding1'>;
+export type OnBoarding1Props = StackScreenProps<Screen, 'OnBoarding'>;
 export type OnBoarding2Props = StackScreenProps<Screen, 'OnBoarding2'>;
 export type OnBoarding3Props = StackScreenProps<Screen, 'OnBoarding3'>;
 export type AppPermissionProps = StackScreenProps<Screen, 'AppPermission'>;

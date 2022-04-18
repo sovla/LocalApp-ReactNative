@@ -6,6 +6,19 @@ export const en = {
 export const ko = {
   translation: {
     title: '제목',
+    Skip: 'Skip',
+    onBoardingGuide1: '우리 지역 기반\n직거래 마켓',
+    onBoardingGuide2:
+      '우리 동네 주민들과 안전하고\n믿을수 있는 직거래로 시작해보세요',
+    onBoardingGuide3: '키워드 알림',
+    onBoardingGuide4:
+      '찾는 상품이 없으세요?\n키워드만 등록하면  알림으로 바로\n알려줘 검색 시간까지 단축 된답니다',
+    onBoardingGuide5: '믿을 수 있는 거래',
+    onBoardingGuide6:
+      '거래하기 전, 프로필에 있는\n평점과 좋아요를 확인해보세요',
+
+    onBoardingGuide7: '수수료',
+    onBoardingGuide8: '모든 판매에 대한 수수료는 받지\n않습니다.',
     loginComplete: '로그인이 완료 되었습니다.',
     loginCompleteText: 'LocalApp에서 제공되는 모든 서비스를',
     loginCompleteText2: '정상적으로 이용하실 수 있습니다.',
