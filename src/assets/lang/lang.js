@@ -5,6 +5,7 @@ export const en = {
 };
 export const ko = {
   translation: {
+    title: '제목',
     loginComplete: '로그인이 완료 되었습니다.',
     loginCompleteText: 'LocalApp에서 제공되는 모든 서비스를',
     loginCompleteText2: '정상적으로 이용하실 수 있습니다.',
@@ -316,6 +317,28 @@ export const ko = {
     openingTime: '영업시간',
     openingTimeGuide1: "요일을 체크하지 않으면 'Closed'로 표시 됩니다.",
     open24hours: '24시간영업',
+    tradeArea: '거래 희망 지역',
+    carBrand: '차량 브랜드',
+    model: '모델명',
+    detailModel: '상세모델',
+    color: '색상',
+    year: '연식',
+    distanceDriven: '주행거리',
+    displacement: '배기량',
+    fuel: '연료',
+    gearbox: '변속기',
+    doors: '도어수',
+    door2: '2 도어',
+    door4: '4 도어',
+    carEndNumber: '차량 번호 끝자리',
+    unSelected: '미선택',
+    noInput: '미입력',
+    selectDetailOption: '상세 옵션 선택',
+    carHistoryInformation: '차량 이력 정보',
+    ownerChangeHistory: '소유자 변경 이력',
+    yes: '있음',
+    no: '없음',
+    bikeBrand: '오토바이 브랜드',
   },
 };
 export const es = {

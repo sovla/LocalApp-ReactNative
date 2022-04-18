@@ -1,4 +1,5 @@
 import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
+import {categoryMenuTypes, ProductTypes, tierTypes} from '../Components/global';
 
 type Screen = {
   OnBoarding1: StackScreenProps<Screen> | undefined;
@@ -45,7 +46,17 @@ type Screen = {
   AlarmList: StackScreenProps<Screen> | undefined;
   AlarmDetail: StackScreenProps<Screen> | undefined;
   MyProduct: StackScreenProps<Screen> | undefined;
-  ProductUpdate: StackScreenProps<Screen> | undefined;
+  ProductUpdate: {
+    title?: string;
+    categoryMenu?: categoryMenuTypes['menu'];
+    price?: string;
+    tag?: string;
+    imageArray?: Array<any>;
+    tier?: tierTypes['name'];
+    location?: string;
+    content?: string;
+    isNego?: boolean;
+  };
   ProductPhoto: StackScreenProps<Screen> | undefined;
   ProductCategory: StackScreenProps<Screen> | undefined;
   ProductTag: StackScreenProps<Screen> | undefined;

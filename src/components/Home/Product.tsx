@@ -87,7 +87,7 @@ const Product: React.FC<ProductProps> = ({
         <MediumText fontSize={`${14 * fontSize}`}>{title}</MediumText>
         <View style={stylesNoneList.locationContentView}>
           <Image source={LocationIcon} style={stylesNoneList.locationImage} />
-          <Text fontSize={`${10 * fontSize}`} color={Theme.color.darkGray}>
+          <Text fontSize={`${10 * fontSize}`} color={Theme.color.darkGray_78}>
             {location}
             {time}
           </Text>
@@ -150,7 +150,7 @@ const Product: React.FC<ProductProps> = ({
         <MediumText fontSize={`${14 * fontSize}`}>{title}</MediumText>
         <View style={stylesNoneList.locationContentView}>
           <Image source={LocationIcon} style={stylesNoneList.locationImage} />
-          <Text fontSize={`${10 * fontSize}`} color={Theme.color.darkGray}>
+          <Text fontSize={`${10 * fontSize}`} color={Theme.color.darkGray_78}>
             {location}
             {time}
           </Text>

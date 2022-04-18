@@ -1,5 +1,5 @@
 import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {Fragment} from 'react';
+import React, {Fragment, useCallback} from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {Text} from '@Components/Global/text';
@@ -11,10 +11,18 @@ import Header from '@/Components/LoginSignUp/Header';
 import Line from '@/Components/Global/Line';
 import {categoryMenu} from '@/assets/global/dummy';
 import MenuBulletIcon from '@assets/image/menu_bullet.png';
+import {ProductCategoryProps} from '@/Types/Screen/Screen';
+import {categoryMenuTypes} from '@/Types/Components/global';
 
-const ProductCategory = () => {
+const ProductCategory = ({navigation}: ProductCategoryProps) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const onPressItem = useCallback((name: categoryMenuTypes['menu']) => {
+    navigation.navigate('ProductUpdate', {
+      categoryMenu: name,
+    });
+  }, []);
+
   return (
     <View>
       <Header title={t('categoryUpdate')} />
@@ -33,7 +41,9 @@ const ProductCategory = () => {
         {categoryMenu.map(item => {
           return (
             <Fragment key={item.name}>
-              <TouchableOpacity style={styles.touch}>
+              <TouchableOpacity
+                onPress={() => onPressItem(item.name)}
+                style={styles.touch}>
                 <AutoHeightImage
                   source={item.image}
                   width={getPixel(25)}
