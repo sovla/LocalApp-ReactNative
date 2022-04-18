@@ -1,5 +1,6 @@
 import {
   categoryMenuTypes,
+  openingHoursTypes,
   ProductTypes,
   tierTypes,
 } from '@/Types/Components/global';
@@ -160,4 +161,42 @@ export const productDummy: ProductTypes = {
   ],
   isNego: false,
   location: 'Bom Retiro',
+};
+
+export const openingHoursInit: openingHoursTypes = {
+  mon: {
+    isOn: false,
+    startTime: '00:00',
+    endTime: '00:00',
+  },
+  tue: {
+    isOn: false,
+    startTime: '00:00',
+    endTime: '00:00',
+  },
+  wed: {
+    isOn: false,
+    startTime: '00:00',
+    endTime: '00:00',
+  },
+  thu: {
+    isOn: false,
+    startTime: '00:00',
+    endTime: '00:00',
+  },
+  fri: {
+    isOn: false,
+    startTime: '00:00',
+    endTime: '00:00',
+  },
+  sat: {
+    isOn: false,
+    startTime: '00:00',
+    endTime: '00:00',
+  },
+  sun: {
+    isOn: false,
+    startTime: '00:00',
+    endTime: '00:00',
+  },
 };

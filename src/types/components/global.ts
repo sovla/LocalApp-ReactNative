@@ -68,6 +68,7 @@ export interface CheckBoxProps {
 export interface CheckBoxImageProps {
   isOn?: boolean;
   isBox?: boolean;
+  isCheckImage?: boolean;
   width?: number;
   height?: number;
 }
@@ -124,4 +125,42 @@ export interface tierTypes {
   title: string;
   content: string;
   image?: any;
+}
+
+export interface openingHoursTypes {
+  mon: {
+    isOn: boolean;
+    startTime: string;
+    endTime: string;
+  };
+  tue: {
+    isOn: boolean;
+    startTime: string;
+    endTime: string;
+  };
+  wed: {
+    isOn: boolean;
+    startTime: string;
+    endTime: string;
+  };
+  thu: {
+    isOn: boolean;
+    startTime: string;
+    endTime: string;
+  };
+  fri: {
+    isOn: boolean;
+    startTime: string;
+    endTime: string;
+  };
+  sat: {
+    isOn: boolean;
+    startTime: string;
+    endTime: string;
+  };
+  sun: {
+    isOn: boolean;
+    startTime: string;
+    endTime: string;
+  };
 }

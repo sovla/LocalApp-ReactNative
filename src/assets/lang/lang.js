@@ -313,6 +313,9 @@ export const ko = {
     autoLogin: '자동 로그인',
     login: '로그인',
     password: '비밀번호',
+    openingTime: '영업시간',
+    openingTimeGuide1: "요일을 체크하지 않으면 'Closed'로 표시 됩니다.",
+    open24hours: '24시간영업',
   },
 };
 export const es = {
