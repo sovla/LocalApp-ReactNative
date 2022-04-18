@@ -88,17 +88,27 @@ export default function BusinessOpeningHours() {
     (
       key: keyof openingHoursTypes,
       value?: string,
-      innerKey?: openingHoursTypes['mon'],
+      innerKey?: keyof openingHoursTypes['mon'],
     ) => {
       if (isFull) {
         setIsFull(false);
       }
       if (!value) {
+        // value 없는경우 isOn만 변경
         setOpeningHours(prev => ({
           ...prev,
           [key]: {
             ...prev[key],
             isOn: !prev[key].isOn,
+          },
+        }));
+      } else {
+        const typeKey = innerKey as keyof openingHoursTypes['mon'];
+        setOpeningHours(prev => ({
+          ...prev,
+          [key]: {
+            ...prev[key],
+            [typeKey]: value,
           },
         }));
       }
@@ -144,7 +154,11 @@ export default function BusinessOpeningHours() {
                     {t(key)}
                   </Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.timeTouch}>
+                <TouchableOpacity
+                  onPress={() => {
+                    onPressCheckBox(confirmedKey, '01:00', 'startTime');
+                  }}
+                  style={styles.timeTouch}>
                   <Text
                     fontSize={`${14 * fontSize}`}
                     color={
@@ -157,6 +171,7 @@ export default function BusinessOpeningHours() {
                     width={getPixel(8)}
                   />
                 </TouchableOpacity>
+
                 <Text
                   fontSize={`${14 * fontSize}`}
                   color={
@@ -165,7 +180,12 @@ export default function BusinessOpeningHours() {
                   style={styles.marginHorizontal10}>
                   ~
                 </Text>
-                <TouchableOpacity style={styles.timeTouch}>
+
+                <TouchableOpacity
+                  onPress={() => {
+                    onPressCheckBox(confirmedKey, '01:00', 'endTime');
+                  }}
+                  style={styles.timeTouch}>
                   <Text
                     fontSize={`${14 * fontSize}`}
                     color={
