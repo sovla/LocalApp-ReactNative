@@ -2,7 +2,8 @@ const Theme = {
   color: {
     white: '#FFFFFF',
     black: '#333333',
-
+    whiteBlack_53: '#536073',
+    whiteBlue_F0: '#F0F3FC',
     blue_3D: '#3D56F0',
     blue_B3: '#B3B6DA32',
     darkBlue: '#012DAF',

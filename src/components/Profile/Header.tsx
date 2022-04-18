@@ -10,7 +10,7 @@ import BackWhiteIcon from '@assets/image/back_white.png';
 import Theme from '@/assets/global/Theme';
 
 const Header: React.FC<{
-  title: string;
+  title?: string;
   isBack?: boolean;
   isBlack?: boolean;
 }> = ({title, isBack, children, isBlack = false}) => {

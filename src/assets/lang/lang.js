@@ -305,6 +305,14 @@ export const ko = {
     reportGuide4:
       '불법상품 또는 상품 정보 오류, 부정한 거래를 요구하는 판매자를 발견하셨을 경우 상품 상세화면 하단에 있는 신고하기를 통해 신고하실수 있으며, 신고하실 때는 상품 또는 판매자명과 함께 위반한 내용을 상세하게 기재하여 주시기 바랍니다.',
     submit: '제출하기',
+    businessSignUpGuide1:
+      '비즈니스 계정으로 다양한 혜택과 고객과의 소통을 편리하게 이용하세요.',
+    businessSignUpGuide2: '서비스 전환은 로그인만으로 프로필 전환이 됩니다.',
+    businessSignUpGuide3: '아직 LocalApp 회원이 아니신가요?',
+    signUp: '회원가입',
+    autoLogin: '자동 로그인',
+    login: '로그인',
+    password: '비밀번호',
   },
 };
 export const es = {

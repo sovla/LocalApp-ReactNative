@@ -13,6 +13,7 @@ export interface DefaultButtonProps extends TouchableOpacityProps {
   height?: string;
   onPress?: () => void;
   content?: string;
+  fontColor?: string;
 }
 
 export interface DefaultTextProps extends TextProps {

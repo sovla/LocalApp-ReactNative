@@ -30,14 +30,12 @@ const ButtonStyle = styled.TouchableOpacity<any>`
 
 export const Button: React.FC<DefaultButtonProps> = props => {
   const {t} = useTranslation();
-  const {content = t('signUp')} = props;
+  const {content = t('signUp'), fontColor = Theme.color.white} = props;
   const fontSize = useAppSelector(state => state.fontSize.value);
 
   return (
     <ButtonStyle {...props}>
-      <Text
-        color={Theme.color.white}
-        fontSize={`${Theme.fontSize.fs16 * fontSize}px`}>
+      <Text color={fontColor} fontSize={`${Theme.fontSize.fs16 * fontSize}px`}>
         {content}
       </Text>
     </ButtonStyle>

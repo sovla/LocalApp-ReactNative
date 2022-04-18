@@ -11,7 +11,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import React, {Fragment, useEffect, useState} from 'react';
+import React, {Fragment, useCallback, useEffect, useState} from 'react';
 
 import BackGroundImage from '@assets/image/BG.png';
 import {fontSizeChange, getHeightPixel, getPixel} from '@/Util/pixelChange';
@@ -106,6 +106,12 @@ export default function ReportDetail({
   const userName = 'NETSHOES';
   const [text, setText] = useState<string>('');
   const [selectMenu, setSelectMenu] = useState<number>(0);
+
+  const onPressReport = useCallback(() => {
+    // 수정필요 API치기
+    navigation.navigate('ChattingHome');
+  }, []);
+
   return (
     <KeyboardAvoidingView
       style={{
@@ -168,19 +174,21 @@ export default function ReportDetail({
         </View>
       </KeyboardAwareScrollView>
       <Button
+        onPress={onPressReport}
         content={t('submit')}
-        style={{
-          width: getPixel(328),
-          position: 'absolute',
-          bottom: getHeightPixel(32),
-          left: getPixel(16),
-        }}
+        style={styles.footerButton}
       />
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
+  footerButton: {
+    width: getPixel(328),
+    position: 'absolute',
+    bottom: getHeightPixel(32),
+    left: getPixel(16),
+  },
   textWidth: {
     width: getPixel(328),
   },
