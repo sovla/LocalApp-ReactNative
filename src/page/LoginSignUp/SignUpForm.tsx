@@ -1,5 +1,5 @@
 import {KeyboardAvoidingView, StyleSheet, TextInput, View} from 'react-native';
-import React from 'react';
+import React, {useCallback} from 'react';
 import Header from '@/Components/LoginSignUp/Header';
 import {MediumText, Text} from '@/Components/Global/text';
 import {useAppSelector} from '@/Hooks/CustomHook';
@@ -10,10 +10,16 @@ import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import Input from '@/Components/Global/Input';
 import {Button} from '@/Components/Global/button';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {SignUpFormProps} from '@/Types/Screen/Screen';
 
-export default function SignUpForm() {
+export default function SignUpForm({navigation}: SignUpFormProps) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+
+  const onPressSignUp = useCallback(() => {
+    navigation.navigate('SignUpComplete');
+  }, []);
+
   return (
     <View style={styles.mainContainer}>
       <KeyboardAwareScrollView
@@ -164,6 +170,7 @@ export default function SignUpForm() {
         />
       </KeyboardAwareScrollView>
       <Button
+        onPress={onPressSignUp}
         height="48px"
         style={{
           position: 'absolute',

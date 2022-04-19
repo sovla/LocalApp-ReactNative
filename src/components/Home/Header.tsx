@@ -16,7 +16,7 @@ import MenuIcon from '@assets/image/bar_white.png';
 import AlarmIcon from '@assets/image/notice_white.png';
 import {Box, RowBox} from '../Global/container';
 import {WhiteText} from '../Global/text';
-import {useAppSelector} from '@/Hooks/CustomHook';
+import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
 import TrianglePinkIcon from '@assets/image/triangle_pink.png';
@@ -29,6 +29,7 @@ import ModalMyPage from './ModalMyPage';
 const Header: React.FC<HeaderProps> = () => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const navigation = useAppNavigation();
   const {
     value: isModal,
     on: onIsModal,
@@ -60,13 +61,22 @@ const Header: React.FC<HeaderProps> = () => {
         </TouchableOpacity>
       </RowBox>
       <RowBox>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Search');
+          }}>
           <Image style={styles.icon} source={SearchIcon} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={onIsMenu}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('AllCategory');
+          }}>
           <Image style={styles.icon} source={MenuIcon} />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('AlarmList');
+          }}>
           <Image style={styles.icon} source={AlarmIcon} />
         </TouchableOpacity>
       </RowBox>

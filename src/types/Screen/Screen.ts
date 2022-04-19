@@ -14,6 +14,7 @@ type Screen = {
   SignUpPhoto: StackScreenProps<Screen> | undefined;
   SignUpComplete: StackScreenProps<Screen> | undefined;
   Home: StackScreenProps<Screen> | undefined;
+  AllCategory: StackScreenProps<Screen> | undefined;
   LocationChange: StackScreenProps<Screen> | undefined;
   ProductDetail: StackScreenProps<Screen> | undefined;
   Search: StackScreenProps<Screen> | undefined;
@@ -102,6 +103,7 @@ export type SignUpFormProps = StackScreenProps<Screen, 'SignUpForm'>;
 export type SignUpPhotoProps = StackScreenProps<Screen, 'SignUpPhoto'>;
 export type SignUpCompleteProps = StackScreenProps<Screen, 'SignUpComplete'>;
 export type HomeProps = StackScreenProps<Screen, 'Home'>;
+export type AllCategoryProps = StackScreenProps<Screen, 'AllCategory'>;
 export type LocationChangeProps = StackScreenProps<Screen, 'LocationChange'>;
 export type ProductDetailProps = StackScreenProps<Screen, 'ProductDetail'>;
 export type SearchProps = StackScreenProps<Screen, 'Search'>;

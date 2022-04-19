@@ -17,6 +17,7 @@ import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import AutoHeightImage from 'react-native-auto-height-image';
 import useBoolean from '@/Hooks/useBoolean';
 import UploadModal from '@/Components/Home/UploadModal';
+import {useTranslation} from 'react-i18next';
 
 export default function Home(): JSX.Element {
   const [isList, setIsList] = useState(false);

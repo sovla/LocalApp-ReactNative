@@ -57,7 +57,7 @@ export default function Search(): JSX.Element {
     '아이패드',
     '애플워치',
   ]);
-  const [searchText, setSearchText] = useState<string>('asd');
+  const [searchText, setSearchText] = useState<string>('');
   const isSearch = searchText.length > 0;
   return (
     <View style={styles.mainContainer}>
@@ -70,15 +70,7 @@ export default function Search(): JSX.Element {
               onPressFilter={onIsFilter}
               onPressKeyword={onIsKeyword}
             />
-            <View
-              style={{
-                width: getPixel(360),
-                paddingHorizontal: getPixel(16),
-                marginVertical: getHeightPixel(10),
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                flexDirection: 'row',
-              }}>
+            <View style={styles.isSearchView}>
               <View style={styles.checkboxView}>
                 <Image source={checkboxIcon} style={styles.checkboxImage} />
                 <Text fontSize={`${14 * fontSize}`}>{t('searchSale')}</Text>
@@ -193,6 +185,14 @@ const CategoryCard: React.FC<CategoryCardProps> = ({name, image}) => {
 };
 
 const styles = StyleSheet.create({
+  isSearchView: {
+    width: getPixel(360),
+    paddingHorizontal: getPixel(16),
+    marginVertical: getHeightPixel(10),
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
   checkboxView: {
     flexDirection: 'row',
     alignItems: 'center',

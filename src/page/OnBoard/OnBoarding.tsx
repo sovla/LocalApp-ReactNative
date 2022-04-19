@@ -84,13 +84,15 @@ export default function OnBoarding({navigation}: OnBoardingProps) {
   const [page, setPage] = useState(0);
 
   const color = ['#F3D3DE', '#F5C634', '#716EF3', '#88D9E0'];
-  const loginPage = () => {
-    navigation.navigate('Login');
+  const onPressNext = () => {
+    // 처음이면?
+
+    navigation.navigate('AppPermission');
   };
   return (
     <View style={styles.container}>
       <View style={styles.betweenView}>
-        <TouchableOpacity onPress={loginPage} style={styles.skipButton}>
+        <TouchableOpacity onPress={onPressNext} style={styles.skipButton}>
           <Text fontSize={`${16 * fontSize}`} color={color[page]}>
             {t('Skip')}
           </Text>
@@ -115,7 +117,7 @@ export default function OnBoarding({navigation}: OnBoardingProps) {
           return (
             <TouchableOpacity
               disabled={index !== 3}
-              onPress={loginPage}
+              onPress={onPressNext}
               activeOpacity={0.75}
               style={{
                 width: getPixel(360),

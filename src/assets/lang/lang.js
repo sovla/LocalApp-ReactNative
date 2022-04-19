@@ -5,6 +5,17 @@ export const en = {
 };
 export const ko = {
   translation: {
+    call: '전화',
+    storage: '저장공간',
+    cameraGallery: '카메라/갤러리',
+    appPermissionGuide: '앱 사용 권한 안내',
+    appPermissionGuide2:
+      '가입 및 서비스 이용시 확인을 위한 전화번호 조회  및 문자 자동인증',
+    appPermissionGuide3: '앱 구동에 필요한 파일 저장',
+    appPermissionGuide4:
+      '내 주변 판매 물품 검색 및 위치 기반 추천 서비스를 제공 받기 위한 권한',
+    appPermissionGuide5: '프로필 사진, 상품 등록시 사진 촬영',
+    appPermissionGuide6: '관심 키워드 물품 소식을 제공받기 위한 필요한 권한',
     localApp: '로컬앱',
     loginGuide1: '과 함께',
     loginGuide2: '우리',
@@ -129,6 +140,7 @@ export const ko = {
     likeListDelete: '삭제',
     likeListSave: '저장',
     likeListSelectAll: '전체 선택',
+    allCheck: '전체 동의',
     chattingHomeAll: '전체보기',
     profileHomeTitle: '내 계정',
     profileHomeSellerReviews: '판매자 후기',

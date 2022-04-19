@@ -7,13 +7,85 @@ import React, {Suspense, useEffect, useState} from 'react';
 import {SafeAreaView, View, ActivityIndicator, StyleSheet} from 'react-native';
 
 import i18n from 'i18next';
-import {initReactI18next} from 'react-i18next';
+import {initReactI18next, useTranslation} from 'react-i18next';
 import {en, ko, es, br} from '@/assets/lang/lang';
 import {useAppSelector} from '@/Hooks/CustomHook';
 import Screen from '@/Types/Screen/Screen';
 import {API} from '@/API/API';
+import OnBoarding from './OnBoard/OnBoarding';
+import AppPermission from './OnBoard/AppPermission';
+import Login from './LoginSignUp/Login';
+import LoginComplete from './LoginSignUp/LoginComplete';
+import SignUp from './LoginSignUp/SignUp';
+import SignUpToS from './LoginSignUp/SignUpToS';
+import SignUpTel from './LoginSignUp/SignUpTel';
+import SignUpAuth from './LoginSignUp/SignUpAuth';
+import SignUpForm from './LoginSignUp/SignUpForm';
+import SignUpPhoto from './LoginSignUp/SignUpPhoto';
+import SignUpComplete from './LoginSignUp/SignUpComplete';
+import Home from './Home/Home';
+import AllCategory from './Home/AllCategory';
+import LocationChange from './Home/LocationChange';
+import ProductDetail from './Home/ProductDetail';
+import Search from './Home/Search';
+import SearchDetail from './Home/SearchDetail';
+import MyCategory from './Home/MyCategory';
+import KeywordAlarm from './Home/KeywordAlarm';
+import LikeList from './Home/LikeList';
+import ChattingHome from './Chatting/ChattingHome';
+import ChattingDetail from './Chatting/ChattingDetail';
+import ChattingLocation from './Chatting/ChattingLocation';
+import ReportCategory from './Chatting/ReportCategory';
+import ReportDetail from './Chatting/ReportDetail';
+import ProfileHome from './Profile/ProfileHome';
+import ProfileDetail from './Profile/ProfileDetail';
+import ProfileSellerReview from './Profile/ProfileSellerReview';
+import ReviewWrite from './Profile/ReviewWrite';
+import ProfileSellProduct from './Profile/ProfileSellProduct';
+import BusinessProfile from './Business/BusinessProfile';
+import BusinessProfileMenu from './Business/BusinessProfileMenu';
+import BusinessProfileSetting from './Business/BusinessProfileSetting';
+import BusinessProfileBanner from './Business/BusinessProfileBanner';
+import BusinessSignUp from './Business/BusinessSignUp';
+import BusinessForm from './Business/BusinessForm';
+import BusinessAddress from './Business/BusinessAddress';
+import BusinessLocation from './Business/BusinessLocation';
+import BusinessOpeningHours from './Business/BusinessOpeningHours';
+import Notice from './Notice/Notice';
+import AlarmList from './Notice/AlarmList';
+import AlarmDetail from './Notice/AlarmDetail';
+import MyProduct from './Product/MyProduct';
+import ProductUpdate from './Product/ProductUpdate';
+import ProductPhoto from './Product/ProductPhoto';
+import ProductCategory from './Product/ProductCategory';
+import ProductTag from './Product/ProductTag';
+import ProductTier from './Product/ProductTier';
+import ProductLocation from './Product/ProductLocation';
+import Setting from './Setting/Setting';
+import SettingPrivacy from './Setting/SettingPrivacy';
+import SettingDeleteAccount from './Setting/SettingDeleteAccount';
+import SettingAlarm from './Setting/SettingAlarm';
+import SettingChatting from './Setting/SettingChatting';
+import SettingLanguage from './Setting/SettingLanguage';
+import ServiceCenter from './Setting/ServiceCenter';
+import FAQ from './Setting/FAQ';
+import ToU from './Setting/ToU';
+import PrivacyPolicy from './Setting/PrivacyPolicy';
+import ProductComplete from './Product/ProductComplete';
+import ProductCompleteConfirm from './Product/ProductCompleteConfirm';
+import CarRegister from './Car/CarRegister';
+import CarBrand from './Car/CarBrand';
+import CarModel from './Car/CarModel';
+import CarYear from './Car/CarYear';
+import CarFuel from './Car/CarFuel';
+import CarGear from './Car/CarGear';
+import CarEndNumber from './Car/CarEndNumber';
+import CarLocation from './Car/CarLocation';
+import Menu from './Menu';
+import ProductTierGuide from './Product/ProductTierGuide';
+import BlockList from './Chatting/BlockList';
 
-const ROUTING: keyof Screen = 'SignUpForm';
+const ROUTING: keyof Screen = 'AppPermission';
 
 const resources = {
   en,
@@ -92,38 +164,18 @@ const withScrollView = (WrappedComponent: any) => {
   return (props: any) => {
     const [isShow, setIsShow] = useState(false);
     return (
-      <Suspense
-        fallback={
-          <View>
-            <ActivityIndicator />
-          </View>
-        }>
+      <>
         <SafeAreaView style={{flex: 0, backgroundColor: '#fff'}} />
         <SafeAreaView style={{flex: 1}}>
           <View style={{flex: 1, backgroundColor: Theme.color.white}}>
             <WrappedComponent {...props} />
-            <View style={[styles.position]}>
+            {/* <View style={[styles.position]}>
               <Text>{props.route.name}</Text>
-              {/* <Button
-                width="50px"
-                height="50px"
-                style={{
-                  backgroundColor: !isShow ? '#0000' : Theme.color.blue_3D,
-                }}
-                onPress={() => {
-                  props.navigation.navigate('Menu');
-                }}
-                onLongPress={() => {
-                  setIsShow(p => !p);
-                  console.log('longPress');
-                }}
-                content=""
-              /> */}
-            </View>
+                          </View> */}
           </View>
         </SafeAreaView>
         <SafeAreaView style={{flex: 0, backgroundColor: '#fff'}} />
-      </Suspense>
+      </>
     );
   };
 };
@@ -136,287 +188,291 @@ interface RouterTypes {
 export const RouterSetting: RouterTypes[] = [
   {
     name: 'Menu',
-    component: React.lazy(() => import('./Menu')),
+    component: Menu,
   },
   {
     name: 'Home',
-    component: React.lazy(() => import('./Home/Home')),
+    component: Home,
+  },
+  {
+    name: 'AllCategory',
+    component: AllCategory,
   },
   {
     name: 'KeywordAlarm',
-    component: React.lazy(() => import('./Home/KeywordAlarm')),
+    component: KeywordAlarm,
   },
   {
     name: 'LikeList',
-    component: React.lazy(() => import('./Home/LikeList')),
+    component: LikeList,
   },
   {
     name: 'LocationChange',
-    component: React.lazy(() => import('./Home/LocationChange')),
+    component: LocationChange,
   },
   {
     name: 'MyCategory',
-    component: React.lazy(() => import('./Home/MyCategory')),
+    component: MyCategory,
   },
   {
     name: 'ProductDetail',
-    component: React.lazy(() => import('./Home/ProductDetail')),
+    component: ProductDetail,
   },
   {
     name: 'Search',
-    component: React.lazy(() => import('./Home/Search')),
+    component: Search,
   },
   {
     name: 'SearchDetail',
-    component: React.lazy(() => import('./Home/SearchDetail')),
+    component: SearchDetail,
   },
   {
     name: 'ChattingHome',
-    component: React.lazy(() => import('./Chatting/ChattingHome')),
+    component: ChattingHome,
   },
   {
     name: 'ChattingLocation',
-    component: React.lazy(() => import('./Chatting/ChattingLocation')),
+    component: ChattingLocation,
   },
   {
     name: 'ChattingDetail',
-    component: React.lazy(() => import('./Chatting/ChattingDetail')),
+    component: ChattingDetail,
   },
   {
     name: 'ReportCategory',
-    component: React.lazy(() => import('./Chatting/ReportCategory')),
+    component: ReportCategory,
   },
   {
     name: 'ReportDetail',
-    component: React.lazy(() => import('./Chatting/ReportDetail')),
+    component: ReportDetail,
   },
   {
     name: 'CarBrand',
-    component: React.lazy(() => import('./Car/CarBrand')),
+    component: CarBrand,
   },
   {
     name: 'CarEndNumber',
-    component: React.lazy(() => import('./Car/CarEndNumber')),
+    component: CarEndNumber,
   },
   {
     name: 'CarFuel',
-    component: React.lazy(() => import('./Car/CarFuel')),
+    component: CarFuel,
   },
   {
     name: 'CarGear',
-    component: React.lazy(() => import('./Car/CarGear')),
+    component: CarGear,
   },
   {
     name: 'CarLocation',
-    component: React.lazy(() => import('./Car/CarLocation')),
+    component: CarLocation,
   },
   {
     name: 'CarModel',
-    component: React.lazy(() => import('./Car/CarModel')),
+    component: CarModel,
   },
   {
     name: 'CarRegister',
-    component: React.lazy(() => import('./Car/CarRegister')),
+    component: CarRegister,
   },
   {
     name: 'CarYear',
-    component: React.lazy(() => import('./Car/CarYear')),
+    component: CarYear,
   },
   {
     name: 'Login',
-    component: React.lazy(() => import('./LoginSignUp/Login')),
+    component: Login,
   },
   {
     name: 'LoginComplete',
-    component: React.lazy(() => import('./LoginSignUp/LoginComplete')),
+    component: LoginComplete,
   },
   {
     name: 'SignUp',
-    component: React.lazy(() => import('./LoginSignUp/SignUp')),
+    component: SignUp,
   },
   {
     name: 'SignUpTel',
-    component: React.lazy(() => import('./LoginSignUp/SignUpTel')),
+    component: SignUpTel,
   },
   {
     name: 'SignUpAuth',
-    component: React.lazy(() => import('./LoginSignUp/SignUpAuth')),
+    component: SignUpAuth,
   },
   {
     name: 'SignUpComplete',
-    component: React.lazy(() => import('./LoginSignUp/SignUpComplete')),
+    component: SignUpComplete,
   },
   {
     name: 'SignUpForm',
-    component: React.lazy(() => import('./LoginSignUp/SignUpForm')),
+    component: SignUpForm,
   },
   {
     name: 'SignUpPhoto',
-    component: React.lazy(() => import('./LoginSignUp/SignUpPhoto')),
+    component: SignUpPhoto,
   },
   {
     name: 'SignUpTOS',
-    component: React.lazy(() => import('./LoginSignUp/SignUpToS')),
+    component: SignUpToS,
   },
   {
     name: 'BusinessAddress',
-    component: React.lazy(() => import('./Business/BusinessAddress')),
+    component: BusinessAddress,
   },
   {
     name: 'BusinessForm',
-    component: React.lazy(() => import('./Business/BusinessForm')),
+    component: BusinessForm,
   },
   {
     name: 'BusinessLocation',
-    component: React.lazy(() => import('./Business/BusinessLocation')),
+    component: BusinessLocation,
   },
   {
     name: 'BusinessOpeningHours',
-    component: React.lazy(() => import('./Business/BusinessOpeningHours')),
+    component: BusinessOpeningHours,
   },
   {
     name: 'BusinessProfile',
-    component: React.lazy(() => import('./Business/BusinessProfile')),
+    component: BusinessProfile,
   },
   {
     name: 'BusinessProfileBanner',
-    component: React.lazy(() => import('./Business/BusinessProfileBanner')),
+    component: BusinessProfileBanner,
   },
   {
     name: 'BusinessProfileMenu',
-    component: React.lazy(() => import('./Business/BusinessProfileMenu')),
+    component: BusinessProfileMenu,
   },
   {
     name: 'BusinessProfileSetting',
-    component: React.lazy(() => import('./Business/BusinessProfileSetting')),
+    component: BusinessProfileSetting,
   },
   {
     name: 'BusinessSignUp',
-    component: React.lazy(() => import('./Business/BusinessSignUp')),
+    component: BusinessSignUp,
   },
   {
     name: 'AlarmDetail',
-    component: React.lazy(() => import('./Notice/AlarmDetail')),
+    component: AlarmDetail,
   },
   {
     name: 'AlarmList',
-    component: React.lazy(() => import('./Notice/AlarmList')),
+    component: AlarmList,
   },
   {
     name: 'Notice',
-    component: React.lazy(() => import('./Notice/Notice')),
+    component: Notice,
   },
   {
     name: 'OnBoarding',
-    component: React.lazy(() => import('./OnBoard/OnBoarding')),
+    component: OnBoarding,
   },
   {
     name: 'AppPermission',
-    component: React.lazy(() => import('./OnBoard/AppPermission')),
+    component: AppPermission,
   },
   {
     name: 'ProductCategory',
-    component: React.lazy(() => import('./Product/ProductCategory')),
+    component: ProductCategory,
   },
   {
     name: 'ProductComplete',
-    component: React.lazy(() => import('./Product/ProductComplete')),
+    component: ProductComplete,
   },
   {
     name: 'ProductCompleteConfirm',
-    component: React.lazy(() => import('./Product/ProductCompleteConfirm')),
+    component: ProductCompleteConfirm,
   },
   {
     name: 'ProductLocation',
-    component: React.lazy(() => import('./Product/ProductLocation')),
+    component: ProductLocation,
   },
   {
     name: 'ProductPhoto',
-    component: React.lazy(() => import('./Product/ProductPhoto')),
+    component: ProductPhoto,
   },
   {
     name: 'ProductTag',
-    component: React.lazy(() => import('./Product/ProductTag')),
+    component: ProductTag,
   },
   {
     name: 'ProductTier',
-    component: React.lazy(() => import('./Product/ProductTier')),
+    component: ProductTier,
   },
   {
     name: 'ProductTierGuide',
-    component: React.lazy(() => import('./Product/ProductTierGuide')),
+    component: ProductTierGuide,
   },
   {
     name: 'ProductUpdate',
-    component: React.lazy(() => import('./Product/ProductUpdate')),
+    component: ProductUpdate,
   },
   {
     name: 'MyProduct',
-    component: React.lazy(() => import('./Product/MyProduct')),
+    component: MyProduct,
   },
   {
     name: 'ProfileDetail',
-    component: React.lazy(() => import('./Profile/ProfileDetail')),
+    component: ProfileDetail,
   },
   {
     name: 'ProfileHome',
-    component: React.lazy(() => import('./Profile/ProfileHome')),
+    component: ProfileHome,
   },
   {
     name: 'ProfileSellProduct',
-    component: React.lazy(() => import('./Profile/ProfileSellProduct')),
+    component: ProfileSellProduct,
   },
   {
     name: 'ProfileSellerReview',
-    component: React.lazy(() => import('./Profile/ProfileSellerReview')),
+    component: ProfileSellerReview,
   },
   {
     name: 'ReviewWrite',
-    component: React.lazy(() => import('./Profile/ReviewWrite')),
+    component: ReviewWrite,
   },
   {
     name: 'FAQ',
-    component: React.lazy(() => import('./Setting/FAQ')),
+    component: FAQ,
   },
   {
     name: 'PrivacyPolicy',
-    component: React.lazy(() => import('./Setting/PrivacyPolicy')),
+    component: PrivacyPolicy,
   },
   {
     name: 'ServiceCenter',
-    component: React.lazy(() => import('./Setting/ServiceCenter')),
+    component: ServiceCenter,
   },
   {
     name: 'Setting',
-    component: React.lazy(() => import('./Setting/Setting')),
+    component: Setting,
   },
   {
     name: 'SettingAlarm',
-    component: React.lazy(() => import('./Setting/SettingAlarm')),
+    component: SettingAlarm,
   },
   {
     name: 'SettingChatting',
-    component: React.lazy(() => import('./Setting/SettingChatting')),
+    component: SettingChatting,
   },
   {
     name: 'SettingDeleteAccount',
-    component: React.lazy(() => import('./Setting/SettingDeleteAccount')),
+    component: SettingDeleteAccount,
   },
   {
     name: 'SettingLanguage',
-    component: React.lazy(() => import('./Setting/SettingLanguage')),
+    component: SettingLanguage,
   },
   {
     name: 'SettingPrivacy',
-    component: React.lazy(() => import('./Setting/SettingPrivacy')),
+    component: SettingPrivacy,
   },
   {
     name: 'ToU',
-    component: React.lazy(() => import('./Setting/ToU')),
+    component: ToU,
   },
   {
     name: 'BlockList',
-    component: React.lazy(() => import('./Chatting/BlockList')),
+    component: BlockList,
   },
 ];
 

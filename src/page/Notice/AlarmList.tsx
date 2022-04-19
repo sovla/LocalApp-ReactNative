@@ -1,7 +1,13 @@
-import {FlatList, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
+import {
+  FlatList,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useCallback, useState} from 'react';
 
-import {getPixel} from '@/Util/pixelChange';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import {useTranslation} from 'react-i18next';
 import useBoolean from '@/Hooks/useBoolean';
@@ -13,6 +19,7 @@ import TrashBlackIcon from '@assets/image/trash_black.png';
 import Menu from '@/Components/Profile/Menu';
 import Product from '@/Components/Home/Product';
 import AlarmContent from '@/Components/Notice/AlarmContent';
+import EditIcon from '@assets/image/edit.png';
 
 export default function AlarmList() {
   const {t} = useTranslation();
@@ -21,14 +28,21 @@ export default function AlarmList() {
   const [selectMenu, setSelectMenu] = useState<any>(t('keywordAlarm'));
   const [list, setList] = useState([1, 2, 3, 4, 5]);
   const {value: isDelete, toggle: toggleIsDelete} = useBoolean(false);
-  const onPressDelete = () => {
+  const onPressDelete = useCallback(() => {
     toggleIsDelete();
-  };
-  const onPressAlarm = () => {
+  }, []);
+
+  const onPressAlarm = useCallback(() => {
     navigation.navigate('AlarmDetail');
-  };
+  }, []);
+  const onPressEditButton = useCallback(() => {
+    navigation.navigate('KeywordAlarm');
+  }, []);
   return (
     <View style={{flex: 1}}>
+      <TouchableOpacity onPress={onPressEditButton} style={styles.editTouch}>
+        <Image source={EditIcon} style={styles.editImage} />
+      </TouchableOpacity>
       <Header isBlack title={t('AlarmListTitle')} isBack>
         <View
           style={{
@@ -73,3 +87,13 @@ export default function AlarmList() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  editTouch: {
+    position: 'absolute',
+    bottom: getHeightPixel(25),
+    right: getPixel(16),
+    zIndex: 100,
+  },
+  editImage: {width: getPixel(70), height: getPixel(70)},
+});
