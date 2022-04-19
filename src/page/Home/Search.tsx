@@ -28,6 +28,7 @@ import ProductList from '@/Components/Home/ProductList';
 import ModalFilter from '../../Components/Home/ModalFilter';
 import useBoolean from '@/Hooks/useBoolean';
 import ModalKeyword from '@/Components/Home/ModalKeyword';
+import CloseBlackIcon from '@assets/image/close_black.png';
 
 export default function Search(): JSX.Element {
   const {t} = useTranslation();
@@ -104,52 +105,10 @@ export default function Search(): JSX.Element {
           </>
         ) : (
           <>
-            <View style={styles.subContainer}>
-              <View style={{paddingHorizontal: getPixel(20)}}>
-                <BoldText fontSize={`${24 * fontSize}`}>
-                  {t('searchTitle')}
-                </BoldText>
-                <GrayText fontSize={`${14 * fontSize}`}>
-                  {t('searchSubTitle')}
-                </GrayText>
-                <View style={styles.categoryView}>
-                  {categoryMenu.map((item, index) => {
-                    if (!isMore && index > 7) {
-                      return;
-                    }
-                    return (
-                      <Fragment key={item.name + index}>
-                        <CategoryCard name={item.name} image={item.image} />
-                      </Fragment>
-                    );
-                  })}
-                </View>
-              </View>
-              {!isMore && (
-                <>
-                  <Line
-                    backgroundColor={Theme.color.gray}
-                    width={getPixel(360)}
-                  />
-                  <TouchableOpacity
-                    onPress={() => setIsMore(prev => !prev)}
-                    style={styles.moreTouch}>
-                    <GrayText fontSize={`${12 * fontSize}`}>
-                      {t('more')}
-                    </GrayText>
-                    <AutoHeightImage
-                      source={ArrowDownIcon}
-                      width={getPixel(10)}
-                      style={{marginLeft: getPixel(3)}}
-                    />
-                  </TouchableOpacity>
-                </>
-              )}
-            </View>
             <View style={styles.popularContainer}>
-              <BoldText fontSize={`${16 * fontSize}`}>
-                {t('popularSearch')}
-              </BoldText>
+              <Text fontSize={`${18 * fontSize}`} medium>
+                {t('searchTitleText')}
+              </Text>
               <View style={styles.popularListContainer}>
                 {popularList.map((item, index) => (
                   <TouchableOpacity
@@ -162,6 +121,34 @@ export default function Search(): JSX.Element {
                     </MediumText>
                   </TouchableOpacity>
                 ))}
+              </View>
+              <View style={styles.searchListTitleView}>
+                <Text fontSize={`${18 * fontSize}`} medium>
+                  {t('searchRecentSearches')}
+                </Text>
+                <TouchableOpacity>
+                  <GrayText fontSize={`${14 * fontSize}`}>
+                    {t('allDelete')}
+                  </GrayText>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.searchListRowView}>
+                {[
+                  1, 2, 3, 4, 5, 61, 2, 3, 4, 5, 61, 2, 3, 4, 5, 61, 2, 3, 4, 5,
+                  61, 2, 3, 4, 5, 61, 2, 3, 4, 5, 6,
+                ].map((item, index) => {
+                  return (
+                    <View style={styles.searchListView}>
+                      <Text fontSize={`${14 * fontSize}`} medium>
+                        검색항목
+                      </Text>
+                      <Image
+                        source={CloseBlackIcon}
+                        style={styles.closeBlack}
+                      />
+                    </View>
+                  );
+                })}
               </View>
             </View>
           </>
@@ -185,6 +172,30 @@ const CategoryCard: React.FC<CategoryCardProps> = ({name, image}) => {
 };
 
 const styles = StyleSheet.create({
+  searchListTitleView: {
+    width: getPixel(328),
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: getHeightPixel(40),
+  },
+  searchListRowView: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  closeBlack: {
+    width: getPixel(12.84),
+    height: getPixel(12.84),
+  },
+  searchListView: {
+    width: getPixel(146),
+    height: getHeightPixel(44),
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderBottomWidth: 0.6,
+    borderBottomColor: Theme.color.gray,
+  },
   isSearchView: {
     width: getPixel(360),
     paddingHorizontal: getPixel(16),
@@ -254,8 +265,52 @@ const styles = StyleSheet.create({
     paddingHorizontal: getPixel(8),
     paddingVertical: getHeightPixel(6),
     backgroundColor: Theme.color.white,
-    borderRadius: getPixel(15),
     marginRight: getPixel(8),
     marginBottom: getHeightPixel(8),
   },
 });
+
+{
+  /* <View style={styles.subContainer}>
+              <View style={{paddingHorizontal: getPixel(20)}}>
+                <BoldText fontSize={`${24 * fontSize}`}>
+                  {t('searchTitle')}
+                </BoldText>
+                <GrayText fontSize={`${14 * fontSize}`}>
+                  {t('searchSubTitle')}
+                </GrayText>
+                <View style={styles.categoryView}>
+                  {categoryMenu.map((item, index) => {
+                    if (!isMore && index > 7) {
+                      return;
+                    }
+                    return (
+                      <Fragment key={item.name + index}>
+                        <CategoryCard name={item.name} image={item.image} />
+                      </Fragment>
+                    );
+                  })}
+                </View>
+              </View>
+              {!isMore && (
+                <>
+                  <Line
+                    backgroundColor={Theme.color.gray}
+                    width={getPixel(360)}
+                  />
+                  <TouchableOpacity
+                    onPress={() => setIsMore(prev => !prev)}
+                    style={styles.moreTouch}>
+                    <GrayText fontSize={`${12 * fontSize}`}>
+                      {t('more')}
+                    </GrayText>
+                    <AutoHeightImage
+                      source={ArrowDownIcon}
+                      width={getPixel(10)}
+                      style={{marginLeft: getPixel(3)}}
+                    />
+                  </TouchableOpacity>
+                </>
+              )}
+            </View> */
+}
