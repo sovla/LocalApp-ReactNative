@@ -44,7 +44,9 @@ type Screen = {
   BusinessLocation: StackScreenProps<Screen> | undefined;
   BusinessOpeningHours: StackScreenProps<Screen> | undefined;
   Notice: StackScreenProps<Screen> | undefined;
-  AlarmList: StackScreenProps<Screen> | undefined;
+  AlarmList: {
+    menu?: 'keywordAlarm' | 'alarm';
+  };
   AlarmDetail: StackScreenProps<Screen> | undefined;
   MyProduct: StackScreenProps<Screen> | undefined;
   ProductUpdate: {

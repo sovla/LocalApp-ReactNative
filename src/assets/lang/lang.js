@@ -143,6 +143,7 @@ export const ko = {
     likeListDelete: '삭제',
     likeListSave: '저장',
     likeListSelectAll: '전체 선택',
+    allCategoryTitle: '전체 카테고리',
     allCheck: '전체 동의',
     chattingHomeAll: '전체보기',
     profileHomeTitle: '내 계정',

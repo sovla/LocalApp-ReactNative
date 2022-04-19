@@ -7,7 +7,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {GrayText, Text} from '@Components/Global/text';
@@ -41,10 +41,50 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
     statusMessage: 'Love what you have',
     image: require('@assets/image/dummy.png'),
   };
-  const onPressSaleProduct = () => {
+  const onPressSaleProduct = useCallback(() => {
     //  판매상품 눌럿을 때
     navigation.navigate('MyProduct');
-  };
+    onClose();
+  }, []);
+
+  const onPressMyProfile = useCallback(() => {
+    navigation.navigate('ProfileHome');
+    onClose();
+  }, []);
+  const onPressNotice = useCallback(() => {
+    navigation.navigate('Notice');
+    onClose();
+  }, []);
+  const onPressAlarmList = useCallback(() => {
+    navigation.navigate('AlarmList', {
+      menu: 'alarm',
+    });
+    onClose();
+  }, []);
+  const onPressBusinessChange = useCallback(() => {
+    navigation.navigate('BusinessSignUp');
+    onClose();
+  }, []);
+  const onPressFavorite = useCallback(() => {
+    navigation.navigate('LikeList');
+    onClose();
+  }, []);
+  const onPressInterestCategory = useCallback(() => {
+    navigation.navigate('MyCategory');
+    onClose();
+  }, []);
+  const onPressKeywordAlarm = useCallback(() => {
+    navigation.navigate('AlarmList');
+    onClose();
+  }, []);
+  const onPressSettings = useCallback(() => {
+    navigation.navigate('Setting');
+    onClose();
+  }, []);
+  const onPressServiceCenter = useCallback(() => {
+    navigation.navigate('ServiceCenter');
+    onClose();
+  }, []);
 
   return (
     <View style={modalDim}>
@@ -53,7 +93,9 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
           <TouchableOpacity onPress={onClose}>
             <Image source={BackBlackBoxIcon} style={styles.backImage} />
           </TouchableOpacity>
-          <View style={styles.profileView}>
+          <TouchableOpacity
+            onPress={onPressMyProfile}
+            style={styles.profileView}>
             <View
               style={
                 isLogin
@@ -87,18 +129,24 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
                 {t('modalMyPageLoginGuide')}
               </Text>
             )}
-          </View>
+          </TouchableOpacity>
           <ImageWithView
             image={AnnouncementIcon}
             content={t('modalMyPageNotice')}
             width={getPixel(290)}
+            onPress={onPressNotice}
           />
           <ImageWithView
             image={NoticeColorIcon}
             imageWidth={getPixel(15.38)}
             content={t('modalMyPageAlarm')}
+            onPress={onPressAlarmList}
           />
-          <ImageWithView image={StoreIcon} content={t('modalMyPageBusiness')} />
+          <ImageWithView
+            image={StoreIcon}
+            content={t('modalMyPageBusiness')}
+            onPress={onPressBusinessChange}
+          />
           <Line
             height={getHeightPixel(10)}
             style={{marginBottom: getHeightPixel(10)}}
@@ -108,12 +156,21 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
             content={t('modalMyPageProduct')}
             onPress={onPressSaleProduct}
           />
-          <ImageWithView image={HeartBlueIcon} content={t('modalMyPageLike')} />
+          <ImageWithView
+            image={HeartBlueIcon}
+            content={t('modalMyPageLike')}
+            onPress={onPressFavorite}
+          />
           <ImageWithView
             image={CategoryColorIcon}
             content={t('modalMyPageCategory')}
+            onPress={onPressInterestCategory}
           />
-          <ImageWithView image={NoticeOn} content={t('modalMyPageKeyword')} />
+          <ImageWithView
+            image={NoticeOn}
+            content={t('modalMyPageKeyword')}
+            onPress={onPressKeywordAlarm}
+          />
           <Line
             height={getHeightPixel(10)}
             style={{marginBottom: getHeightPixel(10)}}
@@ -121,11 +178,13 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
           <ImageWithView
             image={SettingsIcon}
             content={t('modalMyPageSettings')}
+            onPress={onPressSettings}
           />
 
           <ImageWithView
             image={ServiceCenterIcon}
             content={t('modalMyPageServiceCenter')}
+            onPress={onPressServiceCenter}
           />
           <View style={styles.touchBlockView}></View>
         </View>

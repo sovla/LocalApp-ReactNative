@@ -12,7 +12,7 @@ import React from 'react';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import BackWhiteIcon from '@assets/image/back_white.png';
 import {useTranslation} from 'react-i18next';
-import {useAppSelector} from '@/Hooks/CustomHook';
+import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import Theme from '@/assets/global/Theme';
 import SearchBlackIcon from '@assets/image/search_black.png';
 import CloseGrayIcon from '@assets/image/close_gray.png';
@@ -21,9 +21,10 @@ import {SearchHeaderProps} from '@/Types/Components/HomeTypes';
 const SearchHeader: React.FC<SearchHeaderProps> = ({text, setText}) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const navigation = useAppNavigation();
   return (
     <ImageBackground style={styles.headerContainer} source={BackGroundImage}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.goBack()}>
         <Image source={BackWhiteIcon} style={styles.backWhiteImage} />
       </TouchableOpacity>
       <View>

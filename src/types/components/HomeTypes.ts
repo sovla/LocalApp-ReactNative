@@ -26,6 +26,7 @@ export interface MenuBoxProps {
   OffImage: any;
   selectMenu: string;
   name: FooterProps['menu'];
+  onPressMenu?: () => void;
 }
 
 export interface HeaderProps {}

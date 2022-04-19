@@ -1,4 +1,4 @@
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Image, Modal, StyleSheet, TouchableOpacity, View} from 'react-native';
 import React, {useEffect, useLayoutEffect, useState} from 'react';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import Theme from '@/assets/global/Theme';
@@ -15,37 +15,58 @@ import {FooterProps, MenuBoxProps} from '@/Types/Components/HomeTypes';
 import {useTranslation} from 'react-i18next';
 import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import {Shadow} from 'react-native-shadow-2';
+import ModalMyPage from './ModalMyPage';
 
 const Footer: React.FC<FooterProps> = ({menu}) => {
+  const [isMenu, setisMenu] = useState(false);
   return (
-    <Shadow distance={5} finalColor={'#0000'} startColor={'#0001'}>
-      <View style={styles.footerContainer}>
-        <MenuBox
-          OffImage={HomeOffIcon}
-          onImage={HomeOnIcon}
-          name="home"
-          selectMenu={menu}
-        />
-        <MenuBox
-          OffImage={FavoriteOffIcon}
-          onImage={FavoriteOnIcon}
-          name="favorite"
-          selectMenu={menu}
-        />
-        <MenuBox
-          OffImage={ChatOffIcon}
-          onImage={ChatOnIcon}
-          name="chat"
-          selectMenu={menu}
-        />
-        <MenuBox
-          OffImage={ProfileOffIcon}
-          onImage={ProfileOnIcon}
-          name="profile"
-          selectMenu={menu}
-        />
-      </View>
-    </Shadow>
+    <>
+      <Shadow distance={5} finalColor={'#0000'} startColor={'#0001'}>
+        <View style={styles.footerContainer}>
+          <MenuBox
+            OffImage={HomeOffIcon}
+            onImage={HomeOnIcon}
+            name="home"
+            selectMenu={menu}
+          />
+          <MenuBox
+            OffImage={FavoriteOffIcon}
+            onImage={FavoriteOnIcon}
+            name="favorite"
+            selectMenu={menu}
+          />
+          <MenuBox
+            OffImage={ChatOffIcon}
+            onImage={ChatOnIcon}
+            name="chat"
+            selectMenu={menu}
+          />
+          <MenuBox
+            OffImage={ProfileOffIcon}
+            onImage={ProfileOnIcon}
+            name="profile"
+            selectMenu={menu}
+            onPressMenu={() => setisMenu(true)}
+          />
+        </View>
+      </Shadow>
+      {isMenu && (
+        <Modal
+          visible={isMenu}
+          transparent
+          onRequestClose={() => {
+            setisMenu(false);
+          }}>
+          {isMenu && (
+            <ModalMyPage
+              onClose={() => {
+                setisMenu(false);
+              }}
+            />
+          )}
+        </Modal>
+      )}
+    </>
   );
 };
 
@@ -54,10 +75,12 @@ const MenuBox: React.FC<MenuBoxProps> = ({
   OffImage,
   selectMenu,
   name,
+  onPressMenu,
 }) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const navigation = useAppNavigation();
+
   const onPress = () => {
     switch (name) {
       case 'chat':
@@ -70,7 +93,7 @@ const MenuBox: React.FC<MenuBoxProps> = ({
         navigation.navigate('Home');
         break;
       case 'profile':
-        navigation.navigate('ProfileHome');
+        if (onPressMenu) onPressMenu();
         break;
 
       default:

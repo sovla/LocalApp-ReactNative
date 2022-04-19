@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
@@ -20,11 +20,15 @@ import Menu from '@/Components/Profile/Menu';
 import Product from '@/Components/Home/Product';
 import AlarmContent from '@/Components/Notice/AlarmContent';
 import EditIcon from '@assets/image/edit.png';
+import {AlarmListProps} from '@/Types/Screen/Screen';
+import {useIsFocused} from '@react-navigation/native';
 
-export default function AlarmList() {
+export default function AlarmList({route: {params}}: AlarmListProps) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const navigation = useAppNavigation();
+  const isFocused = useIsFocused();
+
   const [selectMenu, setSelectMenu] = useState<any>(t('keywordAlarm'));
   const [list, setList] = useState([1, 2, 3, 4, 5]);
   const {value: isDelete, toggle: toggleIsDelete} = useBoolean(false);
@@ -38,6 +42,9 @@ export default function AlarmList() {
   const onPressEditButton = useCallback(() => {
     navigation.navigate('KeywordAlarm');
   }, []);
+  useEffect(() => {
+    if (params?.menu) setSelectMenu(t(params.menu));
+  }, [isFocused]);
   return (
     <View style={{flex: 1}}>
       <TouchableOpacity onPress={onPressEditButton} style={styles.editTouch}>
