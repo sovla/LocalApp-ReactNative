@@ -13,7 +13,7 @@ import {useAppSelector} from '@/Hooks/CustomHook';
 import Screen from '@/Types/Screen/Screen';
 import {API} from '@/API/API';
 
-const ROUTING: keyof Screen = 'Login';
+const ROUTING: keyof Screen = 'SignUpForm';
 
 const resources = {
   en,
@@ -233,6 +233,14 @@ export const RouterSetting: RouterTypes[] = [
   {
     name: 'SignUp',
     component: React.lazy(() => import('./LoginSignUp/SignUp')),
+  },
+  {
+    name: 'SignUpTel',
+    component: React.lazy(() => import('./LoginSignUp/SignUpTel')),
+  },
+  {
+    name: 'SignUpAuth',
+    component: React.lazy(() => import('./LoginSignUp/SignUpAuth')),
   },
   {
     name: 'SignUpComplete',

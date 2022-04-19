@@ -8,6 +8,8 @@ type Screen = {
   LoginComplete: StackScreenProps<Screen> | undefined;
   SignUp: StackScreenProps<Screen> | undefined;
   SignUpTOS: StackScreenProps<Screen> | undefined;
+  SignUpTel: StackScreenProps<Screen> | undefined;
+  SignUpAuth: StackScreenProps<Screen> | undefined;
   SignUpForm: StackScreenProps<Screen> | undefined;
   SignUpPhoto: StackScreenProps<Screen> | undefined;
   SignUpComplete: StackScreenProps<Screen> | undefined;
@@ -93,6 +95,8 @@ export type AppPermissionProps = StackScreenProps<Screen, 'AppPermission'>;
 export type LoginProps = StackScreenProps<Screen, 'Login'>;
 export type LoginCompleteProps = StackScreenProps<Screen, 'LoginComplete'>;
 export type SignUpProps = StackScreenProps<Screen, 'SignUp'>;
+export type SignUpTelProps = StackScreenProps<Screen, 'SignUpTel'>;
+export type SignUpAuthProps = StackScreenProps<Screen, 'SignUpAuth'>;
 export type SignUpTOSProps = StackScreenProps<Screen, 'SignUpTOS'>;
 export type SignUpFormProps = StackScreenProps<Screen, 'SignUpForm'>;
 export type SignUpPhotoProps = StackScreenProps<Screen, 'SignUpPhoto'>;

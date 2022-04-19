@@ -21,3 +21,9 @@ export const onScrollSlide = (
     setState(Math.round(e.nativeEvent.contentOffset.x / getPixel(328)));
   }
 };
+
+export const timer = (number: number) => {
+  return `${Math.floor(number / 60)}:${
+    number % 60 < 10 ? '0' + (number % 60) : number % 60
+  }`;
+};

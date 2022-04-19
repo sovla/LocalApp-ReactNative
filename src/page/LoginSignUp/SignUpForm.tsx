@@ -44,6 +44,42 @@ export default function SignUpForm() {
                 <Text
                   fontSize={`${Theme.fontSize.fs14 * fontSize}px`}
                   color={Theme.color.gray}>
+                  {t('profileDetailName')}
+                </Text>
+                <Text
+                  fontSize={`${Theme.fontSize.fs14 * fontSize}px`}
+                  color={Theme.color.red}>
+                  {' '}
+                  *{' '}
+                </Text>
+              </>
+            );
+          }}
+        />
+        <Input
+          value=""
+          onChange={() => {}}
+          PlaceHolderComponent={() => {
+            return (
+              <>
+                <Text
+                  fontSize={`${Theme.fontSize.fs14 * fontSize}px`}
+                  color={Theme.color.gray}>
+                  {t('profileDetailState')}
+                </Text>
+              </>
+            );
+          }}
+        />
+        <Input
+          value=""
+          onChange={() => {}}
+          PlaceHolderComponent={() => {
+            return (
+              <>
+                <Text
+                  fontSize={`${Theme.fontSize.fs14 * fontSize}px`}
+                  color={Theme.color.gray}>
                   {t('signUpFormPhone')}
                 </Text>
                 <Text
@@ -55,7 +91,6 @@ export default function SignUpForm() {
               </>
             );
           }}
-          errorText={t('signUpErrorPhone')}
         />
 
         <Input
