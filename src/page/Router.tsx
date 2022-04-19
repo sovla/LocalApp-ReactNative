@@ -12,9 +12,8 @@ import {en, ko, es, br} from '@/assets/lang/lang';
 import {useAppSelector} from '@/Hooks/CustomHook';
 import Screen from '@/Types/Screen/Screen';
 import {API} from '@/API/API';
-import SplashScreen from 'react-native-splash-screen';
 
-const ROUTING: keyof Screen = 'OnBoarding';
+const ROUTING: keyof Screen = 'Login';
 
 const resources = {
   en,
@@ -248,7 +247,7 @@ export const RouterSetting: RouterTypes[] = [
     component: React.lazy(() => import('./LoginSignUp/SignUpPhoto')),
   },
   {
-    name: 'SignUpToS',
+    name: 'SignUpTOS',
     component: React.lazy(() => import('./LoginSignUp/SignUpToS')),
   },
   {
@@ -306,14 +305,6 @@ export const RouterSetting: RouterTypes[] = [
   {
     name: 'AppPermission',
     component: React.lazy(() => import('./OnBoard/AppPermission')),
-  },
-  {
-    name: 'OnBoarding2',
-    component: React.lazy(() => import('./OnBoard/OnBoarding2')),
-  },
-  {
-    name: 'OnBoarding3',
-    component: React.lazy(() => import('./OnBoard/OnBoarding3')),
   },
   {
     name: 'ProductCategory',

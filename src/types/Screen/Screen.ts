@@ -3,8 +3,6 @@ import {categoryMenuTypes, ProductTypes, tierTypes} from '../Components/global';
 
 type Screen = {
   OnBoarding: StackScreenProps<Screen> | undefined;
-  OnBoarding2: StackScreenProps<Screen> | undefined;
-  OnBoarding3: StackScreenProps<Screen> | undefined;
   AppPermission: StackScreenProps<Screen> | undefined;
   Login: StackScreenProps<Screen> | undefined;
   LoginComplete: StackScreenProps<Screen> | undefined;
@@ -83,7 +81,6 @@ type Screen = {
   CarEndNumber: StackScreenProps<Screen> | undefined;
   CarLocation: StackScreenProps<Screen> | undefined;
   Menu: StackScreenProps<Screen> | undefined;
-  SignUpToS: StackScreenProps<Screen> | undefined;
   ProductTierGuide: StackScreenProps<Screen> | undefined;
   BlockList: StackScreenProps<Screen> | undefined;
 };
@@ -91,9 +88,7 @@ type Screen = {
 export default Screen;
 
 export type ProfileScreenNavigationProp = StackNavigationProp<Screen>;
-export type OnBoarding1Props = StackScreenProps<Screen, 'OnBoarding'>;
-export type OnBoarding2Props = StackScreenProps<Screen, 'OnBoarding2'>;
-export type OnBoarding3Props = StackScreenProps<Screen, 'OnBoarding3'>;
+export type OnBoardingProps = StackScreenProps<Screen, 'OnBoarding'>;
 export type AppPermissionProps = StackScreenProps<Screen, 'AppPermission'>;
 export type LoginProps = StackScreenProps<Screen, 'Login'>;
 export type LoginCompleteProps = StackScreenProps<Screen, 'LoginComplete'>;
@@ -190,7 +185,6 @@ export type CarGearProps = StackScreenProps<Screen, 'CarGear'>;
 export type CarEndNumberProps = StackScreenProps<Screen, 'CarEndNumber'>;
 export type CarLocationProps = StackScreenProps<Screen, 'CarLocation'>;
 export type MenuProps = StackScreenProps<Screen, 'Menu'>;
-export type SignUpToSProps = StackScreenProps<Screen, 'SignUpToS'>;
 export type ProductTierGuideProps = StackScreenProps<
   Screen,
   'ProductTierGuide'

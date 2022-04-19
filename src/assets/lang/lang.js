@@ -5,6 +5,11 @@ export const en = {
 };
 export const ko = {
   translation: {
+    localApp: '로컬앱',
+    loginGuide1: '과 함께',
+    loginGuide2: '우리',
+    loginGuide3: '동네 직거래',
+    loginGuide4: '!!',
     title: '제목',
     Skip: 'Skip',
     onBoardingGuide1: '우리 지역 기반\n직거래 마켓',
