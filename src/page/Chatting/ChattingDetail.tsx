@@ -176,11 +176,13 @@ export default function ChattingDetail({navigation}: ChattingDetailProps) {
                 maxHeight: getHeightPixel(740 - 55 - 50),
                 flex: 1,
               }}>
-              <KeyboardAwareScrollView style={{flex: 1}}>
-                {[
+              <KeyboardAwareFlatList
+                style={{flex: 1}}
+                data={[
                   1, 2, 3, 4, 5, 6, 7, 81, 2, 3, 4, 5, 6, 7, 81, 2, 3, 4, 5, 6,
                   7, 81, 2, 3, 4, 5, 6, 7, 81, 2, 3, 4, 5, 6, 7, 8,
-                ].map((v, index) => {
+                ]}
+                renderItem={({v, index}) => {
                   return (
                     <>
                       {index === 0 && <Date />}
@@ -212,7 +214,7 @@ export default function ChattingDetail({navigation}: ChattingDetailProps) {
                           date="11:20"
                           isCheck={2}
                           content="R. Guarani, 266 - Bom Retiro
-                          São Paulo - SP, 01123-040"
+                    São Paulo - SP, 01123-040"
                           isMy={index % 2 === 1}
                         />
                       )}
@@ -221,7 +223,7 @@ export default function ChattingDetail({navigation}: ChattingDetailProps) {
                           date="11:20"
                           isCheck={2}
                           content="R. Guarani, 266 - Bom Retiro
-                          São Paulo - SP, 01123-040"
+                    São Paulo - SP, 01123-040"
                           isMy={index % 2 === 1}
                         />
                       )}
@@ -241,8 +243,9 @@ export default function ChattingDetail({navigation}: ChattingDetailProps) {
                       )}
                     </>
                   );
-                })}
-              </KeyboardAwareScrollView>
+                }}
+                initialNumToRender={10}
+              />
             </View>
             <View ref={viewRef}>
               <>

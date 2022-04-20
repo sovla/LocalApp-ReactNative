@@ -208,6 +208,7 @@ export const ko = {
     modalMyPageNotice: '공지사항',
     modalMyPageAlarm: '알림',
     modalMyPageBusiness: '비즈니스 계정 전환',
+    modalMyPageBusinessUpdate: '비즈니스 프로필 관리',
     modalMyPageProduct: '판매상품',
     modalMyPageLike: '관심목록',
     modalMyPageCategory: '관심 카테고리 설정',

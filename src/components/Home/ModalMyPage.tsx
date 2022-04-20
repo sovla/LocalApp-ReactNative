@@ -30,17 +30,22 @@ import CategoryColorIcon from '@assets/image/category_color.png';
 import NoticeOn from '@assets/image/notice_on.png';
 import SettingsIcon from '@assets/image/settings.png';
 import ServiceCenterIcon from '@assets/image/service_center.png';
+import {Button} from '../Global/button';
 
 const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const navigation = useAppNavigation();
+
   const isLogin = true;
   const login = {
     name: 'Leandro',
     statusMessage: 'Love what you have',
     image: require('@assets/image/dummy.png'),
   };
+
+  const [isBusiness, setIsBusiness] = useState(false);
+
   const onPressSaleProduct = useCallback(() => {
     //  판매상품 눌럿을 때
     navigation.navigate('MyProduct');
@@ -63,9 +68,14 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
     onClose();
   }, []);
   const onPressBusinessChange = useCallback(() => {
-    navigation.navigate('BusinessSignUp');
+    if (isBusiness) {
+      navigation.navigate('BusinessProfileMenu');
+    } else {
+      navigation.navigate('BusinessSignUp');
+    }
+
     onClose();
-  }, []);
+  }, [isBusiness]);
   const onPressFavorite = useCallback(() => {
     navigation.navigate('LikeList');
     onClose();
@@ -91,7 +101,21 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
     <View style={modalDim}>
       <SlideRightModal onClose={onClose}>
         <View>
-          <TouchableOpacity onPress={onClose}>
+          <View
+            style={{
+              position: 'absolute',
+              top: 0,
+              right: 0,
+              zIndex: 100,
+            }}>
+            <Button
+              width={getPixel(100)}
+              content="비즈니스계정전환(테스트용)"
+              onPress={() => setIsBusiness(p => !p)}
+            />
+          </View>
+
+          <TouchableOpacity style={styles.backImageView} onPress={onClose}>
             <Image source={BackBlackBoxIcon} style={styles.backImage} />
           </TouchableOpacity>
           <TouchableOpacity
@@ -145,7 +169,9 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
           />
           <ImageWithView
             image={StoreIcon}
-            content={t('modalMyPageBusiness')}
+            content={t(
+              isBusiness ? 'modalMyPageBusinessUpdate' : 'modalMyPageBusiness',
+            )}
             onPress={onPressBusinessChange}
           />
           <Line
@@ -243,9 +269,12 @@ export const ImageWithView: React.FC<{
   const applyFontSize = fontSize ?? 16 * fontSizeState;
   return (
     <>
-      <TouchableOpacity
-        onPress={onPress}
-        style={[styles.imageWithViewTouch, {width}]}>
+      <View
+        style={{
+          width,
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}>
         <View style={styles.imageWithViewView}>
           <Image
             source={image}
@@ -256,8 +285,10 @@ export const ImageWithView: React.FC<{
             resizeMode="contain"
           />
         </View>
-        <Text fontSize={`${applyFontSize}`}>{content}</Text>
-      </TouchableOpacity>
+        <TouchableOpacity onPress={onPress} style={[styles.imageWithViewTouch]}>
+          <Text fontSize={`${applyFontSize}`}>{content}</Text>
+        </TouchableOpacity>
+      </View>
       <Line isGray />
     </>
   );
@@ -300,9 +331,13 @@ const styles = StyleSheet.create({
     marginVertical: getHeightPixel(20),
     alignItems: 'center',
   },
-  backImage: {
+  backImageView: {
+    width: getPixel(30),
+    height: getPixel(30),
     marginTop: getHeightPixel(14),
     marginLeft: getPixel(19),
+  },
+  backImage: {
     width: getPixel(30),
     height: getPixel(30),
   },
@@ -310,12 +345,13 @@ const styles = StyleSheet.create({
     height: getHeightPixel(50),
     flexDirection: 'row',
     alignItems: 'center',
+    width: 'auto',
   },
   imageWithViewView: {
     width: getPixel(30),
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: getPixel(20),
     marginRight: getPixel(10),
+    marginLeft: getPixel(20),
   },
 });
