@@ -17,7 +17,12 @@ type Screen = {
   AllCategory: StackScreenProps<Screen> | undefined;
   LocationChange: StackScreenProps<Screen> | undefined;
   ProductDetail: StackScreenProps<Screen> | undefined;
-  Search: StackScreenProps<Screen> | undefined;
+  Search:
+    | {
+        category?: categoryMenuTypes['menu'];
+        keyword?: string;
+      }
+    | undefined;
   SearchDetail: StackScreenProps<Screen> | undefined;
   MyCategory: StackScreenProps<Screen> | undefined;
   KeywordAlarm: StackScreenProps<Screen> | undefined;

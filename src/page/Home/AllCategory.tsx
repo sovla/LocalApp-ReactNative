@@ -87,8 +87,15 @@ const AllCategory = () => {
     '애플워치',
   ]);
 
-  const onPressCategory = useCallback(() => {
-    navigation.navigate('Search');
+  const onPressCategory = useCallback(item => {
+    navigation.navigate('Search', {
+      category: item,
+    });
+  }, []);
+  const onPressKeyword = useCallback(keyword => {
+    navigation.navigate('Search', {
+      keyword,
+    });
   }, []);
 
   return (
@@ -107,7 +114,9 @@ const AllCategory = () => {
             }
             return (
               <TouchableOpacity
-                onPress={onPressCategory}
+                onPress={() => {
+                  onPressCategory(item.name);
+                }}
                 style={{
                   ...styles.itemTouch,
                   marginRight: (index + 1) % 3 !== 0 ? getPixel(10) : 0,
@@ -150,6 +159,9 @@ const AllCategory = () => {
             {popularList.map((item, index) => (
               <TouchableOpacity
                 key={item + index}
+                onPress={() => {
+                  onPressKeyword(item);
+                }}
                 style={styles.popularListView}>
                 <Text medium fontSize={`${12 * fontSize}`} letterSpacing="0px">
                   {item}

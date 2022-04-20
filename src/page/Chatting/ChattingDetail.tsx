@@ -68,7 +68,7 @@ import {categoryMenu, languageList} from '@/assets/global/dummy';
 import Menu from '@/Components/Profile/Menu';
 import ProductWhiteBox from '@/Components/Product/ProductWhiteBox';
 import EditModal from '@/Components/Product/EditModal';
-import Screen from '@/Types/Screen/Screen';
+import Screen, {ChattingDetailProps} from '@/Types/Screen/Screen';
 import ArrowRightIcon from '@assets/image/arrow_right.png';
 import ArrowUpGrayIcon from '@assets/image/arrow_up_gray.png';
 import ArrowDownGrayIcon from '@assets/image/arrow_down_gray.png';
@@ -98,7 +98,7 @@ import KeyboardSpacer from 'react-native-keyboard-spacer';
 import LocationChatting from '@/Components/Chatting/LocationChatting';
 import ModalChattingSetting from '@/Components/Chatting/ModalChattingSetting';
 
-export default function ChattingDetail() {
+export default function ChattingDetail({navigation}: ChattingDetailProps) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const {
@@ -127,10 +127,15 @@ export default function ChattingDetail() {
                 style={styles.headerImageBackground}
                 source={ChattingBgImage}>
                 <View style={styles.rowCenter}>
-                  <AutoHeightImage
-                    source={BackWhiteIcon}
-                    width={getPixel(30)}
-                  />
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.goBack();
+                    }}>
+                    <AutoHeightImage
+                      source={BackWhiteIcon}
+                      width={getPixel(30)}
+                    />
+                  </TouchableOpacity>
                   <WhiteText
                     bold
                     fontSize={`${16 * fontSize}`}

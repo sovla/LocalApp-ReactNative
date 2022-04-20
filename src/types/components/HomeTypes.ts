@@ -1,9 +1,9 @@
 import React from 'react';
 import {GestureResponderEvent} from 'react-native';
-import {ModalProps} from './global';
+import {categoryMenuTypes, ModalProps} from './global';
 
 export interface CategoryCardProps {
-  name: string;
+  name: categoryMenuTypes['menu'];
   image?: any;
 }
 
@@ -59,6 +59,8 @@ export interface ProductListProps {
 export interface SearchHeaderProps {
   text: string;
   setText: React.Dispatch<React.SetStateAction<string>>;
+  keyword?: categoryMenuTypes['menu'];
+  onPressCloseKeyword?: () => void;
 }
 
 export interface SearchKeywordProps {

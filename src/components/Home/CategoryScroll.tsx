@@ -5,15 +5,16 @@ import {
   NativeSyntheticEvent,
   ScrollView,
   StyleSheet,
+  TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useRef, useState} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {categoryMenu} from '@/assets/global/dummy';
 import {CategoryCardProps} from '@/Types/Components/HomeTypes';
 import {Text} from '../Global/text';
 import {useTranslation} from 'react-i18next';
-import {useAppSelector} from '@/Hooks/CustomHook';
+import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import Theme from '@/assets/global/Theme';
 import {onScrollSlide} from '@/Util/Util';
 
@@ -61,14 +62,21 @@ const CategoryScroll = () => {
 const CategoryCard: React.FC<CategoryCardProps> = ({name, image}) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const navigation = useAppNavigation();
+
+  const onPressItem = useCallback(() => {
+    navigation.navigate('Search', {
+      category: name,
+    });
+  }, []);
 
   return (
-    <View style={styles.cardContainer}>
+    <TouchableOpacity onPress={onPressItem} style={styles.cardContainer}>
       <View style={styles.cardImageView}>
         <Image source={image} style={styles.cardImage} />
       </View>
       <Text fontSize={`${10 * fontSize}`}>{t(name)}</Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 

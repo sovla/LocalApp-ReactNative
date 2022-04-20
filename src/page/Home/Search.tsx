@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Modal,
 } from 'react-native';
-import React, {Fragment, useState} from 'react';
+import React, {Fragment, useCallback, useEffect, useState} from 'react';
 import SearchHeader from '@/Components/Home/SearchHeader';
 import {BoldText, GrayText, MediumText, Text} from '@/Components/Global/text';
 import {useTranslation} from 'react-i18next';
@@ -29,10 +29,14 @@ import ModalFilter from '../../Components/Home/ModalFilter';
 import useBoolean from '@/Hooks/useBoolean';
 import ModalKeyword from '@/Components/Home/ModalKeyword';
 import CloseBlackIcon from '@assets/image/close_black.png';
+import {SearchProps} from '@/Types/Screen/Screen';
+import {categoryMenuTypes} from '@/Types/Components/global';
+import {useIsFocused} from '@react-navigation/native';
 
-export default function Search(): JSX.Element {
+export default function Search({route: {params}}: SearchProps): JSX.Element {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const isFocused = useIsFocused();
   const [isList, setIsList] = useState<boolean>(false);
   const [isMore, setIsMore] = useState<boolean>(false);
   const {
@@ -59,10 +63,32 @@ export default function Search(): JSX.Element {
     '애플워치',
   ]);
   const [searchText, setSearchText] = useState<string>('');
-  const isSearch = searchText.length > 0;
+  const [selectKeyword, setSelectKeyword] = useState<
+    categoryMenuTypes['menu'] | null | undefined
+  >();
+
+  const onPressCloseKeyword = useCallback(() => {
+    setSelectKeyword(null);
+  }, []);
+
+  useEffect(() => {
+    if (params?.category) {
+      setSelectKeyword(params.category);
+    }
+    if (params?.keyword) {
+      setSearchText(params.keyword);
+    }
+  }, [isFocused]);
+  const isSearch =
+    searchText.length > 0 || (selectKeyword && selectKeyword?.length > 0);
   return (
     <View style={styles.mainContainer}>
-      <SearchHeader text={searchText} setText={setSearchText} />
+      <SearchHeader
+        keyword={selectKeyword ?? undefined}
+        text={searchText}
+        setText={setSearchText}
+        onPressCloseKeyword={onPressCloseKeyword}
+      />
 
       <ScrollView>
         {isSearch ? (
