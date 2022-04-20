@@ -78,6 +78,8 @@ type Screen = {
   ProductLocation: StackScreenProps<Screen> | undefined;
   Setting: StackScreenProps<Screen> | undefined;
   SettingPrivacy: StackScreenProps<Screen> | undefined;
+  SettingPrivacyTel: StackScreenProps<Screen> | undefined;
+  SettingPrivacyTelAuth: StackScreenProps<Screen> | undefined;
   SettingDeleteAccount: StackScreenProps<Screen> | undefined;
   SettingAlarm: StackScreenProps<Screen> | undefined;
   SettingChatting: StackScreenProps<Screen> | undefined;
@@ -186,6 +188,14 @@ export type ProductTierProps = StackScreenProps<Screen, 'ProductTier'>;
 export type ProductLocationProps = StackScreenProps<Screen, 'ProductLocation'>;
 export type SettingProps = StackScreenProps<Screen, 'Setting'>;
 export type SettingPrivacyProps = StackScreenProps<Screen, 'SettingPrivacy'>;
+export type SettingPrivacyTelProps = StackScreenProps<
+  Screen,
+  'SettingPrivacyTel'
+>;
+export type SettingPrivacyTelAuthProps = StackScreenProps<
+  Screen,
+  'SettingPrivacyTelAuth'
+>;
 export type SettingDeleteAccountProps = StackScreenProps<
   Screen,
   'SettingDeleteAccount'

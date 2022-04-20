@@ -73,6 +73,8 @@ import ProductTier from './Product/ProductTier';
 import ProductLocation from './Product/ProductLocation';
 import Setting from './Setting/Setting';
 import SettingPrivacy from './Setting/SettingPrivacy';
+import SettingPrivacyTel from './Setting/SettingPrivacyTel';
+import SettingPrivacyTelAuth from './Setting/SettingPrivacyTelAuth';
 import SettingDeleteAccount from './Setting/SettingDeleteAccount';
 import SettingAlarm from './Setting/SettingAlarm';
 import SettingChatting from './Setting/SettingChatting';
@@ -95,7 +97,7 @@ import Menu from './Menu';
 import ProductTierGuide from './Product/ProductTierGuide';
 import BlockList from './Chatting/BlockList';
 
-const ROUTING: keyof Screen = 'AppPermission';
+const ROUTING: keyof Screen = 'Home';
 
 const resources = {
   en,
@@ -114,6 +116,7 @@ const forFade = ({current}: any) => {
 
 export default function Router() {
   const [isChange, setIsChange] = useState<boolean>(false);
+  const [isLanguageChange, setIsLanguageChange] = useState(false);
   const lang = useAppSelector(state => state.lang.value);
 
   useEffect(() => {
@@ -125,13 +128,12 @@ export default function Router() {
         // or even better, manage them via a UI: https://react.i18next.com/guides/multiple-translation-files#manage-your-translations-with-a-management-gui)
         resources: resources,
         lng: 'ko', // if you're using a language detector, do not define the lng option
-        fallbackLng: 'ko',
+
         compatibilityJSON: 'v3',
         interpolation: {
           escapeValue: false, // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
         },
       });
-    i18n.changeLanguage(lang);
     API.post('lang_content.php')
       .then(res => {
         if (res.data?.result === 'true' && res?.data?.data) {
@@ -143,7 +145,27 @@ export default function Router() {
       .finally(() => {
         setIsChange(p => !p);
       });
+  }, []);
+  useEffect(() => {
+    setIsLanguageChange(true);
+    console.log(lang);
+    i18n
+      .changeLanguage(lang)
+      .then(v => {
+        console.log(
+          i18n.language,
+          i18n.getResourceBundle(i18n.language, 'translation'),
+        );
+      })
+      .finally(() => {
+        setIsLanguageChange(false);
+      });
   }, [lang]);
+
+  if (isLanguageChange) {
+    return null;
+  }
+
   return (
     <Suspense fallback={<View></View>}>
       <NavigationContainer>
@@ -491,6 +513,14 @@ export const RouterSetting: RouterTypes[] = [
   {
     name: 'SettingPrivacy',
     component: SettingPrivacy,
+  },
+  {
+    name: 'SettingPrivacyTel',
+    component: SettingPrivacyTel,
+  },
+  {
+    name: 'SettingPrivacyTelAuth',
+    component: SettingPrivacyTelAuth,
   },
   {
     name: 'ToU',

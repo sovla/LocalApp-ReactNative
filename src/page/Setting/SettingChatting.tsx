@@ -36,6 +36,7 @@ export default function SettingChatting() {
     );
     return;
   };
+  console.log(size);
 
   return (
     <View>
@@ -58,7 +59,7 @@ export default function SettingChatting() {
               setIsOn(prev => !prev);
             }}>
             <Text color={Theme.color.blue_3D} fontSize={`${16 * fontSize}`}>
-              {t('fontSizeMedium')}
+              {t(`fontSize${size}`)}
             </Text>
           </TouchableOpacity>
         </View>

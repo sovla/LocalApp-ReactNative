@@ -1,9 +1,9 @@
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {GrayText, Text} from '@Components/Global/text';
-import {useAppSelector} from '@/Hooks/CustomHook';
+import {useAppDispatch, useAppSelector} from '@/Hooks/CustomHook';
 import {useTranslation} from 'react-i18next';
 import AutoHeightImage from 'react-native-auto-height-image';
 
@@ -13,22 +13,21 @@ import {Button, CheckBoxImage} from '@/Components/Global/button';
 import Line from '@/Components/Global/Line';
 import i18next from 'i18next';
 import {languageList} from '@/assets/global/dummy';
+import {changeLang} from '@/Store/langState';
 
 export default function SettingLanguage() {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const dispatch = useAppDispatch();
   const [selectLanguage, setSelectLanguage] = useState(0);
   useEffect(() => {
     const index = languageList.findIndex(v => v === i18next.language);
     setSelectLanguage(index);
   }, []);
-  const onPressSave = () => {
-    i18next
-      .changeLanguage(languageList[selectLanguage], (err, t) => {
-        console.log(err, t);
-      })
-      .then(() => {});
-  };
+  const onPressSave = useCallback(() => {
+    dispatch(changeLang(languageList[selectLanguage]));
+  }, [selectLanguage]);
+
   return (
     <View style={{flex: 1}}>
       <Header title={t('settingLanguageTitle')} />

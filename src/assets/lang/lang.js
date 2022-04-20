@@ -194,6 +194,7 @@ export const ko = {
     businessProfileSettingShopAddress: '업체 주소 등록',
     businessProfileSettingShopHp: '전화번호 등록',
     businessProfileSettingShopTelPh: '핸드폰 번호 등록',
+    businessProfileSettingShopTelChangePh: '핸드폰 번호 변경',
     businessProfileSettingShopOpeningTime: '영업시간 설정',
     businessProfileSettingShopWebSite: '웹사이트',
     businessProfileSettingShopFacebook: '페이스북 주소',

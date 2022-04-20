@@ -1,5 +1,5 @@
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {GrayText, Text} from '@Components/Global/text';
@@ -10,16 +10,20 @@ import Theme from '@/assets/global/Theme';
 import Header from '@/Components/LoginSignUp/Header';
 import {Toggle} from '@/Components/Global/button';
 import Line from '@/Components/Global/Line';
+import {SettingPrivacyProps} from '@/Types/Screen/Screen';
 
-export default function SettingPrivacy() {
+export default function SettingPrivacy({navigation}: SettingPrivacyProps) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
 
   const [isOpen, setIsOpen] = useState(false);
-  const navigation = useAppNavigation();
-  const onPressDeleteAccount = () => {
+  const onPressDeleteAccount = useCallback(() => {
     navigation.navigate('SettingDeleteAccount');
-  };
+  }, []);
+  const onPressTelChange = useCallback(() => {
+    navigation.navigate('SettingPrivacyTel');
+  }, []);
+
   return (
     <View
       style={{
@@ -27,11 +31,7 @@ export default function SettingPrivacy() {
       }}>
       <Header title={t('settingPrivacyTitle')} />
       <View style={styles.sidePadding}>
-        <GrayText
-          style={{
-            marginTop: getHeightPixel(30),
-          }}
-          fontSize={`${12 * fontSize}`}>
+        <GrayText style={styles.marginTop30} fontSize={`${12 * fontSize}`}>
           {t('settingPrivacySubTitle')}
         </GrayText>
         <View style={styles.betweenBox}>
@@ -43,9 +43,9 @@ export default function SettingPrivacy() {
         <Line isGray />
         <View style={styles.betweenBox}>
           <Text fontSize={`${16 * fontSize}`}>
-            {t('businessProfileSettingShopTelOpen')}
+            {t('businessProfileSettingShopTelChangePh')}
           </Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={onPressTelChange}>
             <Text fontSize={`${16 * fontSize}`} color={Theme.color.blue_3D}>
               010-9999-9999
             </Text>
@@ -73,6 +73,9 @@ export default function SettingPrivacy() {
 }
 
 const styles = StyleSheet.create({
+  marginTop30: {
+    marginTop: getHeightPixel(30),
+  },
   sidePadding: {
     marginHorizontal: getPixel(16),
   },

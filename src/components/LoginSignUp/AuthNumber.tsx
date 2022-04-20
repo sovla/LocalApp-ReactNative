@@ -19,12 +19,14 @@ export default function AuthNumber({
   authNum,
   setAuthNum,
   onPressNext,
+  isChange = true,
 }: {
   count: number;
   tel: string;
   authNum: string;
   setAuthNum: React.Dispatch<React.SetStateAction<string>>;
   onPressNext?: () => void;
+  isChange?: boolean;
 }) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
@@ -86,17 +88,19 @@ export default function AuthNumber({
             <GrayText fontSize={`${12 * fontSize}`}>{timer(count)}</GrayText>
           </View>
           <Button onPress={onPressNext} content={t('confirm')} />
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text
-              textAlign="center"
-              color={Theme.color.blue_3D}
-              fontSize={`${14 * fontSize}`}
-              style={{
-                marginTop: getHeightPixel(20),
-              }}>
-              {t('signUpAuthGuide3')}
-            </Text>
-          </TouchableOpacity>
+          {isChange && (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Text
+                textAlign="center"
+                color={Theme.color.blue_3D}
+                fontSize={`${14 * fontSize}`}
+                style={{
+                  marginTop: getHeightPixel(20),
+                }}>
+                {t('signUpAuthGuide3')}
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
       </KeyboardAwareScrollView>
     </View>

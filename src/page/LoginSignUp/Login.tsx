@@ -44,7 +44,7 @@ export default function Login({navigation}: LoginProps) {
   }, []);
 
   const onPressLogin = useCallback(() => {
-    navigation.navigate('Home');
+    navigation.navigate('LoginComplete');
   }, []);
 
   return (

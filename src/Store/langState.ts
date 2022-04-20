@@ -16,13 +16,13 @@ export const langSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    change: (state, action: PayloadAction<string>) => {
+    changeLang: (state, action: PayloadAction<string>) => {
       state.value = action.payload;
     },
   },
 });
 
-export const {change} = langSlice.actions;
+export const {changeLang} = langSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectLang = (state: RootState) => state.lang.value;

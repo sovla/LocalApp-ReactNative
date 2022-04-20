@@ -21,7 +21,7 @@ const CountryPicker: React.FC<{
 }> = ({
   selectNum,
   setSelectNum,
-  width = getPixel(328),
+  width = getPixel(288),
   height = getHeightPixel(60),
   isLabelNumber,
 }) => {
