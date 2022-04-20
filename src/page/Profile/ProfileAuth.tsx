@@ -8,16 +8,16 @@ import {SignUpAuthProps} from '@/Types/Screen/Screen';
 import useInterval from '@/Hooks/useInterval';
 import AuthNumber from '@/Components/LoginSignUp/AuthNumber';
 
-export default function SignUpAuth({navigation}: SignUpAuthProps) {
+export default function ProfileAuth({navigation}: SignUpAuthProps) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
 
   const tel = '+55 11 99999-0000';
-  const [authNum, setAuthNum] = useState('0');
+  const [authNum, setAuthNum] = useState('');
   const [count, setCount] = useState(120);
 
   const onPressNext = useCallback(() => {
-    navigation.navigate('SignUpForm', tel);
+    navigation.navigate('ProfileAuthComplete');
   }, []);
 
   useInterval(() => {

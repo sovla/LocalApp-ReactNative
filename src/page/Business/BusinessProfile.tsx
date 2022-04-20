@@ -6,7 +6,7 @@ import {
   StyleSheet,
   ImageSourcePropType,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {ProfileBackground} from '../Profile/ProfileHome';
 import Header from '@/Components/Profile/Header';
 import {useTranslation} from 'react-i18next';
@@ -35,8 +35,10 @@ import InstagramIcon from '@assets/image/instagram.png';
 import FacebookIcon from '@assets/image/facebook.png';
 import WhatsAppIcon from '@assets/image/whatsapp.png';
 import DribbleIcon from '@assets/image/dribbble.png';
+import {BusinessProfileProps} from '@/Types/Screen/Screen';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
-export default function BusinessProfile() {
+export default function BusinessProfile({navigation}: BusinessProfileProps) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const [isShow, setIsShow] = useState<boolean>(false);
@@ -57,167 +59,192 @@ export default function BusinessProfile() {
     '',
     '10:00~20:00',
   ];
+  const onPressProductSale = useCallback(() => {
+    navigation.navigate('ProfileSellProduct');
+  }, []);
+
+  const onPressChatting = useCallback(() => {
+    navigation.navigate('ChattingDetail');
+  }, []);
+
+  const onPressReviews = useCallback(() => {
+    navigation.navigate('ProfileSellerReview');
+  }, []);
   return (
     <View style={{flex: 1}}>
-      <ProfileBackground />
-      <Header title={t('businessProfileTitle')}>
-        <ShareIcon />
-      </Header>
-      <View style={{marginHorizontal: getPixel(16)}}>
-        <BannerList imageArray={[dummy, dummy, dummy, dummy]} />
-      </View>
-      <View style={{marginHorizontal: getPixel(16)}}>
-        <Shadow distance={10}>
-          <View style={styles.whiteBoxView}>
-            <View style={styles.whiteBoxTopView}>
-              <View style={styles.row}>
-                <View style={styles.profileContentView}>
-                  <Image source={dummy} style={styles.profileImage} />
-                  <View>
-                    <BoldText fontSize={`${16 * fontSize}`}>{name}</BoldText>
-                    <GrayText fontSize={`${12 * fontSize}`}>
-                      {stateMessage}
+      <KeyboardAwareScrollView style={{flex: 1}}>
+        <ProfileBackground />
+        <Header title={t('businessProfileTitle')} isOnPressBack>
+          <ShareIcon />
+        </Header>
+        <View style={{marginHorizontal: getPixel(16)}}>
+          <BannerList imageArray={[dummy, dummy, dummy, dummy]} />
+        </View>
+        <View
+          style={{
+            marginHorizontal: getPixel(16),
+            marginVertical: getHeightPixel(16),
+          }}>
+          <Shadow distance={10}>
+            <View style={styles.whiteBoxView}>
+              <View style={styles.whiteBoxTopView}>
+                <View style={styles.row}>
+                  <View style={styles.profileContentView}>
+                    <Image source={dummy} style={styles.profileImage} />
+                    <View>
+                      <BoldText fontSize={`${16 * fontSize}`}>{name}</BoldText>
+                      <GrayText fontSize={`${12 * fontSize}`}>
+                        {stateMessage}
+                      </GrayText>
+                    </View>
+                  </View>
+                  <View style={styles.starView}>
+                    <Image source={StarIcon} style={styles.starImage} />
+                    <Text medium fontSize={`${16 * fontSize}`}>
+                      {star.toString()}
+                    </Text>
+                  </View>
+                </View>
+                {/* 주소 */}
+                <View style={styles.locationView}>
+                  <Image source={LocationIcon} style={styles.locationImage} />
+                  <Text
+                    fontSize={`${14 * fontSize}`}
+                    style={styles.locationText}>
+                    {location}
+                  </Text>
+                </View>
+                {/* 전화번호 */}
+                <View style={styles.betweenRow}>
+                  <View style={styles.telView}>
+                    <Image source={TelIcon} style={styles.telImage} />
+                    <Text fontSize={`${14 * fontSize}`}>{hp}</Text>
+                  </View>
+                  <View style={styles.telView}>
+                    <Image source={MobileIcon} style={styles.telImage} />
+                    <Text fontSize={`${14 * fontSize}`}>{mobile}</Text>
+                  </View>
+                </View>
+                {/* 영업시간 */}
+                <View style={styles.openingView}>
+                  <DarkBlueText bold fontSize={`${14 * fontSize}`}>
+                    {t('businessProfileOpen')}
+                  </DarkBlueText>
+                  <TouchableOpacity
+                    style={{marginLeft: getPixel(10)}}
+                    onPress={() => {
+                      setIsShow(prev => !prev);
+                    }}>
+                    {Array.isArray(openingTime) &&
+                      openingTime.map((item, index) => {
+                        const transItem = item === '' ? ' 휴무일' : ' ' + item;
+                        if (!isShow && index > 0) {
+                          return;
+                        }
+                        return (
+                          <View
+                            style={{
+                              flexDirection: index === 0 ? 'row' : 'column',
+                            }}>
+                            <Text fontSize={`${14 * fontSize}`}>
+                              {t(dayList[index]) + transItem}
+                            </Text>
+                            {index === 0 && (
+                              <AutoHeightImage
+                                source={
+                                  isShow
+                                    ? require('@assets/image/arrow_down.png')
+                                    : require('@assets/image/arrow_up.png')
+                                }
+                                width={getPixel(10)}
+                                style={styles.arrowImage}
+                              />
+                            )}
+                          </View>
+                        );
+                      })}
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.IconView}>
+                  <View style={{flexDirection: 'row'}}>
+                    <TouchableOpacity>
+                      <AutoHeightImage
+                        source={DribbleIcon}
+                        width={getPixel(20)}
+                        style={{marginRight: getPixel(14)}}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                      <AutoHeightImage
+                        source={FacebookIcon}
+                        width={getPixel(20)}
+                        style={{marginRight: getPixel(14)}}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                      <AutoHeightImage
+                        source={InstagramIcon}
+                        width={getPixel(20)}
+                        style={{marginRight: getPixel(14)}}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                      <AutoHeightImage
+                        source={WhatsAppIcon}
+                        width={getPixel(20)}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.likeView}>
+                    <Image source={LikeIcon} style={styles.likeImage} />
+                    <GrayText fontSize={`${14 * fontSize}`}>
+                      {likeCount.toString()}
                     </GrayText>
                   </View>
                 </View>
-                <View style={styles.starView}>
-                  <Image source={StarIcon} style={styles.starImage} />
-                  <Text medium fontSize={`${16 * fontSize}`}>
-                    {star.toString()}
-                  </Text>
-                </View>
               </View>
-              {/* 주소 */}
-              <View style={styles.locationView}>
-                <Image source={LocationIcon} style={styles.locationImage} />
-                <Text fontSize={`${14 * fontSize}`} style={styles.locationText}>
-                  {location}
-                </Text>
-              </View>
-              {/* 전화번호 */}
-              <View style={styles.betweenRow}>
-                <View style={styles.telView}>
-                  <Image source={TelIcon} style={styles.telImage} />
-                  <Text fontSize={`${14 * fontSize}`}>{hp}</Text>
-                </View>
-                <View style={styles.telView}>
-                  <Image source={MobileIcon} style={styles.telImage} />
-                  <Text fontSize={`${14 * fontSize}`}>{mobile}</Text>
-                </View>
-              </View>
-              {/* 영업시간 */}
-              <View style={styles.openingView}>
-                <DarkBlueText bold fontSize={`${14 * fontSize}`}>
-                  {t('businessProfileOpen')}
-                </DarkBlueText>
+
+              <Line
+                backgroundColor={Theme.color.gray_E9}
+                height={1}
+                width={getPixel(328)}
+              />
+              <View style={styles.bottomContainer}>
                 <TouchableOpacity
-                  style={{marginLeft: getPixel(10)}}
-                  onPress={() => {
-                    setIsShow(prev => !prev);
-                  }}>
-                  {Array.isArray(openingTime) &&
-                    openingTime.map((item, index) => {
-                      const transItem = item === '' ? ' 휴무일' : ' ' + item;
-                      if (!isShow && index > 0) {
-                        return;
-                      }
-                      return (
-                        <View
-                          style={{
-                            flexDirection: index === 0 ? 'row' : 'column',
-                          }}>
-                          <Text fontSize={`${14 * fontSize}`}>
-                            {t(dayList[index]) + transItem}
-                          </Text>
-                          {index === 0 && (
-                            <AutoHeightImage
-                              source={
-                                isShow
-                                  ? require('@assets/image/arrow_down.png')
-                                  : require('@assets/image/arrow_up.png')
-                              }
-                              width={getPixel(10)}
-                              style={styles.arrowImage}
-                            />
-                          )}
-                        </View>
-                      );
-                    })}
+                  onPress={onPressProductSale}
+                  style={styles.bottomView}>
+                  <Image source={BagIcon} style={styles.whiteBoxBottomImage} />
+                  <Text fontSize={`${14 * fontSize}`}>
+                    {t('profileHomeSaleProduct')}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={onPressChatting}
+                  style={styles.bottomView}>
+                  <Image
+                    source={ChatOffIcon}
+                    style={styles.whiteBoxBottomImage}
+                  />
+                  <Text fontSize={`${14 * fontSize}`}>
+                    {t('profileHomeChat')}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={onPressReviews}
+                  style={styles.bottomView}>
+                  <Image
+                    source={MultiStarIcon}
+                    style={styles.whiteBoxBottomImage}
+                  />
+                  <Text fontSize={`${14 * fontSize}`}>
+                    {t('profileHomeSellerReviews')}
+                  </Text>
                 </TouchableOpacity>
               </View>
-              <View style={styles.IconView}>
-                <View style={{flexDirection: 'row'}}>
-                  <TouchableOpacity>
-                    <AutoHeightImage
-                      source={DribbleIcon}
-                      width={getPixel(20)}
-                      style={{marginRight: getPixel(14)}}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity>
-                    <AutoHeightImage
-                      source={FacebookIcon}
-                      width={getPixel(20)}
-                      style={{marginRight: getPixel(14)}}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity>
-                    <AutoHeightImage
-                      source={InstagramIcon}
-                      width={getPixel(20)}
-                      style={{marginRight: getPixel(14)}}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity>
-                    <AutoHeightImage
-                      source={WhatsAppIcon}
-                      width={getPixel(20)}
-                    />
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.likeView}>
-                  <Image source={LikeIcon} style={styles.likeImage} />
-                  <GrayText fontSize={`${14 * fontSize}`}>
-                    {likeCount.toString()}
-                  </GrayText>
-                </View>
-              </View>
             </View>
-
-            <Line
-              backgroundColor={Theme.color.gray_E9}
-              height={1}
-              width={getPixel(328)}
-            />
-            <View style={styles.bottomContainer}>
-              <View style={styles.bottomView}>
-                <Image source={BagIcon} style={styles.whiteBoxBottomImage} />
-                <Text fontSize={`${14 * fontSize}`}>
-                  {t('profileHomeSaleProduct')}
-                </Text>
-              </View>
-              <View style={styles.bottomView}>
-                <Image
-                  source={ChatOffIcon}
-                  style={styles.whiteBoxBottomImage}
-                />
-                <Text fontSize={`${14 * fontSize}`}>
-                  {t('profileHomeChat')}
-                </Text>
-              </View>
-              <View style={styles.bottomView}>
-                <Image
-                  source={MultiStarIcon}
-                  style={styles.whiteBoxBottomImage}
-                />
-                <Text fontSize={`${14 * fontSize}`}>
-                  {t('profileHomeSellerReviews')}
-                </Text>
-              </View>
-            </View>
-          </View>
-        </Shadow>
-      </View>
+          </Shadow>
+        </View>
+      </KeyboardAwareScrollView>
     </View>
   );
 }

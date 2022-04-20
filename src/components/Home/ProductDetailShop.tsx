@@ -1,4 +1,4 @@
-import {Image, StyleSheet, View} from 'react-native';
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {GrayText, MediumText, Text} from '../Global/text';
 import ShopGrayIcon from '@assets/image/shop_gray.png';
@@ -8,10 +8,12 @@ import {ProductDetailShopProps} from '@/Types/Components/HomeTypes';
 import {useTranslation} from 'react-i18next';
 import {useAppSelector} from '@/Hooks/CustomHook';
 import {Shadow} from 'react-native-shadow-2';
+import {getHitSlop} from '@/Util/Util';
 
 const ProductDetailShop: React.FC<ProductDetailShopProps> = ({
   shopName,
   shopSubTitle,
+  onPress,
 }) => {
   const fontSize = useAppSelector(state => state.fontSize.value);
   return (
@@ -26,8 +28,9 @@ const ProductDetailShop: React.FC<ProductDetailShopProps> = ({
             <GrayText fontSize={`${12 * fontSize}`}>{shopSubTitle}</GrayText>
           </View>
         </View>
-
-        <Image source={ShopGrayIcon} style={styles.shopGrayImage} />
+        <TouchableOpacity onPress={onPress} hitSlop={getHitSlop(5)}>
+          <Image source={ShopGrayIcon} style={styles.shopGrayImage} />
+        </TouchableOpacity>
       </View>
     </Shadow>
   );

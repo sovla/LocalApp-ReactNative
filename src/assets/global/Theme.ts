@@ -53,6 +53,7 @@ const Theme = {
   fontWeight: {
     bold: 'NotoSansKR-Bold',
     medium: 'NotoSansKR-Medium',
+    default: 'NotoSansKR-Regular',
   },
 };
 

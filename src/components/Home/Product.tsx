@@ -32,11 +32,17 @@ const Product: React.FC<ProductProps> = ({
   status,
   isList,
   isBorder,
+  onPress,
 }) => {
   const fontSize = useAppSelector(state => state.fontSize.value);
 
   return isList ? (
-    <View style={stylesNoneList.productContainer}>
+    <TouchableOpacity
+      onPress={() => {
+        if (onPress) onPress();
+      }}
+      disabled={!onPress}
+      style={stylesNoneList.productContainer}>
       <View style={stylesNoneList.centerView}>
         <Image source={image} style={[stylesNoneList.productImage]} />
 
@@ -108,9 +114,13 @@ const Product: React.FC<ProductProps> = ({
           </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   ) : (
-    <View
+    <TouchableOpacity
+      onPress={() => {
+        if (onPress) onPress();
+      }}
+      disabled={!onPress}
       style={[
         styles.isListMainContainer,
         isBorder && {
@@ -177,7 +187,7 @@ const Product: React.FC<ProductProps> = ({
           </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

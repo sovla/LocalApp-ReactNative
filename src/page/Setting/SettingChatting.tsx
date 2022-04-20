@@ -3,6 +3,7 @@ import {
   Modal,
   StyleSheet,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import React, {useState} from 'react';
@@ -30,7 +31,7 @@ export default function SettingChatting() {
     dispatch(
       fontChange({
         size: selectSize,
-        value: fontNameToValue(selectSize) / Dimensions.get('window').fontScale,
+        value: fontNameToValue(selectSize),
       }),
     );
     return;
@@ -64,49 +65,61 @@ export default function SettingChatting() {
         <Line isGray width={getPixel(328)} />
       </View>
       {isOn && (
-        <Modal transparent animationType="fade" visible>
-          <View style={styles.modalContainer}>
-            <Shadow distance={5}>
-              <View style={styles.modalView}>
-                <Text
-                  medium
-                  fontSize={`${16 * fontSize}`}
-                  style={{
-                    marginTop: getHeightPixel(20),
-                    marginBottom: getHeightPixel(10),
-                  }}>
-                  {t('fontSize')}
-                </Text>
-                <CheckBox
-                  isOn={size === 'Small'}
-                  setIsOn={() => {
-                    onPressCheckBox('Small');
-                  }}
-                  text={t('fontSizeSmall')}
-                />
-                <CheckBox
-                  isOn={size === 'Medium'}
-                  setIsOn={() => {
-                    onPressCheckBox('Medium');
-                  }}
-                  text={t('fontSizeMedium')}
-                />
-                <CheckBox
-                  isOn={size === 'Large'}
-                  setIsOn={() => {
-                    onPressCheckBox('Large');
-                  }}
-                  text={t('fontSizeLarge')}
-                />
-              </View>
-            </Shadow>
-          </View>
+        <Modal
+          transparent
+          animationType="fade"
+          visible
+          onRequestClose={() => setIsOn(false)}>
+          <TouchableOpacity
+            onPressIn={() => setIsOn(false)}
+            activeOpacity={1}
+            style={{
+              flex: 1,
+            }}>
+            <View style={styles.modalContainer}>
+              <Shadow distance={5}>
+                <View style={styles.modalView}>
+                  <Text
+                    medium
+                    fontSize={`${16 * fontSize}`}
+                    style={styles.textMargin}>
+                    {t('fontSize')}
+                  </Text>
+                  <CheckBox
+                    isOn={size === 'Small'}
+                    setIsOn={() => {
+                      onPressCheckBox('Small');
+                    }}
+                    text={t('fontSizeSmall')}
+                  />
+                  <CheckBox
+                    isOn={size === 'Medium'}
+                    setIsOn={() => {
+                      onPressCheckBox('Medium');
+                    }}
+                    text={t('fontSizeMedium')}
+                  />
+                  <CheckBox
+                    isOn={size === 'Large'}
+                    setIsOn={() => {
+                      onPressCheckBox('Large');
+                    }}
+                    text={t('fontSizeLarge')}
+                  />
+                </View>
+              </Shadow>
+            </View>
+          </TouchableOpacity>
         </Modal>
       )}
     </View>
   );
 }
 const styles = StyleSheet.create({
+  textMargin: {
+    marginTop: getHeightPixel(20),
+    marginBottom: getHeightPixel(10),
+  },
   modalContainer: {
     position: 'absolute',
     top: getHeightPixel(155),

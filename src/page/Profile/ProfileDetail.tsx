@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   TextStyle,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useAppSelector} from '@/Hooks/CustomHook';
 import Header from '@/Components/Profile/Header';
@@ -15,20 +15,34 @@ import EditIcon from '@assets/image/edit_ver.png';
 import {getHitSlop} from '@/Util/Util';
 import {GrayText, Text, WhiteText} from '@/Components/Global/text';
 import CameraWhiteIcon from '@assets/image/camera_white.png';
+import CopyIcon from '@assets/image/copy.png';
 import Line from '@/Components/Global/Line';
 import Theme from '@/assets/global/Theme';
 import {Toggle} from '@/Components/Global/button';
+import {ProfileDetailProps} from '@/Types/Screen/Screen';
+import AutoHeightImage from 'react-native-auto-height-image';
 
-export default function ProfileDetail() {
+export default function ProfileDetail({navigation}: ProfileDetailProps) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const [isOn, setIsOn] = useState(false);
+
+  const onPressProfileEdit = useCallback(() => {
+    navigation.navigate('ProfileUpdate');
+  }, []);
+
+  const onPressTelNumber = useCallback(() => {
+    navigation.navigate('ProfileTel');
+  }, []);
+
   return (
     <View style={{flex: 1}}>
       <ProfileBackground height={getHeightPixel(200)} style={styles.bgView} />
-      <View style={{height: getHeightPixel(200)}}>
+      <View style={styles.mainContainer}>
         <Header isBack title={t('profileDetailTitle')}>
-          <TouchableOpacity hitSlop={getHitSlop(5)}>
+          <TouchableOpacity
+            onPress={onPressProfileEdit}
+            hitSlop={getHitSlop(5)}>
             <Image source={EditIcon} style={styles.editImage} />
           </TouchableOpacity>
         </Header>
@@ -49,26 +63,24 @@ export default function ProfileDetail() {
             <GrayText fontSize={`${12 * fontSize}`}>
               Love what you have.
             </GrayText>
+            <View style={styles.uidView}>
+              <WhiteText fontSize={`${14 * fontSize}`}>NC : 0000abcd</WhiteText>
+              <TouchableOpacity
+                style={styles.marginLeft10}
+                hitSlop={getHitSlop(5)}>
+                <AutoHeightImage source={CopyIcon} width={getPixel(16)} />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </View>
-      <View
-        style={{
-          marginHorizontal: getPixel(16),
-        }}>
+      <View style={styles.mainViewStyle}>
         <BetweenText leftText={t('profileDetailName')} rightText={'Leandro'} />
         <View>
-          <Text
-            style={{
-              marginTop: getHeightPixel(16),
-              marginBottom: getHeightPixel(6),
-            }}
-            fontSize={`${16 * fontSize}`}>
+          <Text style={styles.marginView} fontSize={`${16 * fontSize}`}>
             {t('profileDetailState')}
           </Text>
-          <Text
-            style={{marginBottom: getHeightPixel(16)}}
-            fontSize={`${12 * fontSize}`}>
+          <Text style={styles.marginBottom16} fontSize={`${12 * fontSize}`}>
             asldjask djajsdkasjdkjas
           </Text>
         </View>
@@ -80,6 +92,7 @@ export default function ProfileDetail() {
         <BetweenText
           leftText={t('profileDetailTel')}
           rightText={'+55 11 964845016'}
+          onPressRight={onPressTelNumber}
           isLine={false}
         />
         <View style={styles.betweenTextView}>
@@ -110,6 +123,7 @@ export const BetweenText: React.FC<{
   rightText?: string;
   isLine?: boolean;
   rightTextStyle?: TextStyle;
+  onPressRight?: () => void;
 }> = ({
   leftText,
   rightText,
@@ -117,6 +131,7 @@ export const BetweenText: React.FC<{
   rightTextStyle = {
     color: Theme.color.black,
   },
+  onPressRight,
 }) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
@@ -124,9 +139,11 @@ export const BetweenText: React.FC<{
     <>
       <View style={styles.betweenTextView}>
         <Text fontSize={`${16 * fontSize}`}>{leftText}</Text>
-        <Text fontSize={`${16 * fontSize}`} style={rightTextStyle}>
-          {rightText}
-        </Text>
+        <TouchableOpacity disabled={!onPressRight} onPress={onPressRight}>
+          <Text fontSize={`${16 * fontSize}`} style={rightTextStyle}>
+            {rightText}
+          </Text>
+        </TouchableOpacity>
       </View>
       {isLine && (
         <Line
@@ -140,6 +157,23 @@ export const BetweenText: React.FC<{
 };
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    height: getHeightPixel(200),
+    marginBottom: getHeightPixel(20),
+  },
+  uidView: {
+    marginTop: getHeightPixel(18),
+    flexDirection: 'row',
+  },
+  marginLeft10: {marginLeft: getPixel(10)},
+  marginBottom16: {marginBottom: getHeightPixel(16)},
+  marginView: {
+    marginTop: getHeightPixel(16),
+    marginBottom: getHeightPixel(6),
+  },
+  mainViewStyle: {
+    marginHorizontal: getPixel(16),
+  },
   betweenTextView: {
     width: getPixel(328),
     height: getHeightPixel(50),
@@ -158,7 +192,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: getHeightPixel(30),
     marginLeft: getPixel(16),
-    alignItems: 'center',
   },
   profileView: {
     width: getPixel(80),

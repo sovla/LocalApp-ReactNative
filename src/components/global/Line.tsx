@@ -16,8 +16,11 @@ export default function Line({
       style={{
         width: width ?? getPixel(360),
         height: height ?? 0.4,
-        backgroundColor:
-          backgroundColor ?? isGray ? Theme.color.gray : Theme.color.gray_F5,
+        backgroundColor: backgroundColor
+          ? backgroundColor
+          : isGray
+          ? Theme.color.gray
+          : Theme.color.gray_F5,
         ...style,
       }}
     />

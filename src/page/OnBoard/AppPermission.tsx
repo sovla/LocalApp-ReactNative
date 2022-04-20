@@ -202,7 +202,13 @@ export default function AppPermission({navigation}: AppPermissionProps) {
       <Button
         content={t('next')}
         onPress={() => {
-          navigation.navigate('Home');
+          navigation.reset({
+            routes: [
+              {
+                name: 'Home',
+              },
+            ],
+          });
         }}
         style={styles.button}
       />

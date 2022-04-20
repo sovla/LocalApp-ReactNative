@@ -57,7 +57,7 @@ import {languageList} from '@/assets/global/dummy';
 import Menu from '@/Components/Profile/Menu';
 import ProductWhiteBox from '@/Components/Product/ProductWhiteBox';
 import EditModal from '@/Components/Product/EditModal';
-import Screen from '@/Types/Screen/Screen';
+import Screen, {BusinessSignUpProps} from '@/Types/Screen/Screen';
 import ArrowRightIcon from '@assets/image/arrow_right.png';
 import ArrowUpGrayIcon from '@assets/image/arrow_up_gray.png';
 import ArrowDownGrayIcon from '@assets/image/arrow_down_gray.png';
@@ -73,7 +73,7 @@ import CommunicationImage from '@assets/image/communication.png';
 import Input from '@/Components/Global/Input';
 import {getHitSlop} from '@/Util/Util';
 
-export default function BusinessSignUp() {
+export default function BusinessSignUp({navigation}: BusinessSignUpProps) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const [autoLogin, setAutoLogin] = useState<boolean>(false);
@@ -84,6 +84,9 @@ export default function BusinessSignUp() {
   }, []);
   const onPressIsView = useCallback(() => {
     setIsView(prev => !prev);
+  }, []);
+  const onPressLogin = useCallback(() => {
+    navigation.navigate('Home');
   }, []);
 
   return (
@@ -144,6 +147,7 @@ export default function BusinessSignUp() {
             </Text>
           </TouchableOpacity>
           <Button
+            onPress={onPressLogin}
             content={t('login')}
             width="270px"
             style={styles.button}

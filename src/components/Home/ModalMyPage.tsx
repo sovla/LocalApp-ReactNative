@@ -48,7 +48,8 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
   }, []);
 
   const onPressMyProfile = useCallback(() => {
-    navigation.navigate('ProfileHome');
+    //  내프로필 눌럿을때
+    navigation.navigate('ProfileDetail');
     onClose();
   }, []);
   const onPressNotice = useCallback(() => {

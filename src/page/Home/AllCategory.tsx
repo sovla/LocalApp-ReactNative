@@ -9,7 +9,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import React, {Fragment, useEffect, useState} from 'react';
+import React, {Fragment, useCallback, useEffect, useState} from 'react';
 
 import BackGroundImage from '@assets/image/BG.png';
 import {fontSizeChange, getHeightPixel, getPixel} from '@/Util/pixelChange';
@@ -72,6 +72,8 @@ import SuccessIcon from '@assets/image/success.png';
 const AllCategory = () => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const navigation = useAppNavigation();
+
   const [isMore, setIsMore] = useState<boolean>(false);
   const [popularList, setPopularList] = useState<Array<string>>([
     '자전거',
@@ -84,6 +86,11 @@ const AllCategory = () => {
     '아이패드',
     '애플워치',
   ]);
+
+  const onPressCategory = useCallback(() => {
+    navigation.navigate('Search');
+  }, []);
+
   return (
     <View
       style={{
@@ -100,6 +107,7 @@ const AllCategory = () => {
             }
             return (
               <TouchableOpacity
+                onPress={onPressCategory}
                 style={{
                   ...styles.itemTouch,
                   marginRight: (index + 1) % 3 !== 0 ? getPixel(10) : 0,

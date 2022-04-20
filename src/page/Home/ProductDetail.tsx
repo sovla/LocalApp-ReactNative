@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {
   BoldText,
   GrayText,
@@ -29,8 +29,9 @@ import BackWhiteIcon from '@assets/image/back_white.png';
 import SearchWhiteIcon from '@assets/image/search_white.png';
 import ShareWhiteIcon from '@assets/image/share_white.png';
 import {getHitSlop} from '@/Util/Util';
+import {ProductDetailProps} from '@/Types/Screen/Screen';
 
-export default function ProductDetail() {
+export default function ProductDetail({navigation}: ProductDetailProps) {
   const title =
     '아이맥 imac retina 4k 21.5인치 2017 i7 / 램 16gb / 500gb SSD / 판매합니다.';
   const location = 'Bom Retiro, São Paulo / - 1km';
@@ -46,6 +47,10 @@ export default function ProductDetail() {
 
   const onPressTierGuide = () => {};
   const onPressReport = () => {};
+  const onPressShop = useCallback(() => {
+    navigation.navigate('BusinessProfile');
+  }, []);
+
   return (
     <View
       style={{
@@ -78,6 +83,7 @@ export default function ProductDetail() {
         <ProductDetailShop
           shopName="Americanas"
           shopSubTitle="Toys, Hobby & Diy"
+          onPress={onPressShop}
         />
         <View style={styles.contentView}>
           <MediumText fontSize={`${18 * fontSize}`}>{title}</MediumText>

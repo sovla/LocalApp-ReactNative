@@ -22,14 +22,15 @@ export default function SettingLanguage() {
     const index = languageList.findIndex(v => v === i18next.language);
     setSelectLanguage(index);
   }, []);
-  console.log(i18next.language);
   const onPressSave = () => {
-    i18next.changeLanguage(languageList[selectLanguage], (err, t) => {
-      console.log(err, t);
-    });
+    i18next
+      .changeLanguage(languageList[selectLanguage], (err, t) => {
+        console.log(err, t);
+      })
+      .then(() => {});
   };
   return (
-    <View>
+    <View style={{flex: 1}}>
       <Header title={t('settingLanguageTitle')} />
       <TouchableOpacity
         style={styles.betweenTouch}
@@ -76,9 +77,9 @@ export default function SettingLanguage() {
 
 const styles = StyleSheet.create({
   saveView: {
-    width: getPixel(360),
-    marginTop: getHeightPixel(380),
-    alignItems: 'center',
+    position: 'absolute',
+    bottom: getHeightPixel(30),
+    left: getPixel(32),
   },
   guideView: {
     width: getPixel(360),

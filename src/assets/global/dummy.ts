@@ -200,3 +200,41 @@ export const openingHoursInit: openingHoursTypes = {
     endTime: '00:00',
   },
 };
+
+export const countryNumber = [
+  {
+    label: 'Mexico',
+    countryName: 'Mexico',
+    value: '+52',
+  },
+  {
+    label: 'Brazil',
+    countryName: 'Brazil',
+    value: '+55',
+  },
+  {
+    label: 'Argentina',
+    countryName: 'Argentina',
+    value: '+54',
+  },
+  {
+    label: 'Uruguay',
+    countryName: 'Uruguay',
+    value: '+598',
+  },
+  {
+    label: 'Chile',
+    countryName: 'Chile',
+    value: '+56',
+  },
+  {
+    label: 'Paraguay',
+    countryName: 'Paraguay',
+    value: '+595',
+  },
+  {
+    label: 'Peru',
+    countryName: 'Peru',
+    value: '+51',
+  },
+];

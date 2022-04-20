@@ -10,7 +10,7 @@ export interface fontSizeState {
 
 // Define the initial state using that type
 const initialState: fontSizeState = {
-  value: 1 / Dimensions.get('window').fontScale,
+  value: 1,
   size: 'Medium',
 };
 

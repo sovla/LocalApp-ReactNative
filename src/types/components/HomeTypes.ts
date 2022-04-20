@@ -19,6 +19,7 @@ export interface ProductProps {
   status?: string;
   isList: boolean;
   isBorder?: boolean;
+  onPress?: (item?: any) => void;
 }
 
 export interface MenuBoxProps {
@@ -45,12 +46,14 @@ export interface ImageSwiperProps {
 export interface ProductDetailShopProps {
   shopName: string;
   shopSubTitle: string;
+  onPress?: () => void;
 }
 
 export interface ProductListProps {
   isList: boolean;
   list?: Array<any>;
   isBorder?: boolean;
+  onPressItem?: (item: ProductProps) => void;
 }
 
 export interface SearchHeaderProps {

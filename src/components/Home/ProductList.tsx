@@ -5,7 +5,12 @@ import {getPixel} from '@/Util/pixelChange';
 import {ProductListProps} from '@/Types/Components/HomeTypes';
 import dummy from '@assets/image/dummy.png';
 
-const ProductList: React.FC<ProductListProps> = ({isList, list, isBorder}) => {
+const ProductList: React.FC<ProductListProps> = ({
+  isList,
+  list,
+  isBorder,
+  onPressItem,
+}) => {
   return (
     <View
       style={
@@ -40,6 +45,7 @@ const ProductList: React.FC<ProductListProps> = ({isList, list, isBorder}) => {
                 title="13,000Pa 초강력흡입력 [샤오미] 차량용 무선 핸디 청소기"
                 isList={isList}
                 isBorder={isBorder}
+                onPress={onPressItem}
               />
             </Fragment>
           );

@@ -4,7 +4,13 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import React, {Suspense, useEffect, useState} from 'react';
-import {SafeAreaView, View, ActivityIndicator, StyleSheet} from 'react-native';
+import {
+  SafeAreaView,
+  View,
+  ActivityIndicator,
+  StyleSheet,
+  Dimensions,
+} from 'react-native';
 
 import i18n from 'i18next';
 import {initReactI18next, useTranslation} from 'react-i18next';
@@ -39,6 +45,10 @@ import ReportCategory from './Chatting/ReportCategory';
 import ReportDetail from './Chatting/ReportDetail';
 import ProfileHome from './Profile/ProfileHome';
 import ProfileDetail from './Profile/ProfileDetail';
+import ProfileTel from './Profile/ProfileTel';
+import ProfileAuth from './Profile/ProfileAuth';
+import ProfileAuthComplete from './Profile/ProfileAuthComplete';
+import ProfileUpdate from './Profile/ProfileUpdate';
 import ProfileSellerReview from './Profile/ProfileSellerReview';
 import ReviewWrite from './Profile/ReviewWrite';
 import ProfileSellProduct from './Profile/ProfileSellProduct';
@@ -169,9 +179,9 @@ const withScrollView = (WrappedComponent: any) => {
         <SafeAreaView style={{flex: 1}}>
           <View style={{flex: 1, backgroundColor: Theme.color.white}}>
             <WrappedComponent {...props} />
-            {/* <View style={[styles.position]}>
+            <View style={[styles.position]}>
               <Text>{props.route.name}</Text>
-                          </View> */}
+            </View>
           </View>
         </SafeAreaView>
         <SafeAreaView style={{flex: 0, backgroundColor: '#fff'}} />
@@ -415,6 +425,22 @@ export const RouterSetting: RouterTypes[] = [
     component: ProfileDetail,
   },
   {
+    name: 'ProfileTel',
+    component: ProfileTel,
+  },
+  {
+    name: 'ProfileAuth',
+    component: ProfileAuth,
+  },
+  {
+    name: 'ProfileAuthComplete',
+    component: ProfileAuthComplete,
+  },
+  {
+    name: 'ProfileUpdate',
+    component: ProfileUpdate,
+  },
+  {
     name: 'ProfileHome',
     component: ProfileHome,
   },
@@ -479,8 +505,9 @@ export const RouterSetting: RouterTypes[] = [
 const styles = StyleSheet.create({
   position: {
     position: 'absolute',
-    top: 0,
+    bottom: 0,
     right: 0,
     zIndex: 3000,
+    fontSize: 16,
   },
 });

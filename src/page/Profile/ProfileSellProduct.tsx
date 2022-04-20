@@ -18,20 +18,16 @@ export default function ProfileSellProduct() {
   return (
     <View>
       <Header title={t('profileHomeSaleProduct')} />
+      <View style={{height: getHeightPixel(20)}}></View>
+      <Menu
+        menuList={[t('ProfileSellProduct'), t('ProfileSellProductComplete')]}
+        selectMenu={selectMenu}
+        setSelectMenu={setSelectMenu}
+      />
       <FlatList
-        ListHeaderComponent={
-          <>
-            <View style={{height: getHeightPixel(20)}}></View>
-            <Menu
-              menuList={[
-                t('ProfileSellProduct'),
-                t('ProfileSellProductComplete'),
-              ]}
-              selectMenu={selectMenu}
-              setSelectMenu={setSelectMenu}
-            />
-          </>
-        }
+        contentContainerStyle={{
+          paddingBottom: getHeightPixel(150),
+        }}
         data={list}
         renderItem={({item, index}) => {
           return <Product isList />;

@@ -31,6 +31,10 @@ type Screen = {
   };
   ProfileHome: StackScreenProps<Screen> | undefined;
   ProfileDetail: StackScreenProps<Screen> | undefined;
+  ProfileUpdate: StackScreenProps<Screen> | undefined;
+  ProfileTel: StackScreenProps<Screen> | undefined;
+  ProfileAuth: StackScreenProps<Screen> | undefined;
+  ProfileAuthComplete: StackScreenProps<Screen> | undefined;
   ProfileSellerReview: StackScreenProps<Screen> | undefined;
   ReviewWrite: StackScreenProps<Screen> | undefined;
   ProfileSellProduct: StackScreenProps<Screen> | undefined;
@@ -44,9 +48,11 @@ type Screen = {
   BusinessLocation: StackScreenProps<Screen> | undefined;
   BusinessOpeningHours: StackScreenProps<Screen> | undefined;
   Notice: StackScreenProps<Screen> | undefined;
-  AlarmList: {
-    menu?: 'keywordAlarm' | 'alarm';
-  };
+  AlarmList:
+    | {
+        menu?: 'keywordAlarm' | 'alarm';
+      }
+    | undefined;
   AlarmDetail: StackScreenProps<Screen> | undefined;
   MyProduct: StackScreenProps<Screen> | undefined;
   ProductUpdate: {
@@ -123,6 +129,13 @@ export type ReportCategoryProps = StackScreenProps<Screen, 'ReportCategory'>;
 export type ReportDetailProps = StackScreenProps<Screen, 'ReportDetail'>;
 export type ProfileHomeProps = StackScreenProps<Screen, 'ProfileHome'>;
 export type ProfileDetailProps = StackScreenProps<Screen, 'ProfileDetail'>;
+export type ProfileUpdateProps = StackScreenProps<Screen, 'ProfileUpdate'>;
+export type ProfileTelProps = StackScreenProps<Screen, 'ProfileTel'>;
+export type ProfileAuthProps = StackScreenProps<Screen, 'ProfileAuth'>;
+export type ProfileAuthCompleteProps = StackScreenProps<
+  Screen,
+  'ProfileAuthComplete'
+>;
 export type ProfileSellerReviewProps = StackScreenProps<
   Screen,
   'ProfileSellerReview'

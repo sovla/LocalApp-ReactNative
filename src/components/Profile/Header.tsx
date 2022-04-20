@@ -13,7 +13,8 @@ const Header: React.FC<{
   title?: string;
   isBack?: boolean;
   isBlack?: boolean;
-}> = ({title, isBack, children, isBlack = false}) => {
+  isOnPressBack?: boolean;
+}> = ({title, isBack, children, isBlack = false, isOnPressBack}) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const navigation = useAppNavigation();
@@ -22,7 +23,7 @@ const Header: React.FC<{
       <View style={styles.headerView}>
         <TouchableOpacity
           onPress={() => {
-            if (isBack) {
+            if (isBack || isOnPressBack) {
               navigation.goBack();
             }
           }}
