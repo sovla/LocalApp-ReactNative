@@ -66,6 +66,7 @@ export default function ProductUpdate({route: {params}}: ProductUpdateProps) {
 
   useEffect(() => {
     if (params) {
+      console.log({...params}, 'params');
       setProduct(prev => ({
         ...prev,
         ...params,

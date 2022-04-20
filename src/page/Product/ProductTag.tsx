@@ -1,5 +1,5 @@
 import {StyleSheet, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {GrayText} from '@Components/Global/text';
@@ -10,11 +10,18 @@ import Header from '@/Components/LoginSignUp/Header';
 import {Button} from '@/Components/Global/button';
 import {productDummy} from '@/assets/global/dummy';
 import Input from '@/Components/Global/Input';
+import {ProductTagProps} from '@/Types/Screen/Screen';
 
-const ProductTag = () => {
+const ProductTag: React.FC<ProductTagProps> = ({navigation}) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const [tag, setTag] = useState(productDummy.tag);
+  const onPressConfirm = useCallback(() => {
+    navigation.navigate('ProductUpdate', {
+      tag,
+    });
+  }, [tag]);
+
   return (
     <View>
       <Header title={t('tagUpdate')} />
@@ -42,6 +49,7 @@ const ProductTag = () => {
           style={{
             marginTop: getHeightPixel(380),
           }}
+          onPress={onPressConfirm}
         />
       </View>
     </View>

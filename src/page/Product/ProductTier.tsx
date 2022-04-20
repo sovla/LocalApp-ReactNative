@@ -1,5 +1,5 @@
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {Fragment} from 'react';
+import React, {Fragment, useCallback} from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {Text} from '@Components/Global/text';
@@ -12,10 +12,17 @@ import Header from '@/Components/LoginSignUp/Header';
 import Line from '@/Components/Global/Line';
 import {tierList} from '@/assets/global/dummy';
 import ArrowRightIcon from '@assets/image/arrow_right.png';
+import {ProductTierProps} from '@/Types/Screen/Screen';
 
-const ProductTier: React.FC = () => {
+const ProductTier: React.FC<ProductTierProps> = ({navigation}) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const onPressItem = useCallback(item => {
+    navigation.navigate('ProductUpdate', {
+      tier: item,
+    });
+  }, []);
+
   return (
     <View>
       <Header title={t('searchModalProductState')} />
@@ -26,7 +33,9 @@ const ProductTier: React.FC = () => {
         {tierList.map(item => {
           return (
             <Fragment key={item.name}>
-              <TouchableOpacity style={styles.touch}>
+              <TouchableOpacity
+                style={styles.touch}
+                onPress={() => onPressItem(item.name)}>
                 <Text fontSize={`${16 * fontSize}`}>{t(item.name)}</Text>
               </TouchableOpacity>
               <Line isGray width={getPixel(328)} />
