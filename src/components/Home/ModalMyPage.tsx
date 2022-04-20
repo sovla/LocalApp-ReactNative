@@ -96,6 +96,10 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
     navigation.navigate('ServiceCenter');
     onClose();
   }, []);
+  const onPressLogout = useCallback(() => {
+    navigation.navigate('Login');
+    onClose();
+  }, []);
 
   return (
     <View style={modalDim}>
@@ -216,6 +220,7 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
           <View style={styles.touchBlockView}></View>
         </View>
         <TouchableOpacity
+          onPress={onPressLogout}
           style={[
             styles.loginView,
             Dimensions.get('window').height > 800

@@ -21,6 +21,7 @@ export const ko = {
     loginGuide2: '우리',
     loginGuide3: '동네 직거래',
     loginGuide4: '!!',
+    loginGuide5: '회원 가입시 등록한 휴대폰 번호를 입력해 주세요.',
     signUpGuide1: '앱사용을 위해\n이용약관에 동의해 주세요',
     signUpGuide2: '이용약관, 개인정보 수집에 동의합니다.',
     signUpGuide3: '이용약관 동의',

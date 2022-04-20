@@ -48,6 +48,7 @@ export interface InputProps {
   width?: number;
   height?: number;
   isLine?: boolean;
+  keyboardType?: TextInputProps['keyboardType'];
 }
 
 export interface LineProps {

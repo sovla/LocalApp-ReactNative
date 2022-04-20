@@ -1,83 +1,35 @@
 import {
-  Dimensions,
-  FlatList,
   Image,
   ImageBackground,
-  Modal,
   StyleSheet,
   TouchableOpacity,
   View,
-  ViewStyle,
 } from 'react-native';
-import React, {Fragment, useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 
 import ProfileBackGroundImage from '@assets/image/profile_bg.png';
-import {fontSizeChange, getHeightPixel, getPixel} from '@/Util/pixelChange';
-import LocationWhiteIcon from '@assets/image/location_white.png';
-import SearchIcon from '@assets/image/search_white.png';
-import MenuIcon from '@assets/image/bar_white.png';
-import AlarmIcon from '@assets/image/notice_white.png';
-import {DarkBlueText, GrayText, Text, WhiteText} from '@Components/Global/text';
-import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
+import {GrayText, Text} from '@Components/Global/text';
+import {useAppSelector} from '@/Hooks/CustomHook';
 import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
-import TrianglePinkIcon from '@assets/image/triangle_pink.png';
-import {
-  HeaderProps,
-  ModalMyPageProps,
-  ModalUploadModalProps,
-} from '@/Types/Components/HomeTypes';
-import useBoolean from '@/Hooks/useBoolean';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import BackBlackBoxIcon from '@assets/image/back_black_box.png';
-import AutoHeightImage from 'react-native-auto-height-image';
-import DummyProfileImage from '@assets/image/dummy_profile.png';
 
-import AnnouncementIcon from '@assets/image/announcement.png';
-import NoticeColorIcon from '@assets/image/notice_color.png';
-import StoreIcon from '@assets/image/store.png';
-import WriteIcon from '@assets/image/write.png';
-import TrashWhiteIcon from '@assets/image/trash_white.png';
-import BackWhiteIcon from '@assets/image/back_white.png';
-import NoticeOn from '@assets/image/notice_on.png';
-import SettingsIcon from '@assets/image/settings.png';
-import ServiceCenterIcon from '@assets/image/service_center.png';
-import {
-  Button,
-  CheckBox,
-  CheckBoxImage,
-  Toggle,
-} from '@/Components/Global/button';
+import {Button, CheckBoxImage} from '@/Components/Global/button';
 import Line from '@/Components/Global/Line';
-import {Shadow} from 'react-native-shadow-2';
-import {useDispatch} from 'react-redux';
-import {fontChange, fontSizeState} from '@/Store/fontSizeState';
-import i18next from 'i18next';
-import {languageList} from '@/assets/global/dummy';
-import Menu from '@/Components/Profile/Menu';
-import ProductWhiteBox from '@/Components/Product/ProductWhiteBox';
-import EditModal from '@/Components/Product/EditModal';
-import Screen, {LoginProps} from '@/Types/Screen/Screen';
-import ArrowRightIcon from '@assets/image/arrow_right.png';
-import ArrowUpGrayIcon from '@assets/image/arrow_up_gray.png';
-import ArrowDownGrayIcon from '@assets/image/arrow_down_gray.png';
-import BangBlackIcon from '@assets/image/bang_black.png';
-import {TextInput} from 'react-native-gesture-handler';
+import {LoginProps} from '@/Types/Screen/Screen';
 
-import QuetionIcon from '@assets/image/quetion.png';
-import AnswerIcon from '@assets/image/answer.png';
-import {FAQItemProps} from '@/Types/Components/SettingTypes';
-import SuccessIcon from '@assets/image/success.png';
-import Header from '@/Components/Profile/Header';
-import LoginLogoImage from '@assets/image/login_logo.png';
 import Input from '@/Components/Global/Input';
 import {getHitSlop} from '@/Util/Util';
+import CountryPicker from '@/Components/Profile/CountryPicker';
 
 export default function Login({navigation}: LoginProps) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const [autoLogin, setAutoLogin] = useState<boolean>(false);
   const [isView, setIsView] = useState<boolean>(false);
+  const [selectNum, setSelectNum] = useState('+55');
+  const [tel, setTel] = useState('');
   const titleFontsize = fontSize * 36;
 
   const onPressAutoLogin = useCallback(() => {
@@ -89,6 +41,10 @@ export default function Login({navigation}: LoginProps) {
 
   const onPressSignUp = useCallback(() => {
     navigation.navigate('SignUpTOS');
+  }, []);
+
+  const onPressLogin = useCallback(() => {
+    navigation.navigate('Home');
   }, []);
 
   return (
@@ -153,51 +109,46 @@ export default function Login({navigation}: LoginProps) {
           </View>
         </View>
         <View style={styles.whiteView}>
-          <Input
+          <CountryPicker
             width={getPixel(270)}
+            setSelectNum={setSelectNum}
+            selectNum={selectNum}
+            isLabelNumber
+          />
+          <Line isGray width={getPixel(270)} />
+          <Input
+            keyboardType="numeric"
+            width={getPixel(270)}
+            height={getHeightPixel(56)}
+            value={tel}
+            onChange={setTel}
             PlaceHolderComponent={() => (
-              <GrayText fontSize={`${14 * fontSize}`}>
-                {t('signUpFormEmail')}
-              </GrayText>
+              <GrayText fontSize={`${14 * fontSize}`}>{t('telPh')}</GrayText>
             )}
           />
-          <View>
-            <Input
-              width={getPixel(270)}
-              PlaceHolderComponent={() => (
-                <GrayText fontSize={`${14 * fontSize}`}>
-                  {t('password')}
-                </GrayText>
-              )}
-            />
+          <View style={styles.w270}>
+            <GrayText fontSize={`${10 * fontSize}`}>
+              {t('loginGuide5')}
+            </GrayText>
+          </View>
+          <View style={styles.w270}>
             <TouchableOpacity
-              onPress={onPressIsView}
-              hitSlop={getHitSlop(5)}
-              style={styles.viewImageTouch}>
-              <AutoHeightImage
-                source={
-                  isView
-                    ? require('@assets/image/view.png')
-                    : require('@assets/image/none_view.png')
-                }
-                width={getPixel(24)}
-              />
+              onPress={onPressAutoLogin}
+              style={styles.rowCenter}>
+              <CheckBoxImage isBox isOn={autoLogin} />
+              <Text
+                fontSize={`${12 * fontSize}`}
+                style={{marginLeft: getPixel(10)}}>
+                {t('autoLogin')}
+              </Text>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity onPress={onPressAutoLogin} style={styles.rowCenter}>
-            <CheckBoxImage isBox isOn={autoLogin} />
-            <Text
-              fontSize={`${12 * fontSize}`}
-              style={{marginLeft: getPixel(10)}}>
-              {t('autoLogin')}
-            </Text>
-          </TouchableOpacity>
-          <Button content={t('login')} width="270px" />
+          <Button content={t('login')} onPress={onPressLogin} width="270px" />
           <View
             style={{
               ...styles.rowCenter,
               width: 'auto',
-              marginTop: getHeightPixel(40),
+              marginTop: getHeightPixel(25),
             }}>
             <Text
               color={Theme.color.whiteBlack_53}
@@ -220,6 +171,9 @@ export default function Login({navigation}: LoginProps) {
 }
 
 const styles = StyleSheet.create({
+  w270: {
+    width: getPixel(270),
+  },
   titleView: {
     width: getPixel(265),
     height: getHeightPixel(96),
@@ -272,7 +226,8 @@ const styles = StyleSheet.create({
     top: getHeightPixel(5),
   },
   rowCenter: {
-    width: getPixel(270),
+    width: 'auto',
+
     flexDirection: 'row',
     alignItems: 'center',
     marginVertical: getHeightPixel(19),

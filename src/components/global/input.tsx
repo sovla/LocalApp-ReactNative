@@ -16,13 +16,13 @@ export default function Input({
   width = getPixel(288),
   height = getHeightPixel(40),
   isLine = true,
+  keyboardType,
 }: InputProps) {
   const fontSize = useAppSelector(state => state.fontSize.value);
   const [isFocus, setIsFocus] = useState(false);
   return (
     <>
       <Box
-        alignItems="flex-start"
         style={[
           styles.boxStyle,
           {
@@ -40,9 +40,9 @@ export default function Input({
             {
               fontSize: 12 * fontSize,
               width,
-              height,
             },
           ]}
+          keyboardType={keyboardType}
           onChangeText={onChange}
           onFocus={() => setIsFocus(true)}
           onBlur={() => setIsFocus(false)}
@@ -65,9 +65,12 @@ export default function Input({
 }
 
 const styles = StyleSheet.create({
-  boxStyle: {marginBottom: getHeightPixel(5)},
+  boxStyle: {
+    marginBottom: getHeightPixel(5),
+    justifyContent: 'center',
+  },
   textInput: {
     color: Theme.color.black,
-    marginBottom: getHeightPixel(5),
+    textAlignVertical: 'center',
   },
 });
