@@ -37,13 +37,6 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
   const fontSize = useAppSelector(state => state.fontSize.value);
   const navigation = useAppNavigation();
 
-  const isLogin = true;
-  const login = {
-    name: 'Leandro',
-    statusMessage: 'Love what you have',
-    image: require('@assets/image/dummy.png'),
-  };
-
   const [isBusiness, setIsBusiness] = useState(false);
 
   const onPressSaleProduct = useCallback(() => {
@@ -101,6 +94,16 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
     onClose();
   }, []);
 
+  const isLogin = true;
+  const login = {
+    name: isBusiness ? 'NOB MOBILE SERVICE' : 'Leandro',
+    statusMessage: isBusiness
+      ? '모바일 단말기 판매 / AS 서비스 '
+      : 'Love what you have',
+    image: isBusiness
+      ? require('@assets/image/dummy_b.png')
+      : require('@assets/image/dummy.png'),
+  };
   return (
     <View style={modalDim}>
       <SlideRightModal onClose={onClose}>
@@ -134,7 +137,13 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
                     }
               }>
               <Image
-                source={isLogin ? login.image : DummyProfileImage}
+                source={
+                  isLogin
+                    ? login.image
+                    : isBusiness
+                    ? require('@assets/image/dummy_b.png')
+                    : DummyProfileImage
+                }
                 style={styles.loginImage}
                 resizeMode={isLogin ? 'cover' : 'contain'}
               />
@@ -294,7 +303,7 @@ export const ImageWithView: React.FC<{
           <Text fontSize={`${applyFontSize}`}>{content}</Text>
         </TouchableOpacity>
       </View>
-      <Line isGray />
+      <Line isGray height={0.4} />
     </>
   );
 };
