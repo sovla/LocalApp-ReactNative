@@ -72,12 +72,15 @@ import Header from '@/Components/Profile/Header';
 import CommunicationImage from '@assets/image/communication.png';
 import Input from '@/Components/Global/Input';
 import {getHitSlop} from '@/Util/Util';
+import CountryPicker from '@/Components/Profile/CountryPicker';
 
 export default function BusinessSignUp({navigation}: BusinessSignUpProps) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const [autoLogin, setAutoLogin] = useState<boolean>(false);
   const [isView, setIsView] = useState<boolean>(false);
+  const [selectNum, setSelectNum] = useState('+55');
+  const [tel, setTel] = useState('');
 
   const onPressAutoLogin = useCallback(() => {
     setAutoLogin(prev => !prev);
@@ -107,67 +110,34 @@ export default function BusinessSignUp({navigation}: BusinessSignUpProps) {
           </WhiteText>
         </View>
         <View style={styles.whiteView}>
-          <Input
+          <CountryPicker
             width={getPixel(270)}
+            setSelectNum={setSelectNum}
+            selectNum={selectNum}
+            isLabelNumber
+          />
+          <Line isGray width={getPixel(270)} />
+          <Input
+            keyboardType="numeric"
+            width={getPixel(270)}
+            height={getHeightPixel(56)}
+            value={tel}
+            onChange={setTel}
             PlaceHolderComponent={() => (
-              <GrayText fontSize={`${14 * fontSize}`}>
-                {t('signUpFormEmail')}
-              </GrayText>
+              <GrayText fontSize={`${14 * fontSize}`}>{t('telPh')}</GrayText>
             )}
           />
-          <View>
-            <Input
-              width={getPixel(270)}
-              PlaceHolderComponent={() => (
-                <GrayText fontSize={`${14 * fontSize}`}>
-                  {t('password')}
-                </GrayText>
-              )}
-            />
-            <TouchableOpacity
-              onPress={onPressIsView}
-              hitSlop={getHitSlop(5)}
-              style={styles.viewImageTouch}>
-              <AutoHeightImage
-                source={
-                  isView
-                    ? require('@assets/image/view.png')
-                    : require('@assets/image/none_view.png')
-                }
-                width={getPixel(24)}
-              />
-            </TouchableOpacity>
-          </View>
-          <TouchableOpacity onPress={onPressAutoLogin} style={styles.rowCenter}>
-            <CheckBoxImage isBox isOn={autoLogin} />
-            <Text
-              fontSize={`${12 * fontSize}`}
-              style={{marginLeft: getPixel(10)}}>
-              {t('autoLogin')}
-            </Text>
-          </TouchableOpacity>
+
           <Button
+            content={t('confirmationRequest')}
             onPress={onPressLogin}
-            content={t('login')}
             width="270px"
-            style={styles.button}
-            fontColor={Theme.color.whiteBlack_53}
-          />
-          <View
+            fontColor={Theme.color.black}
             style={{
-              ...styles.rowCenter,
-              width: 'auto',
-              marginTop: getHeightPixel(40),
-            }}>
-            <GrayText fontSize={`${12 * fontSize}`}>
-              {t('businessSignUpGuide3')}
-            </GrayText>
-            <TouchableOpacity hitSlop={getHitSlop(5)} style={styles.marginLeft}>
-              <Text fontSize={`${12 * fontSize}`} color={Theme.color.blue_3D}>
-                {t('signUp')}
-              </Text>
-            </TouchableOpacity>
-          </View>
+              backgroundColor: Theme.color.whiteBlue_F0,
+              marginTop: getHeightPixel(70),
+            }}
+          />
         </View>
       </KeyboardAwareScrollView>
     </View>
@@ -175,6 +145,9 @@ export default function BusinessSignUp({navigation}: BusinessSignUpProps) {
 }
 
 const styles = StyleSheet.create({
+  w270: {
+    width: getPixel(270),
+  },
   marginLeft: {
     marginLeft: getPixel(5),
   },

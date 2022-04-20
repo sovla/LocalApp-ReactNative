@@ -295,6 +295,7 @@ export const ko = {
     tagGuide3:
       '상품과 직접 관련이 없는 다른 상품명, 브랜드, 스팸성 키워드 등을 입력하면 노출이 중단되거나 상품이 삭제 될 수 있습니다.',
     confirm: '확인',
+    confirmationRequest: '확인요청',
     tierNone: '해당사항 없음',
     tierGuideTitle: '등급 기준',
     tradingLocationUpdate: '거래 지역 수정',
