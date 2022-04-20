@@ -29,7 +29,7 @@ const MyProduct = () => {
   return (
     <View
       style={{
-        backgroundColor: Theme.color.whiteGray_F3,
+        backgroundColor: Theme.color.whiteGray_F7,
         flex: 1,
       }}>
       <ImageBackground style={styles.headerContainer} source={BackGroundImage}>

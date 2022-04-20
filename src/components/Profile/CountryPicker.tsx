@@ -35,6 +35,11 @@ const CountryPicker: React.FC<{
         {countryNumber.map(item => {
           return (
             <Picker.Item
+              style={{
+                color: Theme.color.black,
+                fontSize: 16 * fontSize,
+                fontFamily: Theme.fontWeight.default,
+              }}
               key={item.countryName}
               label={t(item.label)}
               value={item.value}

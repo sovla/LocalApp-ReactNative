@@ -93,3 +93,5 @@ export interface FooterProps {
 
 export interface ModalMyPageProps extends ModalProps {}
 export interface ModalUploadModalProps extends ModalProps {}
+
+export interface ModalPopupProps extends ModalProps {}

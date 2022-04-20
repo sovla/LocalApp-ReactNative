@@ -19,10 +19,13 @@ import useBoolean from '@/Hooks/useBoolean';
 import UploadModal from '@/Components/Home/UploadModal';
 import {useTranslation} from 'react-i18next';
 import {HomeProps} from '@/Types/Screen/Screen';
+import ModalPopup from '@/Components/Home/ModalPopup';
 
 export default function Home({navigation}: HomeProps): JSX.Element {
   const [isList, setIsList] = useState(false);
+
   const {value: isUpload, on: onUpload, off: offUpload} = useBoolean(false);
+  const {value: isPopup, on: onIsPopup, off: offIsPopup} = useBoolean(true);
   const onPressItem = useCallback(item => {
     navigation.navigate('ProductDetail', item);
   }, []);
@@ -60,6 +63,7 @@ export default function Home({navigation}: HomeProps): JSX.Element {
           <UploadModal onClose={offUpload} />
         </Modal>
       )}
+      {isPopup && <ModalPopup onClose={offIsPopup} />}
     </View>
   );
 }

@@ -402,6 +402,10 @@ export const ko = {
     profileAuthCompleteGuide1: '전화번호가 성공적으로 변경되었습니다.',
     profileAuthCompleteGuide2: '아이디 또는 암호를 잊어버렸을때',
     profileAuthCompleteGuide3: '이 전화번호를 사용해 신원을 확인합니다.',
+    neverLookAgain: '다시보지 않기',
+    close: '닫기',
+    myCategoryGuide1: '원하시는 관심 카테고리를 체크해주세요',
+    myCategoryGuide2: '최소 1개 이상 선택 되어야 합니다.',
   },
 };
 export const es = {

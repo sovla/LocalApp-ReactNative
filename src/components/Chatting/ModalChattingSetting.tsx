@@ -145,7 +145,7 @@ const ModalChattingSetting: React.FC<ModalChattingSettingProps> = ({
     navigation.navigate('ReportCategory');
   };
   return (
-    <Modal visible transparent>
+    <Modal visible transparent onRequestClose={onClose}>
       <View
         style={[
           styles.dim,
