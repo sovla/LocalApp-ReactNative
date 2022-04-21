@@ -18,10 +18,8 @@ import AutoHeightImage from 'react-native-auto-height-image';
 
 import Header from '@/Components/LoginSignUp/Header';
 import Line from '@/Components/Global/Line';
-import {tierList} from '@/assets/global/dummy';
 import LocationGrayIcon from '@assets/image/location_gray.png';
 import MyLocationIcon from '@assets/image/my_location.png';
-import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import {useCallback} from 'react';
 import axios from 'axios';
 import {useState} from 'react';
@@ -178,7 +176,7 @@ const styles = StyleSheet.create({
   locationTouch: {
     width: getPixel(328),
     marginHorizontal: getPixel(16),
-    height: getHeightPixel(70),
+    paddingVertical: getHeightPixel(20),
     flexDirection: 'row',
     paddingTop: getHeightPixel(14),
     alignItems: 'flex-start',

@@ -97,7 +97,7 @@ import Menu from './Menu';
 import ProductTierGuide from './Product/ProductTierGuide';
 import BlockList from './Chatting/BlockList';
 
-const ROUTING: keyof Screen = 'ProductLocation';
+const ROUTING: keyof Screen = 'SignUpPhoto';
 
 const resources = {
   en,

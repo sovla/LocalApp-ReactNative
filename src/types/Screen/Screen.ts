@@ -10,7 +10,9 @@ type Screen = {
   SignUpTOS: StackScreenProps<Screen> | undefined;
   SignUpTel: StackScreenProps<Screen> | undefined;
   SignUpAuth: StackScreenProps<Screen> | undefined;
-  SignUpForm: StackScreenProps<Screen> | undefined;
+  SignUpForm: {
+    imagePath?: string;
+  };
   SignUpPhoto: StackScreenProps<Screen> | undefined;
   SignUpComplete: StackScreenProps<Screen> | undefined;
   Home: StackScreenProps<Screen> | undefined;

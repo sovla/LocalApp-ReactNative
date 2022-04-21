@@ -27,3 +27,9 @@ export const timer = (number: number) => {
     number % 60 < 10 ? '0' + (number % 60) : number % 60
   }`;
 };
+
+export const checkEmpty = (_item: any) => {
+  if (_item) {
+    return _item;
+  }
+};

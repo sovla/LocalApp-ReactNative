@@ -58,7 +58,7 @@ import {languageList} from '@/assets/global/dummy';
 import Menu from '@/Components/Profile/Menu';
 import ProductWhiteBox from '@/Components/Product/ProductWhiteBox';
 import EditModal from '@/Components/Product/EditModal';
-import Screen from '@/Types/Screen/Screen';
+import Screen, {SignUpPhotoProps} from '@/Types/Screen/Screen';
 import ArrowRightIcon from '@assets/image/arrow_right.png';
 import ArrowUpGrayIcon from '@assets/image/arrow_up_gray.png';
 import ArrowDownGrayIcon from '@assets/image/arrow_down_gray.png';
@@ -73,19 +73,21 @@ import CameraRoll from '@react-native-community/cameraroll';
 import Photo from '@Components/LoginSignUp/Photo';
 import {ImageOrVideo} from 'react-native-image-crop-picker';
 
-export default function SignUpPhoto() {
+export default function SignUpPhoto({navigation}: SignUpPhotoProps) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
-  const [firstImage, setFirstImage] = useState<ImageOrVideo | null>(null);
-  const [imageArray, setImageArray] = useState<
-    CameraRoll.PhotoIdentifier[] | number
-  >([1]);
+  const [firstImage, setFirstImage] = useState<ImageOrVideo | undefined>(
+    undefined,
+  );
+  const [imageArray, setImageArray] = useState<any>([1]);
   const [number, setNumber] = useState<number>(20);
+  const [selectNumber, setSelectNumber] = useState<number>(0);
+
   const getPhotos = useCallback(() => {
     CameraRoll.getPhotos({
       first: number,
     }).then(value => {
-      console.log(value);
+      console.log(imageArray);
       setImageArray(value.edges);
       setNumber((prev: number) => {
         if (value.page_info.has_next_page) {
@@ -97,64 +99,78 @@ export default function SignUpPhoto() {
     });
   }, []);
 
+  const onPressComplete = useCallback(() => {
+    navigation.navigate('SignUpForm', {
+      imagePath:
+        selectNumber === 1
+          ? firstImage?.path
+          : imageArray[selectNumber - 1]?.node?.image?.uri,
+    });
+  }, [selectNumber, firstImage, imageArray]);
+
   useLayoutEffect(() => {
     getPhotos();
     return () => {};
   }, []);
   return (
     <View style={{flex: 1}}>
-      <Header title={t('allPhoto')} />
+      <Header title={t('allPhoto')}>
+        <TouchableOpacity onPress={onPressComplete}>
+          <Text fontSize={`${16 * fontSize}`} medium>
+            {t('complete')}
+          </Text>
+        </TouchableOpacity>
+      </Header>
       <FlatList
         data={imageArray}
         numColumns={3}
         style={{
+          paddingTop: getHeightPixel(20),
           marginHorizontal: getPixel(16),
         }}
         onEndReached={() => {
           getPhotos();
         }}
-        onEndReachedThreshold={0.3}
+        onEndReachedThreshold={1}
         renderItem={({item, index}) => {
+          const select = index + 1 === selectNumber;
           if (index === 0) {
             return (
               <TouchableOpacity
-                style={{
-                  width: getPixel(106),
-                  height: getHeightPixel(112),
-                  marginRight: getPixel(4),
-                  marginBottom: getHeightPixel(4),
-                  borderRadius: 22,
-                  overflow: 'hidden',
-                }}>
+                onPress={() => setSelectNumber(index + 1)}
+                style={styles.firstTouchImage}>
                 <Photo
-                  returnFn={(image: ImageOrVideo) => setFirstImage(image)}
+                  returnFn={image => {
+                    setFirstImage(image);
+                    setSelectNumber(1);
+                  }}
                   width={getPixel(106)}
                   height={getHeightPixel(112)}
                   selectImage={firstImage}
                 />
+                <View style={select ? styles.selectDot : styles.noneSelectDot}>
+                  <WhiteText fontSize={`${12 * fontSize}`}>1</WhiteText>
+                </View>
               </TouchableOpacity>
             );
           }
 
           return (
             <TouchableOpacity
+              onPress={() => setSelectNumber(index + 1)}
               key={index}
               style={{
-                width: getPixel(106),
-                height: getHeightPixel(112),
-                borderRadius: 22,
-                overflow: 'hidden',
+                ...styles.touchImage,
                 marginRight: (index + 1) % 3 !== 0 ? getPixel(4) : 0,
-                marginBottom: getHeightPixel(4),
               }}>
+              <View style={select ? styles.selectDot : styles.noneSelectDot}>
+                <WhiteText fontSize={`${12 * fontSize}`}>1</WhiteText>
+              </View>
               <Image
                 source={{
                   uri: item.node.image.uri,
                 }}
-                style={{
-                  width: getPixel(106),
-                  height: getHeightPixel(112),
-                }}
+                style={styles.imageBox}
               />
             </TouchableOpacity>
           );
@@ -163,3 +179,51 @@ export default function SignUpPhoto() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  firstTouchImage: {
+    width: getPixel(106),
+    height: getHeightPixel(112),
+    marginRight: getPixel(4),
+    marginBottom: getHeightPixel(4),
+    borderRadius: 22,
+    overflow: 'hidden',
+  },
+  imageBox: {
+    width: getPixel(106),
+    height: getHeightPixel(112),
+  },
+  touchImage: {
+    width: getPixel(106),
+    height: getHeightPixel(112),
+    borderRadius: 22,
+    overflow: 'hidden',
+    marginBottom: getHeightPixel(4),
+  },
+  noneSelectDot: {
+    width: getPixel(18),
+    height: getPixel(18),
+    backgroundColor: Theme.color.white,
+    borderWidth: 1,
+    borderColor: Theme.color.gray,
+    position: 'absolute',
+    top: getHeightPixel(6),
+    right: getHeightPixel(6),
+    zIndex: 100,
+    borderRadius: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  selectDot: {
+    width: getPixel(18),
+    height: getPixel(18),
+    backgroundColor: Theme.color.aqua_00,
+    position: 'absolute',
+    top: getHeightPixel(6),
+    right: getHeightPixel(6),
+    zIndex: 100,
+    borderRadius: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});

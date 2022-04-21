@@ -1,13 +1,15 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useCallback} from 'react';
-import {getPixel} from '@/Util/pixelChange';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import CameraIcon from '@assets/image/camera_gray.png';
 import ImageCropPicker, {ImageOrVideo} from 'react-native-image-crop-picker';
 import {useAppNavigation} from '@/Hooks/CustomHook';
 import AutoHeightImage from 'react-native-auto-height-image';
+import Theme from '@/assets/global/Theme';
+import {getHitSlop} from '@/Util/Util';
 
 interface PhotoProps {
-  returnFn: (image?: ImageOrVideo) => void;
+  returnFn?: (image?: ImageOrVideo) => void;
   width?: number;
   height?: number;
   imageWidth?: number;
@@ -40,7 +42,8 @@ const Photo: React.FC<PhotoProps> = ({
   return (
     <TouchableOpacity
       style={{...styles.photoTouch, width, height}}
-      onPress={onPressImageCropPicker}>
+      onPress={onPressImageCropPicker}
+      disabled={selectImage !== undefined}>
       <AutoHeightImage
         source={selectImage ? {uri: selectImage.path} : CameraIcon}
         width={selectImage ? width : imageWidth}
@@ -52,6 +55,14 @@ const Photo: React.FC<PhotoProps> = ({
             : {}
         }
       />
+      {selectImage && (
+        <TouchableOpacity
+          onPress={onPressImageCropPicker}
+          hitSlop={getHitSlop(10)}
+          style={styles.absolute}>
+          <AutoHeightImage source={CameraIcon} width={getPixel(15)} />
+        </TouchableOpacity>
+      )}
     </TouchableOpacity>
   );
 };
@@ -59,10 +70,22 @@ const Photo: React.FC<PhotoProps> = ({
 export default Photo;
 
 const styles = StyleSheet.create({
+  absolute: {
+    position: 'absolute',
+    right: getPixel(5),
+    bottom: getHeightPixel(5),
+    backgroundColor: Theme.color.white,
+    width: getPixel(20),
+    height: getPixel(20),
+    borderRadius: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   photoTouch: {
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5F6FA',
     borderRadius: getPixel(22),
+    overflow: 'hidden',
   },
 });

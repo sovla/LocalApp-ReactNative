@@ -5,7 +5,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import Header from '@/Components/LoginSignUp/Header';
 import {MediumText, Text} from '@/Components/Global/text';
 import {useAppSelector} from '@/Hooks/CustomHook';
@@ -18,15 +18,34 @@ import {Button} from '@/Components/Global/button';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {SignUpFormProps} from '@/Types/Screen/Screen';
 import {ImageOrVideo} from 'react-native-image-crop-picker';
+import {checkEmpty} from '@/Util/Util';
 
-export default function SignUpForm({navigation}: SignUpFormProps) {
+export default function SignUpForm({
+  navigation,
+  route: {params},
+}: SignUpFormProps) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
 
-  const [image, setImage] = useState<ImageOrVideo | null>(null);
+  const [image, setImage] = useState<
+    | ImageOrVideo
+    | {
+        path: string;
+      }
+    | null
+  >(null);
 
   const onPressSignUp = useCallback(() => {
     navigation.navigate('SignUpComplete');
+  }, []);
+
+  useEffect(() => {
+    console.log(params);
+    if (params?.imagePath) {
+      setImage({
+        path: params.imagePath,
+      });
+    }
   }, []);
 
   return (
@@ -48,16 +67,8 @@ export default function SignUpForm({navigation}: SignUpFormProps) {
           style={{marginVertical: getHeightPixel(20)}}>
           {t('signUpFormSubTitle')}
         </Text>
-        <Photo returnFn={selectImage => setImage(selectImage)} isNavigation />
-        {/* <View>
-          <Image
-            source={{uri: image?.path}}
-            style={{
-              width: getPixel(80),
-              height: getPixel(80),
-            }}
-          />
-        </View> */}
+        <Photo selectImage={checkEmpty(image)} isNavigation />
+
         <View style={{height: getHeightPixel(50)}} />
         <Input
           value=""
