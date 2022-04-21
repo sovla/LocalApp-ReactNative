@@ -13,10 +13,12 @@ import React, {useEffect} from 'react';
 import {Provider} from 'react-redux';
 import store from '@/Store/store';
 import SplashScreen from 'react-native-splash-screen';
+import Geolocation from '@react-native-community/geolocation';
 
 const App = () => {
   useEffect(() => {
     SplashScreen.hide();
+    // Geolocation.getCurrentPosition(info => console.log(info));
   }, []);
   return (
     <Provider store={store}>

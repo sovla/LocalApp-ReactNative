@@ -19,6 +19,7 @@ import {
   checkNotifications,
   checkMultiple,
 } from 'react-native-permissions';
+import messaging from '@react-native-firebase/messaging';
 
 const AndroidPermission = [
   PERMISSIONS.ANDROID.READ_SMS,
@@ -29,6 +30,17 @@ const AndroidPermission = [
   PERMISSIONS.ANDROID.CAMERA,
   PERMISSIONS.ANDROID.ACCESS_NOTIFICATION_POLICY,
 ];
+
+async function requestUserPermission() {
+  const authStatus = await messaging().requestPermission();
+  const enabled =
+    authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+    authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+  if (enabled) {
+    console.log('Authorization status:', authStatus);
+  }
+}
 
 export default function AppPermission({navigation}: AppPermissionProps) {
   const {t} = useTranslation();
@@ -94,19 +106,22 @@ export default function AppPermission({navigation}: AppPermissionProps) {
   }, []);
   const onPressAlarm = useCallback(() => {
     if (Platform.OS === 'android') {
-      checkNotifications();
+      requestUserPermission();
       requestMultiple([AndroidPermission[6]]).then(statuses => {
         allPermissionCheck();
       });
     }
   }, []);
 
-  const onPressAll = useCallback(() => {
+  const onPressAll = useCallback(async () => {
     if (Platform.OS === 'android') {
-      requestMultiple(AndroidPermission).then(statuses => {
-        allPermissionCheck();
-      });
+      const result = await requestMultiple(AndroidPermission).then(
+        statuses => {},
+      );
+    } else {
+      requestUserPermission();
     }
+    allPermissionCheck();
   }, []);
 
   const menuList = [
