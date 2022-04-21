@@ -179,6 +179,7 @@ export const ko = {
     fri: '금요일',
     sat: '토요일',
     sun: '일요일',
+    exit: '나가기',
     businessProfileOpen: 'OPEN',
     BusinessProfileMenuTitle: '비즈니스 프로필 관리',
     businessProfileMenu1: '기본 정보 관리',
@@ -412,6 +413,7 @@ export const ko = {
     myCategoryGuide2: '최소 1개 이상 선택 되어야 합니다.',
     allPhoto: '모든 사진',
     moreInformation: '상세정보',
+    mapPh: '지도를 움직여 위치를 설정하세요.',
   },
 };
 export const es = {

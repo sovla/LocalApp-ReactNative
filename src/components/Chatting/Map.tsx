@@ -70,18 +70,43 @@ import AnswerIcon from '@assets/image/answer.png';
 import {FAQItemProps} from '@/Types/Components/SettingTypes';
 import SuccessIcon from '@assets/image/success.png';
 import MapView, {Marker} from 'react-native-maps';
-import Map from '@/Components/Chatting/Map';
+const Map: React.FC<{}> = () => {
+  const navigation = useAppNavigation();
+  const [region, setRegion] = useState({
+    latitude: 37.78825,
+    longitude: -122.4324,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  });
+  const ref = useRef<Marker | null>(null);
 
-export default function ChattingLocation({navigation}: ChattingLocationProps) {
-  const {t} = useTranslation();
-  const fontSize = useAppSelector(state => state.fontSize.value);
+  const onPressMarker = useCallback(e => {
+    navigation.goBack();
+  }, []);
+
+  useEffect(() => {
+    ref.current?.showCallout();
+  }, [region]);
 
   return (
-    <View style={{flex: 1}}>
-      <Header title={t('locationInformation')} />
-      <View style={{flex: 1}}>
-        <Map />
-      </View>
-    </View>
+    <MapView
+      style={{flex: 1}}
+      initialRegion={region}
+      onRegionChange={setRegion}
+      onPress={e => console.log(e)}
+      mapType="standard"
+      showsUserLocation>
+      <Marker
+        coordinate={region}
+        title={'위치 정보 보내기'}
+        description="Rasdsadasdsa"
+        ref={ref}
+        onCalloutPress={onPressMarker}
+        onPress={onPressMarker}></Marker>
+    </MapView>
   );
-}
+};
+
+export default Map;
+
+const styles = StyleSheet.create({});

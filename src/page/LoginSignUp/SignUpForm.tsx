@@ -19,6 +19,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {SignUpFormProps} from '@/Types/Screen/Screen';
 import {ImageOrVideo} from 'react-native-image-crop-picker';
 import {checkEmpty} from '@/Util/Util';
+import {useIsFocused} from '@react-navigation/native';
 
 export default function SignUpForm({
   navigation,
@@ -26,7 +27,7 @@ export default function SignUpForm({
 }: SignUpFormProps) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
-
+  const isFocused = useIsFocused();
   const [image, setImage] = useState<
     | ImageOrVideo
     | {
@@ -40,12 +41,13 @@ export default function SignUpForm({
   }, []);
 
   useEffect(() => {
+    console.log(params);
     if (params?.imagePath) {
       setImage({
         path: params.imagePath,
       });
     }
-  }, []);
+  }, [isFocused]);
 
   return (
     <View style={styles.mainContainer}>

@@ -1,9 +1,9 @@
 import {Image, StyleSheet, View} from 'react-native';
-import React from 'react';
+import React, {useCallback} from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {DarkBlueText, Text, WhiteText} from '@Components/Global/text';
-import {useAppSelector} from '@/Hooks/CustomHook';
+import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
 
@@ -12,6 +12,11 @@ import {Button} from '../Global/button';
 const OtherChatting: React.FC<OtherChattingProps> = ({isMyProduct}) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const navigation = useAppNavigation();
+
+  const onPressProduct = useCallback(() => {
+    navigation.navigate('ProductDetail');
+  }, []);
 
   return isMyProduct ? (
     <View
@@ -51,6 +56,7 @@ const OtherChatting: React.FC<OtherChattingProps> = ({isMyProduct}) => {
           </View>
           <View style={styles.paddingTop14}>
             <Button
+              onPress={onPressProduct}
               fontSize={13}
               content={t('moreInformation')}
               fontColor={Theme.color.white}
@@ -104,6 +110,7 @@ const OtherChatting: React.FC<OtherChattingProps> = ({isMyProduct}) => {
           </View>
           <View style={styles.paddingTop14}>
             <Button
+              onPress={onPressProduct}
               content={t('moreInformation')}
               fontColor={Theme.color.white}
               fontSize={13}

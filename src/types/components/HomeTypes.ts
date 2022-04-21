@@ -87,6 +87,7 @@ export interface LikeProductProps {
   status?: string;
   isEdit: boolean;
   isSelectEdit?: boolean;
+  onPress?: () => void;
 }
 
 export interface FooterProps {

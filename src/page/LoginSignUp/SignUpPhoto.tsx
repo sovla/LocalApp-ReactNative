@@ -9,7 +9,13 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from 'react';
 
 import BackGroundImage from '@assets/image/BG.png';
 import {fontSizeChange, getHeightPixel, getPixel} from '@/Util/pixelChange';
@@ -80,33 +86,84 @@ export default function SignUpPhoto({navigation}: SignUpPhotoProps) {
     undefined,
   );
   const [imageArray, setImageArray] = useState<any>([1]);
-  const [number, setNumber] = useState<number>(20);
+  const [number, setNumber] = useState<number>(100);
   const [selectNumber, setSelectNumber] = useState<number>(0);
 
-  const getPhotos = useCallback(() => {
+  const getPhotos = () => {
     CameraRoll.getPhotos({
       first: number,
     }).then(value => {
-      console.log(imageArray);
+      console.log(value);
       setImageArray(value.edges);
       setNumber((prev: number) => {
         if (value.page_info.has_next_page) {
-          return prev + 20;
+          return prev + 100;
         } else {
           return prev;
         }
       });
     });
-  }, []);
+  };
 
-  const onPressComplete = useCallback(() => {
+  const onPressComplete = () => {
+    console.log(imageArray[selectNumber - 1]);
     navigation.navigate('SignUpForm', {
       imagePath:
         selectNumber === 1
           ? firstImage?.path
           : imageArray[selectNumber - 1]?.node?.image?.uri,
     });
-  }, [selectNumber, firstImage, imageArray]);
+  };
+
+  const _renderItem = useCallback(
+    ({item, index}) => {
+      const select = index + 1 === selectNumber;
+      if (index === 0) {
+        return (
+          <TouchableOpacity
+            onPress={() => setSelectNumber(index + 1)}
+            style={styles.firstTouchImage}>
+            <Photo
+              returnFn={image => {
+                setFirstImage(image);
+                setSelectNumber(1);
+              }}
+              width={getPixel(106)}
+              height={getHeightPixel(112)}
+              selectImage={firstImage}
+            />
+            {firstImage && (
+              <View style={select ? styles.selectDot : styles.noneSelectDot}>
+                <WhiteText fontSize={`${12 * fontSize}`}>1</WhiteText>
+              </View>
+            )}
+          </TouchableOpacity>
+        );
+      }
+      return (
+        <TouchableOpacity
+          onPress={() => setSelectNumber(index + 1)}
+          key={index}
+          style={{
+            ...styles.touchImage,
+            marginRight: (index + 1) % 3 !== 0 ? getPixel(4) : 0,
+          }}>
+          <View style={select ? styles.selectDot : styles.noneSelectDot}>
+            <WhiteText fontSize={`${12 * fontSize}`}>1</WhiteText>
+          </View>
+          <Image
+            source={{
+              uri: item.node.image.uri,
+            }}
+            style={styles.imageBox}
+          />
+        </TouchableOpacity>
+      );
+    },
+    [selectNumber],
+  );
+
+  const keyExtractor = useCallback((item, index) => index.toString(), []);
 
   useLayoutEffect(() => {
     getPhotos();
@@ -124,57 +181,22 @@ export default function SignUpPhoto({navigation}: SignUpPhotoProps) {
       <FlatList
         data={imageArray}
         numColumns={3}
+        keyExtractor={keyExtractor}
         style={{
           paddingTop: getHeightPixel(20),
           marginHorizontal: getPixel(16),
+          paddingBottom: getHeightPixel(40),
         }}
+        getItemLayout={(data, index) => ({
+          length: getPixel(106),
+          offset: getHeightPixel(112) * index,
+          index,
+        })}
         onEndReached={() => {
           getPhotos();
         }}
-        onEndReachedThreshold={1}
-        renderItem={({item, index}) => {
-          const select = index + 1 === selectNumber;
-          if (index === 0) {
-            return (
-              <TouchableOpacity
-                onPress={() => setSelectNumber(index + 1)}
-                style={styles.firstTouchImage}>
-                <Photo
-                  returnFn={image => {
-                    setFirstImage(image);
-                    setSelectNumber(1);
-                  }}
-                  width={getPixel(106)}
-                  height={getHeightPixel(112)}
-                  selectImage={firstImage}
-                />
-                <View style={select ? styles.selectDot : styles.noneSelectDot}>
-                  <WhiteText fontSize={`${12 * fontSize}`}>1</WhiteText>
-                </View>
-              </TouchableOpacity>
-            );
-          }
-
-          return (
-            <TouchableOpacity
-              onPress={() => setSelectNumber(index + 1)}
-              key={index}
-              style={{
-                ...styles.touchImage,
-                marginRight: (index + 1) % 3 !== 0 ? getPixel(4) : 0,
-              }}>
-              <View style={select ? styles.selectDot : styles.noneSelectDot}>
-                <WhiteText fontSize={`${12 * fontSize}`}>1</WhiteText>
-              </View>
-              <Image
-                source={{
-                  uri: item.node.image.uri,
-                }}
-                style={styles.imageBox}
-              />
-            </TouchableOpacity>
-          );
-        }}
+        onEndReachedThreshold={0.3}
+        renderItem={_renderItem}
       />
     </View>
   );

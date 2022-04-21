@@ -52,9 +52,9 @@ export default function BusinessProfileBanner() {
 
       <Button
         style={{
-          marginTop: getHeightPixel(390),
-          marginHorizontal: getPixel(16),
-          borderRadius: getPixel(2),
+          position: 'absolute',
+          bottom: getHeightPixel(30),
+          left: getPixel(16),
         }}
         width="328px"
         content={t('save')}

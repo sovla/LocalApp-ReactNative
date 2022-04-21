@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 
 import BackGroundImage from '@assets/image/BG.png';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
@@ -15,29 +15,75 @@ import MenuIcon from '@assets/image/bar_white.png';
 import AlarmIcon from '@assets/image/notice_white.png';
 import {Box, RowBox} from '../Global/container';
 import {WhiteText} from '../Global/text';
-import {useAppSelector} from '@/Hooks/CustomHook';
+import {useAppSelector, useAppNavigation} from '@/Hooks/CustomHook';
 import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
+import {Picker} from '@react-native-picker/picker';
 
 const Header: React.FC = () => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const [selectMenu, setSelectMenu] = useState('전체보기');
+  const navigation = useAppNavigation();
   return (
     <ImageBackground style={styles.headerContainer} source={BackGroundImage}>
       <RowBox>
-        <TouchableOpacity style={styles.locationTouch}>
-          <WhiteText fontSize={`${18 * fontSize}`}>Bom Retiro</WhiteText>
-          {/* 수정필요 이쪽에 드롭다운 넣을 예정 */}
-        </TouchableOpacity>
+        <Picker
+          style={{
+            width: getPixel(120),
+            height: getHeightPixel(50),
+            color: Theme.color.white,
+            fontSize: fontSize * 18,
+            fontFamily: Theme.fontWeight.medium,
+          }}
+          selectedValue={selectMenu}
+          onValueChange={setSelectMenu}>
+          <Picker.Item
+            style={{
+              color: Theme.color.white,
+              fontSize: fontSize * 18,
+              fontFamily: Theme.fontWeight.medium,
+            }}
+            label={'전체보기'}
+            value={'전체보기'}
+          />
+          <Picker.Item
+            style={{
+              color: Theme.color.white,
+              fontSize: fontSize * 18,
+              fontFamily: Theme.fontWeight.medium,
+            }}
+            label={'구매'}
+            value={'구매'}
+          />
+          <Picker.Item
+            style={{
+              color: Theme.color.white,
+              fontSize: fontSize * 18,
+              fontFamily: Theme.fontWeight.medium,
+            }}
+            label={'판매'}
+            value={'판매'}
+          />
+        </Picker>
       </RowBox>
       <RowBox>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Search');
+          }}>
           <Image style={styles.icon} source={SearchIcon} />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('AllCategory');
+          }}>
           <Image style={styles.icon} source={MenuIcon} />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('AlarmList');
+          }}>
           <Image style={styles.icon} source={AlarmIcon} />
         </TouchableOpacity>
       </RowBox>

@@ -1,9 +1,9 @@
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import React, {useCallback} from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {Text, WhiteText} from '@Components/Global/text';
-import {useAppSelector} from '@/Hooks/CustomHook';
+import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
 
@@ -22,10 +22,15 @@ const LocationChatting: React.FC<LocationChattingProps> = ({
 }) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const navigation = useAppNavigation();
   const location = {
     lat: 37.545444,
     lng: 127.328453,
   };
+  const onPressLocation = useCallback(() => {
+    navigation.navigate('ChattingLocation');
+  }, []);
+
   return (
     <View
       style={[
@@ -98,7 +103,9 @@ const LocationChatting: React.FC<LocationChattingProps> = ({
             }}
           />
         </MapView>
-        <TouchableOpacity style={styles.mapContentTouch}>
+        <TouchableOpacity
+          onPress={onPressLocation}
+          style={styles.mapContentTouch}>
           <Text
             color={isMy ? Theme.color.white : Theme.color.black}
             style={styles.mapContentView}

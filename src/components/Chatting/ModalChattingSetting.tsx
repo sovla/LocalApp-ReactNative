@@ -68,15 +68,20 @@ import {TextInput} from 'react-native-gesture-handler';
 import QuetionIcon from '@assets/image/quetion.png';
 import AnswerIcon from '@assets/image/answer.png';
 import {FAQItemProps} from '@/Types/Components/SettingTypes';
-import SuccessIcon from '@assets/image/success.png';
+import TrashBlueIcon from '@assets/image/trash_blue.png';
+import ExportIcon from '@assets/image/export.png';
+import ExitIcon from '@assets/image/exit.png';
+import ReportIcon from '@assets/image/report.png';
+import BlockBlueIcon from '@assets/image/block_blue.png';
 import {SlideRightModal} from '../Home/ModalFilter';
 
-import CloseRoundBlackIcon from '@assets/image/close_round_black.png';
+import CloseBlueIcon from '@assets/image/close_blue.png';
 import NoticeEmptyBlackIcon from '@assets/image/notice_empty_black.png';
 import {
   ModalAlertViewProps,
   ModalChattingSettingProps,
 } from '@/Types/Components/ChattingTypes';
+import Notice from '@/Page/Notice/Notice';
 
 const ModalChattingSetting: React.FC<ModalChattingSettingProps> = ({
   onClose,
@@ -144,6 +149,7 @@ const ModalChattingSetting: React.FC<ModalChattingSettingProps> = ({
     onClose();
     navigation.navigate('ReportCategory');
   };
+
   return (
     <Modal visible transparent onRequestClose={onClose}>
       <View
@@ -170,29 +176,26 @@ const ModalChattingSetting: React.FC<ModalChattingSettingProps> = ({
                 paddingHorizontal: getPixel(16),
                 paddingTop: getHeightPixel(60),
               }}>
-              <View style={styles.rowBox}>
+              <View style={styles.rowBoxBetween}>
                 <View style={styles.rowCenter}>
-                  <AutoHeightImage
-                    style={{
-                      marginRight: getPixel(10),
-                    }}
-                    source={NoticeEmptyBlackIcon}
-                    width={getPixel(30)}
-                  />
+                  <View style={styles.imageView}>
+                    <AutoHeightImage
+                      source={NoticeColorIcon}
+                      width={getPixel(15.84)}
+                    />
+                  </View>
                   <Text fontSize={`${16 * fontSize}`}>{t('alarmSetting')}</Text>
                 </View>
                 <Toggle isOn={isAlarm} setIsOn={setIsAlarm} />
               </View>
-              <View style={styles.rowBox}>
+              <View style={styles.rowBoxBetween}>
                 <View style={styles.rowCenter}>
-                  <AutoHeightImage
-                    source={CloseRoundBlackIcon}
-                    width={getPixel(20)}
-                    style={{
-                      marginLeft: getPixel(5),
-                      marginRight: getPixel(15),
-                    }}
-                  />
+                  <View style={styles.imageView}>
+                    <AutoHeightImage
+                      source={CloseBlueIcon}
+                      width={getPixel(20)}
+                    />
+                  </View>
                   <Text fontSize={`${16 * fontSize}`}>{t('userBlock')}</Text>
                 </View>
                 <Toggle isOn={isBlock} setIsOn={onPressUserBlock} />
@@ -200,7 +203,13 @@ const ModalChattingSetting: React.FC<ModalChattingSettingProps> = ({
               <Line isGray width={getPixel(274)} />
               <TouchableOpacity
                 onPress={onPressDeleteChattingContent}
-                style={[styles.rowBox, {paddingLeft: getPixel(5)}]}>
+                style={[styles.rowBox]}>
+                <View style={styles.imageView}>
+                  <AutoHeightImage
+                    source={TrashBlueIcon}
+                    width={getPixel(20)}
+                  />
+                </View>
                 <Text fontSize={`${16 * fontSize}`}>
                   {t('deleteChattingContent')}
                 </Text>
@@ -208,10 +217,17 @@ const ModalChattingSetting: React.FC<ModalChattingSettingProps> = ({
               <Line isGray width={getPixel(274)} />
               <TouchableOpacity
                 onPress={onPressChattingDownload}
-                style={[
-                  styles.rowBox,
-                  {paddingLeft: getPixel(5), height: getHeightPixel(75)},
-                ]}>
+                style={[styles.rowBox, {paddingVertical: getHeightPixel(20)}]}>
+                <View
+                  style={[
+                    styles.imageView,
+                    {
+                      alignSelf: 'flex-start',
+                      marginTop: getHeightPixel(5),
+                    },
+                  ]}>
+                  <AutoHeightImage source={ExportIcon} width={getPixel(20)} />
+                </View>
                 <View>
                   <Text fontSize={`${16 * fontSize}`}>
                     {t('chattingDownload')}
@@ -224,19 +240,32 @@ const ModalChattingSetting: React.FC<ModalChattingSettingProps> = ({
               <Line isGray width={getPixel(274)} />
               <TouchableOpacity
                 onPress={onPressBlockManagement}
-                style={[styles.rowBox, {paddingLeft: getPixel(5)}]}>
+                style={[styles.rowBox]}>
+                <View style={styles.imageView}>
+                  <AutoHeightImage
+                    source={BlockBlueIcon}
+                    width={getPixel(20)}
+                  />
+                </View>
                 <Text fontSize={`${16 * fontSize}`}>
                   {t('blockUserManagement')}
                 </Text>
               </TouchableOpacity>
               <Line isGray width={getPixel(274)} />
 
-              <TouchableOpacity
-                onPress={onPressReport}
-                style={[styles.rowBox, {paddingLeft: getPixel(5)}]}>
+              <TouchableOpacity onPress={onPressReport} style={[styles.rowBox]}>
+                <View style={styles.imageView}>
+                  <AutoHeightImage source={ReportIcon} width={getPixel(20)} />
+                </View>
                 <Text fontSize={`${16 * fontSize}`}>{t('report')}</Text>
               </TouchableOpacity>
               <Line isGray width={getPixel(274)} />
+              <TouchableOpacity onPress={onClose} style={[styles.rowBox]}>
+                <View style={styles.imageView}>
+                  <AutoHeightImage source={ExitIcon} width={getPixel(20)} />
+                </View>
+                <Text fontSize={`${16 * fontSize}`}>{t('exit')}</Text>
+              </TouchableOpacity>
             </View>
           </SlideRightModal>
         )}
@@ -292,6 +321,12 @@ const ModalAlertView: React.FC<ModalAlertViewProps> = ({
 };
 
 const styles = StyleSheet.create({
+  imageView: {
+    width: getPixel(30),
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: getPixel(10),
+  },
   alertModalBangImage: {
     width: getPixel(20),
     height: getPixel(20),
@@ -341,6 +376,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   rowBox: {
+    flexDirection: 'row',
+    minHeight: getHeightPixel(50),
+    width: getPixel(274),
+    alignItems: 'center',
+  },
+  rowBoxBetween: {
     flexDirection: 'row',
     height: getHeightPixel(50),
     justifyContent: 'space-between',

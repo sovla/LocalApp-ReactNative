@@ -43,14 +43,32 @@ export default function ProductDetail({navigation}: ProductDetailProps) {
   const price = 'R$6500.00';
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
-  const [imageArray, setImageArray] = useState<Array<any>>([1, 2, 3, 4]);
+  const [imageArray, setImageArray] = useState<Array<any>>([
+    require('@assets/image/dummy_i.png'),
+    require('@assets/image/dummy_i.png'),
+    require('@assets/image/dummy_i.png'),
+    require('@assets/image/dummy_i.png'),
+    require('@assets/image/dummy_i.png'),
+    require('@assets/image/dummy_i.png'),
+    require('@assets/image/dummy_i.png'),
+  ]);
 
-  const onPressTierGuide = () => {};
-  const onPressReport = () => {};
+  const onPressTierGuide = useCallback(() => {
+    navigation.navigate('ProductTierGuide');
+  }, []);
+  const onPressReport = useCallback(() => {
+    navigation.navigate('ReportCategory');
+  }, []);
   const onPressShop = useCallback(() => {
     navigation.navigate('BusinessProfile');
   }, []);
+  const onPressChattingTrade = useCallback(() => {
+    navigation.navigate('ChattingDetail');
+  }, []);
 
+  const onPressSearch = useCallback(() => {
+    navigation.navigate('Search');
+  }, []);
   return (
     <View
       style={{
@@ -66,11 +84,15 @@ export default function ProductDetail({navigation}: ProductDetailProps) {
           />
           <TouchableOpacity
             style={styles.backWhiteTouch}
+            onPress={() => {
+              navigation.goBack();
+            }}
             hitSlop={getHitSlop(5)}>
             <Image source={BackWhiteIcon} style={styles.backWhiteImage} />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.searchWhiteTouch}
+            onPress={onPressSearch}
             hitSlop={getHitSlop(5)}>
             <Image source={SearchWhiteIcon} style={styles.searchWhiteImage} />
           </TouchableOpacity>
@@ -137,7 +159,9 @@ export default function ProductDetail({navigation}: ProductDetailProps) {
               </Text>
             </View>
           </View>
-          <TouchableOpacity style={styles.footerRightTouch}>
+          <TouchableOpacity
+            onPress={onPressChattingTrade}
+            style={styles.footerRightTouch}>
             <WhiteText fontSize={`${14 * fontSize}`}>
               {t('tradeInChat')}
             </WhiteText>

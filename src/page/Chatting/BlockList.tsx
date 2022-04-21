@@ -10,7 +10,7 @@ import Theme from '@/assets/global/Theme';
 import Header from '@/Components/LoginSignUp/Header';
 import Line from '@/Components/Global/Line';
 
-const BlockList = () => {
+const BlockList: React.FC = () => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   return (

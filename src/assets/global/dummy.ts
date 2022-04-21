@@ -103,6 +103,8 @@ export const dayList = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 
 export const languageList = ['br', 'es', 'en', 'ko'];
 
+export const rangeList = ['0km', '5km', '10km', '20km', '40km'];
+
 export const tierList: tierTypes[] = [
   {
     name: 'Ntier',

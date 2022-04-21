@@ -46,7 +46,13 @@ export default function Setting() {
             navigation.navigate('SettingChatting');
           }}
         />
-        <ImageWithView image={CloseBlueIcon} content={t('settingMenu4')} />
+        <ImageWithView
+          image={CloseBlueIcon}
+          content={t('settingMenu4')}
+          onPress={() => {
+            navigation.navigate('BlockList');
+          }}
+        />
         <ImageWithView
           image={EarthIcon}
           content={t('settingMenu5')}

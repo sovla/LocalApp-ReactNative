@@ -7,8 +7,11 @@ import {
   TouchableOpacity,
   FlatList,
   Modal,
+  TextInput,
+  KeyboardAvoidingView,
+  ScrollView,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import BackGroundImage from '@assets/image/BG.png';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import BackWhiteIcon from '@assets/image/back_white.png';
@@ -22,8 +25,9 @@ import Footer from '@/Components/Home/Footer';
 import {getHitSlop} from '@/Util/Util';
 import useBoolean from '@/Hooks/useBoolean';
 import AlertModal from '@/Components/Home/AlertModal';
+import {LikeListProps} from '@/Types/Screen/Screen';
 
-export default function LikeList() {
+export default function LikeList({navigation}: LikeListProps) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const [isEdit, setIsEdit] = useState<boolean>(false);
@@ -35,9 +39,14 @@ export default function LikeList() {
   const onPressSave = () => {
     setIsEdit(false);
   };
+  const onPressItem = useCallback(() => {
+    navigation.navigate('ProductDetail');
+  }, []);
+
   return (
-    <View style={{backgroundColor: Theme.color.whiteGray_F6, flex: 1}}>
-      <ImageBackground style={styles.headerContainer} source={BackGroundImage}>
+    <KeyboardAvoidingView
+      style={{backgroundColor: Theme.color.whiteGray_F6, flex: 1}}>
+      {/* <ImageBackground style={styles.headerContainer} source={BackGroundImage}>
         <View style={styles.headerLeftView}>
           <Image source={BackWhiteIcon} style={styles.backWhiteImage} />
           <WhiteText medium fontSize={`${20 * fontSize}`}>
@@ -92,6 +101,7 @@ export default function LikeList() {
         renderItem={({item, index}) => {
           return (
             <LikeProduct
+              onPress={onPressItem}
               status={item === 2 ? '예약중' : item === 3 ? '판매완료' : ''}
               price="R$ 24.00"
               title="13,000Pa 초강력흡입력 [샤오미] 차량용 무선 핸디 청소기"
@@ -100,8 +110,35 @@ export default function LikeList() {
           );
         }}
       />
-      <Footer menu="favorite" />
-    </View>
+      <Footer menu="favorite" /> */}
+      <ScrollView>
+        {[1, 2, 3, 1, 2, 3, 2, 3, 31, 1, 2, 13, 123, 12, 312, 3].map(v => (
+          <Image
+            source={1}
+            style={{
+              width: getPixel(200),
+              height: getPixel(200),
+            }}
+          />
+        ))}
+      </ScrollView>
+      <View
+        style={{
+          width: getPixel(360),
+          height: getHeightPixel(100),
+          paddingBottom: getHeightPixel(50),
+          backgroundColor: 'blue',
+          flexDirection: 'row',
+        }}>
+        <TextInput
+          style={{
+            backgroundColor: 'red',
+            height: getHeightPixel(50),
+            marginBottom: getHeightPixel(50),
+          }}
+        />
+      </View>
+    </KeyboardAvoidingView>
   );
 }
 

@@ -97,7 +97,7 @@ import Menu from './Menu';
 import ProductTierGuide from './Product/ProductTierGuide';
 import BlockList from './Chatting/BlockList';
 
-const ROUTING: keyof Screen = 'SignUpPhoto';
+const ROUTING: keyof Screen = 'SignUpForm';
 
 const resources = {
   en,
@@ -195,6 +195,9 @@ export default function Router() {
 const withScrollView = (WrappedComponent: any) => {
   return (props: any) => {
     const [isShow, setIsShow] = useState(false);
+    if (props.route.name === 'ChattingDetail') {
+      return <WrappedComponent {...props} />;
+    }
     return (
       <>
         <SafeAreaView style={{flex: 0, backgroundColor: '#fff'}} />
