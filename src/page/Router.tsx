@@ -97,7 +97,7 @@ import Menu from './Menu';
 import ProductTierGuide from './Product/ProductTierGuide';
 import BlockList from './Chatting/BlockList';
 
-const ROUTING: keyof Screen = 'Home';
+const ROUTING: keyof Screen = 'ProductLocation';
 
 const resources = {
   en,
@@ -116,7 +116,7 @@ const forFade = ({current}: any) => {
 
 export default function Router() {
   const [isChange, setIsChange] = useState<boolean>(false);
-  const [isLanguageChange, setIsLanguageChange] = useState(false);
+  const [isLanguageChange, setIsLanguageChange] = useState<boolean>(false);
   const lang = useAppSelector(state => state.lang.value);
 
   useEffect(() => {

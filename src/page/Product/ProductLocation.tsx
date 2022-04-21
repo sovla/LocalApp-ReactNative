@@ -1,87 +1,96 @@
 import {
-  Dimensions,
   FlatList,
-  Image,
-  ImageBackground,
-  Modal,
-  ScrollView,
+  NativeSyntheticEvent,
   StyleSheet,
   TextInput,
+  TextInputSubmitEditingEventData,
   TouchableOpacity,
   View,
-  ViewStyle,
 } from 'react-native';
-import React, {Fragment, useEffect, useState} from 'react';
+import React from 'react';
 
-import BackGroundImage from '@assets/image/BG.png';
-import {fontSizeChange, getHeightPixel, getPixel} from '@/Util/pixelChange';
-import LocationWhiteIcon from '@assets/image/location_white.png';
-import SearchIcon from '@assets/image/search_white.png';
-import MenuIcon from '@assets/image/bar_white.png';
-import AlarmIcon from '@assets/image/notice_white.png';
-import {DarkBlueText, GrayText, Text, WhiteText} from '@Components/Global/text';
-import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
+import {GrayText, Text} from '@Components/Global/text';
+import {useAppSelector} from '@/Hooks/CustomHook';
 import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
-import TrianglePinkIcon from '@assets/image/triangle_pink.png';
-import {
-  HeaderProps,
-  ModalMyPageProps,
-  ModalUploadModalProps,
-} from '@/Types/Components/HomeTypes';
-import useBoolean from '@/Hooks/useBoolean';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import BackBlackBoxIcon from '@assets/image/back_black_box.png';
 import AutoHeightImage from 'react-native-auto-height-image';
-import DummyProfileImage from '@assets/image/dummy_profile.png';
 
-import AnnouncementIcon from '@assets/image/announcement.png';
-import NoticeColorIcon from '@assets/image/notice_color.png';
-import StoreIcon from '@assets/image/store.png';
-import CloseGrayIcon from '@assets/image/close_gray.png';
-import MoreIcon from '@assets/image/more.png';
-import UploadWhiteIcon from '@assets/image/upload_white.png';
-import NoticeOn from '@assets/image/notice_on.png';
-import SettingsIcon from '@assets/image/settings.png';
-import ArrowRightGrayIcon from '@assets/image/arrow_right_gray.png';
 import Header from '@/Components/LoginSignUp/Header';
-import {
-  Button,
-  CheckBox,
-  CheckBoxImage,
-  Toggle,
-} from '@/Components/Global/button';
 import Line from '@/Components/Global/Line';
-import {Shadow} from 'react-native-shadow-2';
-import {useDispatch} from 'react-redux';
-import {fontChange, fontSizeState} from '@/Store/fontSizeState';
-import i18next, {t} from 'i18next';
-import {
-  categoryMenu,
-  languageList,
-  productDummy,
-  tierList,
-} from '@/assets/global/dummy';
-import Menu from '@/Components/Profile/Menu';
-import {ProductWhiteBoxProps} from '@/Types/Components/ProductTypes';
-import CameraImage from '@/Components/Product/CameraImage';
-import {getHitSlop} from '@/Util/Util';
-import Input from '@/Components/Global/Input';
-import {ProductTypes} from '@/Types/Components/global';
+import {tierList} from '@/assets/global/dummy';
 import LocationGrayIcon from '@assets/image/location_gray.png';
 import MyLocationIcon from '@assets/image/my_location.png';
+import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+import {useCallback} from 'react';
+import axios from 'axios';
+import {useState} from 'react';
 
 const ProductLocation = () => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const [locationList, setLocationList] = useState<any>([]);
+  const onSubmit = useCallback(
+    (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
+      const config: any = {
+        method: 'get',
+        url: `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${e.nativeEvent.text}&types=establishment&location=37.76999%2C-122.44696&radius=500&key=AIzaSyAbfTo68JkJSdEi9emDHyMfGl7vxjYD704`,
+        headers: {},
+      };
+      axios(config)
+        .then(function (response) {
+          if (response.data.status === 'OK') {
+            setLocationList(response.data.predictions);
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+    [],
+  );
+  const onPress = useCallback(main_text => {
+    const config: any = {
+      method: 'get',
+      url: `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${main_text}&inputtype=textquery&locationbias=circle%3A2000%4047.6918452%2C-122.2226413&fields=formatted_address%2Cname%2Crating%2Copening_hours%2Cgeometry&key=AIzaSyAbfTo68JkJSdEi9emDHyMfGl7vxjYD704`,
+      headers: {},
+    };
+    axios(config)
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <View>
       <Header title={t('tradingLocationUpdate')} />
       <FlatList
-        data={tierList}
+        data={locationList}
         ListHeaderComponent={
           <>
             <View style={styles.headerView}>
+              {/* <GooglePlacesAutocomplete
+                placeholder="Search"
+                debounce={2000}
+                onFail={v => console.log(v)}
+                styles={{
+                  textInput: {
+                    color: Theme.color.black,
+                  },
+                }}
+                onPress={(data, details = null) => {
+                  // 'details' is provided when fetchDetails = true
+                  console.log(data, details);
+                }}
+              
+                query={{
+                  key: 'AIzaSyAbfTo68JkJSdEi9emDHyMfGl7vxjYD704',
+                  language: 'en',
+                }}
+              /> */}
               <Text
                 medium
                 fontSize={`${20 * fontSize}`}
@@ -90,6 +99,7 @@ const ProductLocation = () => {
               </Text>
               <View>
                 <TextInput
+                  onSubmitEditing={onSubmit}
                   style={[
                     styles.textInput,
                     {
@@ -111,8 +121,9 @@ const ProductLocation = () => {
         renderItem={({item, index}) => {
           return (
             <LocationSelect
-              locationTitle="Rua. Tres Rios"
-              locationSubTitle="Bom Retiro, São Paulo - SP,Brasil "
+              onPress={() => onPress(item.structured_formatting.main_text)}
+              locationTitle={item.structured_formatting.main_text}
+              locationSubTitle={item.structured_formatting.secondary_text}
             />
           );
         }}
@@ -131,13 +142,14 @@ const ProductLocation = () => {
 export default ProductLocation;
 
 const LocationSelect: React.FC<{
+  onPress?: () => void;
   locationTitle: string;
   locationSubTitle: string;
-}> = ({locationTitle, locationSubTitle}) => {
+}> = ({locationTitle, locationSubTitle, onPress}) => {
   const fontSize = useAppSelector(state => state.fontSize.value);
   return (
     <>
-      <TouchableOpacity style={styles.locationTouch}>
+      <TouchableOpacity onPress={onPress} style={styles.locationTouch}>
         <AutoHeightImage
           source={LocationGrayIcon}
           width={getPixel(14)}

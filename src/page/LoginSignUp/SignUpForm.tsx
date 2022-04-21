@@ -1,5 +1,11 @@
-import {KeyboardAvoidingView, StyleSheet, TextInput, View} from 'react-native';
-import React, {useCallback} from 'react';
+import {
+  Image,
+  KeyboardAvoidingView,
+  StyleSheet,
+  TextInput,
+  View,
+} from 'react-native';
+import React, {useCallback, useState} from 'react';
 import Header from '@/Components/LoginSignUp/Header';
 import {MediumText, Text} from '@/Components/Global/text';
 import {useAppSelector} from '@/Hooks/CustomHook';
@@ -11,10 +17,13 @@ import Input from '@/Components/Global/Input';
 import {Button} from '@/Components/Global/button';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {SignUpFormProps} from '@/Types/Screen/Screen';
+import {ImageOrVideo} from 'react-native-image-crop-picker';
 
 export default function SignUpForm({navigation}: SignUpFormProps) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+
+  const [image, setImage] = useState<ImageOrVideo | null>(null);
 
   const onPressSignUp = useCallback(() => {
     navigation.navigate('SignUpComplete');
@@ -39,7 +48,16 @@ export default function SignUpForm({navigation}: SignUpFormProps) {
           style={{marginVertical: getHeightPixel(20)}}>
           {t('signUpFormSubTitle')}
         </Text>
-        <Photo />
+        <Photo returnFn={selectImage => setImage(selectImage)} isNavigation />
+        {/* <View>
+          <Image
+            source={{uri: image?.path}}
+            style={{
+              width: getPixel(80),
+              height: getPixel(80),
+            }}
+          />
+        </View> */}
         <View style={{height: getHeightPixel(50)}} />
         <Input
           value=""

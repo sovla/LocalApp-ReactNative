@@ -410,6 +410,7 @@ export const ko = {
     close: '닫기',
     myCategoryGuide1: '원하시는 관심 카테고리를 체크해주세요',
     myCategoryGuide2: '최소 1개 이상 선택 되어야 합니다.',
+    allPhoto: '모든 사진',
   },
 };
 export const es = {
