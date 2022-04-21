@@ -17,7 +17,7 @@ import {
   TextInput,
   TouchableWithoutFeedback,
 } from 'react-native';
-import React, {Fragment, useEffect, useRef, useState} from 'react';
+import React, {Fragment, useCallback, useEffect, useRef, useState} from 'react';
 
 import BackGroundImage from '@assets/image/BG.png';
 import {fontSizeChange, getHeightPixel, getPixel} from '@/Util/pixelChange';
@@ -112,6 +112,10 @@ export default function ChattingDetail({navigation}: ChattingDetailProps) {
 
   const name = 'Designplus';
   const viewRef = useRef<View>(null);
+
+  const onPressLocation = useCallback(() => {
+    navigation.navigate('ChattingLocation');
+  }, []);
 
   return (
     <>
@@ -308,7 +312,9 @@ export default function ChattingDetail({navigation}: ChattingDetailProps) {
                       />
                       <Text fontSize={`${14 * fontSize}`}>{t('camera')}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.footerImageTouch}>
+                    <TouchableOpacity
+                      onPress={onPressLocation}
+                      style={styles.footerImageTouch}>
                       <Image
                         source={LocationOrangeIcon}
                         style={styles.footerOnImage}

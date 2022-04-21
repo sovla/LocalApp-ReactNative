@@ -40,7 +40,6 @@ export default function SignUpForm({
   }, []);
 
   useEffect(() => {
-    console.log(params);
     if (params?.imagePath) {
       setImage({
         path: params.imagePath,

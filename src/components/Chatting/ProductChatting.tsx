@@ -2,75 +2,113 @@ import {Image, StyleSheet, View} from 'react-native';
 import React from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import {DarkBlueText, Text} from '@Components/Global/text';
+import {DarkBlueText, Text, WhiteText} from '@Components/Global/text';
 import {useAppSelector} from '@/Hooks/CustomHook';
 import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
 
 import {OtherChattingProps} from '@/Types/Components/ChattingTypes';
+import {Button} from '../Global/button';
 const OtherChatting: React.FC<OtherChattingProps> = ({isMyProduct}) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
 
-  const changeStyle: any = isMyProduct
-    ? {
-        color: Theme.color.blue_3D,
-        borderColor: Theme.color.blue_3D,
-        borderRadius: {
-          borderBottomRightRadius: 0,
-        },
-        justifyContent: 'flex-end',
-      }
-    : {
-        color: Theme.color.white,
-        borderColor: Theme.color.whiteGray_DC,
-        borderRadius: {
-          borderBottomLeftRadius: 0,
-        },
-        justifyContent: 'flex-start',
-      };
-  return (
+  return isMyProduct ? (
     <View
       style={{
         ...styles.container,
-        justifyContent: changeStyle.justifyContent,
+        justifyContent: 'flex-end',
       }}>
-      {!isMyProduct && (
-        <View style={styles.imageView}>
-          <Image
-            source={require('@assets/image/dummy.png')}
-            style={styles.image}
-          />
-        </View>
-      )}
-
       <View
         style={{
           ...styles.chattingView,
-          backgroundColor: changeStyle.color,
-          ...changeStyle.borderRadius,
+          backgroundColor: Theme.color.blue_3D,
+          borderBottomRightRadius: 0,
         }}>
         <View
           style={{
             ...styles.productView,
-            borderColor: changeStyle.borderColor,
+            borderColor: Theme.color.blue_3D,
           }}>
           <View style={styles.row}>
-            <Image
-              source={require('@assets/image/dummy.png')}
-              style={styles.innerImage}
+            <View style={styles.innerImageView}>
+              <Image
+                source={require('@assets/image/dummy.png')}
+                style={styles.innerImage}
+              />
+            </View>
+            <View style={{width: getPixel(120), marginLeft: getPixel(10)}}>
+              <WhiteText
+                fontSize={`${12 * fontSize}`}
+                numberOfLines={2}
+                style={styles.marginBottom5}>
+                Smart Insulation Cup Water Bottle Led Temperature Dis...
+              </WhiteText>
+              <WhiteText fontSize={`${14 * fontSize}`} bold>
+                R$ 160,00
+              </WhiteText>
+            </View>
+          </View>
+          <View style={styles.paddingTop14}>
+            <Button
+              fontSize={13}
+              content={t('moreInformation')}
+              fontColor={Theme.color.white}
+              style={styles.button}
             />
+          </View>
+        </View>
+      </View>
+    </View>
+  ) : (
+    <View
+      style={{
+        ...styles.container,
+        justifyContent: 'flex-start',
+      }}>
+      <View style={styles.imageView}>
+        <Image
+          source={require('@assets/image/dummy.png')}
+          style={styles.image}
+        />
+      </View>
+
+      <View
+        style={{
+          ...styles.chattingView,
+          backgroundColor: Theme.color.white,
+          borderBottomLeftRadius: 0,
+        }}>
+        <View
+          style={{
+            ...styles.productView,
+          }}>
+          <View style={styles.row}>
+            <View style={styles.innerImageView}>
+              <Image
+                source={require('@assets/image/dummy.png')}
+                style={styles.innerImage}
+              />
+            </View>
             <View style={{width: getPixel(120), marginLeft: getPixel(10)}}>
               <Text
                 fontSize={`${12 * fontSize}`}
                 numberOfLines={2}
-                style={styles.marginTop}>
+                style={styles.marginBottom5}>
                 Smart Insulation Cup Water Bottle Led Temperature Dis...
               </Text>
               <DarkBlueText fontSize={`${14 * fontSize}`} bold>
                 R$ 160,00
               </DarkBlueText>
             </View>
+          </View>
+          <View style={styles.paddingTop14}>
+            <Button
+              content={t('moreInformation')}
+              fontColor={Theme.color.white}
+              fontSize={13}
+              style={{...styles.button, backgroundColor: Theme.color.gray}}
+            />
           </View>
         </View>
       </View>
@@ -81,24 +119,36 @@ const OtherChatting: React.FC<OtherChattingProps> = ({isMyProduct}) => {
 export default OtherChatting;
 
 const styles = StyleSheet.create({
+  button: {
+    backgroundColor: Theme.color.aqua_00,
+    width: getPixel(217),
+    height: getHeightPixel(36),
+  },
+  paddingTop14: {
+    paddingTop: getHeightPixel(14),
+  },
   row: {
     flexDirection: 'row',
+  },
+  innerImageView: {
+    width: getPixel(62),
+    height: getPixel(62),
+    borderWidth: 2,
+    borderColor: Theme.color.white,
+    borderRadius: 8,
+    overflow: 'hidden',
   },
   innerImage: {
     width: getPixel(62),
     height: getPixel(62),
   },
-  marginTop: {
-    marginTop: getHeightPixel(5),
+  marginBottom5: {
+    marginBottom: getHeightPixel(5),
   },
   productView: {
-    width: getPixel(217),
-    height: getHeightPixel(90),
-    borderWidth: 1,
+    width: getPixel(213),
+    minHeight: getHeightPixel(90),
     borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: Theme.color.white,
   },
   container: {
     marginTop: getHeightPixel(15),
@@ -114,7 +164,7 @@ const styles = StyleSheet.create({
   },
   chattingView: {
     width: getPixel(245),
-    height: getHeightPixel(120),
+    minHeight: getHeightPixel(120),
     borderRadius: getPixel(15),
     backgroundColor: Theme.color.white,
     justifyContent: 'center',

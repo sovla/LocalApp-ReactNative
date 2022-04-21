@@ -32,10 +32,11 @@ export const Button: React.FC<DefaultButtonProps> = props => {
   const {t} = useTranslation();
   const {content = t('signUp'), fontColor = Theme.color.white} = props;
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const textSize = props.fontSize ?? 16;
 
   return (
     <ButtonStyle {...props}>
-      <Text color={fontColor} fontSize={`${Theme.fontSize.fs16 * fontSize}px`}>
+      <Text color={fontColor} fontSize={`${textSize * fontSize}px`}>
         {content}
       </Text>
     </ButtonStyle>
