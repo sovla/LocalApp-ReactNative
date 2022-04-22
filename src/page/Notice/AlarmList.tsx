@@ -47,9 +47,6 @@ export default function AlarmList({route: {params}}: AlarmListProps) {
   }, [isFocused]);
   return (
     <View style={{flex: 1}}>
-      <TouchableOpacity onPress={onPressEditButton} style={styles.editTouch}>
-        <Image source={EditIcon} style={styles.editImage} />
-      </TouchableOpacity>
       <Header isBlack title={t('AlarmListTitle')} isBack>
         <View
           style={{
