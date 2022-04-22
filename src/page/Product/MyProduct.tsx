@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 
 import BackGroundImage from '@assets/image/BG.png';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
@@ -19,12 +19,17 @@ import TrashWhiteIcon from '@assets/image/trash_white.png';
 import BackWhiteIcon from '@assets/image/back_white.png';
 import Menu from '@/Components/Profile/Menu';
 import ProductWhiteBox from '@/Components/Product/ProductWhiteBox';
+import {MyProductProps} from '@/Types/Screen/Screen';
 
-const MyProduct = () => {
+const MyProduct: React.FC<MyProductProps> = ({navigation}) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
 
   const [selectMenu, setSelectMenu] = useState<string>(t('ProfileSellProduct'));
+
+  const onPressBackButton = useCallback(() => {
+    navigation.goBack();
+  }, []);
 
   return (
     <View
@@ -34,7 +39,7 @@ const MyProduct = () => {
       }}>
       <ImageBackground style={styles.headerContainer} source={BackGroundImage}>
         <View style={styles.rowCenter}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={onPressBackButton}>
             <AutoHeightImage source={BackWhiteIcon} width={getPixel(30)} />
           </TouchableOpacity>
           <WhiteText medium fontSize={`${20 * fontSize}`}>

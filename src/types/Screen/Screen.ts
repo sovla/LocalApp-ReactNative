@@ -62,17 +62,20 @@ type Screen = {
     | undefined;
   AlarmDetail: StackScreenProps<Screen> | undefined;
   MyProduct: StackScreenProps<Screen> | undefined;
-  ProductUpdate: {
-    title?: string;
-    categoryMenu?: categoryMenuTypes['menu'];
-    price?: string;
-    tag?: string;
-    imageArray?: Array<any>;
-    tier?: tierTypes['name'];
-    location?: string;
-    content?: string;
-    isNego?: boolean;
-  };
+  ProductUpdate:
+    | {
+        title?: string;
+        categoryMenu?: categoryMenuTypes['menu'];
+        price?: string;
+        tag?: string;
+        imageArray?: Array<any>;
+        tier?: tierTypes['name'];
+        location?: string;
+        content?: string;
+        isNego?: boolean;
+        isEdit?: boolean; // 해당 페이지 수정여부
+      }
+    | undefined;
   ProductPhoto: StackScreenProps<Screen> | undefined;
   ProductCategory: StackScreenProps<Screen> | undefined;
   ProductTag: StackScreenProps<Screen> | undefined;

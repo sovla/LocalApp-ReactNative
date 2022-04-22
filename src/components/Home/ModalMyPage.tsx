@@ -330,7 +330,7 @@ const styles = StyleSheet.create({
   loginImageView: {
     width: getPixel(56),
     height: getHeightPixel(56),
-    borderRadius: getPixel(20),
+    borderRadius: 20,
     overflow: 'hidden',
     marginRight: getPixel(12),
   },
@@ -359,7 +359,7 @@ const styles = StyleSheet.create({
     height: getHeightPixel(50),
     flexDirection: 'row',
     alignItems: 'center',
-    width: 'auto',
+    width: getPixel(150),
   },
   imageWithViewView: {
     width: getPixel(30),

@@ -20,6 +20,7 @@ import UploadModal from '@/Components/Home/UploadModal';
 import {useTranslation} from 'react-i18next';
 import {HomeProps} from '@/Types/Screen/Screen';
 import ModalPopup from '@/Components/Home/ModalPopup';
+import {useFocusEffect} from '@react-navigation/native';
 
 export default function Home({navigation}: HomeProps): JSX.Element {
   const [isList, setIsList] = useState(false);

@@ -90,7 +90,9 @@ export default function ProductUpdate({route: {params}}: ProductUpdateProps) {
   };
   return (
     <View style={{flex: 1}}>
-      <Header title={t('productUpdateTitle')} />
+      <Header
+        title={t(params?.isEdit ? 'productUpdateTitle' : 'productRegTitle')}
+      />
       <KeyboardAwareScrollView>
         <View style={styles.viewMainContainer}>
           <ScrollView horizontal>
@@ -529,7 +531,7 @@ const styles = StyleSheet.create({
     marginBottom: getHeightPixel(30),
     width: getPixel(328),
     height: getHeightPixel(140),
-    borderRadius: getPixel(4),
+    borderRadius: 4,
     borderWidth: 1,
     borderColor: Theme.color.whiteGray_EE,
   },
@@ -566,7 +568,7 @@ const styles = StyleSheet.create({
     width: getPixel(60),
     height: getPixel(60),
     overflow: 'hidden',
-    borderRadius: getPixel(15),
+    borderRadius: 15,
     marginLeft: getPixel(22),
   },
 });

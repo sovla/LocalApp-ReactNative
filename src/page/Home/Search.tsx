@@ -139,6 +139,9 @@ export default function Search({route: {params}}: SearchProps): JSX.Element {
                 {popularList.map((item, index) => (
                   <TouchableOpacity
                     key={item + index}
+                    onPress={() => {
+                      setSearchText(item);
+                    }}
                     style={styles.popularListView}>
                     <MediumText
                       fontSize={`${12 * fontSize}`}
@@ -250,7 +253,7 @@ const styles = StyleSheet.create({
     width: getPixel(46),
     height: getPixel(46),
     backgroundColor: Theme.color.whiteGray_F6,
-    borderRadius: getPixel(10),
+    borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
   },

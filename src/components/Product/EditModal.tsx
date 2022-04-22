@@ -95,15 +95,29 @@ const EditModal: React.FC<EditModalProps> = ({onClose, isBump}) => {
           {!isBumpUp ? (
             <View style={styles.container}>
               {isBump && (
-                <TouchableOpacity
-                  onPress={() => {
-                    setIsBumpUp(prev => !prev);
-                  }}
-                  style={styles.aquaView}>
-                  <WhiteText medium fontSize={`${16 * fontSize}`}>
-                    {t('bumpUp')}
-                  </WhiteText>
-                </TouchableOpacity>
+                <>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setIsBumpUp(prev => !prev);
+                    }}
+                    style={styles.aquaView}>
+                    <WhiteText medium fontSize={`${16 * fontSize}`}>
+                      {t('bumpUp')}
+                    </WhiteText>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={onClose} style={styles.whiteView}>
+                    <Text medium fontSize={`${16 * fontSize}`}>
+                      {t('MyProductMenu1')}
+                    </Text>
+                  </TouchableOpacity>
+                  <Line isGray />
+                  <TouchableOpacity onPress={onClose} style={styles.whiteView}>
+                    <Text medium fontSize={`${16 * fontSize}`}>
+                      {t('MyProductMenu2')}
+                    </Text>
+                  </TouchableOpacity>
+                  <Line isGray />
+                </>
               )}
               <TouchableOpacity
                 onPress={onPressUpdate}

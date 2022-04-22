@@ -33,3 +33,11 @@ export const checkEmpty = (_item: any) => {
     return _item;
   }
 };
+
+export const strEmptyCheck = (_item: string | undefined | null) => {
+  if (typeof _item === 'string' && _item.length > 0) {
+    return true;
+  } else {
+    return false;
+  }
+};

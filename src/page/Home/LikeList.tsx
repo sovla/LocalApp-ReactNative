@@ -47,7 +47,12 @@ export default function LikeList({navigation}: LikeListProps) {
     <View style={{flex: 1, backgroundColor: Theme.color.whiteGray_F7}}>
       <ImageBackground style={styles.headerContainer} source={BackGroundImage}>
         <View style={styles.headerLeftView}>
-          <Image source={BackWhiteIcon} style={styles.backWhiteImage} />
+          <TouchableOpacity
+            onPress={() => {
+              navigation.goBack();
+            }}>
+            <Image source={BackWhiteIcon} style={styles.backWhiteImage} />
+          </TouchableOpacity>
           <WhiteText medium fontSize={`${20 * fontSize}`}>
             {t('likeListTitle')}
           </WhiteText>

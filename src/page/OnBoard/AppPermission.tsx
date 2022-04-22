@@ -28,7 +28,6 @@ const AndroidPermission = [
   PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION,
   PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
   PERMISSIONS.ANDROID.CAMERA,
-  PERMISSIONS.ANDROID.ACCESS_NOTIFICATION_POLICY,
 ];
 
 async function requestUserPermission() {
@@ -72,52 +71,17 @@ export default function AppPermission({navigation}: AppPermissionProps) {
     }
   }, []);
 
-  const onPressCall = useCallback(() => {
-    if (Platform.OS === 'android') {
-      requestMultiple([AndroidPermission[0]]).then(statuses => {
-        allPermissionCheck();
-      });
-    }
-  }, []);
-  const onPressStorage = useCallback(() => {
-    if (Platform.OS === 'android') {
-      requestMultiple([AndroidPermission[1], AndroidPermission[2]]).then(
-        statuses => {
-          allPermissionCheck();
-        },
-      );
-    }
-  }, []);
-  const onPressLocation = useCallback(() => {
-    if (Platform.OS === 'android') {
-      requestMultiple([AndroidPermission[3], AndroidPermission[4]]).then(
-        statuses => {
-          allPermissionCheck();
-        },
-      );
-    }
-  }, []);
-  const onPressCamera = useCallback(() => {
-    if (Platform.OS === 'android') {
-      requestMultiple([AndroidPermission[5]]).then(statuses => {
-        allPermissionCheck();
-      });
-    }
-  }, []);
-  const onPressAlarm = useCallback(() => {
-    if (Platform.OS === 'android') {
-      requestUserPermission();
-      requestMultiple([AndroidPermission[6]]).then(statuses => {
-        allPermissionCheck();
-      });
-    }
-  }, []);
-
   const onPressAll = useCallback(async () => {
     if (Platform.OS === 'android') {
-      const result = await requestMultiple(AndroidPermission).then(
-        statuses => {},
-      );
+      const result = await requestMultiple(AndroidPermission).then(statuses => {
+        navigation.reset({
+          routes: [
+            {
+              name: 'Login',
+            },
+          ],
+        });
+      });
     } else {
       requestUserPermission();
     }
@@ -129,35 +93,30 @@ export default function AppPermission({navigation}: AppPermissionProps) {
       title: 'call',
       require: 'require',
       content: 'appPermissionGuide2',
-      onPress: onPressCall,
       isOn: permission.call,
     },
     {
       title: 'storage',
       require: 'require',
       content: 'appPermissionGuide3',
-      onPress: onPressStorage,
       isOn: permission.storage,
     },
     {
       title: 'locationInformation',
       require: 'require',
       content: 'appPermissionGuide4',
-      onPress: onPressLocation,
       isOn: permission.locationInformation,
     },
     {
       title: 'cameraGallery',
       require: 'option',
       content: 'appPermissionGuide5',
-      onPress: onPressCamera,
       isOn: permission.cameraGallery,
     },
     {
       title: 'modalMyPageAlarm',
       require: 'option',
       content: 'appPermissionGuide6',
-      onPress: onPressAlarm,
       isOn: permission.alarm,
     },
   ];
@@ -167,21 +126,10 @@ export default function AppPermission({navigation}: AppPermissionProps) {
         <Text fontSize={`${24 * fontSize}`} medium>
           {t('appPermissionGuide')}
         </Text>
-        <TouchableOpacity
-          onPress={onPressAll}
-          style={[styles.rowTouch, styles.marginTop30]}>
-          <CheckBoxImage isBox />
-          <Text style={styles.marginText} fontSize={`${16 * fontSize}`} medium>
-            {t('allCheck')}
-          </Text>
-        </TouchableOpacity>
-        <Line isGray style={{marginBottom: getHeightPixel(16)}} />
+
         {menuList.map(item => {
           return (
-            <TouchableOpacity
-              onPress={item.onPress}
-              style={styles.rowTouch}
-              key={item.title}>
+            <TouchableOpacity style={styles.rowTouch} key={item.title}>
               <View style={styles.permissionView}>
                 <CheckBoxImage isOn={item.isOn} isBox />
               </View>
@@ -214,19 +162,7 @@ export default function AppPermission({navigation}: AppPermissionProps) {
           );
         })}
       </View>
-      <Button
-        content={t('next')}
-        onPress={() => {
-          navigation.reset({
-            routes: [
-              {
-                name: 'Home',
-              },
-            ],
-          });
-        }}
-        style={styles.button}
-      />
+      <Button content={t('next')} onPress={onPressAll} style={styles.button} />
     </View>
   );
 }

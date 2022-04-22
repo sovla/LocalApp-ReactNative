@@ -33,7 +33,13 @@ const ProductWhiteBox: React.FC<ProductWhiteBoxProps> = ({
   const {value: isReview, on: onIsReview, off: offIsReview} = useBoolean(false);
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        {
+          height: isComplete ? getHeightPixel(132) : getHeightPixel(90),
+        },
+      ]}>
       <View style={styles.contentContainer}>
         <Image
           source={require('@assets/image/dummy.png')}
@@ -62,20 +68,25 @@ const ProductWhiteBox: React.FC<ProductWhiteBoxProps> = ({
           <AutoHeightImage source={MoreIcon} width={getPixel(19.2)} />
         </TouchableOpacity>
       </View>
-      <View style={styles.menuView}>
-        <TouchableOpacity style={styles.menuLeftTouch}>
-          <Text fontSize={`${12 * fontSize}`}>
-            {t(isComplete ? 'MyProductMenu3' : 'MyProductMenu1')}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={isComplete ? onIsReview : () => {}}
-          style={styles.menuRightTouch}>
-          <Text fontSize={`${12 * fontSize}`}>
-            {t(isComplete ? 'MyProductMenu4' : 'MyProductMenu2')}
-          </Text>
-        </TouchableOpacity>
-      </View>
+      {isComplete && (
+        <>
+          <View style={styles.menuView}>
+            <TouchableOpacity style={styles.menuLeftTouch}>
+              <Text fontSize={`${12 * fontSize}`}>
+                {t(isComplete ? 'MyProductMenu3' : 'MyProductMenu1')}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={isComplete ? onIsReview : () => {}}
+              style={styles.menuRightTouch}>
+              <Text fontSize={`${12 * fontSize}`}>
+                {t(isComplete ? 'MyProductMenu4' : 'MyProductMenu2')}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </>
+      )}
+
       {isEditProduct && (
         <EditModal
           onClose={offIsEditProduct}
@@ -92,9 +103,8 @@ export default ProductWhiteBox;
 const styles = StyleSheet.create({
   container: {
     width: getPixel(328),
-    height: getHeightPixel(132),
     backgroundColor: Theme.color.white,
-    borderRadius: getPixel(10),
+    borderRadius: 10,
     marginBottom: getHeightPixel(8),
     marginHorizontal: getPixel(16),
     paddingTop: getHeightPixel(13),

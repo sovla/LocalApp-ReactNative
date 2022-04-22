@@ -18,7 +18,7 @@ import LikeIcon from '@assets/image/heart.png';
 import LikeEmptyIcon from '@assets/image/unlike.png';
 import LikeFillIcon from '@assets/image/love_pink.png';
 import dummy from '@assets/image/dummy.png';
-import {getHitSlop} from '@/Util/Util';
+import {checkEmpty, getHitSlop, strEmptyCheck} from '@/Util/Util';
 
 const Product: React.FC<ProductProps> = ({
   title,
@@ -75,7 +75,8 @@ const Product: React.FC<ProductProps> = ({
             </WhiteText>
           </View>
         )}
-        {status === '판매완료' && (
+        {/* 백그라운드 오버레이 */}
+        {strEmptyCheck(status) && (
           <View
             style={{
               position: 'absolute',
@@ -154,7 +155,7 @@ const Product: React.FC<ProductProps> = ({
             </WhiteText>
           </View>
         )}
-        {status === '판매완료' && <View style={styles.backgroundView} />}
+        {strEmptyCheck(status) && <View style={styles.backgroundView} />}
       </View>
       <View style={styles.contentView}>
         <MediumText fontSize={`${14 * fontSize}`}>{title}</MediumText>

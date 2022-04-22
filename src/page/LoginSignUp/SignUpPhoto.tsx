@@ -78,6 +78,7 @@ import SuccessIcon from '@assets/image/success.png';
 import CameraRoll from '@react-native-community/cameraroll';
 import Photo from '@Components/LoginSignUp/Photo';
 import {ImageOrVideo} from 'react-native-image-crop-picker';
+import FastImage from 'react-native-fast-image';
 
 export default function SignUpPhoto({navigation}: SignUpPhotoProps) {
   const {t} = useTranslation();
@@ -86,18 +87,17 @@ export default function SignUpPhoto({navigation}: SignUpPhotoProps) {
     undefined,
   );
   const [imageArray, setImageArray] = useState<any>([1]);
-  const [number, setNumber] = useState<number>(100);
+  const [number, setNumber] = useState<number>(10000);
   const [selectNumber, setSelectNumber] = useState<number>(0);
 
   const getPhotos = () => {
     CameraRoll.getPhotos({
       first: number,
     }).then(value => {
-      console.log(value);
       setImageArray(value.edges);
       setNumber((prev: number) => {
         if (value.page_info.has_next_page) {
-          return prev + 100;
+          return prev + 10000;
         } else {
           return prev;
         }
@@ -106,7 +106,6 @@ export default function SignUpPhoto({navigation}: SignUpPhotoProps) {
   };
 
   const onPressComplete = () => {
-    console.log(imageArray[selectNumber - 1]);
     navigation.navigate('SignUpForm', {
       imagePath:
         selectNumber === 1
@@ -152,10 +151,10 @@ export default function SignUpPhoto({navigation}: SignUpPhotoProps) {
             <WhiteText fontSize={`${12 * fontSize}`}>1</WhiteText>
           </View>
           <Image
+            style={styles.imageBox}
             source={{
               uri: item.node.image.uri,
             }}
-            style={styles.imageBox}
           />
         </TouchableOpacity>
       );
@@ -188,7 +187,7 @@ export default function SignUpPhoto({navigation}: SignUpPhotoProps) {
           paddingBottom: getHeightPixel(40),
         }}
         getItemLayout={(data, index) => ({
-          length: getPixel(106),
+          length: getPixel(110),
           offset: getHeightPixel(112) * index,
           index,
         })}
@@ -197,6 +196,9 @@ export default function SignUpPhoto({navigation}: SignUpPhotoProps) {
         }}
         onEndReachedThreshold={0.3}
         renderItem={_renderItem}
+        maxToRenderPerBatch={25}
+        initialNumToRender={25}
+        removeClippedSubviews
       />
     </View>
   );

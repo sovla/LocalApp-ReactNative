@@ -25,46 +25,28 @@ const Header: React.FC = () => {
   const fontSize = useAppSelector(state => state.fontSize.value);
   const [selectMenu, setSelectMenu] = useState('전체보기');
   const navigation = useAppNavigation();
+  const chattingMenu = ['chattingMenu1', 'chattingMenu2', 'chattingMenu3'];
   return (
     <ImageBackground style={styles.headerContainer} source={BackGroundImage}>
       <RowBox>
         <Picker
-          style={{
-            width: getPixel(120),
-            height: getHeightPixel(50),
-            color: Theme.color.white,
-            fontSize: fontSize * 18,
-            fontFamily: Theme.fontWeight.medium,
-          }}
+          style={styles.pickerStyle}
           selectedValue={selectMenu}
           onValueChange={setSelectMenu}>
-          <Picker.Item
-            style={{
-              color: Theme.color.white,
-              fontSize: fontSize * 18,
-              fontFamily: Theme.fontWeight.medium,
-            }}
-            label={'전체보기'}
-            value={'전체보기'}
-          />
-          <Picker.Item
-            style={{
-              color: Theme.color.white,
-              fontSize: fontSize * 18,
-              fontFamily: Theme.fontWeight.medium,
-            }}
-            label={'구매'}
-            value={'구매'}
-          />
-          <Picker.Item
-            style={{
-              color: Theme.color.white,
-              fontSize: fontSize * 18,
-              fontFamily: Theme.fontWeight.medium,
-            }}
-            label={'판매'}
-            value={'판매'}
-          />
+          {chattingMenu.map(v => {
+            return (
+              <Picker.Item
+                style={{
+                  ...styles.pickerItem,
+                  fontSize: fontSize * 18,
+                  color: Theme.color.black,
+                  backgroundColor: '#0000',
+                }}
+                label={t(v)}
+                value={t(v)}
+              />
+            );
+          })}
         </Picker>
       </RowBox>
       <RowBox>
@@ -94,6 +76,15 @@ const Header: React.FC = () => {
 export default Header;
 
 const styles = StyleSheet.create({
+  pickerItem: {
+    fontFamily: Theme.fontWeight.medium,
+  },
+  pickerStyle: {
+    width: getPixel(120),
+    height: getHeightPixel(50),
+    color: Theme.color.white,
+    fontFamily: Theme.fontWeight.medium,
+  },
   headerContainer: {
     width: '100%',
     height: getHeightPixel(50),
@@ -117,7 +108,7 @@ const styles = StyleSheet.create({
     width: getPixel(120),
     height: getHeightPixel(23),
     bottom: -getHeightPixel(32),
-    borderRadius: getPixel(4),
+    borderRadius: 4,
     left: 0,
     justifyContent: 'center',
     alignItems: 'center',

@@ -97,7 +97,7 @@ import Menu from './Menu';
 import ProductTierGuide from './Product/ProductTierGuide';
 import BlockList from './Chatting/BlockList';
 
-const ROUTING: keyof Screen = 'AppPermission';
+const ROUTING: keyof Screen = 'OnBoarding';
 
 const resources = {
   en,

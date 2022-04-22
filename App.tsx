@@ -17,7 +17,9 @@ import Geolocation from '@react-native-community/geolocation';
 
 const App = () => {
   useEffect(() => {
-    SplashScreen.hide();
+    setTimeout(() => {
+      SplashScreen.hide();
+    }, 1500);
     // Geolocation.getCurrentPosition(info => console.log(info));
   }, []);
   return (

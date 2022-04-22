@@ -172,6 +172,9 @@ export default function ChattingDetail({navigation}: ChattingDetailProps) {
             1, 2, 3, 4, 5, 6, 7, 81, 2, 3, 4, 5, 6, 7, 81, 2, 3, 4, 5, 6, 7, 81,
             2, 3, 4, 5, 6, 7, 81, 2, 3, 4, 5, 6, 7, 8,
           ]}
+          contentContainerStyle={{
+            paddingBottom: getHeightPixel(200),
+          }}
           renderItem={({v, index}) => {
             return (
               <>
@@ -313,7 +316,7 @@ const styles = StyleSheet.create({
     width: getPixel(254),
     height: getHeightPixel(40),
 
-    borderRadius: getPixel(10),
+    borderRadius: 10,
     backgroundColor: Theme.color.whiteGray_FA,
     borderColor: Theme.color.whiteGray_F2,
     borderWidth: 1,

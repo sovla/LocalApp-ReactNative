@@ -1,4 +1,11 @@
-import {Image, Modal, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  Modal,
+  StyleSheet,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import React, {useCallback} from 'react';
 import Theme from '@/assets/global/Theme';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
@@ -7,6 +14,7 @@ import {Text} from '../Global/text';
 import {useTranslation} from 'react-i18next';
 import {useAppSelector} from '@/Hooks/CustomHook';
 import {ModalPopupProps} from '@/Types/Components/HomeTypes';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const ModalPopup: React.FC<ModalPopupProps> = ({onClose}) => {
   const {t} = useTranslation();
@@ -18,31 +26,39 @@ const ModalPopup: React.FC<ModalPopupProps> = ({onClose}) => {
 
   return (
     <Modal transparent onRequestClose={onClose} visible>
-      <TouchableOpacity
-        onPress={onClose}
-        style={styles.dimTouch}
-        activeOpacity={1}>
+      <View style={styles.dimTouch}>
         <View style={styles.mainView}>
-          <Image
-            source={require('@assets/image/dummy.png')}
-            style={styles.Image}
-          />
+          <ScrollView
+            style={{
+              width: getPixel(280),
+            }}
+            horizontal
+            pagingEnabled>
+            {[1, 2, 3, 4].map(v => {
+              return (
+                <Image
+                  source={require('@assets/image/dummy.png')}
+                  style={styles.Image}
+                />
+              );
+            })}
+          </ScrollView>
           <View style={styles.footerButton}>
             <TouchableOpacity
               onPress={onPressNeverLookAgain}
               style={styles.buttonTouch}>
-              <Text fontSize={`${16 * fontSize}`} color={Theme.color.blue_3D}>
+              <Text fontSize={`${12 * fontSize}`} color={Theme.color.black}>
                 {t('neverLookAgain')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={onClose} style={styles.buttonTouchRight}>
-              <Text fontSize={`${16 * fontSize}`} color={Theme.color.white}>
+              <Text fontSize={`${12 * fontSize}`} color={Theme.color.black}>
                 {t('close')}
               </Text>
             </TouchableOpacity>
           </View>
         </View>
-      </TouchableOpacity>
+      </View>
     </Modal>
   );
 };
@@ -57,8 +73,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   Image: {
-    width: getPixel(250),
-    height: getHeightPixel(200),
+    width: getPixel(280),
+    height: getHeightPixel(235),
   },
   mainView: {
     width: getPixel(280),
@@ -67,15 +83,12 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     alignItems: 'center',
     backgroundColor: Theme.color.white,
-    paddingTop: getHeightPixel(20),
   },
   footerButton: {
-    position: 'absolute',
-    bottom: -1,
-    left: 0,
     width: getPixel(280),
     height: getHeightPixel(45),
     flexDirection: 'row',
+    backgroundColor: Theme.color.white,
   },
   buttonTouch: {
     width: '50%',
@@ -83,8 +96,9 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: Theme.color.blue_3D,
+    borderWidth: 0.5,
+    borderColor: Theme.color.whiteGray_E5,
+    backgroundColor: Theme.color.white,
   },
   buttonTouchRight: {
     width: '50%',
@@ -92,8 +106,8 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Theme.color.blue_3D,
-    borderWidth: 1,
-    borderColor: Theme.color.blue_3D,
+    backgroundColor: Theme.color.white,
+    borderWidth: 0.5,
+    borderColor: Theme.color.whiteGray_E5,
   },
 });
