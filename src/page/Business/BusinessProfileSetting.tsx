@@ -6,7 +6,7 @@ import {
   ScrollView,
   ImageSourcePropType,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useAppSelector} from '@/Hooks/CustomHook';
 import Header from '@/Components/Profile/Header';
@@ -40,6 +40,9 @@ export default function BusinessProfileSetting({
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const [isOn, setIsOn] = useState<boolean>(false);
+  const onPressSave = useCallback(() => {
+    navigation.goBack();
+  }, []);
 
   return (
     <View
@@ -102,6 +105,7 @@ export default function BusinessProfileSetting({
             <Input
               value=""
               width={getPixel(328)}
+              height={getHeightPixel(45)}
               PlaceHolderComponent={() => (
                 <GrayText>
                   {t('businessProfileSettingShopIntroductionPh')}
@@ -232,7 +236,7 @@ export default function BusinessProfileSetting({
             marginTop: getHeightPixel(100),
             marginBottom: getHeightPixel(34),
           }}>
-          <Button content={t('save')} width="328px" />
+          <Button onPress={onPressSave} content={t('save')} width="328px" />
         </View>
       </ScrollView>
     </View>

@@ -1,5 +1,5 @@
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import React, {useCallback} from 'react';
 import Header from '@/Components/LoginSignUp/Header';
 import {t} from 'i18next';
 import {useTranslation} from 'react-i18next';
@@ -11,10 +11,18 @@ import AutoHeightImage from 'react-native-auto-height-image';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import Theme from '@/assets/global/Theme';
 import {Button} from '@/Components/Global/button';
+import {BusinessProfileBannerProps} from '@/Types/Screen/Screen';
 
-export default function BusinessProfileBanner() {
+export default function BusinessProfileBanner({
+  navigation,
+}: BusinessProfileBannerProps) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+
+  const onPressSave = useCallback(() => {
+    navigation.goBack();
+  }, []);
+
   return (
     <View
       style={{
@@ -56,6 +64,7 @@ export default function BusinessProfileBanner() {
           bottom: getHeightPixel(30),
           left: getPixel(16),
         }}
+        onPress={onPressSave}
         width="328px"
         content={t('save')}
       />
