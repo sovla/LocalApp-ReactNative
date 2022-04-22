@@ -48,7 +48,8 @@ const ModalKeyword: React.FC<ModalKeywordProps> = ({onClose, keyword}) => {
         </TouchableOpacity>
 
         <View style={styles.keywordContentView}>
-          <Text fontSize={`${20 * fontSize}`}>{`'${keyword}'`}</Text>
+          {/* <Text fontSize={`${20 * fontSize}`}>{`'${keyword}'`}</Text> */}
+          <Text fontSize={`${20 * fontSize}`}>{`'아이폰11'`}</Text>
           <Text fontSize={`${20 * fontSize}`}>{t('searchModalKeyword')}</Text>
         </View>
 
