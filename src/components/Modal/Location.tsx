@@ -6,12 +6,12 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import Theme from '@/assets/global/Theme';
 import {BoldText, GrayText, MediumText, Text} from '../Global/text';
 import {useTranslation} from 'react-i18next';
-import {useAppSelector} from '@/Hooks/CustomHook';
+import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import SearchIcon from '@assets/image/search.png';
 import MyLocationIcon from '@assets/image/my-location.png';
 import CloseIcon from '@assets/image/close.png';
@@ -22,10 +22,17 @@ import {Shadow} from 'react-native-shadow-2';
 export default function Location({offIsModal}: {offIsModal: any}): JSX.Element {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const navigation = useAppNavigation();
 
   const [isFocus, setIsFocus] = useState<boolean>(false);
   const [value, setValue] = useState<string>('');
   const [usedList, setUsedList] = useState(['Bom retiro', 'Bras']);
+
+  const onPressLocation = useCallback(() => {
+    offIsModal();
+    navigation.navigate('LocationChange');
+  }, []);
+
   return (
     <View style={{flex: 1}}>
       <View style={styles.space} />
@@ -56,9 +63,11 @@ export default function Location({offIsModal}: {offIsModal: any}): JSX.Element {
           </View>
           <View style={styles.locationView}>
             <Image source={MyLocationIcon} style={styles.locationImage} />
-            <MediumText fontSize={`${12 * fontSize}`}>
-              {t('nowLocation')}
-            </MediumText>
+            <TouchableOpacity hitSlop={getHitSlop(5)} onPress={onPressLocation}>
+              <MediumText fontSize={`${12 * fontSize}`}>
+                {t('nowLocation')}
+              </MediumText>
+            </TouchableOpacity>
           </View>
           <View style={styles.line} />
           {!isFocus && (
