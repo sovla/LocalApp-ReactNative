@@ -6,7 +6,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import Theme from '@/assets/global/Theme';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import AutoHeightImage from 'react-native-auto-height-image';
@@ -15,6 +15,7 @@ import {useTranslation} from 'react-i18next';
 import {useAppSelector} from '@/Hooks/CustomHook';
 import {ModalPopupProps} from '@/Types/Components/HomeTypes';
 import {ScrollView} from 'react-native-gesture-handler';
+import {onScrollSlide} from '@/Util/Util';
 
 const ModalPopup: React.FC<ModalPopupProps> = ({onClose}) => {
   const {t} = useTranslation();
@@ -23,26 +24,49 @@ const ModalPopup: React.FC<ModalPopupProps> = ({onClose}) => {
     //  추가필요 다신보지않기
     onClose();
   }, []);
+  const [page, setPage] = useState<number>(0);
 
   return (
     <Modal transparent onRequestClose={onClose} visible>
       <View style={styles.dimTouch}>
         <View style={styles.mainView}>
-          <ScrollView
-            style={{
-              width: getPixel(280),
-            }}
-            horizontal
-            pagingEnabled>
-            {[1, 2, 3, 4].map(v => {
-              return (
-                <Image
-                  source={require('@assets/image/dummy.png')}
-                  style={styles.Image}
-                />
-              );
-            })}
-          </ScrollView>
+          <View style={styles.imageView}>
+            <ScrollView
+              style={{
+                width: getPixel(280),
+              }}
+              horizontal
+              pagingEnabled
+              onMomentumScrollEnd={e => {
+                onScrollSlide(e, setPage, getPixel(280));
+              }}>
+              {[1, 2, 3, 4].map((v, i) => {
+                return (
+                  <Image
+                    key={i}
+                    source={require('@assets/image/dummy.png')}
+                    style={styles.Image}
+                  />
+                );
+              })}
+            </ScrollView>
+            <View style={styles.positionDot}>
+              {[1, 2, 3, 4].map((v, i) => {
+                return (
+                  <View
+                    style={{
+                      width: getPixel(10),
+                      height: getPixel(10),
+                      marginRight: i !== 3 ? getPixel(5) : 0,
+                      backgroundColor:
+                        page === i ? Theme.color.whiteGray_EE : '#fff5',
+                      borderRadius: 100,
+                    }}
+                  />
+                );
+              })}
+            </View>
+          </View>
           <View style={styles.footerButton}>
             <TouchableOpacity
               onPress={onPressNeverLookAgain}
@@ -66,6 +90,20 @@ const ModalPopup: React.FC<ModalPopupProps> = ({onClose}) => {
 export default ModalPopup;
 
 const styles = StyleSheet.create({
+  positionDot: {
+    position: 'absolute',
+    bottom: getHeightPixel(10),
+    left: 0,
+    width: getPixel(280),
+    height: getHeightPixel(20),
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imageView: {
+    width: getPixel(280),
+    height: getHeightPixel(235),
+  },
   dimTouch: {
     flex: 1,
     backgroundColor: '#0007',
