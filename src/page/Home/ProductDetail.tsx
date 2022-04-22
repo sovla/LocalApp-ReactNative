@@ -95,12 +95,20 @@ export default function ProductDetail({navigation}: ProductDetailProps) {
             style={styles.searchWhiteTouch}
             onPress={onPressSearch}
             hitSlop={getHitSlop(5)}>
-            <Image source={SearchWhiteIcon} style={styles.searchWhiteImage} />
+            <Image
+              resizeMode="contain"
+              source={SearchWhiteIcon}
+              style={styles.searchWhiteImage}
+            />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.shareWhiteTouch}
             hitSlop={getHitSlop(5)}>
-            <Image source={ShareWhiteIcon} style={styles.shareWhiteImage} />
+            <Image
+              resizeMode="contain"
+              source={ShareWhiteIcon}
+              style={styles.shareWhiteImage}
+            />
           </TouchableOpacity>
         </View>
         <ProductDetailShop
