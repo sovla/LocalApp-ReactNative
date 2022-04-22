@@ -152,7 +152,7 @@ export default function BusinessProfile({navigation}: BusinessProfileProps) {
                             {index === 0 && (
                               <AutoHeightImage
                                 source={
-                                  isShow
+                                  !isShow
                                     ? require('@assets/image/arrow_down.png')
                                     : require('@assets/image/arrow_up.png')
                                 }
