@@ -25,6 +25,8 @@ import Location from '../Modal/Location';
 import useBoolean from '@/Hooks/useBoolean';
 import ModalFilter from './ModalFilter';
 import ModalMyPage from './ModalMyPage';
+import AutoHeightImage from 'react-native-auto-height-image';
+import ArrowDownWhiteIcon from '@assets/image/arrow_down_white.png';
 
 const Header: React.FC<HeaderProps> = () => {
   const {t} = useTranslation();
@@ -58,6 +60,11 @@ const Header: React.FC<HeaderProps> = () => {
         </Box>
         <TouchableOpacity onPress={toggleIsModal} style={styles.locationTouch}>
           <WhiteText fontSize={`${18 * fontSize}`}>Bom Retiro</WhiteText>
+          <AutoHeightImage
+            source={ArrowDownWhiteIcon}
+            width={getPixel(8)}
+            style={styles.marginLeft5}
+          />
         </TouchableOpacity>
       </RowBox>
       <RowBox>
@@ -101,6 +108,9 @@ const Header: React.FC<HeaderProps> = () => {
 export default Header;
 
 const styles = StyleSheet.create({
+  marginLeft5: {
+    marginLeft: getPixel(5),
+  },
   headerContainer: {
     width: '100%',
     height: getHeightPixel(50),
