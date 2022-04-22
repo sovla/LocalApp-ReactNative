@@ -1,23 +1,27 @@
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
-import React from 'react';
+import React, {useCallback} from 'react';
 import Product from './Product';
 import ProductList from './ProductList';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {BoldText, GrayText} from '../Global/text';
 import {useTranslation} from 'react-i18next';
-import {useAppSelector} from '@/Hooks/CustomHook';
+import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import {getHitSlop} from '@/Util/Util';
 
 export default function ShopSellProduct({shopName}: {shopName: string}) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const navigation = useAppNavigation();
+  const onPressAllView = useCallback(() => {
+    navigation.navigate('ProfileSellProduct');
+  }, []);
   return (
     <View>
       <View style={styles.shopView}>
         <BoldText fontSize={`${14 * fontSize}`}>
           {shopName + t('saleProduct')}
         </BoldText>
-        <TouchableOpacity hitSlop={getHitSlop(5)}>
+        <TouchableOpacity onPress={onPressAllView} hitSlop={getHitSlop(5)}>
           <GrayText fontSize={`${12 * fontSize}`}>{t('allView')}</GrayText>
         </TouchableOpacity>
       </View>

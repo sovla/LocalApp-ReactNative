@@ -69,6 +69,7 @@ export default function ProductDetail({navigation}: ProductDetailProps) {
   const onPressSearch = useCallback(() => {
     navigation.navigate('Search');
   }, []);
+
   return (
     <View
       style={{
