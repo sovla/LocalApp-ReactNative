@@ -118,7 +118,7 @@ export default function ChattingDetail({navigation}: ChattingDetailProps) {
   }, []);
 
   const onPressShopIcon = useCallback(() => {
-    navigation.navigate('BusinessProfile');
+    navigation.navigate('ProfileHome');
   }, []);
 
   return (
@@ -126,11 +126,7 @@ export default function ChattingDetail({navigation}: ChattingDetailProps) {
       style={{
         flex: 1,
       }}>
-      <View
-        style={{
-          maxHeight: getHeightPixel(50),
-          height: getHeightPixel(50),
-        }}>
+      <View style={styles.mainView}>
         <ImageBackground
           style={styles.headerImageBackground}
           source={ChattingBgImage}>
@@ -307,6 +303,10 @@ export default function ChattingDetail({navigation}: ChattingDetailProps) {
 }
 
 const styles = StyleSheet.create({
+  mainView: {
+    maxHeight: getHeightPixel(50),
+    height: getHeightPixel(50),
+  },
   footerSendGray: {
     width: getPixel(30),
     height: getPixel(30),

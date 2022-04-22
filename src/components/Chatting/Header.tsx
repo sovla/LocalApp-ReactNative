@@ -30,15 +30,16 @@ const Header: React.FC = () => {
     <ImageBackground style={styles.headerContainer} source={BackGroundImage}>
       <RowBox>
         <Picker
-          style={styles.pickerStyle}
+          style={{...styles.pickerStyle, fontSize: fontSize * 14}}
           selectedValue={selectMenu}
+          dropdownIconColor={Theme.color.white}
           onValueChange={setSelectMenu}>
           {chattingMenu.map(v => {
             return (
               <Picker.Item
                 style={{
                   ...styles.pickerItem,
-                  fontSize: fontSize * 18,
+                  fontSize: fontSize * 14,
                   color: Theme.color.black,
                   backgroundColor: '#0000',
                 }}
@@ -80,7 +81,7 @@ const styles = StyleSheet.create({
     fontFamily: Theme.fontWeight.medium,
   },
   pickerStyle: {
-    width: getPixel(120),
+    width: getPixel(150),
     height: getHeightPixel(50),
     color: Theme.color.white,
     fontFamily: Theme.fontWeight.medium,
