@@ -17,6 +17,7 @@ import MyLocationIcon from '@assets/image/my-location.png';
 import CloseIcon from '@assets/image/close.png';
 import {getHitSlop} from '@/Util/Util';
 import CloseBlackIcon from '@assets/image/close_black.png';
+import {Shadow} from 'react-native-shadow-2';
 
 export default function Location({offIsModal}: {offIsModal: any}): JSX.Element {
   const {t} = useTranslation();
@@ -28,59 +29,63 @@ export default function Location({offIsModal}: {offIsModal: any}): JSX.Element {
   return (
     <View style={{flex: 1}}>
       <View style={styles.space} />
-      <View style={styles.whiteBox}>
-        <BoldText fontSize={`${20 * fontSize}`}>{t('locationChange')}</BoldText>
+      <Shadow>
+        <View style={styles.whiteBox}>
+          <BoldText fontSize={`${20 * fontSize}`}>
+            {t('locationChange')}
+          </BoldText>
 
-        <View style={{marginTop: getHeightPixel(8)}}>
-          <TextInput
-            style={[
-              styles.textInput,
-              {
-                fontSize: 11 * fontSize,
-              },
-            ]}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
-            onChangeText={setValue}>
-            {!isFocus && value?.length === 0 && (
-              <GrayText fontSize={`${11 * fontSize}`}>
-                {t('locationPlaceholder')}
-              </GrayText>
-            )}
-          </TextInput>
-          <Image source={SearchIcon} style={styles.searchImage} />
-        </View>
-        <View style={styles.locationView}>
-          <Image source={MyLocationIcon} style={styles.locationImage} />
-          <MediumText fontSize={`${12 * fontSize}`}>
-            {t('nowLocation')}
-          </MediumText>
-        </View>
-        <View style={styles.line} />
-        {!isFocus && (
-          <BoldText fontSize={`${14 * fontSize}`}>{t('areaUsed')}</BoldText>
-        )}
+          <View style={{marginTop: getHeightPixel(8)}}>
+            <TextInput
+              style={[
+                styles.textInput,
+                {
+                  fontSize: 11 * fontSize,
+                },
+              ]}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              onChangeText={setValue}>
+              {!isFocus && value?.length === 0 && (
+                <GrayText fontSize={`${11 * fontSize}`}>
+                  {t('locationPlaceholder')}
+                </GrayText>
+              )}
+            </TextInput>
+            <Image source={SearchIcon} style={styles.searchImage} />
+          </View>
+          <View style={styles.locationView}>
+            <Image source={MyLocationIcon} style={styles.locationImage} />
+            <MediumText fontSize={`${12 * fontSize}`}>
+              {t('nowLocation')}
+            </MediumText>
+          </View>
+          <View style={styles.line} />
+          {!isFocus && (
+            <BoldText fontSize={`${14 * fontSize}`}>{t('areaUsed')}</BoldText>
+          )}
 
-        <ScrollView>
-          {!isFocus &&
-            usedList.map(item => {
-              return (
-                <TouchableOpacity style={styles.usedLocationView}>
-                  <Text fontSize={`${14 * fontSize}`}>{item}</Text>
-                  <TouchableOpacity hitSlop={getHitSlop(5)}>
-                    <Image source={CloseIcon} style={styles.deleteIcon} />
+          <ScrollView>
+            {!isFocus &&
+              usedList.map(item => {
+                return (
+                  <TouchableOpacity style={styles.usedLocationView}>
+                    <Text fontSize={`${14 * fontSize}`}>{item}</Text>
+                    <TouchableOpacity hitSlop={getHitSlop(5)}>
+                      <Image source={CloseIcon} style={styles.deleteIcon} />
+                    </TouchableOpacity>
                   </TouchableOpacity>
-                </TouchableOpacity>
-              );
-            })}
-        </ScrollView>
-        <TouchableOpacity
-          style={styles.closeBlackTouch}
-          onPress={offIsModal}
-          hitSlop={getHitSlop(5)}>
-          <Image source={CloseBlackIcon} style={styles.closeBlackImage} />
-        </TouchableOpacity>
-      </View>
+                );
+              })}
+          </ScrollView>
+          <TouchableOpacity
+            style={styles.closeBlackTouch}
+            onPress={offIsModal}
+            hitSlop={getHitSlop(5)}>
+            <Image source={CloseBlackIcon} style={styles.closeBlackImage} />
+          </TouchableOpacity>
+        </View>
+      </Shadow>
     </View>
   );
 }
