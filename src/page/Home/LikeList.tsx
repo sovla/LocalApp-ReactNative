@@ -44,9 +44,8 @@ export default function LikeList({navigation}: LikeListProps) {
   }, []);
 
   return (
-    <KeyboardAvoidingView
-      style={{backgroundColor: Theme.color.whiteGray_F6, flex: 1}}>
-      {/* <ImageBackground style={styles.headerContainer} source={BackGroundImage}>
+    <View style={{flex: 1, backgroundColor: Theme.color.whiteGray_F7}}>
+      <ImageBackground style={styles.headerContainer} source={BackGroundImage}>
         <View style={styles.headerLeftView}>
           <Image source={BackWhiteIcon} style={styles.backWhiteImage} />
           <WhiteText medium fontSize={`${20 * fontSize}`}>
@@ -110,35 +109,8 @@ export default function LikeList({navigation}: LikeListProps) {
           );
         }}
       />
-      <Footer menu="favorite" /> */}
-      <ScrollView>
-        {[1, 2, 3, 1, 2, 3, 2, 3, 31, 1, 2, 13, 123, 12, 312, 3].map(v => (
-          <Image
-            source={1}
-            style={{
-              width: getPixel(200),
-              height: getPixel(200),
-            }}
-          />
-        ))}
-      </ScrollView>
-      <View
-        style={{
-          width: getPixel(360),
-          height: getHeightPixel(100),
-          paddingBottom: getHeightPixel(50),
-          backgroundColor: 'blue',
-          flexDirection: 'row',
-        }}>
-        <TextInput
-          style={{
-            backgroundColor: 'red',
-            height: getHeightPixel(50),
-            marginBottom: getHeightPixel(50),
-          }}
-        />
-      </View>
-    </KeyboardAvoidingView>
+      <Footer menu="favorite" />
+    </View>
   );
 }
 

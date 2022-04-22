@@ -97,7 +97,7 @@ import Menu from './Menu';
 import ProductTierGuide from './Product/ProductTierGuide';
 import BlockList from './Chatting/BlockList';
 
-const ROUTING: keyof Screen = 'SignUpForm';
+const ROUTING: keyof Screen = 'AppPermission';
 
 const resources = {
   en,
