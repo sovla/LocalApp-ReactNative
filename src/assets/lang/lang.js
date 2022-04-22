@@ -248,6 +248,7 @@ export const ko = {
     deleteAccountGuide5: '모든 정보를 삭제하는 것에 동의합니까?',
     message: '메시지',
     messageAlarm: '메시지 알림',
+    alarmSoundSetting: '알림음 설정',
     vibration: '진동',
     alarmShow: '알림표시',
     alarmShowGuide: '화면 상단에 알림 미리보기 표시',
