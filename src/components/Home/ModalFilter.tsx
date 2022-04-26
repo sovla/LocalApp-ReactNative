@@ -116,7 +116,7 @@ const ModalFilter: React.FC<ModalFilterProps> = ({onClose}) => {
               <View style={styles.priceText}>
                 <TextInput
                   keyboardType="numeric"
-                  placeholder="0"
+                  placeholder="R$ 0"
                   style={[
                     styles.priceTextInput,
                     {
@@ -183,61 +183,61 @@ export const SlideRightModal: React.FC<ModalFilterProps> = ({
   children,
   onClose,
 }) => {
-  const pan = useRef(new Animated.ValueXY({x: getPixel(310), y: 0})).current;
+  // const pan = useRef(new Animated.ValueXY({x: getPixel(310), y: 0})).current;
 
-  const panResponder = PanResponder.create({
-    onStartShouldSetPanResponder: () => true,
-    onPanResponderMove: Animated.event(
-      [
-        null,
-        {
-          dx: pan.x, // x,y are Animated.Value
-        },
-      ],
-      {useNativeDriver: false},
-    ),
+  // const panResponder = PanResponder.create({
+  //   onStartShouldSetPanResponder: () => true,
+  //   onPanResponderMove: Animated.event(
+  //     [
+  //       null,
+  //       {
+  //         dx: pan.x, // x,y are Animated.Value
+  //       },
+  //     ],
+  //     {useNativeDriver: false},
+  //   ),
 
-    onPanResponderRelease: (e, g) => {
-      if (g.dx > 150) {
-        Animated.spring(
-          pan, // Auto-multiplexed
-          {
-            toValue: {x: getPixel(310), y: 0},
-            useNativeDriver: true,
-            bounciness: 0,
-          }, // Back to zero
-        ).start();
-        setTimeout(() => {
-          onClose();
-        }, 250);
-      } else {
-        Animated.spring(
-          pan, // Auto-multiplexed
-          {
-            toValue: {x: 0, y: 0},
-            useNativeDriver: true,
-            bounciness: 0,
-          }, // Back to zero
-        ).start();
-      }
-    },
-  });
+  //   onPanResponderRelease: (e, g) => {
+  //     if (g.dx > 150) {
+  //       Animated.spring(
+  //         pan, // Auto-multiplexed
+  //         {
+  //           toValue: {x: getPixel(310), y: 0},
+  //           useNativeDriver: true,
+  //           bounciness: 0,
+  //         }, // Back to zero
+  //       ).start();
+  //       setTimeout(() => {
+  //         onClose();
+  //       }, 250);
+  //     } else {
+  //       Animated.spring(
+  //         pan, // Auto-multiplexed
+  //         {
+  //           toValue: {x: 0, y: 0},
+  //           useNativeDriver: true,
+  //           bounciness: 0,
+  //         }, // Back to zero
+  //       ).start();
+  //     }
+  //   },
+  // });
 
-  useEffect(() => {
-    Animated.spring(
-      pan, // Auto-multiplexed
-      {
-        toValue: {x: 0, y: 0},
-        useNativeDriver: true,
-        bounciness: 0,
-      }, // Back to zero
-    ).start();
-  }, []);
+  // useEffect(() => {
+  //   Animated.spring(
+  //     pan, // Auto-multiplexed
+  //     {
+  //       toValue: {x: 0, y: 0},
+  //       useNativeDriver: true,
+  //       bounciness: 0,
+  //     }, // Back to zero
+  //   ).start();
+  // }, []);
 
   return (
     <Animated.View
-      {...panResponder.panHandlers}
-      style={[styles.animatedContainer, pan.getTranslateTransform()]}>
+      // {...panResponder.panHandlers } pan.getTranslateTransform()
+      style={[styles.animatedContainer]}>
       {children}
     </Animated.View>
   );

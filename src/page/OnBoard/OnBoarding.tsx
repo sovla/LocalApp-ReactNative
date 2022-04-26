@@ -54,7 +54,7 @@ export default function OnBoarding({navigation}: OnBoardingProps) {
       <FlatList
         data={[1, 2, 3, 4]}
         style={{
-          width: '100%',
+          flex: 1,
         }}
         horizontal
         pagingEnabled
@@ -69,7 +69,7 @@ export default function OnBoarding({navigation}: OnBoardingProps) {
               activeOpacity={0.75}
               style={{
                 width: getPixel(360),
-                height: getHeightPixel(720),
+                height: getHeightPixel(740),
                 backgroundColor: color[index],
               }}>
               <Image source={Logo2Image} style={styles.logoImage} />

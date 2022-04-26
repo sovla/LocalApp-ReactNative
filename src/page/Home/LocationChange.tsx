@@ -26,8 +26,11 @@ import {Slider} from '@miblanchard/react-native-slider';
 import MapPersonIcon from '@assets/image/map_person.png';
 import AutoHeightImage from 'react-native-auto-height-image';
 import {rangeList} from '@/assets/global/dummy';
+import {LocationChangeProps} from '@/Types/Screen/Screen';
 
-export default function LocationChange(): JSX.Element {
+export default function LocationChange({
+  navigation,
+}: LocationChangeProps): JSX.Element {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const location = 'Bom retiro';
@@ -133,7 +136,9 @@ export default function LocationChange(): JSX.Element {
           </View>
         </View>
       </View>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity
+        onPress={() => navigation.goBack()}
+        style={styles.button}>
         <WhiteText medium fontSize={`${18 * fontSize}`}>
           선택한 위치로 설정
         </WhiteText>

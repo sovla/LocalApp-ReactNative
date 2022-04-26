@@ -25,7 +25,7 @@ export default function ShopSellProduct({shopName}: {shopName: string}) {
           <GrayText fontSize={`${12 * fontSize}`}>{t('allView')}</GrayText>
         </TouchableOpacity>
       </View>
-      <ProductList isList={false} list={[1, 1, 1, 1, 1]} isBorder />
+      <ProductList isList={false} list={[1, 1, 1, 1]} isBorder />
     </View>
   );
 }

@@ -31,9 +31,12 @@ import ModalKeyword from '@/Components/Home/ModalKeyword';
 import CloseBlackIcon from '@assets/image/close_black.png';
 import {SearchProps} from '@/Types/Screen/Screen';
 import {categoryMenuTypes} from '@/Types/Components/global';
-import {useIsFocused} from '@react-navigation/native';
+import {NavigationRouteContext, useIsFocused} from '@react-navigation/native';
 
-export default function Search({route: {params}}: SearchProps): JSX.Element {
+export default function Search({
+  route: {params},
+  navigation,
+}: SearchProps): JSX.Element {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const isFocused = useIsFocused();
@@ -81,6 +84,10 @@ export default function Search({route: {params}}: SearchProps): JSX.Element {
   }, [isFocused]);
   const isSearch =
     searchText.length > 0 || (selectKeyword && selectKeyword?.length > 0);
+
+  const onPressItem = useCallback(() => {
+    navigation.navigate('ProductDetail');
+  }, []);
   return (
     <View style={styles.mainContainer}>
       <SearchHeader
@@ -115,7 +122,11 @@ export default function Search({route: {params}}: SearchProps): JSX.Element {
                 />
               </TouchableOpacity>
             </View>
-            <ProductList list={[1, 2, 3, 4, 5]} isList={isList} />
+            <ProductList
+              list={[1, 2, 3, 4, 5]}
+              isList={isList}
+              onPressItem={onPressItem}
+            />
             <Modal visible={isFilter} transparent onRequestClose={offIsFilter}>
               {isFilter && <ModalFilter onClose={offIsFilter} />}
             </Modal>
