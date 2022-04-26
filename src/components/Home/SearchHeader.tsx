@@ -67,9 +67,9 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
           onChangeText={setText}
         />
 
-        <TouchableOpacity style={styles.closeGrayTouch}>
+        {/* <TouchableOpacity style={styles.closeGrayTouch}>
           <Image source={CloseGrayIcon} style={styles.closeGrayImage} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </ImageBackground>
   );

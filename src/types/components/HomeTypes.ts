@@ -76,6 +76,7 @@ export interface ProductState {
   Reaper: boolean;
   used: boolean;
   forParts: boolean;
+  donation: boolean;
 }
 
 export interface ModalKeywordProps extends ModalProps {

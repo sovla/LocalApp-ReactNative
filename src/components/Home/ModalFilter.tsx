@@ -30,6 +30,7 @@ const ModalFilter: React.FC<ModalFilterProps> = ({onClose}) => {
     Reaper: false,
     used: false,
     forParts: false,
+    donation: false,
   });
 
   const {t} = useTranslation();
@@ -60,6 +61,10 @@ const ModalFilter: React.FC<ModalFilterProps> = ({onClose}) => {
     {
       text: 'searchModalProductState4',
       name: 'forParts',
+    },
+    {
+      text: 'donation',
+      name: 'donation',
     },
   ];
 
@@ -97,14 +102,17 @@ const ModalFilter: React.FC<ModalFilterProps> = ({onClose}) => {
                   );
                 })}
             </View>
+
             <Line
               backgroundColor={Theme.color.gray}
               style={styles.lineMargin}
             />
+
             <View>
               <MediumText fontSize={`${18 * fontSize}`}>
                 {t('searchModalPriceRange')}
               </MediumText>
+
               <View style={styles.priceText}>
                 <TextInput
                   keyboardType="numeric"

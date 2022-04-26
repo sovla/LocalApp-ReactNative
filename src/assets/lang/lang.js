@@ -121,7 +121,7 @@ export const ko = {
     searchModalFilter: '검색 필터',
     searchModalsort: '정렬',
     searchModalPriceRange: '가격범위',
-    searchModalTextInputPlaceHolder: '제한없음',
+    searchModalTextInputPlaceHolder: 'R$ 5.000.000',
     searchModalSortItem1: '최신순',
     searchModalSortItem2: '높은 가격순',
     searchModalSortItem3: '낮은 가격순',
