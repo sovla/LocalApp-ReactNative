@@ -58,14 +58,11 @@ export default function ReportDetail({
   const naviState = useNavigationState(state => state);
   const onPressReport = useCallback(() => {
     // 수정필요 API치기
-    const count = reportType == 'prohibited' ? 0 : 1;
-    navigation.reset({
-      index: naviState.index - count,
-      routes: naviState.routes.filter(
-        (value, index) => index < naviState.index - count,
-      ),
-    });
-  }, [naviState]);
+    const count = reportType == 'prohibited' ? 1 : 2;
+
+    console.log();
+    navigation.pop(count);
+  }, [naviState, reportType]);
 
   return (
     <KeyboardAvoidingView

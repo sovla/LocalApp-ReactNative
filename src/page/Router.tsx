@@ -148,7 +148,6 @@ export default function Router() {
   }, []);
   useEffect(() => {
     setIsLanguageChange(true);
-    console.log(lang);
     i18n
       .changeLanguage(lang)
       .then(v => {
@@ -204,9 +203,9 @@ const withScrollView = (WrappedComponent: any) => {
         <SafeAreaView style={{flex: 1}}>
           <View style={{flex: 1, backgroundColor: Theme.color.white}}>
             <WrappedComponent {...props} />
-            <View style={[styles.position]}>
+            {/* <View style={[styles.position]}>
               <Text>{props.route.name}</Text>
-            </View>
+            </View> */}
           </View>
         </SafeAreaView>
         <SafeAreaView style={{flex: 0, backgroundColor: '#fff'}} />

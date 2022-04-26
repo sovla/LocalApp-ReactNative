@@ -11,7 +11,7 @@ import Header from '@/Components/LoginSignUp/Header';
 import ArrowRightIcon from '@assets/image/arrow_right.png';
 import {ReportCategoryProps} from '@/Types/Screen/Screen';
 
-export default function ReportCategory({isUser}: ReportCategoryProps) {
+export default function ReportCategory({}: ReportCategoryProps) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const navigation = useAppNavigation();
