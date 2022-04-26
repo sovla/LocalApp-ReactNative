@@ -66,7 +66,9 @@ export default function ProductDetail({navigation}: ProductDetailProps) {
     navigation.navigate('ProductTierGuide');
   }, []);
   const onPressReport = useCallback(() => {
-    navigation.navigate('ReportCategory');
+    navigation.navigate('ReportDetail', {
+      reportType: 'prohibited',
+    });
   }, []);
   const onPressShop = useCallback(() => {
     navigation.navigate('BusinessProfile');

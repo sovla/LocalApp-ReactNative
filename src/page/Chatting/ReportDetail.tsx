@@ -19,7 +19,7 @@ import {Button, CheckBoxImage} from '@/Components/Global/button';
 import Line from '@/Components/Global/Line';
 import {TextInput} from 'react-native-gesture-handler';
 
-import Screen, {ReportDetailProps} from '@/Types/Screen/Screen';
+import {ReportDetailProps} from '@/Types/Screen/Screen';
 import {useNavigationState} from '@react-navigation/native';
 
 export default function ReportDetail({
@@ -58,11 +58,11 @@ export default function ReportDetail({
   const naviState = useNavigationState(state => state);
   const onPressReport = useCallback(() => {
     // 수정필요 API치기
-
+    const count = reportType == 'prohibited' ? 0 : 1;
     navigation.reset({
-      index: naviState.index - 1,
+      index: naviState.index - count,
       routes: naviState.routes.filter(
-        (value, index) => index < naviState.index - 1,
+        (value, index) => index < naviState.index - count,
       ),
     });
   }, [naviState]);
