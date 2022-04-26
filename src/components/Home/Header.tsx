@@ -15,7 +15,7 @@ import SearchIcon from '@assets/image/search_white.png';
 import MenuIcon from '@assets/image/bar_white.png';
 import AlarmIcon from '@assets/image/notice_white.png';
 import {Box, RowBox} from '../Global/container';
-import {WhiteText} from '../Global/text';
+import {Text, WhiteText} from '../Global/text';
 import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
@@ -28,7 +28,7 @@ import ModalMyPage from './ModalMyPage';
 import AutoHeightImage from 'react-native-auto-height-image';
 import ArrowDownWhiteIcon from '@assets/image/arrow_down_white.png';
 
-const Header: React.FC<HeaderProps> = () => {
+const Header: React.FC<HeaderProps> = ({isChange}) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const navigation = useAppNavigation();
@@ -45,23 +45,49 @@ const Header: React.FC<HeaderProps> = () => {
     toggle: toggleIsMenu,
   } = useBoolean(false);
 
+  const textColor = isChange ? Theme.color.black : Theme.color.white;
+
   return (
-    <ImageBackground style={styles.headerContainer} source={BackGroundImage}>
+    <ImageBackground
+      style={[
+        styles.headerContainer,
+        isChange && {
+          backgroundColor: Theme.color.white,
+        },
+      ]}
+      source={BackGroundImage}
+      imageStyle={{
+        opacity: isChange ? 0 : 1,
+      }}>
       <RowBox>
         <Box style={styles.firstIcon}>
-          <Image style={[styles.icon]} source={LocationWhiteIcon} />
+          <Image
+            style={[styles.icon]}
+            source={
+              isChange
+                ? require('@assets/image/location_black.png')
+                : require('@assets/image/location_white.png')
+            }
+          />
 
           <View style={styles.locationCheck}>
             <Image source={TrianglePinkIcon} style={styles.locationCheckIcon} />
+
             <WhiteText fontSize={`${12 * fontSize}px`}>
               {t('locationCheck')}
             </WhiteText>
           </View>
         </Box>
         <TouchableOpacity onPress={toggleIsModal} style={styles.locationTouch}>
-          <WhiteText fontSize={`${18 * fontSize}`}>Bom Retiro</WhiteText>
+          <Text color={textColor} fontSize={`${18 * fontSize}`}>
+            Bom Retiro
+          </Text>
           <AutoHeightImage
-            source={ArrowDownWhiteIcon}
+            source={
+              isChange
+                ? require('@assets/image/arrow_down.png')
+                : require('@assets/image/arrow_down_white.png')
+            }
             width={getPixel(8)}
             style={styles.marginLeft5}
           />
@@ -72,19 +98,40 @@ const Header: React.FC<HeaderProps> = () => {
           onPress={() => {
             navigation.navigate('Search');
           }}>
-          <Image style={styles.icon} source={SearchIcon} />
+          <Image
+            style={styles.icon}
+            source={
+              isChange
+                ? require('@assets/image/search_black.png')
+                : require('@assets/image/search_white.png')
+            }
+          />
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('AllCategory');
           }}>
-          <Image style={styles.icon} source={MenuIcon} />
+          <Image
+            style={styles.icon}
+            source={
+              isChange
+                ? require('@assets/image/bar_black.png')
+                : require('@assets/image/bar_white.png')
+            }
+          />
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('AlarmList');
           }}>
-          <Image style={styles.icon} source={AlarmIcon} />
+          <Image
+            style={styles.icon}
+            source={
+              isChange
+                ? require('@assets/image/notice_black.png')
+                : require('@assets/image/notice_white.png')
+            }
+          />
         </TouchableOpacity>
       </RowBox>
       {isModal && (

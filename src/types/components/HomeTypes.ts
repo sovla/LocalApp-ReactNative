@@ -30,7 +30,9 @@ export interface MenuBoxProps {
   onPressMenu?: () => void;
 }
 
-export interface HeaderProps {}
+export interface HeaderProps {
+  isChange?: boolean;
+}
 
 export interface NavigationHeaderProps {
   title?: string;

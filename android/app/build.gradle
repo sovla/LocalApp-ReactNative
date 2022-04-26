@@ -190,8 +190,6 @@ android {
 }
 
 dependencies {
-    //  리액트 네이티브 푸쉬 소리 변경
-    compile project(':react-native-notification-sounds')
     // Import the Firebase BoM
     implementation platform('com.google.firebase:firebase-bom:29.3.1')
 

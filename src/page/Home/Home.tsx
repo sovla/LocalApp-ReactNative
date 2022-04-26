@@ -4,6 +4,8 @@ import {
   Modal,
   TouchableOpacity,
   StyleSheet,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
 } from 'react-native';
 import React, {useCallback, useState} from 'react';
 import Header from '@/Components/Home/Header';
@@ -27,14 +29,27 @@ export default function Home({navigation}: HomeProps): JSX.Element {
 
   const {value: isUpload, on: onUpload, off: offUpload} = useBoolean(false);
   const {value: isPopup, on: onIsPopup, off: offIsPopup} = useBoolean(true);
+  const {value: isChange, on: onIsChange, off: offIsChange} = useBoolean(false);
+
   const onPressItem = useCallback(item => {
     navigation.navigate('ProductDetail', item);
   }, []);
 
+  const onScroll = useCallback(
+    (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+      if (event.nativeEvent.contentOffset.y > getHeightPixel(160)) {
+        onIsChange();
+      } else {
+        offIsChange();
+      }
+    },
+    [],
+  );
+
   return (
     <View style={{flex: 1, backgroundColor: Theme.color.whiteGray_F6}}>
-      <Header />
-      <ScrollView>
+      <Header isChange={isChange} />
+      <ScrollView onScroll={onScroll}>
         <CategoryScroll key="CategoryScroll" />
         <HomeList
           key="HomeList"
