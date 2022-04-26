@@ -13,7 +13,7 @@ import {ProfileBackground} from '../Profile/ProfileHome';
 import StoreIcon from '@assets/image/store.png';
 import AdIcon from '@assets/image/ad.png';
 import AutoHeightImage from 'react-native-auto-height-image';
-import Line from '@/Components/Global/Line';
+import CopyIcon from '@assets/image/copy.png';
 import ArrowRightIcon from '@assets/image/arrow_right.png';
 import Theme from '@/assets/global/Theme';
 import {StackScreenProps} from '@react-navigation/stack';
@@ -53,6 +53,14 @@ export default function BusinessProfileMenu({
             <GrayText fontSize={`${12 * fontSize}`}>
               Love what you have.
             </GrayText>
+            <View style={styles.uidView}>
+              <WhiteText fontSize={`${14 * fontSize}`}>NC : 0000abcd</WhiteText>
+              <TouchableOpacity
+                style={styles.marginLeft10}
+                hitSlop={getHitSlop(5)}>
+                <AutoHeightImage source={CopyIcon} width={getPixel(16)} />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </View>
@@ -98,6 +106,14 @@ export default function BusinessProfileMenu({
   );
 }
 const styles = StyleSheet.create({
+  uidView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: getHeightPixel(15),
+  },
+  marginLeft10: {
+    marginLeft: getPixel(10),
+  },
   headerView: {height: getHeightPixel(200), marginBottom: getHeightPixel(10)},
   menuArrowImage: {marginRight: getPixel(10)},
   menuText: {marginLeft: getPixel(12)},

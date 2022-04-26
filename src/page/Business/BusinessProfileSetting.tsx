@@ -5,6 +5,7 @@ import {
   TextInput,
   ScrollView,
   ImageSourcePropType,
+  TouchableOpacity,
 } from 'react-native';
 import React, {useCallback, useState} from 'react';
 import {useTranslation} from 'react-i18next';
@@ -32,6 +33,8 @@ import FacebookBlueIcon from '@assets/image/facebook_blue.png';
 import InstagramBlueIcon from '@assets/image/instagram_blue.png';
 import WhatsappBlueIcon from '@assets/image/whatsapp_blue.png';
 import AutoHeightImage from 'react-native-auto-height-image';
+import CopyIcon from '@assets/image/copy.png';
+import {getHitSlop} from '@/Util/Util';
 
 export default function BusinessProfileSetting({
   navigation,
@@ -73,6 +76,16 @@ export default function BusinessProfileSetting({
               <GrayText fontSize={`${12 * fontSize}`}>
                 Love what you have.
               </GrayText>
+              <View style={styles.uidView}>
+                <WhiteText fontSize={`${14 * fontSize}`}>
+                  NC : 0000abcd
+                </WhiteText>
+                <TouchableOpacity
+                  style={styles.marginLeft10}
+                  hitSlop={getHitSlop(5)}>
+                  <AutoHeightImage source={CopyIcon} width={getPixel(16)} />
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </View>
@@ -302,6 +315,14 @@ const ImageInput: React.FC<{
   );
 };
 const styles = StyleSheet.create({
+  uidView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: getHeightPixel(15),
+  },
+  marginLeft10: {
+    marginLeft: getPixel(10),
+  },
   imageInputView: {
     width: getPixel(328),
     height: getHeightPixel(50),
