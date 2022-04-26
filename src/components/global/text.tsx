@@ -3,9 +3,19 @@ import {DefaultTextProps} from '@/Types/Components/global';
 import styled, {css} from 'styled-components/native';
 import pixelChange from 'Util/pixelChange';
 
+const fontSizeChange = (fontSize: string | undefined) => {
+  if (fontSize) {
+    if (fontSize?.includes('px')) {
+      return fontSize;
+    } else {
+      return fontSize + 'px';
+    }
+  }
+};
+
 export const Text = styled.Text<DefaultTextProps>`
   color: ${p => p.color ?? Theme.color.black};
-  font-size: ${p => pixelChange(p.fontSize) ?? `${Theme.fontSize.fs16}px`};
+  font-size: ${p => fontSizeChange(p.fontSize) ?? `${Theme.fontSize.fs16}px`};
   width: ${p => pixelChange(p.width) ?? 'auto'};
   height: ${p => pixelChange(p.height) ?? 'auto'};
   letter-spacing: ${p => p.letterSpacing ?? '-0.84px'};

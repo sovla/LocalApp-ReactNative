@@ -114,7 +114,7 @@ export default function Login({navigation}: LoginProps) {
             setSelectNum={setSelectNum}
             selectNum={selectNum}
             isLabelNumber
-            pickerFontSize={11}
+            pickerFontSize={14}
           />
           <Line isGray width={getPixel(270)} />
           <Input

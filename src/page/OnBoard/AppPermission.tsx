@@ -83,21 +83,21 @@ export default function AppPermission({navigation}: AppPermissionProps) {
       requestUserPermission();
     }
     allPermissionCheck();
-    if (
-      permission.call &&
-      permission.storage &&
-      permission.locationInformation
-    ) {
-      navigation.reset({
-        routes: [
-          {
-            name: 'Login',
-          },
-        ],
-      });
-    } else {
-      AlertButton('권한을 허용 해주세요.');
-    }
+    navigation.reset({
+      routes: [
+        {
+          name: 'Login',
+        },
+      ],
+    });
+    // if (
+    //   permission.call &&
+    //   permission.storage &&
+    //   permission.locationInformation
+    // ) {
+    // } else {
+    //   AlertButton('권한을 허용 해주세요.');
+    // }
   }, []);
 
   const menuList = [

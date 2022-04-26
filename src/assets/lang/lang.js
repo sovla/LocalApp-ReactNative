@@ -261,6 +261,7 @@ export const ko = {
     settingLanguageTitle: '언어설정',
     settingLanguageGuide1: '설정된 언어 변경 시 자동으로 앱이 실행됩니다.',
     productRegistration: '상품등록',
+    productInformation: '상품정보',
     MyProductMenu1: '예약중으로 변경',
     MyProductMenu2: '판매완료로 변경',
     MyProductMenu3: '재판매',

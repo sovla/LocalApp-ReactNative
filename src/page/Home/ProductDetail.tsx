@@ -1,5 +1,7 @@
 import {
   Image,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
@@ -8,6 +10,7 @@ import {
 import React, {useCallback, useState} from 'react';
 import {
   BoldText,
+  DarkBlueText,
   GrayText,
   MediumText,
   Text,
@@ -26,10 +29,14 @@ import ShopSellProduct from '@/Components/Home/ShopSellProduct';
 import pressLikeIcon from '@assets/image/dislike.png';
 import {Shadow} from 'react-native-shadow-2';
 import BackWhiteIcon from '@assets/image/back_white.png';
+import BackBlackBoxIcon from '@assets/image/back_black_box.png';
 import SearchWhiteIcon from '@assets/image/search_white.png';
+import SearchBlackIcon from '@assets/image/search_black.png';
 import ShareWhiteIcon from '@assets/image/share_white.png';
+import ShareIcon from '@assets/image/share.png';
 import {getHitSlop} from '@/Util/Util';
 import {ProductDetailProps} from '@/Types/Screen/Screen';
+import useBoolean from '@/Hooks/useBoolean';
 
 export default function ProductDetail({navigation}: ProductDetailProps) {
   const title =
@@ -53,6 +60,8 @@ export default function ProductDetail({navigation}: ProductDetailProps) {
     require('@assets/image/dummy_i.png'),
   ]);
 
+  const {value: isChange, on: onIsChange, off: offIsChange} = useBoolean(false);
+
   const onPressTierGuide = useCallback(() => {
     navigation.navigate('ProductTierGuide');
   }, []);
@@ -69,48 +78,140 @@ export default function ProductDetail({navigation}: ProductDetailProps) {
   const onPressSearch = useCallback(() => {
     navigation.navigate('Search');
   }, []);
+  const onScroll = useCallback(
+    (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+      if (event.nativeEvent.contentOffset.y > getHeightPixel(270)) {
+        onIsChange();
+      } else {
+        offIsChange();
+      }
+    },
+    [isChange],
+  );
+  console.log(isChange);
+
+  const Header = useCallback(() => {
+    return (
+      <View
+        style={[
+          styles._headerView,
+          isChange && {
+            display: 'flex',
+          },
+        ]}>
+        <Shadow>
+          <>
+            <View style={styles._headerBetween}>
+              <View style={styles._headerRow}>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.goBack();
+                  }}
+                  hitSlop={getHitSlop(5)}
+                  style={styles.marginRight10}>
+                  <Image
+                    source={BackBlackBoxIcon}
+                    style={styles.backWhiteImage}
+                  />
+                </TouchableOpacity>
+                <Text medium fontSize={`${20 * fontSize}`}>
+                  {t('productInformation')}
+                </Text>
+              </View>
+              <View style={styles._headerRow}>
+                <TouchableOpacity
+                  style={styles.marginRight10}
+                  onPress={onPressSearch}
+                  hitSlop={getHitSlop(5)}>
+                  <Image
+                    resizeMode="contain"
+                    source={SearchBlackIcon}
+                    style={styles.searchWhiteImage}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity hitSlop={getHitSlop(5)}>
+                  <Image
+                    resizeMode="contain"
+                    source={ShareIcon}
+                    style={styles.shareWhiteImage}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View style={styles._headerEndView}>
+              <View style={styles._headerProductImageView}>
+                <Image
+                  source={require('@assets/image/dummy_i.png')}
+                  style={styles._headerProductImage}
+                />
+              </View>
+              <View style={styles.marginLeft15}>
+                <Text
+                  bold
+                  fontSize={`${14 * fontSize}`}
+                  numberOfLines={1}
+                  style={{width: getPixel(250)}}>
+                  {title}
+                </Text>
+                <DarkBlueText bold fontSize={`${14 * fontSize}`}>
+                  {price}
+                </DarkBlueText>
+              </View>
+            </View>
+          </>
+        </Shadow>
+      </View>
+    );
+  }, [isChange]);
+
+  const InnerHeader = useCallback(() => {
+    return (
+      <View style={styles.swiperView}>
+        <ImageSwiper
+          imageArray={imageArray}
+          setImageArray={setImageArray}
+          width={getPixel(360)}
+          height={getHeightPixel(250)}
+        />
+        <TouchableOpacity
+          style={styles.backWhiteTouch}
+          onPress={() => {
+            navigation.goBack();
+          }}
+          hitSlop={getHitSlop(5)}>
+          <Image source={BackWhiteIcon} style={styles.backWhiteImage} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.searchWhiteTouch}
+          onPress={onPressSearch}
+          hitSlop={getHitSlop(5)}>
+          <Image
+            resizeMode="contain"
+            source={SearchWhiteIcon}
+            style={styles.searchWhiteImage}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.shareWhiteTouch}
+          hitSlop={getHitSlop(5)}>
+          <Image
+            resizeMode="contain"
+            source={ShareWhiteIcon}
+            style={styles.shareWhiteImage}
+          />
+        </TouchableOpacity>
+      </View>
+    );
+  }, []);
 
   return (
     <View
       style={{
         flex: 1,
       }}>
-      <ScrollView>
-        <View style={styles.swiperView}>
-          <ImageSwiper
-            imageArray={imageArray}
-            setImageArray={setImageArray}
-            width={getPixel(360)}
-            height={getHeightPixel(250)}
-          />
-          <TouchableOpacity
-            style={styles.backWhiteTouch}
-            onPress={() => {
-              navigation.goBack();
-            }}
-            hitSlop={getHitSlop(5)}>
-            <Image source={BackWhiteIcon} style={styles.backWhiteImage} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.searchWhiteTouch}
-            onPress={onPressSearch}
-            hitSlop={getHitSlop(5)}>
-            <Image
-              resizeMode="contain"
-              source={SearchWhiteIcon}
-              style={styles.searchWhiteImage}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.shareWhiteTouch}
-            hitSlop={getHitSlop(5)}>
-            <Image
-              resizeMode="contain"
-              source={ShareWhiteIcon}
-              style={styles.shareWhiteImage}
-            />
-          </TouchableOpacity>
-        </View>
+      <Header />
+      <ScrollView onScroll={onScroll}>
+        <InnerHeader />
         <ProductDetailShop
           shopName="Americanas"
           shopSubTitle="Toys, Hobby & Diy"
@@ -182,6 +283,47 @@ export default function ProductDetail({navigation}: ProductDetailProps) {
 }
 
 const styles = StyleSheet.create({
+  _headerEndView: {
+    flexDirection: 'row',
+    width: getPixel(360),
+    paddingHorizontal: getPixel(16),
+    marginBottom: getHeightPixel(20),
+  },
+  marginLeft15: {
+    marginLeft: getPixel(15),
+  },
+  _headerProductImageView: {
+    borderRadius: 8,
+    overflow: 'hidden',
+    width: getPixel(40),
+    height: getPixel(40),
+  },
+  _headerProductImage: {
+    width: getPixel(40),
+    height: getPixel(40),
+  },
+  marginRight10: {
+    marginRight: getPixel(10),
+  },
+  _headerRow: {flexDirection: 'row', alignItems: 'center'},
+  _headerBetween: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    height: getHeightPixel(50),
+    width: getPixel(360),
+    paddingHorizontal: getPixel(16),
+  },
+  _headerView: {
+    minHeight: getHeightPixel(100),
+    width: getPixel(360),
+    display: 'none',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    zIndex: 100,
+    backgroundColor: Theme.color.white,
+  },
   footerContentView: {
     backgroundColor: Theme.color.gray,
     height: getHeightPixel(38),

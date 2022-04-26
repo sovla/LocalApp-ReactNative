@@ -1,4 +1,4 @@
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
 import React, {useRef} from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
@@ -45,7 +45,8 @@ const CountryPicker: React.FC<{
           includeFontPadding: false,
           padding: 0,
           margin: 0,
-          fontSize: pickerFontSize * fontSize,
+          fontSize:
+            (pickerFontSize * fontSize) / Dimensions.get('window').fontScale,
           fontFamily: Theme.fontWeight.default,
         }}
         selectedValue={selectNum}
@@ -59,7 +60,9 @@ const CountryPicker: React.FC<{
               style={{
                 ...styles.pickerItemAndroid,
                 fontFamily: Theme.fontWeight.default,
-                fontSize: pickerFontSize * fontSize,
+                fontSize:
+                  (pickerFontSize * fontSize) /
+                  Dimensions.get('window').fontScale,
               }}
               key={item.countryName}
               label={label}
