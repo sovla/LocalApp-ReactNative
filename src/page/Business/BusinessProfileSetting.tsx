@@ -31,10 +31,12 @@ import ClockIcon from '@assets/image/clock.png';
 import WebIcon from '@assets/image/web.png';
 import FacebookBlueIcon from '@assets/image/facebook_blue.png';
 import InstagramBlueIcon from '@assets/image/instagram_blue.png';
+import ArrowRightNewIcon from '@assets/image/arrow_right_new.png';
 import WhatsappBlueIcon from '@assets/image/whatsapp_blue.png';
 import AutoHeightImage from 'react-native-auto-height-image';
 import CopyIcon from '@assets/image/copy.png';
 import {getHitSlop} from '@/Util/Util';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 export default function BusinessProfileSetting({
   navigation,
@@ -47,12 +49,19 @@ export default function BusinessProfileSetting({
     navigation.goBack();
   }, []);
 
+  const onPressShopAddress = useCallback(() => {
+    navigation.navigate('ProductLocation');
+  }, []);
+  const onPressShopTime = useCallback(() => {
+    navigation.navigate('BusinessOpeningHours');
+  }, []);
+
   return (
     <View
       style={{
         flex: 1,
       }}>
-      <ScrollView>
+      <KeyboardAwareScrollView>
         <ProfileBackground
           height={getHeightPixel(200)}
           style={styles.imageBackground}
@@ -152,18 +161,29 @@ export default function BusinessProfileSetting({
               fontSize: 14 * fontSize,
             }}
           />
-          <ImageInput
-            image={HomeIcon}
-            value=""
-            onChange={() => {}}
-            PlaceHolder={() => (
+          {/* 업체 주소 등록 */}
+          <TouchableOpacity
+            onPress={onPressShopAddress}
+            style={{...styles.imageInputView, justifyContent: 'space-between'}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <View style={[styles.imageInputImageView, styles.marginRight20]}>
+                <AutoHeightImage source={HomeIcon} width={getPixel(20)} />
+              </View>
+
               <RedDotText
                 content={t('businessProfileSettingShopAddress')}
                 color={Theme.color.gray}
-                isView={false}
+                isView={true}
               />
-            )}
-          />
+            </View>
+            <AutoHeightImage source={ArrowRightNewIcon} width={getPixel(20)} />
+          </TouchableOpacity>
+
+          {/* 전화번호 */}
           <ImageInput
             image={PhoneBlueIcon}
             value=""
@@ -176,6 +196,8 @@ export default function BusinessProfileSetting({
               />
             )}
           />
+
+          {/* 핸드폰 */}
           <ImageInput
             image={MobileBlueIcon}
             imageWidth={getPixel(13.31)}
@@ -189,18 +211,25 @@ export default function BusinessProfileSetting({
               />
             )}
           />
-          <ImageInput
-            image={ClockIcon}
-            value=""
-            onChange={() => {}}
-            PlaceHolder={() => (
+
+          {/* 영업시간 */}
+          <TouchableOpacity
+            onPress={onPressShopTime}
+            style={{...styles.imageInputView, justifyContent: 'space-between'}}>
+            <View style={styles.rowCenter}>
+              <View style={[styles.imageInputImageView, styles.marginRight20]}>
+                <AutoHeightImage source={ClockIcon} width={getPixel(20)} />
+              </View>
+
               <RedDotText
                 content={t('businessProfileSettingShopOpeningTime')}
                 color={Theme.color.gray}
-                isView={false}
+                isView={true}
               />
-            )}
-          />
+            </View>
+            <AutoHeightImage source={ArrowRightNewIcon} width={getPixel(20)} />
+          </TouchableOpacity>
+
           <ImageInput
             image={WebIcon}
             value=""
@@ -251,7 +280,7 @@ export default function BusinessProfileSetting({
           }}>
           <Button onPress={onPressSave} content={t('save')} width="328px" />
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </View>
   );
 }
@@ -315,6 +344,13 @@ const ImageInput: React.FC<{
   );
 };
 const styles = StyleSheet.create({
+  rowCenter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  marginRight20: {
+    marginRight: getPixel(20),
+  },
   uidView: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -325,7 +361,7 @@ const styles = StyleSheet.create({
   },
   imageInputView: {
     width: getPixel(328),
-    height: getHeightPixel(50),
+    height: 55,
     borderBottomColor: Theme.color.gray,
     borderBottomWidth: 0.4,
     flexDirection: 'row',
