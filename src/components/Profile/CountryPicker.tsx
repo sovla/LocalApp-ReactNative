@@ -43,6 +43,7 @@ const CountryPicker: React.FC<{
           includeFontPadding: false,
           padding: 0,
           margin: 0,
+          fontSize: 14 * fontSize,
         }}
         selectedValue={selectNum}
         onValueChange={(itemValue, itemIndex) => setSelectNum(itemValue)}>
@@ -52,7 +53,7 @@ const CountryPicker: React.FC<{
             : t(item.label);
           return (
             <Picker.Item
-              style={{...styles.pickerItemAndroid, fontSize: 16 * fontSize}}
+              style={{...styles.pickerItemAndroid, fontSize: 14 * fontSize}}
               key={item.countryName}
               label={label}
               value={item.value}
