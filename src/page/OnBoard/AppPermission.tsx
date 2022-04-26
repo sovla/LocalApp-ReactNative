@@ -20,6 +20,8 @@ import {
   checkMultiple,
 } from 'react-native-permissions';
 import messaging from '@react-native-firebase/messaging';
+import AutoHeightImage from 'react-native-auto-height-image';
+import {AlertButton} from '@/Util/Util';
 
 const AndroidPermission = [
   PERMISSIONS.ANDROID.READ_SMS,
@@ -73,19 +75,28 @@ export default function AppPermission({navigation}: AppPermissionProps) {
 
   const onPressAll = useCallback(async () => {
     if (Platform.OS === 'android') {
-      const result = await requestMultiple(AndroidPermission).then(statuses => {
-        navigation.reset({
-          routes: [
-            {
-              name: 'Login',
-            },
-          ],
-        });
-      });
+      const result = await requestMultiple(AndroidPermission).then(
+        statuses => {},
+      );
     } else {
       requestUserPermission();
     }
     allPermissionCheck();
+    if (
+      permission.call &&
+      permission.storage &&
+      permission.locationInformation
+    ) {
+      navigation.reset({
+        routes: [
+          {
+            name: 'Login',
+          },
+        ],
+      });
+    } else {
+      AlertButton('권한을 허용 해주세요.');
+    }
   }, []);
 
   const menuList = [
@@ -93,31 +104,31 @@ export default function AppPermission({navigation}: AppPermissionProps) {
       title: 'call',
       require: 'require',
       content: 'appPermissionGuide2',
-      isOn: permission.call,
+      image: require('@assets/image/phone_blue.png'),
     },
     {
       title: 'storage',
       require: 'require',
       content: 'appPermissionGuide3',
-      isOn: permission.storage,
+      image: require('@assets/image/storage_space.png'),
     },
     {
       title: 'locationInformation',
       require: 'require',
       content: 'appPermissionGuide4',
-      isOn: permission.locationInformation,
+      image: require('@assets/image/location2.png'),
     },
     {
       title: 'cameraGallery',
       require: 'option',
       content: 'appPermissionGuide5',
-      isOn: permission.cameraGallery,
+      image: require('@assets/image/camera.png'),
     },
     {
       title: 'modalMyPageAlarm',
       require: 'option',
       content: 'appPermissionGuide6',
-      isOn: permission.alarm,
+      image: require('@assets/image/notice_color.png'),
     },
   ];
   return (
@@ -126,12 +137,12 @@ export default function AppPermission({navigation}: AppPermissionProps) {
         <Text fontSize={`${24 * fontSize}`} medium>
           {t('appPermissionGuide')}
         </Text>
-
+        <View style={{height: getHeightPixel(40)}} />
         {menuList.map(item => {
           return (
             <TouchableOpacity style={styles.rowTouch} key={item.title}>
               <View style={styles.permissionView}>
-                <CheckBoxImage isOn={item.isOn} isBox />
+                <AutoHeightImage width={getPixel(20)} source={item.image} />
               </View>
               <View>
                 <View style={styles.rowCenterView}>

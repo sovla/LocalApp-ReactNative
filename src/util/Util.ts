@@ -1,4 +1,4 @@
-import {NativeScrollEvent, NativeSyntheticEvent} from 'react-native';
+import {Alert, NativeScrollEvent, NativeSyntheticEvent} from 'react-native';
 import {getPixel} from './pixelChange';
 
 export const getHitSlop = (number: number) => {
@@ -40,4 +40,37 @@ export const strEmptyCheck = (_item: string | undefined | null) => {
   } else {
     return false;
   }
+};
+
+export const AlertButton = (
+  alertContent: string,
+  leftButtonText: string = '확인',
+  leftButtonPress: () => void = () => {},
+) => {
+  Alert.alert('', alertContent, [
+    {
+      text: leftButtonText,
+      onPress: () => leftButtonPress(),
+    },
+  ]);
+};
+
+export const AlertButtons = (
+  alertContent: string,
+  leftButtonText: string | undefined = '확인',
+  RightButtonText: string | undefined = '취소',
+  leftButtonPress: () => void,
+  RightButtonPress: () => void | undefined = () => {},
+) => {
+  if (leftButtonText && RightButtonText)
+    Alert.alert('', alertContent, [
+      {
+        text: leftButtonText,
+        onPress: () => leftButtonPress(),
+      },
+      {
+        text: RightButtonText,
+        onPress: () => RightButtonPress(),
+      },
+    ]);
 };
