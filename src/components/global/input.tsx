@@ -17,6 +17,7 @@ export default function Input({
   height = getHeightPixel(40),
   isLine = true,
   keyboardType,
+  inputFontSize = 12,
 }: InputProps) {
   const fontSize = useAppSelector(state => state.fontSize.value);
   const [isFocus, setIsFocus] = useState(false);
@@ -38,7 +39,7 @@ export default function Input({
           style={[
             styles.textInput,
             {
-              fontSize: 12 * fontSize,
+              fontSize: inputFontSize * fontSize,
               width,
             },
           ]}

@@ -114,6 +114,7 @@ export default function Login({navigation}: LoginProps) {
             setSelectNum={setSelectNum}
             selectNum={selectNum}
             isLabelNumber
+            pickerFontSize={11}
           />
           <Line isGray width={getPixel(270)} />
           <Input
@@ -122,6 +123,7 @@ export default function Login({navigation}: LoginProps) {
             height={getHeightPixel(56)}
             value={tel}
             onChange={setTel}
+            inputFontSize={14}
             PlaceHolderComponent={() => (
               <GrayText fontSize={`${14 * fontSize}`}>{t('telPh')}</GrayText>
             )}

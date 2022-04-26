@@ -18,12 +18,14 @@ const CountryPicker: React.FC<{
   width?: number;
   height?: number;
   isLabelNumber?: boolean;
+  pickerFontSize?: number;
 }> = ({
   selectNum,
   setSelectNum,
   width = getPixel(288),
   height = getHeightPixel(60),
   isLabelNumber,
+  pickerFontSize = 16,
 }) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
@@ -43,7 +45,8 @@ const CountryPicker: React.FC<{
           includeFontPadding: false,
           padding: 0,
           margin: 0,
-          fontSize: 14 * fontSize,
+          fontSize: pickerFontSize * fontSize,
+          fontFamily: Theme.fontWeight.default,
         }}
         selectedValue={selectNum}
         onValueChange={(itemValue, itemIndex) => setSelectNum(itemValue)}>
@@ -53,7 +56,11 @@ const CountryPicker: React.FC<{
             : t(item.label);
           return (
             <Picker.Item
-              style={{...styles.pickerItemAndroid, fontSize: 14 * fontSize}}
+              style={{
+                ...styles.pickerItemAndroid,
+                fontFamily: Theme.fontWeight.default,
+                fontSize: pickerFontSize * fontSize,
+              }}
               key={item.countryName}
               label={label}
               value={item.value}

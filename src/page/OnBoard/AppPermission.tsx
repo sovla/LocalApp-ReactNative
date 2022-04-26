@@ -57,6 +57,7 @@ export default function AppPermission({navigation}: AppPermissionProps) {
   const allPermissionCheck = useCallback(() => {
     if (Platform.OS === 'android') {
       checkMultiple(AndroidPermission).then(state => {
+        console.log(state);
         setPermission(prev => ({
           ...prev,
           call: state[AndroidPermission[0]] === 'granted',

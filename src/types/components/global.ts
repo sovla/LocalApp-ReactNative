@@ -50,6 +50,7 @@ export interface InputProps {
   height?: number;
   isLine?: boolean;
   keyboardType?: TextInputProps['keyboardType'];
+  inputFontSize?: number;
 }
 
 export interface LineProps {
