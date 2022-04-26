@@ -97,7 +97,7 @@ import Menu from './Menu';
 import ProductTierGuide from './Product/ProductTierGuide';
 import BlockList from './Chatting/BlockList';
 
-const ROUTING: keyof Screen = 'OnBoarding';
+const ROUTING: keyof Screen = 'Home';
 
 const resources = {
   en,
@@ -150,12 +150,7 @@ export default function Router() {
     setIsLanguageChange(true);
     i18n
       .changeLanguage(lang)
-      .then(v => {
-        console.log(
-          i18n.language,
-          i18n.getResourceBundle(i18n.language, 'translation'),
-        );
-      })
+      .then(v => {})
       .finally(() => {
         setIsLanguageChange(false);
       });

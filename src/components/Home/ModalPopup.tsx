@@ -1,70 +1,92 @@
 import {
+  ActivityIndicator,
   Image,
+  Linking,
   Modal,
   StyleSheet,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import Theme from '@/assets/global/Theme';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import AutoHeightImage from 'react-native-auto-height-image';
 import {Text} from '../Global/text';
 import {useTranslation} from 'react-i18next';
 import {useAppSelector} from '@/Hooks/CustomHook';
 import {ModalPopupProps} from '@/Types/Components/HomeTypes';
 import {ScrollView} from 'react-native-gesture-handler';
 import {onScrollSlide} from '@/Util/Util';
+import useApi from '@/Hooks/useApi';
+import Loading from '../Global/Loading';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ModalPopup: React.FC<ModalPopupProps> = ({onClose}) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const onPressNeverLookAgain = useCallback(() => {
-    //  추가필요 다신보지않기
+    AsyncStorage.setItem('isPopup', 'Y');
     onClose();
   }, []);
   const [page, setPage] = useState<number>(0);
+
+  const {data: List, isLoading} = useApi<{
+    link: string | null;
+    file: string[] | null;
+    status: 'Y' | 'N';
+  }>(
+    {
+      link: null,
+      file: null,
+      status: 'N',
+    },
+    'home_popup.php',
+  );
+
+  const onPressItem = useCallback(() => {
+    if (List?.link && Linking.canOpenURL(List.link)) {
+      Linking.openURL(List.link);
+    }
+  }, [List]);
 
   return (
     <Modal transparent onRequestClose={onClose} visible>
       <View style={styles.dimTouch}>
         <View style={styles.mainView}>
           <View style={styles.imageView}>
+            {isLoading && <Loading />}
+
             <ScrollView
-              style={{
-                width: getPixel(280),
-              }}
+              style={styles.width280}
               horizontal
               pagingEnabled
               onMomentumScrollEnd={e => {
                 onScrollSlide(e, setPage, getPixel(280));
               }}>
-              {[1, 2, 3, 4].map((v, i) => {
-                return (
-                  <Image
-                    key={i}
-                    source={require('@assets/image/dummy.png')}
-                    style={styles.Image}
-                  />
-                );
-              })}
+              {Array.isArray(List?.file) &&
+                List.file.map((v: string, i: React.Key | null | undefined) => {
+                  return (
+                    <TouchableOpacity onPress={onPressItem}>
+                      <Image key={i} source={{uri: v}} style={styles.Image} />
+                    </TouchableOpacity>
+                  );
+                })}
             </ScrollView>
             <View style={styles.positionDot}>
-              {[1, 2, 3, 4].map((v, i) => {
-                return (
-                  <View
-                    style={{
-                      width: getPixel(10),
-                      height: getPixel(10),
-                      marginRight: i !== 3 ? getPixel(5) : 0,
-                      backgroundColor:
-                        page === i ? Theme.color.whiteGray_EE : '#fff5',
-                      borderRadius: 100,
-                    }}
-                  />
-                );
-              })}
+              {Array.isArray(List?.file) &&
+                List.file.map((v: string, i: number) => {
+                  return (
+                    <View
+                      style={{
+                        width: getPixel(10),
+                        height: getPixel(10),
+                        marginRight: i !== 3 ? getPixel(5) : 0,
+                        backgroundColor:
+                          page === i ? Theme.color.whiteGray_EE : '#fff5',
+                        borderRadius: 100,
+                      }}
+                    />
+                  );
+                })}
             </View>
           </View>
           <View style={styles.footerButton}>
@@ -90,6 +112,9 @@ const ModalPopup: React.FC<ModalPopupProps> = ({onClose}) => {
 export default ModalPopup;
 
 const styles = StyleSheet.create({
+  width280: {
+    width: getPixel(280),
+  },
   positionDot: {
     position: 'absolute',
     bottom: getHeightPixel(10),

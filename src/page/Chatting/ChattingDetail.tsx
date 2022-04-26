@@ -1,85 +1,27 @@
 import {
-  Animated,
-  Dimensions,
-  FlatList,
   Image,
   ImageBackground,
   Keyboard,
-  KeyboardAvoidingView,
-  Modal,
-  Platform,
-  SafeAreaView,
-  ScrollView,
   StyleSheet,
   TouchableOpacity,
   View,
-  ViewStyle,
   TextInput,
-  TouchableWithoutFeedback,
 } from 'react-native';
-import React, {Fragment, useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 
-import BackGroundImage from '@assets/image/BG.png';
-import {fontSizeChange, getHeightPixel, getPixel} from '@/Util/pixelChange';
-import LocationWhiteIcon from '@assets/image/location_white.png';
-import SearchIcon from '@assets/image/search_white.png';
-import MenuIcon from '@assets/image/bar_white.png';
-import AlarmIcon from '@assets/image/notice_white.png';
-import {DarkBlueText, GrayText, Text, WhiteText} from '@Components/Global/text';
-import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
+import {Text, WhiteText} from '@Components/Global/text';
+import {useAppSelector} from '@/Hooks/CustomHook';
 import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
-import TrianglePinkIcon from '@assets/image/triangle_pink.png';
-import {
-  HeaderProps,
-  ModalMyPageProps,
-  ModalUploadModalProps,
-} from '@/Types/Components/HomeTypes';
 import useBoolean from '@/Hooks/useBoolean';
-import {
-  KeyboardAwareFlatList,
-  KeyboardAwareScrollView,
-} from 'react-native-keyboard-aware-scroll-view';
-import BackBlackBoxIcon from '@assets/image/back_black_box.png';
+import {KeyboardAwareFlatList} from 'react-native-keyboard-aware-scroll-view';
 import AutoHeightImage from 'react-native-auto-height-image';
-import DummyProfileImage from '@assets/image/dummy_profile.png';
 
-import AnnouncementIcon from '@assets/image/announcement.png';
-import NoticeColorIcon from '@assets/image/notice_color.png';
-import StoreIcon from '@assets/image/store.png';
-import WriteIcon from '@assets/image/write.png';
-import TrashWhiteIcon from '@assets/image/trash_white.png';
 import BackWhiteIcon from '@assets/image/back_white.png';
-import NoticeOn from '@assets/image/notice_on.png';
-import SettingsIcon from '@assets/image/settings.png';
-import ServiceCenterIcon from '@assets/image/service_center.png';
-import {
-  Button,
-  CheckBox,
-  CheckBoxImage,
-  Toggle,
-} from '@/Components/Global/button';
-import Line from '@/Components/Global/Line';
-import {Shadow} from 'react-native-shadow-2';
-import {useDispatch} from 'react-redux';
-import {fontChange, fontSizeState} from '@/Store/fontSizeState';
-import i18next from 'i18next';
-import {categoryMenu, languageList} from '@/assets/global/dummy';
-import Menu from '@/Components/Profile/Menu';
-import ProductWhiteBox from '@/Components/Product/ProductWhiteBox';
-import EditModal from '@/Components/Product/EditModal';
-import Screen, {ChattingDetailProps} from '@/Types/Screen/Screen';
-import ArrowRightIcon from '@assets/image/arrow_right.png';
-import ArrowUpGrayIcon from '@assets/image/arrow_up_gray.png';
-import ArrowDownGrayIcon from '@assets/image/arrow_down_gray.png';
-import BangBlackIcon from '@assets/image/bang_black.png';
+import {ChattingDetailProps} from '@/Types/Screen/Screen';
 
-import QuetionIcon from '@assets/image/quetion.png';
-import AnswerIcon from '@assets/image/answer.png';
-import {FAQItemProps} from '@/Types/Components/SettingTypes';
-import SuccessIcon from '@assets/image/success.png';
 import ChattingBgImage from '@assets/image/chatting_bg.png';
-import Header from '@/Components/Profile/Header';
 
 import SearchWhiteIcon from '@assets/image/search_white.png';
 import MoreWhiteIcon from '@assets/image/more_white.png';
@@ -94,9 +36,9 @@ import PlusMenuIcon from '@assets/image/plus_menu.png';
 import GalleryPurpleIcon from '@assets/image/gallery_purple.png';
 import CameraSkyIcon from '@assets/image/camera_sky.png';
 import LocationOrangeIcon from '@assets/image/location_orange.png';
-import KeyboardSpacer from 'react-native-keyboard-spacer';
 import LocationChatting from '@/Components/Chatting/LocationChatting';
 import ModalChattingSetting from '@/Components/Chatting/ModalChattingSetting';
+import SendBird from 'sendbird';
 
 export default function ChattingDetail({navigation}: ChattingDetailProps) {
   const {t} = useTranslation();
@@ -110,8 +52,14 @@ export default function ChattingDetail({navigation}: ChattingDetailProps) {
 
   const [chatting, setChatting] = useState<string>('');
 
+  const [Channel, setChannel] = useState();
+  const [UserList, setUserList] = useState([]);
+  const [UserChannelList, setUserChannelList] = useState([]);
+  const sb = new SendBird({appId: '9sDA1B1F4-0BE6-4DA8-82C5-2E81DAB56F23'});
+
   const name = 'Designplus';
   const viewRef = useRef<View>(null);
+  const _onButtonPress = () => {};
 
   const onPressLocation = useCallback(() => {
     navigation.navigate('ChattingLocation');
@@ -120,6 +68,30 @@ export default function ChattingDetail({navigation}: ChattingDetailProps) {
   const onPressShopIcon = useCallback(() => {
     navigation.navigate('ProfileHome');
   }, []);
+
+  function StartChat() {
+    console.log('채팅의 아이디를 확인 합니다--------------');
+    console.log('채팅 유저의 아이디      :   ' + chatting);
+    console.log('채팅하는 대상자의 아이디  :   ' + name);
+    console.log('----------------------------------');
+    //이미 방이 다시 방을 만들지 않으므로
+    let UserIds = [];
+    UserIds.push(name);
+    UserIds.push(chatting);
+    var params = new sb.GroupChannelParams();
+    params.isDistinct = true; //1+1 채팅간의 방은 더이상 만들지 않습니다.
+    params.addUserIds(UserIds);
+    sb.GroupChannel.createChannel(params, function (groupChannel, error) {
+      //채널을 만들어줍니다.
+      if (error) {
+      }
+      //채널 생성 완료
+      const channelUrl = groupChannel.url;
+      console.log(channelUrl);
+      setChannel(groupChannel);
+    });
+  }
+  useEffect(() => {}, []);
 
   return (
     <View
@@ -266,7 +238,7 @@ export default function ChattingDetail({navigation}: ChattingDetailProps) {
               }}
             />
           </View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={StartChat}>
             <Image
               source={SendGrayIcon}
               style={styles.footerSendGray}

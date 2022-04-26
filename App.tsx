@@ -14,7 +14,10 @@ import {Provider} from 'react-redux';
 import store from '@/Store/store';
 import SplashScreen from 'react-native-splash-screen';
 import Geolocation from '@react-native-community/geolocation';
-import {LogBox} from 'react-native';
+import {LogBox, Platform} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import SendBird from 'sendbird';
+import messaging from '@react-native-firebase/messaging';
 
 const App = () => {
   useEffect(() => {
@@ -26,6 +29,29 @@ const App = () => {
       ]);
     }, 1500);
     // Geolocation.getCurrentPosition(info => console.log(info));
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      const authorizationStatus = await messaging().requestPermission();
+      if (
+        authorizationStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+        authorizationStatus === messaging.AuthorizationStatus.PROVISIONAL
+      ) {
+        if (Platform.OS === 'ios') {
+          const token = await messaging().getAPNSToken();
+          if (token) {
+            AsyncStorage.setItem('token', token);
+          }
+        } else {
+          const token = await messaging().getToken();
+          console.log(token);
+          if (token) {
+            AsyncStorage.setItem('token', token);
+          }
+        }
+      }
+    })();
   }, []);
   return (
     <Provider store={store}>

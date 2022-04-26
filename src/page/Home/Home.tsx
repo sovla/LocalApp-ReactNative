@@ -7,7 +7,7 @@ import {
   NativeScrollEvent,
   NativeSyntheticEvent,
 } from 'react-native';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useLayoutEffect, useState} from 'react';
 import Header from '@/Components/Home/Header';
 import CategoryScroll from '@/Components/Home/CategoryScroll';
 import HomeList from '@/Components/Home/HomeList';
@@ -22,14 +22,22 @@ import UploadModal from '@/Components/Home/UploadModal';
 import {useTranslation} from 'react-i18next';
 import {HomeProps} from '@/Types/Screen/Screen';
 import ModalPopup from '@/Components/Home/ModalPopup';
-import {useFocusEffect} from '@react-navigation/native';
-
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function Home({navigation}: HomeProps): JSX.Element {
   const [isList, setIsList] = useState(false);
 
   const {value: isUpload, on: onUpload, off: offUpload} = useBoolean(false);
-  const {value: isPopup, on: onIsPopup, off: offIsPopup} = useBoolean(true);
+  const {value: isPopup, on: onIsPopup, off: offIsPopup} = useBoolean(false);
   const {value: isChange, on: onIsChange, off: offIsChange} = useBoolean(false);
+  const isFocused = useIsFocused();
+  useLayoutEffect(() => {
+    AsyncStorage.getItem('isPopup').then(result => {
+      if (result === 'N') {
+        onIsPopup();
+      }
+    });
+  }, []);
 
   const onPressItem = useCallback(item => {
     navigation.navigate('ProductDetail', item);

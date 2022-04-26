@@ -10,7 +10,7 @@ const JWT_TOKEN = 'L0FONYcvjajULdjnaKpBP';
 
 const baseURL = 'https://dmonster1786.cafe24.com/api/';
 
-const LOGON = false;
+const LOGON = true;
 
 const formFormatter = (data: any, isIndex = true) => {
   const formData = new FormData();
@@ -68,7 +68,7 @@ export const API = axios.create({
             debug_jwt: JWT_TOKEN,
           },
     );
-    console.log('formData result :::\n', result);
+    if (LOGON) console.log('formData result :::\n', result);
     return result;
   },
   transformResponse: (data?: string) => {
@@ -78,16 +78,13 @@ export const API = axios.create({
     }
     try {
       const jsonParseData = JSON.parse(data);
-      console.log(jsonParseData, '가공전');
+      if (LOGON) console.log('가공전 :::', jsonParseData);
 
       if (jsonParseData.result === 'true') {
-        const jwtDecodeData: any = jwtDecode(jsonParseData?.data);
+        // const jwtDecodeData: any = jwtDecode(jsonParseData?.data);
 
-        if (LOGON) console.log('API Result Success :::\n', jwtDecodeData);
-        return {
-          ...jsonParseData,
-          data: jwtDecodeData?.data,
-        };
+        if (LOGON) console.log('API Result Success :::\n', jsonParseData.data);
+        return jsonParseData.data;
       } else {
         if (LOGON) console.log('API Result Failed :::', jsonParseData);
         return jsonParseData;
@@ -102,6 +99,10 @@ export const API = axios.create({
     }
   },
 });
+
+export const checkData = (result: {data: {data: {status: 'Y' | 'N'}}}) => {
+  return result?.data?.data?.status === 'Y';
+};
 
 // export const ImageAPI = async (
 //   data: Object,
