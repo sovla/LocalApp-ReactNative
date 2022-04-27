@@ -70,14 +70,20 @@ import AnswerIcon from '@assets/image/answer.png';
 import {FAQItemProps} from '@/Types/Components/SettingTypes';
 import SuccessIcon from '@assets/image/success.png';
 import MapView, {Marker} from 'react-native-maps';
-const Map: React.FC<{}> = () => {
+const Map: React.FC<{
+  region: {
+    latitude: number;
+    longitude: number;
+  };
+  setRegion: React.Dispatch<
+    React.SetStateAction<{
+      latitude: number;
+      longitude: number;
+    }>
+  >;
+  isMarker?: boolean;
+}> = ({region, setRegion, isMarker = true}) => {
   const navigation = useAppNavigation();
-  const [region, setRegion] = useState({
-    latitude: 37.78825,
-    longitude: -122.4324,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
-  });
   const ref = useRef<Marker | null>(null);
 
   const onPressMarker = useCallback(e => {
@@ -88,18 +94,24 @@ const Map: React.FC<{}> = () => {
     ref.current?.showCallout();
   }, [region]);
 
+  const markerInfo = isMarker
+    ? {
+        title: '위치 정보 보내기',
+        description: 'Rasdsadasdsa',
+      }
+    : {};
+
   return (
     <MapView
       style={{flex: 1}}
-      initialRegion={region}
+      initialRegion={{...region, latitudeDelta: 0.003, longitudeDelta: 0.003}}
       onRegionChange={setRegion}
       onPress={e => console.log(e)}
       mapType="standard"
       showsUserLocation>
       <Marker
-        coordinate={region}
-        title={'위치 정보 보내기'}
-        description="Rasdsadasdsa"
+        coordinate={{...region, latitudeDelta: 0.003, longitudeDelta: 0.003}}
+        {...markerInfo}
         ref={ref}
         onCalloutPress={onPressMarker}
         onPress={onPressMarker}></Marker>

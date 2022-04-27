@@ -82,3 +82,7 @@ export const birthDate = (str: string) => {
     return str;
   }
 };
+
+export const geoLanguage = (str: string) => {
+  return str === 'br' ? 'pt-BR' : str;
+};

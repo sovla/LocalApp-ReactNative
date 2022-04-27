@@ -2,6 +2,7 @@ import axios from 'axios';
 import jwt_encode from 'jwt-encode';
 import jwtDecode from 'jwt-decode';
 import {Platform} from 'react-native';
+import i18next from 'i18next';
 
 const SECRETKEY =
   'AAAAUV9vLXY:APA91bHklBUTeYmzfdYLVhpYEa8irZKGWSq8PXQkD6nMXSkreECmUr_-iFhy7ZJauagMU7w8GgkdjbF5i2IPrEx-W6JGeHYBBp1NNvd73H34IqUBUNvCdS0wj1ZXs__CRjh_j1NikOPP';
@@ -52,8 +53,13 @@ export const API = axios.create({
     // 보내기전 데이터 가공
     let cloneData = data; // 데이터 복사
     let imageData; // 이미지 데이터 넣을 변수
-
-    if (LOGON) console.log('formData :::', data);
+    if (!cloneData?.lang?.length) {
+      cloneData = {
+        ...cloneData,
+        lang: i18next.language,
+      };
+    }
+    if (LOGON) console.log('formData :::', cloneData);
     if (typeof data?.imageField === 'string') {
       // 이미지 필드에 문자열 하나만 있는 경우
       const field = data.imageField; // 해당 필드명

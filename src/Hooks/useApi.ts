@@ -2,7 +2,7 @@ import {API, checkData} from '@/API/API';
 import {Dispatch, SetStateAction, useEffect, useState} from 'react';
 import {check} from 'react-native-permissions';
 
-function useApi<T>(defaultValue: T, apiPath: string) {
+function useApi<T, D>(defaultValue: T, apiPath: string, axiosData: D) {
   const [data, setData] = useState<T>(defaultValue);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -10,7 +10,7 @@ function useApi<T>(defaultValue: T, apiPath: string) {
   useEffect(() => {
     (() => {
       setIsLoading(true);
-      API.post(apiPath)
+      API.post<any, any, D>(apiPath, axiosData)
         .then(result => {
           if (checkData(result)) {
             setData(result.data.data);

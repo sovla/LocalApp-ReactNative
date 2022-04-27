@@ -7,7 +7,13 @@ import {
   PanResponder,
   TouchableOpacity,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import Header from '@/Components/LoginSignUp/Header';
 import {useTranslation} from 'react-i18next';
 import {useAppSelector} from '@/Hooks/CustomHook';
@@ -27,14 +33,39 @@ import MapPersonIcon from '@assets/image/map_person.png';
 import AutoHeightImage from 'react-native-auto-height-image';
 import {rangeList} from '@/assets/global/dummy';
 import {LocationChangeProps} from '@/Types/Screen/Screen';
+import Geolocation from '@react-native-community/geolocation';
+import axios from 'axios';
+import {geoLanguage} from '@/Util/Util';
+import useGeocoding from '@/Hooks/useGeocoding';
 
 export default function LocationChange({
   navigation,
-}: LocationChangeProps): JSX.Element {
-  const {t} = useTranslation();
+}: LocationChangeProps): JSX.Element | null {
+  const {t, i18n} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
-  const location = 'Bom retiro';
   const [selectRange, setSelectRange] = useState<number>(0);
+  const [isLocation, setIsLocation] = useState(true);
+  const [region, setRegion] = useState<{latitude: number; longitude: number}>({
+    latitude: -23.55,
+    longitude: -46.633333,
+  });
+  const {location, detail, city, locationName} = useGeocoding(region);
+
+  useLayoutEffect(() => {
+    Geolocation.getCurrentPosition(info => {
+      // setRegion({
+      //   latitude: info.coords.latitude,
+      //   longitude: info.coords.longitude,
+      // });
+      setIsLocation(false);
+    });
+
+    return () => {};
+  }, []);
+
+  if (isLocation) {
+    return null;
+  }
 
   return (
     <View
@@ -48,7 +79,7 @@ export default function LocationChange({
           height: getHeightPixel(338),
           backgroundColor: '#0008',
         }}>
-        <Map />
+        <Map region={region} setRegion={setRegion} isMarker={false} />
         <View style={styles.absoluteLocation}>
           <WhiteText fontSize={`${12 * fontSize}`}>{t('mapPh')}</WhiteText>
         </View>
@@ -59,12 +90,8 @@ export default function LocationChange({
           style={{
             marginLeft: getPixel(5),
           }}>
-          <Text fontSize={`${16 * fontSize}`}>
-            Rua Três Rios , Bom Retiro, São Paulo
-          </Text>
-          <GrayText fontSize={`${12 * fontSize}`}>
-            São Paulo - SP, Brasil
-          </GrayText>
+          <Text fontSize={`${16 * fontSize}`}>{detail}</Text>
+          <GrayText fontSize={`${12 * fontSize}`}>{locationName}</GrayText>
         </View>
       </View>
       <View style={styles.locationAreaView}>
@@ -73,7 +100,7 @@ export default function LocationChange({
         </BoldText>
         <View style={styles.locationTextView}>
           <Text fontSize={`${14 * fontSize}`}>
-            {location}
+            {city}
             {t('at')}
           </Text>
           <BoldText fontSize={`${14 * fontSize}`}>

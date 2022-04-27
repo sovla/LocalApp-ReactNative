@@ -24,12 +24,27 @@ import {HomeProps} from '@/Types/Screen/Screen';
 import ModalPopup from '@/Components/Home/ModalPopup';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import useApi from '@/Hooks/useApi';
+import {useAppSelector} from '@/Hooks/CustomHook';
 export default function Home({navigation}: HomeProps): JSX.Element {
+  const {t} = useTranslation();
+  const fontSize = useAppSelector(state => state.fontSize.value);
+  const {user} = useAppSelector(state => state);
   const [isList, setIsList] = useState(false);
-
   const {value: isUpload, on: onUpload, off: offUpload} = useBoolean(false);
   const {value: isPopup, on: onIsPopup, off: offIsPopup} = useBoolean(false);
   const {value: isChange, on: onIsChange, off: offIsChange} = useBoolean(false);
+  const [page, setPage] = useState(1);
+  const {
+    data: List,
+    isLoading,
+    isError,
+    errorMessage,
+  } = useApi([], 'product_home_list.php', {
+    mt_idx: user.mt_idx,
+    page: page,
+  });
+
   const isFocused = useIsFocused();
   useLayoutEffect(() => {
     AsyncStorage.getItem('isPopup').then(result => {

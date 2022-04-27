@@ -52,7 +52,7 @@ export default function Login({navigation}: LoginProps) {
       lang: i18n.language,
     });
     if (result.data.result === 'true') {
-      AlertButton(result.data.data);
+      AlertButton(result.data.data.data);
       setIsAuthModal(true);
     } else {
       AlertButton(result.data?.msg);

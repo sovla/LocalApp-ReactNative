@@ -18,15 +18,24 @@ import CloseIcon from '@assets/image/close.png';
 import {getHitSlop} from '@/Util/Util';
 import CloseBlackIcon from '@assets/image/close_black.png';
 import {Shadow} from 'react-native-shadow-2';
+import useApi from '@/Hooks/useApi';
 
 export default function Location({offIsModal}: {offIsModal: any}): JSX.Element {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const {user} = useAppSelector(state => state);
   const navigation = useAppNavigation();
 
   const [isFocus, setIsFocus] = useState<boolean>(false);
   const [value, setValue] = useState<string>('');
-  const [usedList, setUsedList] = useState(['Bom retiro', 'Bras']);
+  const {
+    data: usedList,
+    isLoading,
+    isError,
+    errorMessage,
+  } = useApi([], 'mt_location_history.php', {
+    mt_idx: user.mt_idx,
+  });
 
   const onPressLocation = useCallback(() => {
     offIsModal();

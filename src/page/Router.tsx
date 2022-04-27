@@ -147,11 +147,13 @@ export default function Router() {
         if (Platform.OS === 'ios') {
           const token = await messaging().getAPNSToken();
           if (token) {
+            console.log('token:::', token);
             dispatch(changeToken(token));
           }
         } else {
           const token = await messaging().getToken();
           if (token) {
+            console.log('token:::', token);
             dispatch(changeToken(token));
           }
         }
@@ -205,7 +207,7 @@ export default function Router() {
         if (result === 'AppPermission') {
           setInitRoute(result);
         } else if (result === 'Login') {
-          setInitRoute(result);
+          setInitRoute('Home');
         }
       })
       .finally(() => {
