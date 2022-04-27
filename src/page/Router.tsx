@@ -1,9 +1,20 @@
 import Theme from '@/assets/global/Theme';
 import {Text} from '@/Components/Global/text';
-import {NavigationContainer} from '@react-navigation/native';
+import {
+  createNavigationContainerRef,
+  NavigationContainer,
+  NavigationContainerRef,
+} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import React, {Suspense, useEffect, useState} from 'react';
+import React, {
+  RefObject,
+  Suspense,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import {
   SafeAreaView,
   View,
@@ -96,8 +107,7 @@ import CarLocation from './Car/CarLocation';
 import Menu from './Menu';
 import ProductTierGuide from './Product/ProductTierGuide';
 import BlockList from './Chatting/BlockList';
-
-const ROUTING: keyof Screen = 'Home';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const resources = {
   en,
@@ -117,9 +127,14 @@ const forFade = ({current}: any) => {
 export default function Router() {
   const [isChange, setIsChange] = useState<boolean>(false);
   const [isLanguageChange, setIsLanguageChange] = useState<boolean>(false);
+  const [isAsync, setIsAsync] = useState<boolean>(true);
+  const [initRoute, setInitRoute] = useState<keyof Screen>('OnBoarding');
   const lang = useAppSelector(state => state.lang.value);
 
+  const ref = createNavigationContainerRef<Screen>();
+
   useEffect(() => {
+    // 언어설정
     i18n
       .use(initReactI18next) // passes i18n down to react-i18next
       .init({
@@ -134,6 +149,7 @@ export default function Router() {
           escapeValue: false, // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
         },
       });
+    // 언어설정 api
     API.post('lang_content.php')
       .then(res => {
         if (res.data?.result === 'true' && res?.data?.data) {
@@ -147,6 +163,7 @@ export default function Router() {
       });
   }, []);
   useEffect(() => {
+    // 언어변경시 실행되는 effect
     setIsLanguageChange(true);
     i18n
       .changeLanguage(lang)
@@ -156,14 +173,28 @@ export default function Router() {
       });
   }, [lang]);
 
-  if (isLanguageChange) {
+  useLayoutEffect(() => {
+    AsyncStorage.getItem('done')
+      .then(result => {
+        if (result === 'AppPermission') {
+          setInitRoute(result);
+        } else if (result === 'Login') {
+          setInitRoute(result);
+        }
+      })
+      .finally(() => {
+        setIsAsync(false);
+      });
+  }, []);
+
+  if (isLanguageChange || isAsync) {
     return null;
   }
 
   return (
     <Suspense fallback={<View></View>}>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName={ROUTING}>
+      <NavigationContainer ref={ref}>
+        <Stack.Navigator initialRouteName={initRoute}>
           {RouterSetting.map((item, index) => (
             <Stack.Screen
               name={item.name}

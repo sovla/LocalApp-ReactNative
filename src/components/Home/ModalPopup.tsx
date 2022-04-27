@@ -19,6 +19,7 @@ import {onScrollSlide} from '@/Util/Util';
 import useApi from '@/Hooks/useApi';
 import Loading from '../Global/Loading';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {ModalPopupAPI} from '@/Types/API/APItypes';
 
 const ModalPopup: React.FC<ModalPopupProps> = ({onClose}) => {
   const {t} = useTranslation();
@@ -29,11 +30,7 @@ const ModalPopup: React.FC<ModalPopupProps> = ({onClose}) => {
   }, []);
   const [page, setPage] = useState<number>(0);
 
-  const {data: List, isLoading} = useApi<{
-    link: string | null;
-    file: string[] | null;
-    status: 'Y' | 'N';
-  }>(
+  const {data: List, isLoading} = useApi<ModalPopupAPI>(
     {
       link: null,
       file: null,

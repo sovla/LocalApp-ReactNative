@@ -420,6 +420,8 @@ export const ko = {
     allPhoto: '모든 사진',
     moreInformation: '상세정보',
     mapPh: '지도를 움직여 위치를 설정하세요.',
+    telRequireAlert: '전화번호를 입력해주세요.',
+    appPermissionAlert: '필수 권한을 허용해주세요.',
   },
 };
 export const es = {

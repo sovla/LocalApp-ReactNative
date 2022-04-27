@@ -4,7 +4,7 @@ import jwtDecode from 'jwt-decode';
 import {Platform} from 'react-native';
 
 const SECRETKEY =
-  'AAAAB3NzaC1yc2EAAAABJQAAAQEAv6+cPJDNZvvR7zuLo9vK8xHt/ucEMdZhBxbiVow/Gopl0y+GSpHic01rUqIoj/XortnJWekObyeAqSGTHDXOOGxl7/9xJdtXpe2WIW1voIAgX6xwNcIPoLpdPat7g5CkrWWJ+k5JUYHycV+ue3HgMII0OCKC4ira0hURNohGiac22IfO5+XIjn8uPQdg4dpmgxJbokB4DjO2uO5e9EMU4wF1ucxpKF0FANYmvjijUpdjnfKmBA/dg/9Go4d9rUfnhmcv5QaVxUDFouveW9e';
+  'AAAAUV9vLXY:APA91bHklBUTeYmzfdYLVhpYEa8irZKGWSq8PXQkD6nMXSkreECmUr_-iFhy7ZJauagMU7w8GgkdjbF5i2IPrEx-W6JGeHYBBp1NNvd73H34IqUBUNvCdS0wj1ZXs__CRjh_j1NikOPP';
 
 const JWT_TOKEN = 'L0FONYcvjajULdjnaKpBP';
 

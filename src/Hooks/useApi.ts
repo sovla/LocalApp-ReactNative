@@ -15,7 +15,7 @@ function useApi<T>(defaultValue: T, apiPath: string) {
           if (checkData(result)) {
             setData(result.data.data);
           } else {
-            setErrorMessage(result.data);
+            setErrorMessage(result.data.msg);
             setIsError(true);
           }
         })

@@ -1,5 +1,5 @@
 import {Platform, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {Text, RedText} from '@Components/Global/text';
@@ -22,6 +22,7 @@ import {
 import messaging from '@react-native-firebase/messaging';
 import AutoHeightImage from 'react-native-auto-height-image';
 import {AlertButton} from '@/Util/Util';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AndroidPermission = [
   PERMISSIONS.ANDROID.READ_SMS,
@@ -47,57 +48,31 @@ export default function AppPermission({navigation}: AppPermissionProps) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
 
-  const [permission, setPermission] = useState({
-    call: false,
-    storage: false,
-    locationInformation: false,
-    cameraGallery: false,
-    alarm: false,
-  });
-  const allPermissionCheck = useCallback(() => {
-    if (Platform.OS === 'android') {
-      checkMultiple(AndroidPermission).then(state => {
-        console.log(state);
-        setPermission(prev => ({
-          ...prev,
-          call: state[AndroidPermission[0]] === 'granted',
-          storage:
-            state[AndroidPermission[1]] === 'granted' &&
-            state[AndroidPermission[2]] === 'granted',
-          locationInformation:
-            state[AndroidPermission[3]] === 'granted' &&
-            state[AndroidPermission[4]] === 'granted',
-          cameraGallery: state[AndroidPermission[5]] === 'granted',
-          alarm: state[AndroidPermission[6]] === 'granted',
-        }));
-      });
-    }
-  }, []);
-
   const onPressAll = useCallback(async () => {
     if (Platform.OS === 'android') {
-      const result = await requestMultiple(AndroidPermission).then(
-        statuses => {},
-      );
+      const result = await requestMultiple(AndroidPermission).then(state => {
+        if (
+          state[AndroidPermission[0]] === 'granted' &&
+          state[AndroidPermission[1]] === 'granted' &&
+          state[AndroidPermission[2]] === 'granted' &&
+          state[AndroidPermission[3]] === 'granted' &&
+          state[AndroidPermission[4]] === 'granted'
+        ) {
+          AsyncStorage.setItem('done', 'Login');
+          return navigation.reset({
+            routes: [
+              {
+                name: 'Login',
+              },
+            ],
+          });
+        } else {
+          AlertButton(t('appPermissionAlert'));
+        }
+      });
     } else {
-      requestUserPermission();
+      await requestUserPermission();
     }
-    allPermissionCheck();
-    navigation.reset({
-      routes: [
-        {
-          name: 'Login',
-        },
-      ],
-    });
-    // if (
-    //   permission.call &&
-    //   permission.storage &&
-    //   permission.locationInformation
-    // ) {
-    // } else {
-    //   AlertButton('권한을 허용 해주세요.');
-    // }
   }, []);
 
   const menuList = [

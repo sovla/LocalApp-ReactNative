@@ -20,14 +20,15 @@ import Line from '@/Components/Global/Line';
 import {LoginProps} from '@/Types/Screen/Screen';
 
 import Input from '@/Components/Global/Input';
-import {getHitSlop} from '@/Util/Util';
+import {AlertButton, getHitSlop} from '@/Util/Util';
 import CountryPicker from '@/Components/Profile/CountryPicker';
+import {API} from '@/API/API';
 
 export default function Login({navigation}: LoginProps) {
-  const {t} = useTranslation();
+  const {t, i18n} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const [autoLogin, setAutoLogin] = useState<boolean>(false);
-  const [isView, setIsView] = useState<boolean>(false);
+  const [isAuthModal, setIsAuthModal] = useState<boolean>(false);
   const [selectNum, setSelectNum] = useState('+55');
   const [tel, setTel] = useState('');
   const titleFontsize = fontSize * 36;
@@ -36,16 +37,30 @@ export default function Login({navigation}: LoginProps) {
     setAutoLogin(prev => !prev);
   }, []);
   const onPressIsView = useCallback(() => {
-    setIsView(prev => !prev);
+    setIsAuthModal(prev => !prev);
   }, []);
 
   const onPressSignUp = useCallback(() => {
     navigation.navigate('SignUpTOS');
   }, []);
 
-  const onPressLogin = useCallback(() => {
-    navigation.navigate('LoginComplete');
-  }, []);
+  const onPressLogin = useCallback(async () => {
+    if (tel === '') {
+      return AlertButton(t('telRequireAlert'));
+    }
+    const result = await API.post('member_login_certi.php', {
+      jct_country: selectNum.split('+')[1],
+      jct_hp: tel,
+      lang: i18n.language,
+    });
+    if (result.data.result === 'true') {
+      navigation.navigate('LoginComplete');
+    } else {
+      AlertButton(result.data?.msg);
+    }
+
+    //
+  }, [selectNum, tel, i18n]);
 
   return (
     <View style={styles.container}>

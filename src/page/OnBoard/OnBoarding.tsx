@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {Text, WhiteText} from '@Components/Global/text';
@@ -23,6 +23,7 @@ import {onScrollSlide} from '@/Util/Util';
 import KeywordAlarmImage from '@assets/image/keyword_alarm.png';
 import ShoppingImage from '@assets/image/shopping.png';
 import CommissionImage from '@assets/image/commission.png';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function OnBoarding({navigation}: OnBoardingProps) {
   const {t} = useTranslation();
@@ -30,6 +31,13 @@ export default function OnBoarding({navigation}: OnBoardingProps) {
   const [page, setPage] = useState(0);
 
   const color = ['#F3D3DE', '#F5C634', '#716EF3', '#88D9E0'];
+
+  useEffect(() => {
+    return () => {
+      AsyncStorage.setItem('done', 'AppPermission');
+    };
+  }, []);
+
   const onPressNext = () => {
     // 처음이면?
 
