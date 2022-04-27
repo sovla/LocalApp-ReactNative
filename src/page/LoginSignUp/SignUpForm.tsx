@@ -5,7 +5,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import Header from '@/Components/LoginSignUp/Header';
 import {MediumText, Text} from '@/Components/Global/text';
 import {useAppSelector} from '@/Hooks/CustomHook';
@@ -18,37 +18,80 @@ import {Button} from '@/Components/Global/button';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {SignUpFormProps} from '@/Types/Screen/Screen';
 import {ImageOrVideo} from 'react-native-image-crop-picker';
-import {checkEmpty} from '@/Util/Util';
+import {birthDate, checkEmpty} from '@/Util/Util';
 import {useIsFocused} from '@react-navigation/native';
+import useObject from '@/Hooks/useObject';
+import {API} from '@/API/API';
+
+interface userState {
+  mt_country?: string;
+  mt_hp?: string;
+  mt_name?: string;
+  mt_birth?: string;
+  mt_gender?: string;
+  mt_email?: string;
+  mt_memo?: string;
+  mt_marketing?: string;
+}
 
 export default function SignUpForm({
   navigation,
   route: {params},
 }: SignUpFormProps) {
-  const {t} = useTranslation();
+  const {t, i18n} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const {token} = useAppSelector(state => state.global.data);
   const isFocused = useIsFocused();
-  const [image, setImage] = useState<
-    | ImageOrVideo
-    | {
-        path: string;
-      }
-    | null
-  >(null);
 
-  const onPressSignUp = useCallback(() => {
-    navigation.navigate('SignUpComplete');
-  }, []);
+  const [image, setImage] = useState<{
+    path: string;
+    mime: string;
+  } | null>(null);
+
+  const [user, setUser, onChangeUser] = useObject<userState>({
+    mt_country: '55',
+    mt_hp: '0101234',
+    mt_name: '사용자명',
+    mt_birth: '1994-07-11',
+    mt_gender: 'M',
+    mt_email: 'test@naver.com',
+    mt_memo: '상태메시지',
+    mt_marketing: 'N',
+  });
+
+  const inputRefs = useRef<any[]>([]);
+
+  const onPressSignUp = useCallback(async () => {
+    const result = await API.post('member_join.php', {
+      ...user,
+      lang: i18n.language,
+      mt_app_token: token,
+      mt_file: image,
+      imageField: 'mt_file',
+    });
+
+    if (result.data?.result === 'true') {
+      navigation.replace('SignUpComplete');
+    }
+  }, [user, image, i18n]);
 
   useEffect(() => {
-    console.log(params);
-    if (params?.imagePath) {
-      setImage({
-        path: params.imagePath,
-      });
+    if (params?.image) {
+      setImage(params.image);
+    }
+    if (params?.selectNum && params?.tel) {
+      setUser((prev: userState) => ({
+        ...prev,
+        mt_hp: params.tel,
+        mt_country: params.selectNum?.replace('+', ''),
+      }));
+    }
+    if (params?.option) {
+      onChangeUser('mt_marketing', 'Y');
     }
   }, [isFocused]);
 
+  const tel = `+${user.mt_country} ${user.mt_hp}`;
   return (
     <View style={styles.mainContainer}>
       <KeyboardAwareScrollView
@@ -72,8 +115,11 @@ export default function SignUpForm({
 
         <View style={{height: getHeightPixel(50)}} />
         <Input
-          value=""
-          onChange={() => {}}
+          ref={inputRefs}
+          value={user.mt_name}
+          onChange={v => {
+            onChangeUser('mt_name', v);
+          }}
           PlaceHolderComponent={() => {
             return (
               <>
@@ -93,8 +139,9 @@ export default function SignUpForm({
           }}
         />
         <Input
-          value=""
-          onChange={() => {}}
+          ref={inputRefs}
+          value={user.mt_memo}
+          onChange={v => onChangeUser('mt_memo', v)}
           PlaceHolderComponent={() => {
             return (
               <>
@@ -108,8 +155,9 @@ export default function SignUpForm({
           }}
         />
         <Input
-          value=""
-          onChange={() => {}}
+          ref={inputRefs}
+          value={tel}
+          disabled
           PlaceHolderComponent={() => {
             return (
               <>
@@ -130,8 +178,9 @@ export default function SignUpForm({
         />
 
         <Input
-          value=""
-          onChange={() => {}}
+          ref={inputRefs}
+          value={user.mt_birth}
+          onChange={v => onChangeUser('mt_birth', birthDate(v))}
           PlaceHolderComponent={() => {
             return (
               <>
@@ -156,8 +205,9 @@ export default function SignUpForm({
           }}
         />
         <Input
-          value=""
-          onChange={() => {}}
+          ref={inputRefs}
+          value={user.mt_gender}
+          onChange={v => onChangeUser('mt_gender', v)}
           PlaceHolderComponent={() => {
             return (
               <>
@@ -177,8 +227,9 @@ export default function SignUpForm({
           }}
         />
         <Input
-          value=""
-          onChange={() => {}}
+          ref={inputRefs}
+          value={user.mt_email}
+          onChange={v => onChangeUser('mt_email', v)}
           PlaceHolderComponent={() => {
             return (
               <>

@@ -15,15 +15,35 @@ import Line from '@/Components/Global/Line';
 import {SignUpTelProps} from '@/Types/Screen/Screen';
 import ArrowDownIcon from '@assets/image/arrow_down.png';
 import {TextInput} from 'react-native-gesture-handler';
+import CountryPicker from '@/Components/Profile/CountryPicker';
+import {API} from '@/API/API';
+import {AlertButton} from '@/Util/Util';
 
-export default function SignUpTel({navigation}: SignUpTelProps) {
-  const {t} = useTranslation();
+export default function SignUpTel({
+  navigation,
+  route: {params},
+}: SignUpTelProps) {
+  const {t, i18n} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const [tel, setTel] = useState('');
+  const [selectNum, setselectNum] = useState('+55');
 
-  const onPressNext = useCallback(() => {
-    return navigation.navigate('SignUpAuth', tel);
-  }, []);
+  const onPressNext = useCallback(async () => {
+    if (tel === '') {
+      return AlertButton(t('telRequireAlert'));
+    }
+    const result = await API.post('member_join_hp_certi.php', {
+      jct_country: selectNum.replace('+', ''),
+      jct_hp: tel,
+      lang: i18n.language,
+    });
+
+    if (result.data.result === 'true') {
+      return navigation.navigate('SignUpAuth', {tel, selectNum, ...params});
+    } else {
+      AlertButton(result.data?.msg);
+    }
+  }, [tel, selectNum]);
 
   return (
     <View style={styles.container}>
@@ -40,21 +60,26 @@ export default function SignUpTel({navigation}: SignUpTelProps) {
               {t('signUpTelGuide3')}
             </Text>
           </Text>
-          <TouchableOpacity style={styles.touch}>
-            <Text fontSize={`${14 * fontSize}`}>브라질</Text>
-            <AutoHeightImage source={ArrowDownIcon} width={getPixel(12)} />
-          </TouchableOpacity>
+          <CountryPicker selectNum={selectNum} setSelectNum={setselectNum} />
           <Line isGray width={getPixel(288)} />
           <View style={styles.touch}>
             <View style={styles.telLeftView}>
-              <GrayText fontSize={`${16 * fontSize}`}>+</GrayText>
-              <Text fontSize={`${16 * fontSize}`}> 55</Text>
+              <GrayText
+                style={{marginRight: getPixel(5)}}
+                fontSize={`${16 * fontSize}`}>
+                +
+              </GrayText>
+              <Text fontSize={`${16 * fontSize}`}>
+                {selectNum.includes('+') && selectNum.split('+')[1]}
+              </Text>
             </View>
             <TextInput
+              keyboardType="numeric"
               style={{
                 ...styles.textInput,
                 fontSize: 15 * fontSize,
               }}
+              onChangeText={setTel}
               placeholder={t('telPh')}
               placeholderTextColor={Theme.color.gray}
             />

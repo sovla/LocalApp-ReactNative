@@ -8,10 +8,22 @@ type Screen = {
   LoginComplete: StackScreenProps<Screen> | undefined;
   SignUp: StackScreenProps<Screen> | undefined;
   SignUpTOS: StackScreenProps<Screen> | undefined;
-  SignUpTel: StackScreenProps<Screen> | undefined;
-  SignUpAuth: StackScreenProps<Screen> | undefined;
+  SignUpTel: {
+    option?: boolean;
+  };
+  SignUpAuth: {
+    tel: string;
+    selectNum: string;
+    option?: boolean;
+  };
   SignUpForm: {
-    imagePath?: string;
+    image?: {
+      mime: string;
+      path: string;
+    };
+    tel?: string;
+    selectNum?: string;
+    option?: boolean;
   };
   SignUpPhoto: StackScreenProps<Screen> | undefined;
   SignUpComplete: StackScreenProps<Screen> | undefined;

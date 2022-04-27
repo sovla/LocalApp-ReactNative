@@ -31,28 +31,6 @@ const App = () => {
     // Geolocation.getCurrentPosition(info => console.log(info));
   }, []);
 
-  useEffect(() => {
-    (async () => {
-      const authorizationStatus = await messaging().requestPermission();
-      if (
-        authorizationStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-        authorizationStatus === messaging.AuthorizationStatus.PROVISIONAL
-      ) {
-        if (Platform.OS === 'ios') {
-          const token = await messaging().getAPNSToken();
-          if (token) {
-            AsyncStorage.setItem('token', token);
-          }
-        } else {
-          const token = await messaging().getToken();
-          console.log(token);
-          if (token) {
-            AsyncStorage.setItem('token', token);
-          }
-        }
-      }
-    })();
-  }, []);
   return (
     <Provider store={store}>
       <Router />

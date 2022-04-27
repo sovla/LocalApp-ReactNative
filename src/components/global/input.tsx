@@ -18,6 +18,8 @@ export default function Input({
   isLine = true,
   keyboardType,
   inputFontSize = 12,
+  disabled,
+  ref,
 }: InputProps) {
   const fontSize = useAppSelector(state => state.fontSize.value);
   const [isFocus, setIsFocus] = useState(false);
@@ -36,6 +38,8 @@ export default function Input({
           },
         ]}>
         <TextInput
+          ref={ref}
+          editable={!disabled}
           style={[
             styles.textInput,
             {
@@ -47,7 +51,7 @@ export default function Input({
           onChangeText={onChange}
           onFocus={() => setIsFocus(true)}
           onBlur={() => setIsFocus(false)}
-          value={PlaceHolderComponent === undefined ? value : undefined}>
+          value={value?.length ? value : undefined}>
           {!isFocus && !value?.length && PlaceHolderComponent !== undefined ? (
             <PlaceHolderComponent />
           ) : null}

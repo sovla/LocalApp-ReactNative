@@ -20,13 +20,15 @@ export default function AuthNumber({
   setAuthNum,
   onPressNext,
   isChange = true,
+  onPressRetry,
 }: {
   count: number;
   tel: string;
   authNum: string;
   setAuthNum: React.Dispatch<React.SetStateAction<string>>;
-  onPressNext?: () => void;
+  onPressNext: () => void;
   isChange?: boolean;
+  onPressRetry: () => void;
 }) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
@@ -80,7 +82,7 @@ export default function AuthNumber({
             </View>
           </View>
           <View style={styles.authRetryView}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={onPressRetry}>
               <GrayText fontSize={`${12 * fontSize}`}>
                 {t('authRetry')}
               </GrayText>

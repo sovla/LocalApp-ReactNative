@@ -21,12 +21,13 @@ import {
   ActivityIndicator,
   StyleSheet,
   Dimensions,
+  Platform,
 } from 'react-native';
 
 import i18n from 'i18next';
 import {initReactI18next, useTranslation} from 'react-i18next';
 import {en, ko, es, br} from '@/assets/lang/lang';
-import {useAppSelector} from '@/Hooks/CustomHook';
+import {useAppDispatch, useAppSelector} from '@/Hooks/CustomHook';
 import Screen from '@/Types/Screen/Screen';
 import {API} from '@/API/API';
 import OnBoarding from './OnBoard/OnBoarding';
@@ -108,6 +109,8 @@ import Menu from './Menu';
 import ProductTierGuide from './Product/ProductTierGuide';
 import BlockList from './Chatting/BlockList';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import messaging from '@react-native-firebase/messaging';
+import {changeToken} from '@/Store/globalState';
 
 const resources = {
   en,
@@ -130,8 +133,31 @@ export default function Router() {
   const [isAsync, setIsAsync] = useState<boolean>(true);
   const [initRoute, setInitRoute] = useState<keyof Screen>('OnBoarding');
   const lang = useAppSelector(state => state.lang.value);
+  const dispatch = useAppDispatch();
 
   const ref = createNavigationContainerRef<Screen>();
+
+  useEffect(() => {
+    (async () => {
+      const authorizationStatus = await messaging().requestPermission();
+      if (
+        authorizationStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+        authorizationStatus === messaging.AuthorizationStatus.PROVISIONAL
+      ) {
+        if (Platform.OS === 'ios') {
+          const token = await messaging().getAPNSToken();
+          if (token) {
+            dispatch(changeToken(token));
+          }
+        } else {
+          const token = await messaging().getToken();
+          if (token) {
+            dispatch(changeToken(token));
+          }
+        }
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     // 언어설정
@@ -229,9 +255,9 @@ const withScrollView = (WrappedComponent: any) => {
         <SafeAreaView style={{flex: 1}}>
           <View style={{flex: 1, backgroundColor: Theme.color.white}}>
             <WrappedComponent {...props} />
-            {/* <View style={[styles.position]}>
+            <View style={[styles.position]}>
               <Text>{props.route.name}</Text>
-            </View> */}
+            </View>
           </View>
         </SafeAreaView>
         <SafeAreaView style={{flex: 0, backgroundColor: '#fff'}} />

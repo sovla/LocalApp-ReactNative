@@ -69,7 +69,7 @@ import QuetionIcon from '@assets/image/quetion.png';
 import AnswerIcon from '@assets/image/answer.png';
 import {FAQItemProps} from '@/Types/Components/SettingTypes';
 import SuccessIcon from '@assets/image/success.png';
-import {getHitSlop} from '@/Util/Util';
+import {AlertButton, getHitSlop} from '@/Util/Util';
 
 export default function SignUpToS({navigation}: SignUpTOSProps) {
   const {t} = useTranslation();
@@ -91,8 +91,12 @@ export default function SignUpToS({navigation}: SignUpTOSProps) {
   }, [isAllCheck]);
 
   const onPressNext = useCallback(() => {
-    navigation.navigate('SignUpTel');
-  }, []);
+    if (agree.require1 && agree.require2) {
+      navigation.navigate('SignUpTel', {option: agree.option});
+    } else {
+      AlertButton(t('signUpRequireAlert'));
+    }
+  }, [agree]);
 
   return (
     <View style={styles.container}>

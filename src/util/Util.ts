@@ -74,3 +74,11 @@ export const AlertButtons = (
       },
     ]);
 };
+
+export const birthDate = (str: string) => {
+  if (str.length === 2 || str.length === 5) {
+    return str + '/';
+  } else {
+    return str;
+  }
+};

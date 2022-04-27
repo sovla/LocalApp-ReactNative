@@ -23,6 +23,7 @@ import Input from '@/Components/Global/Input';
 import {AlertButton, getHitSlop} from '@/Util/Util';
 import CountryPicker from '@/Components/Profile/CountryPicker';
 import {API} from '@/API/API';
+import ModalAuth from '@/Components/LoginSignUp/ModalAuth';
 
 export default function Login({navigation}: LoginProps) {
   const {t, i18n} = useTranslation();
@@ -35,9 +36,6 @@ export default function Login({navigation}: LoginProps) {
 
   const onPressAutoLogin = useCallback(() => {
     setAutoLogin(prev => !prev);
-  }, []);
-  const onPressIsView = useCallback(() => {
-    setIsAuthModal(prev => !prev);
   }, []);
 
   const onPressSignUp = useCallback(() => {
@@ -54,7 +52,8 @@ export default function Login({navigation}: LoginProps) {
       lang: i18n.language,
     });
     if (result.data.result === 'true') {
-      navigation.navigate('LoginComplete');
+      AlertButton(result.data.data);
+      setIsAuthModal(true);
     } else {
       AlertButton(result.data?.msg);
     }
@@ -183,6 +182,13 @@ export default function Login({navigation}: LoginProps) {
           </View>
         </View>
       </KeyboardAwareScrollView>
+      {isAuthModal && (
+        <ModalAuth
+          onPressRetry={onPressLogin}
+          tel={tel}
+          selectNum={selectNum}
+          onClose={() => setIsAuthModal(false)}></ModalAuth>
+      )}
     </View>
   );
 }

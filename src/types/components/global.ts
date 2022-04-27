@@ -51,6 +51,8 @@ export interface InputProps {
   isLine?: boolean;
   keyboardType?: TextInputProps['keyboardType'];
   inputFontSize?: number;
+  disabled?: boolean;
+  ref?: any;
 }
 
 export interface LineProps {

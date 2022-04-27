@@ -48,21 +48,75 @@ export const API = axios.create({
     'Access-Control-Allow-Credentials': true, // Required for cookies, authorization headers with HTTPS
   },
 
-  transformRequest: (data?: object) => {
+  transformRequest: (data?: any) => {
     // 보내기전 데이터 가공
+    let cloneData = data; // 데이터 복사
+    let imageData; // 이미지 데이터 넣을 변수
+
     if (LOGON) console.log('formData :::', data);
-    const jwt_data = jwt_encode(data, SECRETKEY);
+    if (typeof data?.imageField === 'string') {
+      // 이미지 필드에 문자열 하나만 있는 경우
+      const field = data.imageField; // 해당 필드명
+
+      let cloneData = Object.assign({}, data);
+      //  객체복사
+      delete cloneData[field];
+      //  이미지 제외
+
+      if (Array.isArray(data[field])) {
+        // 배열인 경우
+        imageData = [];
+        for (const item of data[field]) {
+          imageData.push({
+            //  아닌경우 하나의 배열에 푸쉬
+            key: 'image' + new Date().getTime(),
+            uri:
+              Platform.OS === 'android'
+                ? item.path
+                : item.path.replace('file://', ''),
+            type: item.mime,
+            name: 'auto.jpg',
+          });
+        }
+      } else {
+        const item = data[field];
+        imageData = {
+          key: 'image' + new Date().getTime(),
+          uri:
+            Platform.OS === 'android'
+              ? item.path
+              : item.path.replace('file://', ''),
+          type: item.mime,
+          name: 'auto.jpg',
+        };
+      }
+    }
+    const jwt_data = jwt_encode(cloneData, SECRETKEY);
+
     const result = formFormatter(
       data
-        ? Object.assign(
-            // 데이터가 있는경우
-            {
-              jwt_data,
-            },
-            {
-              debug_jwt: JWT_TOKEN,
-            },
-          )
+        ? imageData
+          ? Object.assign(
+              // 이미지 데이터+ 데이터가 있는경우
+              {
+                jwt_data,
+                [Array.isArray(imageData)
+                  ? data.imageField + '[]' // 배열인 경우
+                  : data.imageField]: imageData, // 기본
+              },
+              {
+                debug_jwt: JWT_TOKEN,
+              },
+            )
+          : Object.assign(
+              // 데이터가 있는경우
+              {
+                jwt_data,
+              },
+              {
+                debug_jwt: JWT_TOKEN,
+              },
+            )
         : {
             // 데이터가 없는경우
             debug_jwt: JWT_TOKEN,
@@ -78,13 +132,12 @@ export const API = axios.create({
     }
     try {
       const jsonParseData = JSON.parse(data);
-      if (LOGON) console.log('가공전 :::', jsonParseData);
 
       if (jsonParseData.result === 'true') {
         // const jwtDecodeData: any = jwtDecode(jsonParseData?.data);
 
-        if (LOGON) console.log('API Result Success :::\n', jsonParseData.data);
-        return jsonParseData.data;
+        if (LOGON) console.log('API Result Success :::\n', jsonParseData);
+        return jsonParseData;
       } else {
         if (LOGON) console.log('API Result Failed :::', jsonParseData);
         return jsonParseData;

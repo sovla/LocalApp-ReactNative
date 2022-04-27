@@ -1,6 +1,8 @@
 import {configureStore} from '@reduxjs/toolkit';
 import fontSizeState from './fontSizeState';
+import globalState from './globalState';
 import langState from './langState';
+import userState from './userState';
 
 const store = configureStore({
   reducer: {
@@ -9,6 +11,8 @@ const store = configureStore({
     // middleware: ['array of middlewares'],
     fontSize: fontSizeState,
     lang: langState,
+    global: globalState,
+    user: userState,
   },
 });
 

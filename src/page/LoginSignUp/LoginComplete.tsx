@@ -16,7 +16,13 @@ export default function LoginComplete({navigation}: LoginCompleteProps) {
   const fontSize = useAppSelector(state => state.fontSize.value);
 
   const onPressComplete = useCallback(() => {
-    navigation.navigate('Home');
+    return navigation.reset({
+      routes: [
+        {
+          name: 'Home',
+        },
+      ],
+    });
   }, []);
 
   return (

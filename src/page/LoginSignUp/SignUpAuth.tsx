@@ -7,17 +7,54 @@ import {SignUpAuthProps} from '@/Types/Screen/Screen';
 
 import useInterval from '@/Hooks/useInterval';
 import AuthNumber from '@/Components/LoginSignUp/AuthNumber';
+import {AlertButton} from '@/Util/Util';
+import {API} from '@/API/API';
 
-export default function SignUpAuth({navigation}: SignUpAuthProps) {
-  const {t} = useTranslation();
+export default function SignUpAuth({
+  navigation,
+  route: {params},
+}: SignUpAuthProps) {
+  const {t, i18n} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
 
-  const tel = '+55 11 99999-0000';
-  const [authNum, setAuthNum] = useState('0');
+  const tel = params.selectNum + ' ' + params.tel;
+  const [authNum, setAuthNum] = useState('');
   const [count, setCount] = useState(120);
 
-  const onPressNext = useCallback(() => {
-    navigation.navigate('SignUpForm', tel);
+  const onPressNext = useCallback(async () => {
+    if (count === 0) {
+      return AlertButton(t('authAlert1'));
+    }
+    if (authNum.length !== 6) {
+      return AlertButton(t('authAlert2'));
+    }
+
+    const result = await API.post('member_join_hp_certi_check.php', {
+      jct_country: params.selectNum.replace('+', ''),
+      jct_hp: params.tel,
+      lang: i18n.language,
+      passcode: authNum,
+    });
+    if (result.data.result === 'true') {
+      navigation.navigate('SignUpForm', {
+        ...params,
+      });
+    } else {
+      AlertButton(result.data?.msg);
+    }
+  }, [count, authNum, i18n]);
+  const onPressRetry = useCallback(async () => {
+    const result = await API.post('member_join_hp_certi.php', {
+      jct_country: params.selectNum.replace('+', ''),
+      jct_hp: params.tel,
+      lang: i18n.language,
+    });
+
+    if (result.data.result === 'true') {
+      setCount(120);
+    } else {
+      AlertButton(result.data?.msg);
+    }
   }, []);
 
   useInterval(() => {
@@ -31,6 +68,7 @@ export default function SignUpAuth({navigation}: SignUpAuthProps) {
       onPressNext={onPressNext}
       setAuthNum={setAuthNum}
       tel={tel}
+      onPressRetry={onPressRetry}
     />
   );
 }
