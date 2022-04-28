@@ -13,6 +13,7 @@ import {getHitSlop} from '@/Util/Util';
 const ProductDetailShop: React.FC<ProductDetailShopProps> = ({
   shopName,
   shopSubTitle,
+  image = ShopDummyImage,
   onPress,
 }) => {
   const fontSize = useAppSelector(state => state.fontSize.value);
@@ -21,7 +22,7 @@ const ProductDetailShop: React.FC<ProductDetailShopProps> = ({
       <View style={styles.betweenView}>
         <View style={styles.rowView}>
           <View style={styles.shopImageRoundView}>
-            <Image source={ShopDummyImage} style={styles.shopImage} />
+            <Image source={image} style={styles.shopImage} />
           </View>
           <View style={styles.contentView}>
             <MediumText fontSize={`${16 * fontSize}`}>{shopName}</MediumText>

@@ -51,6 +51,7 @@ export interface ProductDetailShopProps {
   shopName: string;
   shopSubTitle: string;
   onPress?: () => void;
+  image?: any;
 }
 
 export interface ProductListProps {
@@ -156,4 +157,24 @@ interface LikeApiTypes {
   pt_title?: string;
   busi_check?: 'Y' | 'N';
   pt_cate?: string;
+}
+
+export interface ProduetDetailApiType {
+  T:
+    | ({
+        file: string[] | [];
+        pt_detail: string;
+        pt_grade: string;
+        pt_price_check: 'Y' | 'N';
+        sell_idx: string;
+        sell_memo: string;
+        sell_name: string;
+        sell_profile: string;
+        sell_type: string;
+      } & ProductApiTypes)
+    | null;
+  D: {
+    mt_idx: string | null;
+    pt_idx: string;
+  };
 }
