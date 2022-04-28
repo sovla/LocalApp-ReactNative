@@ -1,3 +1,6 @@
-member_login.php  / 로그인 
-에러남 
+member_login.php  
 자동 로그인 체크여부 추가
+
+product_like_list.php/ 관심 목록
+예약중 판매중 , 상태 없음 +
+비즈니스 여부 없음

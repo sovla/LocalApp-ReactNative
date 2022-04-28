@@ -1,15 +1,10 @@
 import {
   View,
-  Text,
   ImageBackground,
   StyleSheet,
   Image,
   TouchableOpacity,
   FlatList,
-  Modal,
-  TextInput,
-  KeyboardAvoidingView,
-  ScrollView,
 } from 'react-native';
 import React, {useCallback, useState} from 'react';
 import BackGroundImage from '@assets/image/BG.png';
@@ -18,20 +13,30 @@ import BackWhiteIcon from '@assets/image/back_white.png';
 import {GrayText, WhiteText} from '@/Components/Global/text';
 import {useTranslation} from 'react-i18next';
 import {useAppSelector} from '@/Hooks/CustomHook';
-import Product from '@/Components/Home/Product';
 import LikeProduct from '@/Components/Home/LikeProduct';
 import Theme from '@/assets/global/Theme';
 import Footer from '@/Components/Home/Footer';
-import {getHitSlop} from '@/Util/Util';
-import useBoolean from '@/Hooks/useBoolean';
-import AlertModal from '@/Components/Home/AlertModal';
+import {brPrice, getHitSlop} from '@/Util/Util';
 import {LikeListProps} from '@/Types/Screen/Screen';
+import useApi from '@/Hooks/useApi';
+import {LikeListType} from '@/Types/Components/HomeTypes';
 
 export default function LikeList({navigation}: LikeListProps) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const {user} = useAppSelector(state => state);
+
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [likeList, setLiekList] = useState<Array<any>>([1, 2, 3, 4, 5]);
+  const [page, setPage] = useState(1);
+
+  const {data, isLoading, isError, errorMessage} = useApi<
+    LikeListType['T'],
+    LikeListType['D']
+  >(null, 'product_like_list.php', {
+    mt_idx: user.mt_idx,
+    page: page,
+  });
 
   const onPressDelete = () => {
     setIsEdit(false);
@@ -101,14 +106,22 @@ export default function LikeList({navigation}: LikeListProps) {
             <></>
           )
         }
-        data={likeList}
+        data={data?.list ?? []}
         renderItem={({item, index}) => {
           return (
             <LikeProduct
               onPress={onPressItem}
               status={item === 2 ? '예약중' : item === 3 ? '판매완료' : ''}
-              price="R$ 24.00"
-              title="13,000Pa 초강력흡입력 [샤오미] 차량용 무선 핸디 청소기"
+              price={brPrice(item?.pt_price ?? '')}
+              title={item?.pt_title ?? ''}
+              image={
+                item?.pt_file
+                  ? {
+                      uri: item.pt_file,
+                    }
+                  : undefined
+              }
+              idx={item?.like_idx}
               isEdit={isEdit}
             />
           );

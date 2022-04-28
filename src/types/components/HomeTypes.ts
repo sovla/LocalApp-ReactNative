@@ -108,6 +108,7 @@ export interface LikeProductProps {
   isEdit: boolean;
   isSelectEdit?: boolean;
   onPress?: () => void;
+  idx?: string;
 }
 
 export interface FooterProps {
@@ -120,3 +121,34 @@ export interface ModalUploadModalProps extends ModalProps {}
 export interface ModalPopupProps extends ModalProps {}
 
 // API
+
+export type HomeProductListType = {
+  T: {
+    list: ProductApiTypes[] | null;
+    total_page: number | null;
+    tptal_count: number | null;
+  } | null;
+  D: {
+    mt_idx: string | null;
+    page: string | number;
+  };
+};
+
+export type LikeListType = {
+  T: {
+    list?: LikeApiTypes[] | null;
+    total_page?: number | null;
+    tptal_count?: number | null;
+  } | null;
+  D: {
+    mt_idx: string | null;
+    page: string | number;
+  };
+};
+
+interface LikeApiTypes {
+  like_idx?: string;
+  pt_file?: string;
+  pt_price?: string;
+  pt_title?: string;
+}
