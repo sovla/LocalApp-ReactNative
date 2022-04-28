@@ -20,6 +20,7 @@ export interface ProductProps {
   isList: boolean;
   isBorder?: boolean;
   onPress?: (item?: any) => void;
+  idx: string;
 }
 
 export interface MenuBoxProps {
@@ -53,9 +54,25 @@ export interface ProductDetailShopProps {
 
 export interface ProductListProps {
   isList: boolean;
-  list?: Array<any>;
+  list?: Array<ProductApiTypes>;
   isBorder?: boolean;
   onPressItem?: (item: ProductProps) => void;
+}
+export interface ProductApiTypes {
+  busi_check?: 'Y' | 'N' | null;
+  dist?: number | null;
+  fin_status?: 'Y' | 'N' | 'R' | null; // 판매중 N, 예약중: R, 판매완료: Y
+  like_count?: number | null;
+  my_like?: 'Y' | 'N' | null;
+  pt_file?: string | null;
+  pt_idx?: string | null;
+  pt_location?: string | null;
+  pt_location_detail?: string | null;
+  pt_price?: string | null;
+  pt_time?: number | null;
+  pt_time_type?: 'now' | 'minute' | 'hour' | 'day' | 'month' | 'year' | null;
+  pt_title?: string | null;
+  view_count?: number | null;
 }
 
 export interface SearchHeaderProps {
@@ -101,3 +118,5 @@ export interface ModalMyPageProps extends ModalProps {}
 export interface ModalUploadModalProps extends ModalProps {}
 
 export interface ModalPopupProps extends ModalProps {}
+
+// API

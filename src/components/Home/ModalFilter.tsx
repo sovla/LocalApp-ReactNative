@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import Theme from '@/assets/global/Theme';
 import {MediumText} from '@/Components/Global/text';
@@ -20,11 +20,14 @@ import CloseBlackIcon from '@assets/image/close_black.png';
 import {ModalFilterProps, ProductState} from '@/Types/Components/HomeTypes';
 import {CheckBox} from '../Global/button';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {Slider} from '@miblanchard/react-native-slider';
 
 const ModalFilter: React.FC<ModalFilterProps> = ({onClose}) => {
+  const ref = useRef(null);
   const [selectFilter, setSelectFilter] = useState<string>(
     'searchModalSortItem1',
   );
+  const [isFocus, setIsFocus] = useState(false);
   const [productState, setProductState] = useState<ProductState>({
     newProduct: false,
     Reaper: false,
@@ -32,6 +35,7 @@ const ModalFilter: React.FC<ModalFilterProps> = ({onClose}) => {
     forParts: false,
     donation: false,
   });
+  const [range, setRange] = useState([0, 1]);
 
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
@@ -67,6 +71,10 @@ const ModalFilter: React.FC<ModalFilterProps> = ({onClose}) => {
       name: 'donation',
     },
   ];
+
+  useEffect(() => {
+    console.log(ref.current);
+  }, [range]);
 
   return (
     <View style={styles.dim}>
@@ -112,9 +120,39 @@ const ModalFilter: React.FC<ModalFilterProps> = ({onClose}) => {
               <MediumText fontSize={`${18 * fontSize}`}>
                 {t('searchModalPriceRange')}
               </MediumText>
-
+              <Slider
+                value={range}
+                onValueChange={value => {
+                  if (Array.isArray(value)) {
+                    setRange([value[0], value[1]]);
+                  }
+                }}
+                maximumValue={5000000}
+                minimumValue={0}
+                step={125000}
+                trackStyle={{
+                  backgroundColor: Theme.color.whiteGray_EE,
+                  height: getHeightPixel(6),
+                  borderRadius: 8,
+                }}
+                minimumTrackTintColor={Theme.color.blue_3D}
+                thumbStyle={{
+                  backgroundColor: Theme.color.white,
+                  borderWidth: 1,
+                  borderColor: Theme.color.whiteGray_B7,
+                }}
+                thumbTouchSize={{
+                  width: 40,
+                  height: 40,
+                }}
+                ref={ref}
+              />
               <View style={styles.priceText}>
                 <TextInput
+                  value={range[0] !== 0 ? range[0].toString() : ''}
+                  onChangeText={t => {
+                    setRange(prev => [+t, prev[1]]);
+                  }}
                   keyboardType="numeric"
                   placeholder="R$ 0"
                   style={[
@@ -128,6 +166,10 @@ const ModalFilter: React.FC<ModalFilterProps> = ({onClose}) => {
                 <MediumText fontSize={`${16 * fontSize}`}>~</MediumText>
                 <TextInput
                   keyboardType="numeric"
+                  value={range[1] > 1 ? range[1].toString() : ''}
+                  onChangeText={t => {
+                    setRange(prev => [prev[0], +t]);
+                  }}
                   placeholder={t('searchModalTextInputPlaceHolder')}
                   style={[
                     styles.priceTextInput,

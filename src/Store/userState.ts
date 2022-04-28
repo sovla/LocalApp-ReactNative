@@ -19,7 +19,7 @@ const initialState: userState = {
   mt_busi: null,
   mt_country: null,
   mt_hp: null,
-  mt_idx: '11',
+  mt_idx: '3',
   mt_level: null,
   mt_marketing: null,
   mt_memo: null,

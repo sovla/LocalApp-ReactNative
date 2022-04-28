@@ -43,11 +43,11 @@ export default function LocationChange({
 }: LocationChangeProps): JSX.Element | null {
   const {t, i18n} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
-  const [selectRange, setSelectRange] = useState<number>(0);
+  const [selectRange, setSelectRange] = useState<number>(4);
   const [isLocation, setIsLocation] = useState(true);
   const [region, setRegion] = useState<{latitude: number; longitude: number}>({
-    latitude: -23.55,
-    longitude: -46.633333,
+    latitude: -23.5279688,
+    longitude: -46.6365761,
   });
   const {location, detail, city, locationName} = useGeocoding(region);
 

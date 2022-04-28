@@ -425,6 +425,13 @@ export const ko = {
     signUpRequireAlert: '이용약관 및 개인정보 수집에 동의해주세요.',
     authAlert1: '인증 가능한 시간이 지났습니다. 재요청 해주세요.',
     authAlert2: '인증 번호는 6자리 숫자입니다.',
+    nowTime: '방금전',
+    minuteTime: '분전',
+    hourTime: '시간전',
+    dayTime: '일전',
+    monthTime: '달전',
+    yearTime: '년전',
+    withinDistance: 'km이내',
   },
 };
 export const es = {

@@ -61,8 +61,9 @@ const Header: React.FC<HeaderProps> = ({isChange}) => {
       }}>
       <RowBox>
         <Box style={styles.firstIcon}>
-          <Image
-            style={[styles.icon]}
+          <AutoHeightImage
+            style={[styles.marginRight10]}
+            width={getPixel(18)}
             source={
               isChange
                 ? require('@assets/image/location_black.png')
@@ -190,6 +191,9 @@ const styles = StyleSheet.create({
   icon: {
     width: getPixel(24),
     height: getPixel(24),
+    marginRight: getPixel(10),
+  },
+  marginRight10: {
     marginRight: getPixel(10),
   },
   firstIcon: {

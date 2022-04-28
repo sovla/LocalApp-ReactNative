@@ -107,6 +107,7 @@ const Map: React.FC<{
       initialRegion={{...region, latitudeDelta: 0.003, longitudeDelta: 0.003}}
       onRegionChange={setRegion}
       onPress={e => console.log(e)}
+      zoomControlEnabled
       mapType="standard"
       showsUserLocation>
       <Marker

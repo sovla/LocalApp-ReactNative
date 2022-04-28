@@ -1,3 +1,4 @@
+import i18next from 'i18next';
 import {Alert, NativeScrollEvent, NativeSyntheticEvent} from 'react-native';
 import {getPixel} from './pixelChange';
 
@@ -84,5 +85,43 @@ export const birthDate = (str: string) => {
 };
 
 export const geoLanguage = (str: string) => {
+  // geocoding 언어 설정
   return str === 'br' ? 'pt-BR' : str;
+};
+
+export const viewCountCheck = (count: number) => {
+  // view count 999+표시
+  if (count > 999) {
+    return '999+';
+  } else {
+    return count.toString();
+  }
+};
+
+export const brPrice = (price: string) => {
+  // 가격 3자리 . 표시
+  if (price.includes('R$')) {
+    return price.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  } else {
+    return 'R$ ' + price.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  }
+};
+
+export const productTimeSetting = (
+  time: number,
+  timeType: 'now' | 'minute' | 'hour' | 'day' | 'month' | 'year' | null,
+) => {
+  if (timeType === 'now') {
+    return i18next.t('nowTime');
+  } else if (timeType === 'minute') {
+    return time + i18next.t('minuteTime');
+  } else if (timeType === 'hour') {
+    return time + i18next.t('hourTime');
+  } else if (timeType === 'day') {
+    return time + i18next.t('dayTime');
+  } else if (timeType === 'month') {
+    return time + i18next.t('monthTime');
+  } else if (timeType === 'year') {
+    return time + i18next.t('yearTime');
+  }
 };

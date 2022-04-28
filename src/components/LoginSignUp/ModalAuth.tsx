@@ -47,9 +47,9 @@ export default function ModalAuth({
   const [count, setCount] = useState(120);
   const [authNum, setAuthNum] = useState('');
   const onPressNext = useCallback(async () => {
-    if (!(count > 0)) {
-      return AlertButton(t('authAlert1'));
-    }
+    // if (!(count > 0)) {
+    //   return AlertButton(t('authAlert1'));
+    // }
     if (authNum.length !== 6) {
       return AlertButton(t('authAlert2'));
     }

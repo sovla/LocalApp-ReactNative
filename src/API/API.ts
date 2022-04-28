@@ -159,10 +159,6 @@ export const API = axios.create({
   },
 });
 
-export const checkData = (result: {data: {data: {status: 'Y' | 'N'}}}) => {
-  return result?.data?.data?.status === 'Y';
-};
-
 // export const ImageAPI = async (
 //   data: Object,
 //   field: string,

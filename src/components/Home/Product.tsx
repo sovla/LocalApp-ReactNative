@@ -1,5 +1,5 @@
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import React, {useCallback, useState} from 'react';
 import {ProductProps} from '@/Types/Components/HomeTypes';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import Theme from '@/assets/global/Theme';
@@ -19,6 +19,7 @@ import LikeEmptyIcon from '@assets/image/unlike.png';
 import LikeFillIcon from '@assets/image/love_pink.png';
 import dummy from '@assets/image/dummy.png';
 import {checkEmpty, getHitSlop, strEmptyCheck} from '@/Util/Util';
+import {usePostSend} from '@/Hooks/useApi';
 
 const Product: React.FC<ProductProps> = ({
   title,
@@ -33,8 +34,39 @@ const Product: React.FC<ProductProps> = ({
   isList,
   isBorder,
   onPress,
+  idx,
 }) => {
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const {user} = useAppSelector(state => state);
+  const {PostAPI} = usePostSend<
+    {
+      data: {
+        like: 'Y' | 'N' | null;
+      };
+    },
+    {
+      mt_idx: string;
+      pt_idx: string;
+    }
+  >('product_like.php', {
+    mt_idx: user?.mt_idx ?? '0',
+    pt_idx: idx,
+  });
+
+  const [like, setLike] = useState(isLike);
+
+  const onPressLike = useCallback(() => {
+    setLike(prev => !prev);
+    PostAPI().then(res => {
+      if (res?.data.result === 'true') {
+        if (res?.data?.like === 'Y') {
+          setLike(true);
+        } else {
+          setLike(false);
+        }
+      }
+    });
+  }, []);
 
   return isList ? (
     <TouchableOpacity
@@ -48,10 +80,11 @@ const Product: React.FC<ProductProps> = ({
 
         {/* 하트 아이콘 */}
         <TouchableOpacity
+          onPress={onPressLike}
           hitSlop={getHitSlop(5)}
           style={stylesNoneList.absoluteTouch}>
           <Image
-            source={!isLike ? LikeEmptyIcon : LikeFillIcon}
+            source={!like ? LikeEmptyIcon : LikeFillIcon}
             style={stylesNoneList.isLikeImage}
           />
         </TouchableOpacity>
@@ -131,9 +164,12 @@ const Product: React.FC<ProductProps> = ({
       ]}>
       <View style={[stylesNoneList.centerView, {borderRadius: 0}]}>
         <Image source={image} style={styles.isListMainImage} />
-        <TouchableOpacity hitSlop={getHitSlop(5)} style={styles.likeTouch}>
+        <TouchableOpacity
+          onPress={onPressLike}
+          hitSlop={getHitSlop(5)}
+          style={styles.likeTouch}>
           <Image
-            source={!isLike ? LikeEmptyIcon : LikeFillIcon}
+            source={!like ? LikeEmptyIcon : LikeFillIcon}
             style={stylesNoneList.isLikeImage}
           />
         </TouchableOpacity>
@@ -161,7 +197,12 @@ const Product: React.FC<ProductProps> = ({
         <MediumText fontSize={`${14 * fontSize}`}>{title}</MediumText>
         <View style={stylesNoneList.locationContentView}>
           <Image source={LocationIcon} style={stylesNoneList.locationImage} />
-          <Text fontSize={`${10 * fontSize}`} color={Theme.color.darkGray_78}>
+          <Text
+            style={{
+              width: getPixel(127),
+            }}
+            fontSize={`${10 * fontSize}`}
+            color={Theme.color.darkGray_78}>
             {location}
             {time}
           </Text>
@@ -204,12 +245,12 @@ Product.defaultProps = {
   isList: false,
 };
 
-export default Product;
+export default React.memo(Product);
 
 const styles = StyleSheet.create({
   contentView: {
     width: getPixel(160),
-    paddingVertical: 10,
+    paddingVertical: getHeightPixel(10),
     paddingLeft: getPixel(10),
     paddingRight: getPixel(5),
   },

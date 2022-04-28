@@ -30,7 +30,7 @@ const ModalPopup: React.FC<ModalPopupProps> = ({onClose}) => {
   }, []);
   const [page, setPage] = useState<number>(0);
 
-  const {data: List, isLoading} = useApi<ModalPopupAPI>(
+  const {data: List, isLoading} = useApi<ModalPopupAPI, any>(
     {
       link: null,
       file: null,

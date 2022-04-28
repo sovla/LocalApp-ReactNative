@@ -26,6 +26,7 @@ import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import useApi from '@/Hooks/useApi';
 import {useAppSelector} from '@/Hooks/CustomHook';
+import {ProductApiTypes} from '@/Types/Components/HomeTypes';
 export default function Home({navigation}: HomeProps): JSX.Element {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
@@ -35,12 +36,17 @@ export default function Home({navigation}: HomeProps): JSX.Element {
   const {value: isPopup, on: onIsPopup, off: offIsPopup} = useBoolean(false);
   const {value: isChange, on: onIsChange, off: offIsChange} = useBoolean(false);
   const [page, setPage] = useState(1);
-  const {
-    data: List,
-    isLoading,
-    isError,
-    errorMessage,
-  } = useApi([], 'product_home_list.php', {
+  const {data, isLoading, isError, errorMessage} = useApi<
+    {
+      list: ProductApiTypes[] | null;
+      total_page: number | null;
+      tptal_count: number | null;
+    },
+    {
+      mt_idx: string;
+      page: string;
+    }
+  >([], 'product_home_list.php', {
     mt_idx: user.mt_idx,
     page: page,
   });
@@ -68,7 +74,6 @@ export default function Home({navigation}: HomeProps): JSX.Element {
     },
     [],
   );
-
   return (
     <View style={{flex: 1, backgroundColor: Theme.color.whiteGray_F6}}>
       <Header isChange={isChange} />
@@ -83,7 +88,7 @@ export default function Home({navigation}: HomeProps): JSX.Element {
 
         <ProductList
           isList={isList}
-          list={[1, 2, 3, 4, 5]}
+          list={data.list ?? []}
           onPressItem={onPressItem}
         />
       </ScrollView>
