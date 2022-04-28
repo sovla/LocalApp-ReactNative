@@ -1,5 +1,5 @@
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {LikeProductProps, ProductProps} from '@/Types/Components/HomeTypes';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import Theme from '@/assets/global/Theme';
@@ -28,18 +28,23 @@ const LikeProduct: React.FC<LikeProductProps> = ({
   isEdit,
   isSelectEdit,
   onPress,
+  idx,
+  categoryNum,
 }) => {
   const fontSize = useAppSelector(state => state.fontSize.value);
   const [isOn, setIsOn] = useState(false);
+
+  const onPressItem = useCallback(() => {
+    if (isEdit) {
+      setIsOn(prev => !prev);
+    } else if (!isEdit && onPress) {
+      onPress(idx, categoryNum);
+    }
+  }, [isEdit]);
+
   return (
     <TouchableOpacity
-      onPress={
-        isEdit
-          ? () => {
-              setIsOn(prev => !prev);
-            }
-          : onPress
-      }
+      onPress={onPressItem}
       style={{
         flexDirection: 'row',
         alignItems: 'center',

@@ -30,7 +30,10 @@ type Screen = {
   Home: StackScreenProps<Screen> | undefined;
   AllCategory: StackScreenProps<Screen> | undefined;
   LocationChange: StackScreenProps<Screen> | undefined;
-  ProductDetail: StackScreenProps<Screen> | undefined;
+  ProductDetail: {
+    pt_idx: string;
+    pt_cate: string;
+  };
   Search:
     | {
         category?: categoryMenuTypes['menu'];

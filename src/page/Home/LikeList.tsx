@@ -44,8 +44,11 @@ export default function LikeList({navigation}: LikeListProps) {
   const onPressSave = () => {
     setIsEdit(false);
   };
-  const onPressItem = useCallback(() => {
-    navigation.navigate('ProductDetail');
+  const onPressItem = useCallback((idx: string, cate: string) => {
+    navigation.navigate('ProductDetail', {
+      pt_idx: idx,
+      pt_cate: cate,
+    });
   }, []);
 
   return (
@@ -121,7 +124,8 @@ export default function LikeList({navigation}: LikeListProps) {
                     }
                   : undefined
               }
-              idx={item?.like_idx}
+              idx={item?.like_idx ?? '0'}
+              categoryNum={item?.pt_cate ?? '0'}
               isEdit={isEdit}
             />
           );

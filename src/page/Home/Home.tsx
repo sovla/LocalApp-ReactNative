@@ -53,8 +53,11 @@ export default function Home({navigation}: HomeProps): JSX.Element {
     });
   }, []);
 
-  const onPressItem = useCallback(item => {
-    navigation.navigate('ProductDetail', item);
+  const onPressItem = useCallback((idx: string, cate: string) => {
+    navigation.navigate('ProductDetail', {
+      pt_cate: cate,
+      pt_idx: idx,
+    });
   }, []);
 
   const onScroll = useCallback(

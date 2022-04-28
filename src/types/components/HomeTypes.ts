@@ -19,8 +19,9 @@ export interface ProductProps {
   status?: string;
   isList: boolean;
   isBorder?: boolean;
-  onPress?: (item?: any) => void;
+  onPress?: (idx: string, cate: string) => void;
   idx: string;
+  cate: string;
 }
 
 export interface MenuBoxProps {
@@ -56,10 +57,11 @@ export interface ProductListProps {
   isList: boolean;
   list?: Array<ProductApiTypes>;
   isBorder?: boolean;
-  onPressItem?: (item: ProductProps) => void;
+  onPressItem?: (idx: string, cate: string) => void;
 }
 export interface ProductApiTypes {
   busi_check?: 'Y' | 'N' | null;
+  pt_cate?: string | null;
   dist?: number | null;
   fin_status?: 'Y' | 'N' | 'R' | null; // 판매중 N, 예약중: R, 판매완료: Y
   like_count?: number | null;
@@ -107,8 +109,9 @@ export interface LikeProductProps {
   status?: string;
   isEdit: boolean;
   isSelectEdit?: boolean;
-  onPress?: () => void;
-  idx?: string;
+  onPress?: (idx: string, type: string) => void;
+  idx: string;
+  categoryNum: string;
 }
 
 export interface FooterProps {
@@ -151,4 +154,6 @@ interface LikeApiTypes {
   pt_file?: string;
   pt_price?: string;
   pt_title?: string;
+  busi_check?: 'Y' | 'N';
+  pt_cate?: string;
 }

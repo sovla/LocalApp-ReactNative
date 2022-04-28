@@ -68,6 +68,7 @@ const ProductList: React.FC<ProductListProps> = ({
                 isBorder={isBorder}
                 onPress={onPressItem}
                 idx={item?.pt_idx ?? '0'}
+                cate={item?.pt_cate ?? '0'}
               />
             </Fragment>
           );

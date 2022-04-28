@@ -35,6 +35,7 @@ const Product: React.FC<ProductProps> = ({
   isBorder,
   onPress,
   idx,
+  cate,
 }) => {
   const fontSize = useAppSelector(state => state.fontSize.value);
   const {user} = useAppSelector(state => state);
@@ -71,7 +72,7 @@ const Product: React.FC<ProductProps> = ({
   return isList ? (
     <TouchableOpacity
       onPress={() => {
-        if (onPress) onPress();
+        if (onPress) onPress(idx, cate);
       }}
       disabled={!onPress}
       style={stylesNoneList.productContainer}>
@@ -152,7 +153,7 @@ const Product: React.FC<ProductProps> = ({
   ) : (
     <TouchableOpacity
       onPress={() => {
-        if (onPress) onPress();
+        if (onPress) onPress(idx, cate);
       }}
       disabled={!onPress}
       style={[
