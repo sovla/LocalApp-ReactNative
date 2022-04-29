@@ -75,6 +75,7 @@ export const CheckBox: React.FC<CheckBoxProps> = ({
 export const CheckBoxImage: React.FC<CheckBoxImageProps> = ({
   isOn,
   isBox,
+  isBlue,
   isCheckImage,
   width = getPixel(18),
   height = getPixel(18),
@@ -88,6 +89,10 @@ export const CheckBoxImage: React.FC<CheckBoxImageProps> = ({
       return isOn
         ? require('@assets/image/check_on.png')
         : require('@assets/image/check_off.png');
+    } else if (isBlue) {
+      return isOn
+        ? require('@assets/image/checkbox_blue.png')
+        : require('@assets/image/checkbox.png');
     } else {
       return isOn
         ? require('@assets/image/radio_on.png')

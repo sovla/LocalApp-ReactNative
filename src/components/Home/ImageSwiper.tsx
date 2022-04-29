@@ -22,7 +22,6 @@ export default function ImageSwiper({
   const [dotNumber, setDotNumber] = useState(0);
 
   const dotArray = new Array(imageArray?.length).fill(1);
-  console.log(imageArray);
 
   return (
     <View style={styles.mainContainer}>
@@ -40,7 +39,7 @@ export default function ImageSwiper({
           })}
         {(!Array.isArray(imageArray) || imageArray?.length < 1) && (
           <Image
-            source={require('@assets/image/none_image_l.jpg')}
+            source={require('@assets/image/none_image_l.png')}
             style={{width, height}}
           />
         )}

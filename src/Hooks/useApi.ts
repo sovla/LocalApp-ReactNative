@@ -1,4 +1,5 @@
 import {API} from '@/API/API';
+import {useIsFocused} from '@react-navigation/native';
 import {Axios, AxiosResponse} from 'axios';
 import {
   Dispatch,
@@ -10,48 +11,60 @@ import {
 import {check, RESULTS} from 'react-native-permissions';
 import useBoolean from './useBoolean';
 
-function useApi<T, D>(defaultValue: T, apiPath: string, axiosData?: D) {
+function useApi<T, D>(
+  defaultValue: T,
+  apiPath: string,
+  axiosData?: D,
+  isFirst: boolean = true,
+) {
   const [data, setData] = useState<T>(defaultValue);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+
+  const isFocused = useIsFocused();
+
   useEffect(() => {
-    (() => {
-      setIsLoading(true);
-      API.post<
-        any,
-        AxiosResponse<
-          {
-            result: 'true' | 'false' | null;
-            data: any | T;
-            msg: null | string;
-          } | null,
-          any
-        >
-      >(apiPath, axiosData)
-        .then(result => {
-          if (result.data?.result === 'true') {
-            if (result?.data?.data?.data) {
-              setData(result.data.data.data);
-            }
-          } else {
-            if (result.data?.msg) {
-              setErrorMessage(result.data.msg);
-            }
-            setIsError(true);
+    if (isFirst) {
+      getData();
+    }
+  }, [isFocused]);
+
+  const getData = useCallback(async () => {
+    setIsLoading(true);
+    await API.post<
+      any,
+      AxiosResponse<
+        {
+          result: 'true' | 'false' | null;
+          data: any | T;
+          msg: null | string;
+        } | null,
+        any
+      >
+    >(apiPath, axiosData)
+      .then(result => {
+        if (result.data?.result === 'true') {
+          if (result?.data?.data?.data) {
+            setData(result.data.data.data);
           }
-        })
-        .catch(err => {
+        } else {
+          if (result.data?.msg) {
+            setErrorMessage(result.data.msg);
+          }
           setIsError(true);
-          setErrorMessage(err);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    })();
+        }
+      })
+      .catch(err => {
+        setIsError(true);
+        setErrorMessage(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, []);
 
-  return {data, isLoading, isError, errorMessage};
+  return {data, isLoading, isError, errorMessage, getData};
 }
 
 export default useApi;

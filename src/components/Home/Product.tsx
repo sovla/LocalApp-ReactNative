@@ -1,6 +1,6 @@
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import React, {useCallback, useState} from 'react';
-import {ProductProps} from '@/Types/Components/HomeTypes';
+import {ProductLike, ProductProps} from '@/Types/Components/HomeTypes';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import Theme from '@/assets/global/Theme';
 import {
@@ -39,20 +39,13 @@ const Product: React.FC<ProductProps> = ({
 }) => {
   const fontSize = useAppSelector(state => state.fontSize.value);
   const {user} = useAppSelector(state => state);
-  const {PostAPI} = usePostSend<
+  const {PostAPI} = usePostSend<ProductLike['T'], ProductLike['D']>(
+    'product_like.php',
     {
-      data: {
-        like: 'Y' | 'N' | null;
-      };
+      mt_idx: user?.mt_idx ?? '0',
+      pt_idx: idx,
     },
-    {
-      mt_idx: string;
-      pt_idx: string;
-    }
-  >('product_like.php', {
-    mt_idx: user?.mt_idx ?? '0',
-    pt_idx: idx,
-  });
+  );
 
   const [like, setLike] = useState(isLike);
 

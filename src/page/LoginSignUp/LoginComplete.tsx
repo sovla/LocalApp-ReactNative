@@ -33,18 +33,12 @@ export default function LoginComplete({navigation}: LoginCompleteProps) {
           width={getPixel(50)}
           style={styles.image}
         />
-        <MediumText
-          fontSize={`${Theme.fontSize.fs24 * fontSize}px`}
-          style={styles.mainText}>
+        <MediumText fontSize={`${24 * fontSize}px`} style={styles.mainText}>
           {t('loginComplete')}
         </MediumText>
 
-        <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`}>
-          {t('loginCompleteText')}
-        </Text>
-        <Text fontSize={`${Theme.fontSize.fs14 * fontSize}px`}>
-          {t('loginCompleteText2')}
-        </Text>
+        <Text fontSize={`${14 * fontSize}px`}>{t('loginCompleteText')}</Text>
+        <Text fontSize={`${14 * fontSize}px`}>{t('loginCompleteText2')}</Text>
       </Box>
 
       <Button

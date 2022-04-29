@@ -42,7 +42,7 @@ export interface NavigationHeaderProps {
 
 export interface ImageSwiperProps {
   imageArray: Array<any>;
-  setImageArray: React.Dispatch<React.SetStateAction<Array<any>>>;
+  setImageArray?: React.Dispatch<React.SetStateAction<Array<any>>>;
   width: number;
   height: number;
 }
@@ -56,26 +56,9 @@ export interface ProductDetailShopProps {
 
 export interface ProductListProps {
   isList: boolean;
-  list?: Array<ProductApiTypes>;
+  list?: Array<ProductApiTypes> | ProduetDetailOtherApiType['T'];
   isBorder?: boolean;
   onPressItem?: (idx: string, cate: string) => void;
-}
-export interface ProductApiTypes {
-  busi_check?: 'Y' | 'N' | null;
-  pt_cate?: string | null;
-  dist?: number | null;
-  fin_status?: 'Y' | 'N' | 'R' | null; // 판매중 N, 예약중: R, 판매완료: Y
-  like_count?: number | null;
-  my_like?: 'Y' | 'N' | null;
-  pt_file?: string | null;
-  pt_idx?: string | null;
-  pt_location?: string | null;
-  pt_location_detail?: string | null;
-  pt_price?: string | null;
-  pt_time?: number | null;
-  pt_time_type?: 'now' | 'minute' | 'hour' | 'day' | 'month' | 'year' | null;
-  pt_title?: string | null;
-  view_count?: number | null;
 }
 
 export interface SearchHeaderProps {
@@ -126,6 +109,24 @@ export interface ModalPopupProps extends ModalProps {}
 
 // API
 
+export interface ProductApiTypes {
+  busi_check?: 'Y' | 'N' | null;
+  pt_cate?: string | null;
+  dist?: number | null;
+  fin_status?: 'Y' | 'N' | 'R' | null; // 판매중 N, 예약중: R, 판매완료: Y
+  like_count?: number | null;
+  my_like?: 'Y' | 'N' | null;
+  pt_file?: string | null;
+  pt_idx?: string | null;
+  pt_location?: string | null;
+  pt_location_detail?: string | null;
+  pt_price?: string | null;
+  pt_time?: number | null;
+  pt_time_type?: 'now' | 'minute' | 'hour' | 'day' | 'month' | 'year' | null;
+  pt_title?: string | null;
+  view_count?: number | null;
+}
+
 export type HomeProductListType = {
   T: {
     list: ProductApiTypes[] | null;
@@ -160,19 +161,51 @@ interface LikeApiTypes {
 }
 
 export interface ProduetDetailApiType {
-  T:
-    | ({
-        file: string[] | [];
-        pt_detail: string;
-        pt_grade: string;
-        pt_price_check: 'Y' | 'N';
-        sell_idx: string;
-        sell_memo: string;
-        sell_name: string;
-        sell_profile: string;
-        sell_type: string;
-      } & ProductApiTypes)
-    | null;
+  T: {
+    file: string[] | [];
+    pt_detail: string;
+    pt_grade: string;
+    pt_price_check: 'Y' | 'N';
+    sell_idx: string;
+    sell_memo: string;
+    sell_name: string;
+    sell_profile: string;
+    sell_type: string;
+    dist: number;
+    like_count: number;
+    my_like: 'Y' | 'N';
+    pt_location: string;
+    pt_location_detail: string;
+    pt_price: string;
+    pt_time: number;
+    pt_time_type: 'now' | 'minute' | 'hour' | 'day' | 'month' | 'year';
+    pt_title: string;
+    view_count: number;
+  } | null;
+  D: {
+    mt_idx: string | null;
+    pt_idx: string;
+  };
+}
+
+export interface ProduetDetailOtherApiType {
+  T: Array<
+    Omit<
+      ProductApiTypes,
+      'like_count' | 'fin_status' | 'pt_cate' | 'busi_check'
+    >
+  > | null;
+  D: {
+    mt_idx: string | null;
+    pt_idx: string;
+  };
+}
+export interface ProductLike {
+  T: {
+    data: {
+      like: 'Y' | 'N';
+    };
+  } | null;
   D: {
     mt_idx: string | null;
     pt_idx: string;

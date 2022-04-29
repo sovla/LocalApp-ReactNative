@@ -99,8 +99,9 @@ const Header: React.FC<HeaderProps> = ({isChange}) => {
           onPress={() => {
             navigation.navigate('Search');
           }}>
-          <Image
+          <AutoHeightImage
             style={styles.icon}
+            width={getPixel(20)}
             source={
               isChange
                 ? require('@assets/image/search_black.png')
@@ -112,8 +113,9 @@ const Header: React.FC<HeaderProps> = ({isChange}) => {
           onPress={() => {
             navigation.navigate('AllCategory');
           }}>
-          <Image
+          <AutoHeightImage
             style={styles.icon}
+            width={getPixel(24)}
             source={
               isChange
                 ? require('@assets/image/bar_black.png')
@@ -125,8 +127,14 @@ const Header: React.FC<HeaderProps> = ({isChange}) => {
           onPress={() => {
             navigation.navigate('AlarmList');
           }}>
-          <Image
-            style={styles.icon}
+          <AutoHeightImage
+            style={[
+              styles.icon,
+              {
+                marginRight: getPixel(16),
+              },
+            ]}
+            width={getPixel(20)}
             source={
               isChange
                 ? require('@assets/image/notice_black.png')
@@ -189,8 +197,6 @@ const styles = StyleSheet.create({
   },
   locationTouch: {flexDirection: 'row', alignItems: 'center'},
   icon: {
-    width: getPixel(20),
-    height: getPixel(20),
     marginRight: getPixel(10),
   },
   marginRight10: {

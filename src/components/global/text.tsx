@@ -18,7 +18,7 @@ export const Text = styled.Text<DefaultTextProps>`
   font-size: ${p => fontSizeChange(p.fontSize) ?? `${Theme.fontSize.fs16}px`};
   width: ${p => pixelChange(p.width) ?? 'auto'};
   height: ${p => pixelChange(p.height) ?? 'auto'};
-  letter-spacing: ${p => p.letterSpacing ?? '-0.84px'};
+  /* letter-spacing: ${p => p.letterSpacing ?? '0px'}; */
   text-decoration: ${p => p.textDecoration ?? 'none'};
   font-family: 'NotoSansKR-Regular';
   ${p =>

@@ -84,10 +84,10 @@ const Dot: React.FC<{isOn: boolean}> = ({isOn}) => {
   return (
     <View
       style={{
-        width: getPixel(7),
+        width: isOn ? getPixel(24) : getPixel(7),
         height: getPixel(7),
         borderColor: Theme.color.gray,
-        borderWidth: getPixel(1.5),
+        borderWidth: isOn ? 0 : getPixel(1.5),
         borderRadius: 100,
         backgroundColor: isOn ? Theme.color.gray : Theme.color.white,
         marginRight: getPixel(5),

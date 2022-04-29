@@ -89,12 +89,14 @@ export const geoLanguage = (str: string) => {
   return str === 'br' ? 'pt-BR' : str;
 };
 
-export const viewCountCheck = (count: number) => {
+export const viewCountCheck = (count?: number | null) => {
   // view count 999+표시
-  if (count > 999) {
+  if (count && count > 999) {
     return '999+';
-  } else {
+  } else if (count && count > 0) {
     return count.toString();
+  } else {
+    return '0';
   }
 };
 
@@ -108,9 +110,12 @@ export const brPrice = (price: string) => {
 };
 
 export const productTimeSetting = (
-  time: number,
+  time: number | null,
   timeType: 'now' | 'minute' | 'hour' | 'day' | 'month' | 'year' | null,
 ) => {
+  if (!time || !timeType) {
+    return '';
+  }
   if (timeType === 'now') {
     return i18next.t('nowTime');
   } else if (timeType === 'minute') {

@@ -3,7 +3,6 @@ import React, {Fragment} from 'react';
 import Product from './Product';
 import {getPixel} from '@/Util/pixelChange';
 import {ProductListProps} from '@/Types/Components/HomeTypes';
-import dummy from '@assets/image/dummy.png';
 import {brPrice, productTimeSetting, viewCountCheck} from '@/Util/Util';
 import {t} from 'i18next';
 
@@ -25,6 +24,15 @@ const ProductList: React.FC<ProductListProps> = ({
       }>
       {Array.isArray(list) &&
         list.map((item, index) => {
+          let status = '';
+          let likeCount = undefined;
+          let cate = '0';
+          if ('fin_status' in item) {
+            status = item.fin_status === 'Y' ? '판매완료' : '예약중'; // 수정필요 t("") 로 번역 되게끔
+            likeCount = viewCountCheck(item?.like_count);
+            cate = item?.pt_cate ?? '0';
+          }
+
           return (
             <Fragment key={index + 'Product'}>
               {!isList && (
@@ -42,19 +50,11 @@ const ProductList: React.FC<ProductListProps> = ({
                     ? {
                         uri: item.pt_file,
                       }
-                    : require('@assets/image/none_image_m.jpg') // 수정필요 더미 이미지 요청
+                    : require('@assets/image/none_image_m.png')
                 }
-                status={
-                  item?.fin_status === 'Y'
-                    ? '판매완료'
-                    : item?.fin_status === 'N'
-                    ? ''
-                    : '예약중' // 수정필요 t("") 로 번역 되게끔
-                }
+                status={status}
                 viewCount={viewCountCheck(item?.view_count ?? 0)}
-                likeCount={
-                  isBorder ? undefined : viewCountCheck(item?.like_count ?? 0)
-                }
+                likeCount={isBorder ? undefined : likeCount}
                 price={brPrice(item?.pt_price ?? '0')}
                 time={` .  ${productTimeSetting(
                   item?.pt_time ?? 0,
@@ -68,7 +68,7 @@ const ProductList: React.FC<ProductListProps> = ({
                 isBorder={isBorder}
                 onPress={onPressItem}
                 idx={item?.pt_idx ?? '0'}
-                cate={item?.pt_cate ?? '0'}
+                cate={cate}
               />
             </Fragment>
           );
@@ -78,5 +78,3 @@ const ProductList: React.FC<ProductListProps> = ({
 };
 
 export default ProductList;
-
-const styles = StyleSheet.create({});

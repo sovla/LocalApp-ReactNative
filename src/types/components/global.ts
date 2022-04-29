@@ -73,6 +73,7 @@ export interface CheckBoxProps {
 export interface CheckBoxImageProps {
   isOn?: boolean;
   isBox?: boolean;
+  isBlue?: boolean;
   isCheckImage?: boolean;
   width?: number;
   height?: number;

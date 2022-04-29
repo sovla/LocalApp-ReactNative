@@ -43,6 +43,7 @@ export default function Login({navigation}: LoginProps) {
   }, []);
 
   const onPressLogin = useCallback(async () => {
+    return navigation.navigate('LoginComplete');
     if (tel === '') {
       return AlertButton(t('telRequireAlert'));
     }
@@ -93,28 +94,34 @@ export default function Login({navigation}: LoginProps) {
             <Text
               color={Theme.color.aqua_00}
               bold
-              fontSize={`${titleFontsize}`}>
+              fontSize={`${getPixel(titleFontsize)}`}>
               {t('localApp')}
             </Text>
-            <Text color={Theme.color.white} bold fontSize={`${titleFontsize}`}>
+            <Text
+              color={Theme.color.white}
+              bold
+              fontSize={`${getPixel(titleFontsize)}`}>
               {t('loginGuide1')}
             </Text>
           </View>
           <View style={[styles.rowCenter1]}>
-            <Text color={Theme.color.white} bold fontSize={`${42 * fontSize}`}>
+            <Text
+              color={Theme.color.white}
+              bold
+              fontSize={`${getPixel(42 * fontSize)}`}>
               {t('loginGuide2')}
             </Text>
             <Text
               color={Theme.color.white}
               style={styles.loginGuide3Text}
               bold
-              fontSize={`${titleFontsize}`}>
+              fontSize={`${getPixel(titleFontsize)}`}>
               {t('loginGuide3')}
             </Text>
             <Text
               color={Theme.color.aqua_00}
               bold
-              fontSize={`${titleFontsize}`}
+              fontSize={`${getPixel(titleFontsize)}`}
               style={{
                 marginTop: getHeightPixel(5),
               }}>
@@ -129,12 +136,19 @@ export default function Login({navigation}: LoginProps) {
             selectNum={selectNum}
             isLabelNumber
             pickerFontSize={14}
+            height={getHeightPixel(45)}
           />
-          <Line isGray width={getPixel(270)} />
+          <Line
+            isGray
+            width={getPixel(270)}
+            style={{
+              marginBottom: getHeightPixel(5),
+            }}
+          />
           <Input
             keyboardType="numeric"
             width={getPixel(270)}
-            height={getHeightPixel(56)}
+            height={getHeightPixel(45)}
             value={tel}
             onChange={setTel}
             inputFontSize={14}
@@ -151,7 +165,7 @@ export default function Login({navigation}: LoginProps) {
             <TouchableOpacity
               onPress={onPressAutoLogin}
               style={styles.rowCenter}>
-              <CheckBoxImage isBox isOn={autoLogin} />
+              <CheckBoxImage isOn={autoLogin} isBlue />
               <Text
                 fontSize={`${12 * fontSize}`}
                 style={{marginLeft: getPixel(10)}}>
@@ -168,7 +182,8 @@ export default function Login({navigation}: LoginProps) {
             }}>
             <Text
               color={Theme.color.whiteBlack_53}
-              fontSize={`${12 * fontSize}`}>
+              fontSize={`${12 * fontSize}`}
+              letterSpacing={'0px'}>
               {t('businessSignUpGuide3')}
             </Text>
             <TouchableOpacity
@@ -250,7 +265,6 @@ const styles = StyleSheet.create({
   },
   rowCenter: {
     width: 'auto',
-
     flexDirection: 'row',
     alignItems: 'center',
     marginVertical: getHeightPixel(19),

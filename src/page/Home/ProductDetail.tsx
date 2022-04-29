@@ -34,11 +34,20 @@ import SearchWhiteIcon from '@assets/image/search_white.png';
 import SearchBlackIcon from '@assets/image/search_black.png';
 import ShareWhiteIcon from '@assets/image/share_white.png';
 import ShareIcon from '@assets/image/share.png';
-import {AlertButton, brPrice, getHitSlop, viewCountCheck} from '@/Util/Util';
+import {
+  AlertButton,
+  brPrice,
+  getHitSlop,
+  productTimeSetting,
+  viewCountCheck,
+} from '@/Util/Util';
 import Screen, {ProductDetailProps} from '@/Types/Screen/Screen';
 import useBoolean from '@/Hooks/useBoolean';
 import useApi from '@/Hooks/useApi';
-import {ProduetDetailApiType} from '@/Types/Components/HomeTypes';
+import {
+  ProduetDetailApiType,
+  ProduetDetailOtherApiType,
+} from '@/Types/Components/HomeTypes';
 import Loading from '@/Components/Global/Loading';
 
 export default function ProductDetail({
@@ -56,16 +65,20 @@ export default function ProductDetail({
     mt_idx: user.mt_idx,
     pt_idx: params.pt_idx,
   });
-  const [imageArray, setImageArray] = useState<Array<any>>([
-    require('@assets/image/dummy_i.png'),
-    require('@assets/image/dummy_i.png'),
-    require('@assets/image/dummy_i.png'),
-    require('@assets/image/dummy_i.png'),
-    require('@assets/image/dummy_i.png'),
-    require('@assets/image/dummy_i.png'),
-    require('@assets/image/dummy_i.png'),
-  ]);
-
+  const {
+    data: otherData,
+    isLoading: otherIsLoading,
+    isError: otherIsError,
+    errorMessage: otherErrorMessage,
+    getData,
+  } = useApi<ProduetDetailOtherApiType['T'], ProduetDetailOtherApiType['D']>(
+    null,
+    'product_detail_other.php',
+    {
+      mt_idx: user.mt_idx,
+      pt_idx: params.pt_idx,
+    },
+  );
   const {value: isChange, on: onIsChange, off: offIsChange} = useBoolean(false);
 
   const onPressTierGuide = useCallbackNavigation('ProductTierGuide');
@@ -164,11 +177,12 @@ export default function ProductDetail({
   }, [isChange, data]);
 
   const InnerHeader = useCallback(() => {
+    // 이미지 스와이퍼와 그 상단 이모티콘
     return (
       <View style={styles.swiperView}>
         <ImageSwiper
           imageArray={data?.file && Array.isArray(data.file) ? data.file : []}
-          setImageArray={setImageArray}
+          setImageArray={undefined}
           width={getPixel(360)}
           height={getHeightPixel(250)}
         />
@@ -208,17 +222,20 @@ export default function ProductDetail({
     return null;
   }
 
-  if (isLoading || data === null) {
+  if (isLoading || data === null || otherIsLoading || otherData === null) {
     return <Loading />;
   } else {
     const title = data.pt_title;
     const location = `${data.pt_location_detail} ${data.pt_location} / - ${data.dist}km`;
-    const classText = 'Classe A / há 3 dias';
+    const classAndTimeText = `${data.pt_grade} / ${productTimeSetting(
+      data?.pt_time,
+      data?.pt_time_type,
+    )}`;
     const viewCount = viewCountCheck(data?.view_count ?? 0);
     const likeCount = viewCountCheck(data?.like_count ?? 0);
     const content = data.pt_detail;
 
-    const price = brPrice(data?.pt_price ?? '');
+    const price = brPrice(data?.pt_price);
 
     return (
       <View
@@ -245,7 +262,7 @@ export default function ProductDetail({
             <View style={styles.subContentView}>
               <GrayText fontSize={`${12 * fontSize}`}>{location}</GrayText>
               <View style={styles.betweenView}>
-                <Text fontSize={`${12 * fontSize}`}>{classText}</Text>
+                <Text fontSize={`${12 * fontSize}`}>{classAndTimeText}</Text>
                 <ViewLikeCount likeCount={likeCount} viewCount={viewCount} />
               </View>
             </View>
@@ -272,7 +289,10 @@ export default function ProductDetail({
             </TouchableOpacity>
           </View>
           <Line height={getHeightPixel(9)} />
-          <ShopSellProduct shopName="Americans" />
+          <ShopSellProduct
+            shopName={data?.sell_name}
+            productList={Array.isArray(otherData) ? otherData : undefined}
+          />
         </ScrollView>
         <Shadow distance={5}>
           <View style={styles.footerView}>
