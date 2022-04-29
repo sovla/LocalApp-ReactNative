@@ -57,7 +57,11 @@ export default function ProductDetail({
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const {user} = useAppSelector(state => state);
-
+  if (!params?.pt_cate || !params?.pt_idx) {
+    AlertButton(t('error'));
+    navigation.goBack();
+    return null;
+  }
   const {data, isLoading, isError, errorMessage} = useApi<
     ProduetDetailApiType['T'],
     ProduetDetailApiType['D']
@@ -216,6 +220,7 @@ export default function ProductDetail({
       </View>
     );
   }, [data]);
+
   if (isError) {
     AlertButton(errorMessage);
     navigation.goBack();

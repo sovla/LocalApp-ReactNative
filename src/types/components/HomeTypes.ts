@@ -1,3 +1,5 @@
+import {FilterMenuTypes} from '@/Components/Home/ModalFilter';
+import {FilterState} from '@/Page/Home/Search';
 import React from 'react';
 import {GestureResponderEvent} from 'react-native';
 import {categoryMenuTypes, ModalProps} from './global';
@@ -56,7 +58,7 @@ export interface ProductDetailShopProps {
 
 export interface ProductListProps {
   isList: boolean;
-  list?: Array<ProductApiTypes> | ProduetDetailOtherApiType['T'];
+  list?: Array<ProductApiTypes> | ProduetDetailOtherApiType['T'] | number;
   isBorder?: boolean;
   onPressItem?: (idx: string, cate: string) => void;
 }
@@ -66,6 +68,7 @@ export interface SearchHeaderProps {
   setText: React.Dispatch<React.SetStateAction<string>>;
   keyword?: categoryMenuTypes['menu'];
   onPressCloseKeyword?: () => void;
+  onSubmitEditing?: () => void;
 }
 
 export interface SearchKeywordProps {
@@ -73,7 +76,10 @@ export interface SearchKeywordProps {
   onPressKeyword: (event?: GestureResponderEvent) => void;
 }
 
-export interface ModalFilterProps extends ModalProps {}
+export interface ModalFilterProps extends ModalProps {
+  setFilter: any;
+  filter: FilterState;
+}
 export interface ProductState {
   newProduct: boolean;
   Reaper: boolean;
@@ -237,5 +243,33 @@ export interface KeywordAlarmCheckAPi {
   } | null;
   D: {
     mt_idx: string | null;
+  };
+}
+
+export interface SearchLogApi {
+  // 검색 로그 남기기
+  T: {} | null;
+  D: {
+    mt_idx: string | null;
+    search_txt: string;
+  };
+}
+
+export interface SearchApi {
+  // 검색
+  T: {
+    total_count?: number;
+    total_page?: number;
+    list: ProductApiTypes[] | [];
+  };
+  D: {
+    mt_idx: string | null;
+    search_txt: string;
+    page?: number;
+    category?: string;
+    order?: 0 | 1 | 2 | 3; //  정렬(0:최신순, 1 가격 높, 2:가격 낮, 3: 거리순)
+    s_price?: number;
+    e_price?: number;
+    grade?: string;
   };
 }

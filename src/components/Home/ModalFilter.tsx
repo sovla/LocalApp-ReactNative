@@ -17,17 +17,30 @@ import {useTranslation} from 'react-i18next';
 import {useAppSelector} from '@/Hooks/CustomHook';
 
 import CloseBlackIcon from '@assets/image/close_black.png';
-import {ModalFilterProps, ProductState} from '@/Types/Components/HomeTypes';
+import {
+  ModalFilterProps,
+  ProductState,
+  SearchApi,
+} from '@/Types/Components/HomeTypes';
 import {CheckBox} from '../Global/button';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Slider} from '@miblanchard/react-native-slider';
 
-const ModalFilter: React.FC<ModalFilterProps> = ({onClose}) => {
+export type FilterMenuTypes =
+  | 'searchModalSortItem1'
+  | 'searchModalSortItem2'
+  | 'searchModalSortItem3'
+  | 'searchModalSortItem4';
+
+const ModalFilter: React.FC<ModalFilterProps> = ({
+  onClose,
+  setFilter,
+  filter,
+}) => {
   const ref = useRef(null);
-  const [selectFilter, setSelectFilter] = useState<string>(
+  const [selectFilter, setSelectFilter] = useState<FilterMenuTypes>(
     'searchModalSortItem1',
   );
-  const [isFocus, setIsFocus] = useState(false);
   const [productState, setProductState] = useState<ProductState>({
     newProduct: false,
     Reaper: false,
@@ -35,12 +48,12 @@ const ModalFilter: React.FC<ModalFilterProps> = ({onClose}) => {
     forParts: false,
     donation: false,
   });
-  const [range, setRange] = useState([0, 1]);
+  const [range, setRange] = useState([0, 0.5]);
 
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
 
-  const menu = [
+  const menu: FilterMenuTypes[] = [
     'searchModalSortItem1',
     'searchModalSortItem2',
     'searchModalSortItem3',
@@ -72,20 +85,38 @@ const ModalFilter: React.FC<ModalFilterProps> = ({onClose}) => {
     },
   ];
 
+  const onCloseFn = () => {
+    onClose();
+    setFilter(
+      (
+        prev: Omit<SearchApi, 'mt_idx' | 'search_txt' | 'page' | 'category'>,
+      ) => ({
+        ...prev,
+        order: menu.findIndex(v => v === selectFilter),
+        s_price: range[0],
+        e_price: range[1] > 1 ? range[1] : null,
+      }),
+    );
+  };
+
   useEffect(() => {
-    console.log(ref.current);
-  }, [range]);
+    if (filter.order) {
+      setSelectFilter(menu[filter.order]);
+    }
+
+    setRange([filter?.s_price ?? 0, filter?.e_price ?? 0.5]);
+  }, []);
 
   return (
     <View style={styles.dim}>
-      <SlideRightModal onClose={onClose}>
+      <SlideRightModal onClose={onCloseFn}>
         <KeyboardAwareScrollView>
           <View style={styles.subContainer}>
             <View style={styles.titleView}>
               <MediumText fontSize={`${20 * fontSize}`}>
                 {t('searchModalFilter')}
               </MediumText>
-              <TouchableOpacity onPress={onClose}>
+              <TouchableOpacity onPress={onCloseFn}>
                 <Image source={CloseBlackIcon} style={styles.titleCloseImage} />
               </TouchableOpacity>
             </View>
@@ -166,7 +197,7 @@ const ModalFilter: React.FC<ModalFilterProps> = ({onClose}) => {
                 <MediumText fontSize={`${16 * fontSize}`}>~</MediumText>
                 <TextInput
                   keyboardType="numeric"
-                  value={range[1] > 1 ? range[1].toString() : ''}
+                  value={range[1] > 0.6 ? range[1].toString() : ''}
                   onChangeText={t => {
                     setRange(prev => [prev[0], +t]);
                   }}
@@ -221,10 +252,7 @@ const ModalFilter: React.FC<ModalFilterProps> = ({onClose}) => {
 
 export default ModalFilter;
 
-export const SlideRightModal: React.FC<ModalFilterProps> = ({
-  children,
-  onClose,
-}) => {
+export const SlideRightModal: React.FC<any> = ({children, onClose}) => {
   // const pan = useRef(new Animated.ValueXY({x: getPixel(310), y: 0})).current;
 
   // const panResponder = PanResponder.create({

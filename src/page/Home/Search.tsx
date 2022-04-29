@@ -6,21 +6,23 @@ import {
   StyleSheet,
   Modal,
 } from 'react-native';
-import React, {Fragment, useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import SearchHeader from '@/Components/Home/SearchHeader';
-import {BoldText, GrayText, MediumText, Text} from '@/Components/Global/text';
+import {GrayText, MediumText, Text} from '@/Components/Global/text';
 import {useTranslation} from 'react-i18next';
 import {useAppSelector} from '@/Hooks/CustomHook';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import {categoryMenu} from '@/assets/global/dummy';
-import {CategoryCardProps} from '@/Types/Components/HomeTypes';
+import {
+  CategoryCardProps,
+  HomeProductListType,
+  SearchApi,
+  SearchLogApi,
+} from '@/Types/Components/HomeTypes';
 
 import AutoHeightImage from 'react-native-auto-height-image';
-import Line from '@/Components/Global/Line';
 import SearchKeyword from '@/Components/Home/SearchKeyword';
 
 import Theme from '@/assets/global/Theme';
-import ArrowDownIcon from '@assets/image/arrow_down_gray.png';
 import checkboxIcon from '@assets/image/checkbox.png';
 import MenuOffIcon from '@assets/image/menu_ver.png';
 import MenuOnIcon from '@assets/image/menu_ver1.png';
@@ -31,7 +33,15 @@ import ModalKeyword from '@/Components/Home/ModalKeyword';
 import CloseBlackIcon from '@assets/image/close_black.png';
 import {SearchProps} from '@/Types/Screen/Screen';
 import {categoryMenuTypes} from '@/Types/Components/global';
-import {NavigationRouteContext, useIsFocused} from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
+import useApi from '@/Hooks/useApi';
+
+export interface FilterState {
+  order: undefined | 0 | 1 | 2 | 3;
+  s_price: undefined | number;
+  e_price: undefined | number;
+  grade: undefined | string;
+}
 
 export default function Search({
   route: {params},
@@ -39,18 +49,14 @@ export default function Search({
 }: SearchProps): JSX.Element {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const {user} = useAppSelector(state => state);
+
   const isFocused = useIsFocused();
   const [isList, setIsList] = useState<boolean>(false);
   const [isMore, setIsMore] = useState<boolean>(false);
-  const {
-    value: isFilter,
-    setValue: setIsFilter,
-    on: onIsFilter,
-    off: offIsFilter,
-  } = useBoolean(false);
+  const {value: isFilter, on: onIsFilter, off: offIsFilter} = useBoolean(false);
   const {
     value: isKeyword,
-    setValue: setIsKeyword,
     on: onIsKeyword,
     off: offIsKeyword,
   } = useBoolean(false);
@@ -69,11 +75,61 @@ export default function Search({
   const [selectKeyword, setSelectKeyword] = useState<
     categoryMenuTypes['menu'] | null | undefined
   >();
+  const [filter, setFilter] = useState<FilterState>({
+    order: undefined,
+    s_price: undefined,
+    e_price: undefined,
+    grade: undefined,
+  });
+
+  const {getData: sendSearchLog} = useApi<SearchLogApi['T'], SearchLogApi['D']>(
+    null,
+    'search_log.php',
+    {
+      mt_idx: user.mt_idx,
+      search_txt: searchText,
+    },
+    false,
+  );
+
+  const {
+    data: searchData,
+    getData: sendSearch,
+    isComplete: isSearch,
+  } = useApi<SearchApi['T'], SearchApi['D']>(
+    {
+      list: [],
+    },
+    'product_normal_list.php',
+    {
+      mt_idx: user.mt_idx,
+      search_txt: searchText,
+      ...filter,
+    },
+    false,
+  );
 
   const onPressCloseKeyword = useCallback(() => {
     setSelectKeyword(null);
   }, []);
 
+  const onPressItem = useCallback((idx: string, cate: string) => {
+    navigation.navigate('ProductDetail', {
+      pt_cate: cate,
+      pt_idx: idx,
+    });
+  }, []);
+
+  const onSubmitEditing = useCallback(() => {
+    sendSearchLog();
+    sendSearch();
+  }, [searchText, filter]);
+
+  useEffect(() => {
+    if (isFocused) {
+      onSubmitEditing();
+    }
+  }, [filter]);
   useEffect(() => {
     if (params?.category) {
       setSelectKeyword(params.category);
@@ -82,12 +138,7 @@ export default function Search({
       setSearchText(params.keyword);
     }
   }, [isFocused]);
-  const isSearch =
-    searchText.length > 0 || (selectKeyword && selectKeyword?.length > 0);
 
-  const onPressItem = useCallback(() => {
-    navigation.navigate('ProductDetail');
-  }, []);
   return (
     <View style={styles.mainContainer}>
       <SearchHeader
@@ -95,6 +146,7 @@ export default function Search({
         text={searchText}
         setText={setSearchText}
         onPressCloseKeyword={onPressCloseKeyword}
+        onSubmitEditing={onSubmitEditing}
       />
 
       <ScrollView>
@@ -123,12 +175,18 @@ export default function Search({
               </TouchableOpacity>
             </View>
             <ProductList
-              list={[1, 2, 3, 4, 5]}
+              list={searchData.list}
               isList={isList}
               onPressItem={onPressItem}
             />
             <Modal visible={isFilter} transparent onRequestClose={offIsFilter}>
-              {isFilter && <ModalFilter onClose={offIsFilter} />}
+              {isFilter && (
+                <ModalFilter
+                  onClose={offIsFilter}
+                  setFilter={setFilter}
+                  filter={filter}
+                />
+              )}
             </Modal>
             <Modal
               visible={isKeyword}

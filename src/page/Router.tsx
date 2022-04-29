@@ -248,7 +248,6 @@ export default function Router() {
 
 const withScrollView = (WrappedComponent: any) => {
   return (props: any) => {
-    const [isShow, setIsShow] = useState(false);
     if (props.route.name === 'ChattingDetail') {
       return <WrappedComponent {...props} />;
     }

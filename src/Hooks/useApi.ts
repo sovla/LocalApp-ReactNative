@@ -21,6 +21,7 @@ function useApi<T, D>(
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [isComplete, setisComplete] = useState(false);
 
   const isFocused = useIsFocused();
 
@@ -61,10 +62,11 @@ function useApi<T, D>(
       })
       .finally(() => {
         setIsLoading(false);
+        setisComplete(true);
       });
   }, [axiosData, apiPath, isFirst]);
 
-  return {data, isLoading, isError, errorMessage, getData};
+  return {data, isLoading, isError, errorMessage, getData, isComplete};
 }
 
 export default useApi;

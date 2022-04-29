@@ -27,6 +27,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
   setText,
   keyword,
   onPressCloseKeyword,
+  onSubmitEditing,
 }) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
@@ -65,6 +66,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
           placeholder={t('searchPlaceholder')}
           value={text}
           onChangeText={setText}
+          onSubmitEditing={onSubmitEditing}
         />
 
         {/* <TouchableOpacity style={styles.closeGrayTouch}>
