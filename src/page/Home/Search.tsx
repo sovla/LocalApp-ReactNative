@@ -1,27 +1,11 @@
-import {
-  View,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-  StyleSheet,
-  Modal,
-} from 'react-native';
+import {View, Image, ScrollView, TouchableOpacity, StyleSheet, Modal} from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
 import SearchHeader from '@/Components/Home/SearchHeader';
 import {GrayText, MediumText, Text} from '@/Components/Global/text';
 import {useTranslation} from 'react-i18next';
 import {useAppSelector} from '@/Hooks/CustomHook';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import {
-  CategoryCardProps,
-  HomeProductListType,
-  PopularSearchTextApi,
-  RecentAllDeleteApi,
-  RecentDeleteApi,
-  RecentSearchTextApi,
-  SearchApi,
-  SearchLogApi,
-} from '@/Types/Components/HomeTypes';
+import {CategoryCardProps, HomeProductListType, PopularSearchTextApi, RecentAllDeleteApi, RecentDeleteApi, RecentSearchTextApi, SearchApi, SearchLogApi} from '@/Types/Components/HomeTypes';
 
 import AutoHeightImage from 'react-native-auto-height-image';
 import SearchKeyword from '@/Components/Home/SearchKeyword';
@@ -48,10 +32,7 @@ export interface FilterState {
   grade: undefined | string;
 }
 
-export default function Search({
-  route: {params},
-  navigation,
-}: SearchProps): JSX.Element {
+export default function Search({route: {params}, navigation}: SearchProps): JSX.Element {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const {user} = useAppSelector(state => state);
@@ -60,16 +41,10 @@ export default function Search({
   const [isList, setIsList] = useState<boolean>(false);
   const [isMore, setIsMore] = useState<boolean>(false);
   const {value: isFilter, on: onIsFilter, off: offIsFilter} = useBoolean(false);
-  const {
-    value: isKeyword,
-    on: onIsKeyword,
-    off: offIsKeyword,
-  } = useBoolean(false);
+  const {value: isKeyword, on: onIsKeyword, off: offIsKeyword} = useBoolean(false);
 
   const [searchText, setSearchText] = useState<string>('');
-  const [selectKeyword, setSelectKeyword] = useState<
-    categoryMenuTypes['menu'] | null | undefined
-  >();
+  const [selectKeyword, setSelectKeyword] = useState<categoryMenuTypes['menu'] | null | undefined>();
   const [filter, setFilter] = useState<FilterState>({
     order: undefined,
     s_price: undefined,
@@ -122,10 +97,7 @@ export default function Search({
     false,
   );
 
-  const {getData: sendAllDelete} = useApi<
-    RecentAllDeleteApi['T'],
-    RecentAllDeleteApi['D']
-  >( // 모두 삭제
+  const {getData: sendAllDelete} = useApi<RecentAllDeleteApi['T'], RecentAllDeleteApi['D']>( // 모두 삭제
     null,
     'search_recent_all_delete.php',
     {
@@ -133,10 +105,7 @@ export default function Search({
     },
     false,
   );
-  const {getData: sendDelete} = useApi<
-    RecentDeleteApi['T'],
-    RecentDeleteApi['D']
-  >( // 검색어 삭제
+  const {getData: sendDelete} = useApi<RecentDeleteApi['T'], RecentDeleteApi['D']>( // 검색어 삭제
     null,
     'search_recent_delete.php',
     {
@@ -182,26 +151,16 @@ export default function Search({
     }
   }, [isFocused]);
 
-  const isSearch =
-    isComplete && searchData.list?.length > 0 && searchText.length > 0;
+  const isSearch = isComplete && searchData.list?.length > 0 && searchText.length > 0;
 
   return (
     <View style={styles.mainContainer}>
-      <SearchHeader
-        keyword={selectKeyword ?? undefined}
-        text={searchText}
-        setText={setSearchText}
-        onPressCloseKeyword={onPressCloseKeyword}
-        onSubmitEditing={onSubmitEditing}
-      />
+      <SearchHeader keyword={selectKeyword ?? undefined} text={searchText} setText={setSearchText} onPressCloseKeyword={onPressCloseKeyword} onSubmitEditing={onSubmitEditing} />
 
       <ScrollView>
         {isSearch ? (
           <>
-            <SearchKeyword
-              onPressFilter={onIsFilter}
-              onPressKeyword={onIsKeyword}
-            />
+            <SearchKeyword onPressFilter={onIsFilter} onPressKeyword={onIsKeyword} />
             <View style={styles.isSearchView}>
               <View style={styles.checkboxView}>
                 <Image source={checkboxIcon} style={styles.checkboxImage} />
@@ -220,28 +179,12 @@ export default function Search({
                 />
               </TouchableOpacity>
             </View>
-            <ProductList
-              list={searchData.list}
-              isList={isList}
-              onPressItem={onPressItem}
-            />
+            <ProductList list={searchData.list} isList={isList} onPressItem={onPressItem} />
             <Modal visible={isFilter} transparent onRequestClose={offIsFilter}>
-              {isFilter && (
-                <ModalFilter
-                  onClose={offIsFilter}
-                  setFilter={setFilter}
-                  filter={filter}
-                />
-              )}
+              {isFilter && <ModalFilter onClose={offIsFilter} setFilter={setFilter} filter={filter} />}
             </Modal>
-            <Modal
-              visible={isKeyword}
-              transparent
-              animationType="slide"
-              onRequestClose={offIsKeyword}>
-              {isKeyword && (
-                <ModalKeyword onClose={offIsKeyword} keyword={searchText} />
-              )}
+            <Modal visible={isKeyword} transparent animationType="slide" onRequestClose={offIsKeyword}>
+              {isKeyword && <ModalKeyword onClose={offIsKeyword} keyword={searchText} />}
             </Modal>
           </>
         ) : (
@@ -260,9 +203,7 @@ export default function Search({
                         await onSubmitEditing();
                       }}
                       style={styles.popularListView}>
-                      <MediumText
-                        fontSize={`${12 * fontSize}`}
-                        letterSpacing="0px">
+                      <MediumText fontSize={`${12 * fontSize}`} letterSpacing="0px">
                         {item.title}
                       </MediumText>
                     </TouchableOpacity>
@@ -273,9 +214,7 @@ export default function Search({
                   {t('searchRecentSearches')}
                 </Text>
                 <TouchableOpacity onPress={onPressAllDelete}>
-                  <GrayText fontSize={`${14 * fontSize}`}>
-                    {t('allDelete')}
-                  </GrayText>
+                  <GrayText fontSize={`${14 * fontSize}`}>{t('allDelete')}</GrayText>
                 </TouchableOpacity>
               </View>
               <View style={styles.searchListRowView}>
@@ -300,10 +239,7 @@ export default function Search({
                             recentGetData();
                           });
                         }}>
-                        <Image
-                          source={CloseBlackIcon}
-                          style={styles.closeBlack}
-                        />
+                        <Image source={CloseBlackIcon} style={styles.closeBlack} />
                       </TouchableOpacity>
                     </TouchableOpacity>
                   );
@@ -316,19 +252,6 @@ export default function Search({
     </View>
   );
 }
-
-const CategoryCard: React.FC<CategoryCardProps> = ({name, image}) => {
-  const {t} = useTranslation();
-  const fontSize = useAppSelector(state => state.fontSize.value);
-  return (
-    <TouchableOpacity style={styles.categoryCardContainer}>
-      <View style={styles.categoryCardView}>
-        <AutoHeightImage source={image} width={getPixel(33)} />
-      </View>
-      <Text fontSize={`${12 * fontSize}`}>{t(name)}</Text>
-    </TouchableOpacity>
-  );
-};
 
 const styles = StyleSheet.create({
   searchListTitleView: {

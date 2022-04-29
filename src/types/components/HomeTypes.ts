@@ -196,12 +196,7 @@ export interface ProduetDetailApiType {
 
 export interface ProduetDetailOtherApiType {
   // 상품 상세보기 하단 다른 판매 품목 보기
-  T: Array<
-    Omit<
-      ProductApiTypes,
-      'like_count' | 'fin_status' | 'pt_cate' | 'busi_check'
-    >
-  > | null;
+  T: Array<Omit<ProductApiTypes, 'like_count' | 'fin_status' | 'pt_cate' | 'busi_check'>> | null;
   D: {
     mt_idx: string | null;
     pt_idx: string;
