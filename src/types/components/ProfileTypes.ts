@@ -11,3 +11,12 @@ export interface MenuProps {
   selectMenu: string;
   setSelectMenu: React.Dispatch<React.SetStateAction<string>>;
 }
+
+export interface ProfileSellProductAPi {
+  // 판매상품 API
+  T: any | null;
+  D: {
+    mt_idx: string;
+    type: 'Y' | 'N';
+  };
+}

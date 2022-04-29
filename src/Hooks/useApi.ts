@@ -25,7 +25,7 @@ function useApi<T, D>(
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    if (isFirst) {
+    if (isFirst && isFocused && !isLoading && data === defaultValue) {
       getData();
     }
   }, [isFocused]);
@@ -62,7 +62,7 @@ function useApi<T, D>(
       .finally(() => {
         setIsLoading(false);
       });
-  }, []);
+  }, [axiosData, apiPath, isFirst]);
 
   return {data, isLoading, isError, errorMessage, getData};
 }
