@@ -28,7 +28,8 @@ const ProductList: React.FC<ProductListProps> = ({
           let likeCount = undefined;
           let cate = '0';
           if ('fin_status' in item) {
-            status = item.fin_status === 'Y' ? '판매완료' : '예약중'; // 수정필요 t("") 로 번역 되게끔
+            status = item.fin_status === 'Y' && '판매완료'; // 수정필요 t("") 로 번역 되게끔
+            status = item.fin_status === 'R' && '예약중';
             likeCount = viewCountCheck(item?.like_count);
             cate = item?.pt_cate ?? '0';
           }

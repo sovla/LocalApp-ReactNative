@@ -29,9 +29,6 @@ const ProductDetailShop: React.FC<ProductDetailShopProps> = ({
             <GrayText fontSize={`${12 * fontSize}`}>{shopSubTitle}</GrayText>
           </View>
         </View>
-        <TouchableOpacity onPress={onPress} hitSlop={getHitSlop(5)}>
-          <Image source={ShopGrayIcon} style={styles.shopGrayImage} />
-        </TouchableOpacity>
       </View>
     </Shadow>
   );
@@ -48,7 +45,7 @@ const styles = StyleSheet.create({
     width: getPixel(360),
     height: getHeightPixel(76),
   },
-  rowView: {flexDirection: 'row'},
+  rowView: {flexDirection: 'row', alignItems: 'center'},
   shopImageRoundView: {
     width: getPixel(48),
     height: getPixel(48),
