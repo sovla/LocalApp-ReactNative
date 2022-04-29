@@ -25,6 +25,7 @@ import {
 import {CheckBox} from '../Global/button';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Slider} from '@miblanchard/react-native-slider';
+import {getHitSlop} from '@/Util/Util';
 
 export type FilterMenuTypes =
   | 'searchModalSortItem1'
@@ -116,7 +117,7 @@ const ModalFilter: React.FC<ModalFilterProps> = ({
               <MediumText fontSize={`${20 * fontSize}`}>
                 {t('searchModalFilter')}
               </MediumText>
-              <TouchableOpacity onPress={onCloseFn}>
+              <TouchableOpacity hitSlop={getHitSlop(5)} onPress={onCloseFn}>
                 <Image source={CloseBlackIcon} style={styles.titleCloseImage} />
               </TouchableOpacity>
             </View>

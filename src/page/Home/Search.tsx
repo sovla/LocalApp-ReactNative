@@ -15,6 +15,10 @@ import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {
   CategoryCardProps,
   HomeProductListType,
+  PopularSearchTextApi,
+  RecentAllDeleteApi,
+  RecentDeleteApi,
+  RecentSearchTextApi,
   SearchApi,
   SearchLogApi,
 } from '@/Types/Components/HomeTypes';
@@ -35,6 +39,7 @@ import {SearchProps} from '@/Types/Screen/Screen';
 import {categoryMenuTypes} from '@/Types/Components/global';
 import {useIsFocused} from '@react-navigation/native';
 import useApi from '@/Hooks/useApi';
+import useUpdateEffect from '@/Hooks/useUpdateEffect';
 
 export interface FilterState {
   order: undefined | 0 | 1 | 2 | 3;
@@ -60,17 +65,7 @@ export default function Search({
     on: onIsKeyword,
     off: offIsKeyword,
   } = useBoolean(false);
-  const [popularList, setPopularList] = useState<Array<string>>([
-    '자전거',
-    '의자',
-    '냉장고',
-    '노트북',
-    '캠핑',
-    '가방',
-    '에어팟',
-    '아이패드',
-    '애플워치',
-  ]);
+
   const [searchText, setSearchText] = useState<string>('');
   const [selectKeyword, setSelectKeyword] = useState<
     categoryMenuTypes['menu'] | null | undefined
@@ -82,7 +77,25 @@ export default function Search({
     grade: undefined,
   });
 
-  const {getData: sendSearchLog} = useApi<SearchLogApi['T'], SearchLogApi['D']>(
+  const {
+    data: recentList,
+    setData: setRecentList,
+    getData: recentGetData,
+  } = useApi<
+    // 최근 검색어
+    RecentSearchTextApi['T'],
+    RecentSearchTextApi['D']
+  >([], 'search_recent_list.php', {
+    mt_idx: user.mt_idx,
+  });
+
+  const {data: popularList} = useApi<
+    // 인기 검색어
+    PopularSearchTextApi['T'],
+    PopularSearchTextApi['D']
+  >([], 'search_keyword_list.php');
+
+  const {getData: sendSearchLog} = useApi<SearchLogApi['T'], SearchLogApi['D']>( // 서치 로그
     null,
     'search_log.php',
     {
@@ -95,8 +108,8 @@ export default function Search({
   const {
     data: searchData,
     getData: sendSearch,
-    isComplete: isSearch,
-  } = useApi<SearchApi['T'], SearchApi['D']>(
+    isComplete,
+  } = useApi<SearchApi['T'], SearchApi['D']>( // 검색 api
     {
       list: [],
     },
@@ -105,6 +118,29 @@ export default function Search({
       mt_idx: user.mt_idx,
       search_txt: searchText,
       ...filter,
+    },
+    false,
+  );
+
+  const {getData: sendAllDelete} = useApi<
+    RecentAllDeleteApi['T'],
+    RecentAllDeleteApi['D']
+  >( // 모두 삭제
+    null,
+    'search_recent_all_delete.php',
+    {
+      mt_idx: user.mt_idx,
+    },
+    false,
+  );
+  const {getData: sendDelete} = useApi<
+    RecentDeleteApi['T'],
+    RecentDeleteApi['D']
+  >( // 검색어 삭제
+    null,
+    'search_recent_delete.php',
+    {
+      mt_idx: user.mt_idx,
     },
     false,
   );
@@ -125,7 +161,14 @@ export default function Search({
     sendSearch();
   }, [searchText, filter]);
 
-  useEffect(() => {
+  const onPressRecentDelete = useCallback(() => {}, []);
+
+  const onPressAllDelete = useCallback(() => {
+    sendAllDelete();
+    setRecentList([]);
+  }, []);
+
+  useUpdateEffect(() => {
     if (isFocused) {
       onSubmitEditing();
     }
@@ -138,6 +181,9 @@ export default function Search({
       setSearchText(params.keyword);
     }
   }, [isFocused]);
+
+  const isSearch =
+    isComplete && searchData.list?.length > 0 && searchText.length > 0;
 
   return (
     <View style={styles.mainContainer}>
@@ -205,46 +251,61 @@ export default function Search({
                 {t('searchTitleText')}
               </Text>
               <View style={styles.popularListContainer}>
-                {popularList.map((item, index) => (
-                  <TouchableOpacity
-                    key={item + index}
-                    onPress={() => {
-                      setSearchText(item);
-                    }}
-                    style={styles.popularListView}>
-                    <MediumText
-                      fontSize={`${12 * fontSize}`}
-                      letterSpacing="0px">
-                      {item}
-                    </MediumText>
-                  </TouchableOpacity>
-                ))}
+                {Array.isArray(popularList) &&
+                  popularList.map((item, index) => (
+                    <TouchableOpacity
+                      key={item.title + index}
+                      onPress={async () => {
+                        await setSearchText(item.title);
+                        await onSubmitEditing();
+                      }}
+                      style={styles.popularListView}>
+                      <MediumText
+                        fontSize={`${12 * fontSize}`}
+                        letterSpacing="0px">
+                        {item.title}
+                      </MediumText>
+                    </TouchableOpacity>
+                  ))}
               </View>
               <View style={styles.searchListTitleView}>
                 <Text fontSize={`${18 * fontSize}`} medium>
                   {t('searchRecentSearches')}
                 </Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={onPressAllDelete}>
                   <GrayText fontSize={`${14 * fontSize}`}>
                     {t('allDelete')}
                   </GrayText>
                 </TouchableOpacity>
               </View>
               <View style={styles.searchListRowView}>
-                {[
-                  1, 2, 3, 4, 5, 61, 2, 3, 4, 5, 61, 2, 3, 4, 5, 61, 2, 3, 4, 5,
-                  61, 2, 3, 4, 5, 61, 2, 3, 4, 5, 6,
-                ].map((item, index) => {
+                {recentList.map((item, index) => {
                   return (
-                    <View style={styles.searchListView}>
-                      <Text fontSize={`${14 * fontSize}`} medium>
-                        검색항목
-                      </Text>
-                      <Image
-                        source={CloseBlackIcon}
-                        style={styles.closeBlack}
-                      />
-                    </View>
+                    <TouchableOpacity
+                      onPress={async () => {
+                        await setSearchText(item.title);
+                        await onSubmitEditing();
+                      }}
+                      style={styles.searchListView}>
+                      <View>
+                        <Text fontSize={`${14 * fontSize}`} medium>
+                          {item.title}
+                        </Text>
+                      </View>
+                      <TouchableOpacity
+                        onPress={() => {
+                          sendDelete({
+                            sl_idx: item.sl_idx,
+                          }).then(res => {
+                            recentGetData();
+                          });
+                        }}>
+                        <Image
+                          source={CloseBlackIcon}
+                          style={styles.closeBlack}
+                        />
+                      </TouchableOpacity>
+                    </TouchableOpacity>
                   );
                 })}
               </View>

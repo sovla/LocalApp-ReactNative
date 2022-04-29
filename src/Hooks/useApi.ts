@@ -31,42 +31,48 @@ function useApi<T, D>(
     }
   }, [isFocused]);
 
-  const getData = useCallback(async () => {
-    setIsLoading(true);
-    await API.post<
-      any,
-      AxiosResponse<
-        {
-          result: 'true' | 'false' | null;
-          data: any | T;
-          msg: null | string;
-        } | null,
-        any
-      >
-    >(apiPath, axiosData)
-      .then(result => {
-        if (result.data?.result === 'true') {
-          if (result?.data?.data?.data) {
-            setData(result.data.data.data);
+  const getData = useCallback(
+    async (_data?: any) => {
+      setIsLoading(true);
+      await API.post<
+        any,
+        AxiosResponse<
+          {
+            result: 'true' | 'false' | null;
+            data: any | T;
+            msg: null | string;
+          } | null,
+          any
+        >
+      >(apiPath, {...axiosData, ..._data})
+        .then(result => {
+          console.log(apiPath + '::::', result);
+          if (result.data?.result === 'true') {
+            if (result?.data?.data?.data) {
+              setData(result.data.data.data);
+            } else if (result?.data?.data) {
+              setData(result.data.data);
+            }
+          } else {
+            if (result.data?.msg) {
+              setErrorMessage(result.data.msg);
+            }
+            setIsError(true);
           }
-        } else {
-          if (result.data?.msg) {
-            setErrorMessage(result.data.msg);
-          }
+        })
+        .catch(err => {
           setIsError(true);
-        }
-      })
-      .catch(err => {
-        setIsError(true);
-        setErrorMessage(err);
-      })
-      .finally(() => {
-        setIsLoading(false);
-        setisComplete(true);
-      });
-  }, [axiosData, apiPath, isFirst]);
+          setErrorMessage(err);
+        })
+        .finally(() => {
+          setIsLoading(false);
+          setisComplete(true);
+        });
+    },
+    [axiosData, apiPath, isFirst],
+  );
 
-  return {data, isLoading, isError, errorMessage, getData, isComplete};
+  return {data, isLoading, isError, errorMessage, getData, isComplete, setData};
 }
 
 export default useApi;

@@ -273,3 +273,42 @@ export interface SearchApi {
     grade?: string;
   };
 }
+
+export interface RecentSearchTextApi {
+  // 최근 검색어
+  T:
+    | []
+    | {
+        sl_idx: string;
+        title: string;
+      }[];
+  D: {
+    mt_idx: string | null;
+  };
+}
+
+export interface PopularSearchTextApi {
+  // 인기 검색어
+  T:
+    | []
+    | {
+        title: string;
+      }[];
+  D?: null;
+}
+export interface RecentAllDeleteApi {
+  // 인기 검색어
+  T: any;
+  D?: {
+    mt_idx: string | null;
+  };
+}
+
+export interface RecentDeleteApi {
+  // 인기 검색어
+  T: any;
+  D?: {
+    mt_idx?: string | null;
+    sl_idx?: string;
+  };
+}
