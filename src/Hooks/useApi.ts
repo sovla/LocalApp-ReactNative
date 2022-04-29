@@ -74,35 +74,38 @@ export const usePostSend = <T, D>(apiPath: string, apiData: D) => {
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const PostAPI = useCallback(async () => {
-    setIsLoading(true);
-    const res = await API.post<
-      any,
-      AxiosResponse<
-        {
-          result: 'true' | 'false' | null;
-          data: T | any;
-          msg: null | string;
-        } | null,
-        any
-      >
-    >(apiPath, apiData);
+  const PostAPI = useCallback(
+    async (data?: any) => {
+      setIsLoading(true);
+      const res = await API.post<
+        any,
+        AxiosResponse<
+          {
+            result: 'true' | 'false' | null;
+            data: T | any;
+            msg: null | string;
+          } | null,
+          any
+        >
+      >(apiPath, {...apiData, ...data});
 
-    if (res.data?.result === 'true') {
-      setIsLoading(false);
-      return res.data.data;
-    } else if (res.data?.result === 'false') {
-      setIsLoading(false);
-      setIsError(true);
-      if (res.data.msg) {
-        setErrorMessage(res.data.msg);
+      if (res.data?.result === 'true') {
+        setIsLoading(false);
+        return res.data.data;
+      } else if (res.data?.result === 'false') {
+        setIsLoading(false);
+        setIsError(true);
+        if (res.data.msg) {
+          setErrorMessage(res.data.msg);
+        }
+        return res.data;
+      } else {
+        setIsLoading(false);
+        return null;
       }
-      return res.data;
-    } else {
-      setIsLoading(false);
-      return null;
-    }
-  }, [apiPath, apiData]);
+    },
+    [apiPath, apiData],
+  );
 
   return {
     PostAPI,

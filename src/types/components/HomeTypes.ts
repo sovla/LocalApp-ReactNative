@@ -189,6 +189,7 @@ export interface ProduetDetailApiType {
 }
 
 export interface ProduetDetailOtherApiType {
+  // 상품 상세보기 하단 다른 판매 품목 보기
   T: Array<
     Omit<
       ProductApiTypes,
@@ -201,6 +202,7 @@ export interface ProduetDetailOtherApiType {
   };
 }
 export interface ProductLike {
+  // 상품 좋아요
   T: {
     data: {
       like: 'Y' | 'N';
@@ -209,5 +211,31 @@ export interface ProductLike {
   D: {
     mt_idx: string | null;
     pt_idx: string;
+  };
+}
+
+export interface KeywordAlarmAPi {
+  // 키워드 알람
+  T: {
+    cnt?: number;
+    list:
+      | Array<{
+          kt_idx: string;
+          kt_title: string;
+        }>
+      | [];
+  };
+  D: {
+    mt_idx: string | null;
+  };
+}
+
+export interface KeywordAlarmCheckAPi {
+  // 키워드 알람 체크 && 알람 셋팅
+  T: {
+    mt_keyword?: 'Y' | 'N';
+  } | null;
+  D: {
+    mt_idx: string | null;
   };
 }

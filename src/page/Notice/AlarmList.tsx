@@ -8,7 +8,11 @@ import {
 import React, {useCallback, useEffect, useState} from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
+import {
+  useAppNavigation,
+  useAppSelector,
+  useCallbackNavigation,
+} from '@/Hooks/CustomHook';
 import {useTranslation} from 'react-i18next';
 import useBoolean from '@/Hooks/useBoolean';
 import AutoHeightImage from 'react-native-auto-height-image';
@@ -19,26 +23,26 @@ import TrashBlackIcon from '@assets/image/trash_black.png';
 import Menu from '@/Components/Profile/Menu';
 import Product from '@/Components/Home/Product';
 import AlarmContent from '@/Components/Notice/AlarmContent';
-import EditIcon from '@assets/image/edit.png';
 import {AlarmListProps} from '@/Types/Screen/Screen';
 import {useIsFocused} from '@react-navigation/native';
+import useApi from '@/Hooks/useApi';
+import {NoticeDetailApi} from '@/Types/Components/NoticeTypes';
 
 export default function AlarmList({route: {params}}: AlarmListProps) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const {user} = useAppSelector(state => state);
   const navigation = useAppNavigation();
   const isFocused = useIsFocused();
 
   const [selectMenu, setSelectMenu] = useState<any>(t('keywordAlarm'));
   const [list, setList] = useState([1, 2, 3, 4, 5]);
   const {value: isDelete, toggle: toggleIsDelete} = useBoolean(false);
+
   const onPressDelete = useCallback(() => {
     toggleIsDelete();
   }, []);
-
-  const onPressAlarm = useCallback(() => {
-    navigation.navigate('AlarmDetail');
-  }, []);
+  const onPressAlarm = useCallbackNavigation('AlarmDetail');
   const onPressEditButton = useCallback(() => {
     navigation.navigate('KeywordAlarm');
   }, []);
