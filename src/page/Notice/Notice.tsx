@@ -1,65 +1,91 @@
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {GrayText, Text} from '@Components/Global/text';
-import {useAppSelector} from '@/Hooks/CustomHook';
+import {useAppSelector, useCallbackNavigation} from '@/Hooks/CustomHook';
 import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
 import AutoHeightImage from 'react-native-auto-height-image';
 
 import NewIcon from '@assets/image/new.png';
 import Header from '@/Components/LoginSignUp/Header';
-import {NoticeProps} from '@/Types/Components/NoticeTypes';
+import {NoticeApi, NoticeProps} from '@/Types/Components/NoticeTypes';
+import useApi from '@/Hooks/useApi';
+import Loading from '@Components/Global/Loading';
+import {dateFormat} from '@/Util/Util';
+import {NoticeProps as ScreenNoticeProps} from '@/Types/Screen/Screen';
 
-export default function Notice() {
+export default function Notice({navigation}: ScreenNoticeProps) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
-  const [list, setList] = useState<Array<NoticeProps>>([
-    {
-      date: '2021. 7. 12',
-      title: '매장 교환 방문 시간 안내',
-      isNew: true,
-    },
-    {
-      date: '2021. 7. 12',
-      title: '매장 교환 방문 시간 안내',
-      isNew: true,
-    },
-    {
-      date: '2021. 7. 12',
-      title: '매장 교환 방문 시간 안내',
-      isNew: false,
-    },
-    {
-      date: '2021. 7. 12',
-      title: '매장 교환 방문 시간 안내',
-    },
-  ]);
+  const {user} = useAppSelector(state => state);
+
+  const {data, isLoading, isError, errorMessage} = useApi<
+    NoticeApi['T'],
+    NoticeApi['D']
+  >(null, 'notice_list.php', {
+    mt_idx: user?.mt_idx ?? '',
+  });
+
+  const onPressNotice = useCallback(idx => {
+    navigation.navigate('NoticeDetail', {nt_idx: idx});
+  }, []);
+
+  const _renderItem = useCallback(({item, index}) => {
+    const onPress = () => onPressNotice(item.nt_idx);
+    return (
+      <View style={styles.noticeView}>
+        <TouchableOpacity onPress={onPress}>
+          <GrayText fontSize={`${12 * fontSize}`}>{item.date}</GrayText>
+          <View style={styles.contentView}>
+            <Text fontSize={`${16 * fontSize}`}>{item.title}</Text>
+            {item?.isNew && (
+              <AutoHeightImage
+                source={NewIcon}
+                width={getPixel(16)}
+                style={{marginLeft: getPixel(6)}}
+              />
+            )}
+          </View>
+        </TouchableOpacity>
+      </View>
+    );
+  }, []);
+
+  if (isLoading || data === null) {
+    return <Loading />;
+  }
+  const list: NoticeProps[] | [] = Array.isArray(data)
+    ? data.map(item => {
+        return {
+          date: dateFormat(item.nt_wdate),
+          title: item.nt_title,
+          isNew: item.new_check === 'Y',
+          nt_idx: item.nt_idx,
+        };
+      })
+    : [];
+
   return (
-    <View>
+    <View style={{flex: 1}}>
       <Header title={t('noticeTitle')} />
       <FlatList
+        contentContainerStyle={{flex: 0.9}}
         data={list}
-        renderItem={({item, index}) => {
-          return (
-            <View style={styles.noticeView}>
-              <TouchableOpacity>
-                <GrayText fontSize={`${12 * fontSize}`}>{item.date}</GrayText>
-                <View style={styles.contentView}>
-                  <Text fontSize={`${16 * fontSize}`}>{item.title}</Text>
-                  {item?.isNew && (
-                    <AutoHeightImage
-                      source={NewIcon}
-                      width={getPixel(16)}
-                      style={{marginLeft: getPixel(6)}}
-                    />
-                  )}
-                </View>
-              </TouchableOpacity>
-            </View>
-          );
-        }}
+        renderItem={_renderItem}
+        ListEmptyComponent={
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <GrayText medium fontSize={`${14 * fontSize}`}>
+              공지사항이 없습니다
+            </GrayText>
+          </View>
+        }
       />
     </View>
   );

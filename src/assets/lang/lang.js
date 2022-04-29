@@ -436,6 +436,8 @@ export const ko = {
     favorite: 'Favorite',
     chat: 'Message',
     profile: 'Profile',
+    noticeListTitle: '공지 목록',
+    noticeListTitle: '공지 목록',
   },
 };
 export const es = {

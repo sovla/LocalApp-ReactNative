@@ -1,6 +1,5 @@
 member_login.php  
 자동 로그인 체크여부 추가
 
-product_like_list.php/ 관심 목록
-예약중 판매중 , 상태 없음 +
-비즈니스 여부 없음
+notice_info.php
+insert into notice_t (mt_idx,nt_idx,nvt_wdate) value ('3','1',now())<br/>Unknown column 'mt_idx' in 'field list'

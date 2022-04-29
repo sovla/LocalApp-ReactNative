@@ -130,3 +130,12 @@ export const productTimeSetting = (
     return time + i18next.t('yearTime');
   }
 };
+
+export const dateFormat = (date: string) => {
+  if (date) {
+    const [year, month, day] = date.split('-');
+    return `${year}. ${month}. ${day}.`;
+  } else {
+    return '';
+  }
+};

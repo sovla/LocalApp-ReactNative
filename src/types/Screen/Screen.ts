@@ -70,6 +70,9 @@ type Screen = {
   BusinessLocation: StackScreenProps<Screen> | undefined;
   BusinessOpeningHours: StackScreenProps<Screen> | undefined;
   Notice: StackScreenProps<Screen> | undefined;
+  NoticeDetail: {
+    nt_idx: string;
+  };
   AlarmList:
     | {
         menu?: 'keywordAlarm' | 'alarm';
@@ -197,6 +200,7 @@ export type BusinessOpeningHoursProps = StackScreenProps<
   'BusinessOpeningHours'
 >;
 export type NoticeProps = StackScreenProps<Screen, 'Notice'>;
+export type NoticeDetailProps = StackScreenProps<Screen, 'NoticeDetail'>;
 export type AlarmListProps = StackScreenProps<Screen, 'AlarmList'>;
 export type AlarmDetailProps = StackScreenProps<Screen, 'AlarmDetail'>;
 export type MyProductProps = StackScreenProps<Screen, 'MyProduct'>;

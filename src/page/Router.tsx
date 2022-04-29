@@ -74,6 +74,7 @@ import BusinessAddress from './Business/BusinessAddress';
 import BusinessLocation from './Business/BusinessLocation';
 import BusinessOpeningHours from './Business/BusinessOpeningHours';
 import Notice from './Notice/Notice';
+import NoticeDetail from './Notice/NoticeDetail';
 import AlarmList from './Notice/AlarmList';
 import AlarmDetail from './Notice/AlarmDetail';
 import MyProduct from './Product/MyProduct';
@@ -449,6 +450,10 @@ export const RouterSetting: RouterTypes[] = [
   {
     name: 'Notice',
     component: Notice,
+  },
+  {
+    name: 'NoticeDetail',
+    component: NoticeDetail,
   },
   {
     name: 'OnBoarding',
