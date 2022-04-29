@@ -71,7 +71,10 @@ export default function KeywordAlarm() {
   const onPressAlarmSetting = useCallback(() => {
     setIsOn(prev => !prev);
     alarmTogglePostAPI().then(res => {
-      if (res?.data?.mt_keyword === 'Y') {
+      if (res?.result === 'false') {
+        AlertButton(res?.msg);
+      }
+      if (res?.data?.mt_keyword) {
         setIsOn(res.data.mt_keyword === 'Y');
       }
     });
@@ -79,7 +82,7 @@ export default function KeywordAlarm() {
 
   const onSubmit = useCallback(() => {
     PostAPI().then(res => {
-      if (res.result === 'false') {
+      if (res?.result === 'false') {
         return AlertButton(res.msg);
       }
       getData();
@@ -89,7 +92,7 @@ export default function KeywordAlarm() {
 
   const onPressDelete = useCallback((kt_idx: string) => {
     deletePostAPI({kt_idx}).then(res => {
-      if (res.result === 'false') {
+      if (res?.result === 'false') {
         AlertButton(res.msg); // 잘못된 접근입니다.
       } else {
         getData();

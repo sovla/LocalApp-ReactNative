@@ -82,9 +82,9 @@ export const usePostSend = <T, D>(apiPath: string, apiData: D) => {
         AxiosResponse<
           {
             result: 'true' | 'false' | null;
-            data: T | any;
+            data: any | T;
             msg: null | string;
-          } | null,
+          },
           any
         >
       >(apiPath, {...apiData, ...data});
