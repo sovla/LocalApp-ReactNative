@@ -22,6 +22,7 @@ export default function ImageSwiper({
   const [dotNumber, setDotNumber] = useState(0);
 
   const dotArray = new Array(imageArray?.length).fill(1);
+  console.log(imageArray);
 
   return (
     <View style={styles.mainContainer}>
@@ -30,9 +31,19 @@ export default function ImageSwiper({
         style={{width: width}}
         pagingEnabled
         horizontal>
-        {imageArray.map((item, index) => {
-          return <Image source={item} style={{width: width, height: height}} />;
-        })}
+        {Array.isArray(imageArray) &&
+          imageArray.map((item, index) => {
+            const image = typeof item === 'string' ? {uri: item} : item;
+            return (
+              <Image source={image} style={{width: width, height: height}} />
+            );
+          })}
+        {(!Array.isArray(imageArray) || imageArray?.length < 1) && (
+          <Image
+            source={require('@assets/image/none_image_l.jpg')}
+            style={{width, height}}
+          />
+        )}
       </ScrollView>
       <View style={styles.dotView}>
         {dotArray.map((item, index) => {

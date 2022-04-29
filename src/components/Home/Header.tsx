@@ -63,7 +63,7 @@ const Header: React.FC<HeaderProps> = ({isChange}) => {
         <Box style={styles.firstIcon}>
           <AutoHeightImage
             style={[styles.marginRight10]}
-            width={getPixel(18)}
+            width={getPixel(16)}
             source={
               isChange
                 ? require('@assets/image/location_black.png')
@@ -189,8 +189,8 @@ const styles = StyleSheet.create({
   },
   locationTouch: {flexDirection: 'row', alignItems: 'center'},
   icon: {
-    width: getPixel(24),
-    height: getPixel(24),
+    width: getPixel(20),
+    height: getPixel(20),
     marginRight: getPixel(10),
   },
   marginRight10: {

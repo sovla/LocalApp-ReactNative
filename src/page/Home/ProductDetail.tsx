@@ -34,8 +34,8 @@ import SearchWhiteIcon from '@assets/image/search_white.png';
 import SearchBlackIcon from '@assets/image/search_black.png';
 import ShareWhiteIcon from '@assets/image/share_white.png';
 import ShareIcon from '@assets/image/share.png';
-import {brPrice, getHitSlop, viewCountCheck} from '@/Util/Util';
-import {ProductDetailProps} from '@/Types/Screen/Screen';
+import {AlertButton, brPrice, getHitSlop, viewCountCheck} from '@/Util/Util';
+import Screen, {ProductDetailProps} from '@/Types/Screen/Screen';
 import useBoolean from '@/Hooks/useBoolean';
 import useApi from '@/Hooks/useApi';
 import {ProduetDetailApiType} from '@/Types/Components/HomeTypes';
@@ -56,7 +56,6 @@ export default function ProductDetail({
     mt_idx: user.mt_idx,
     pt_idx: params.pt_idx,
   });
-
   const [imageArray, setImageArray] = useState<Array<any>>([
     require('@assets/image/dummy_i.png'),
     require('@assets/image/dummy_i.png'),
@@ -70,9 +69,12 @@ export default function ProductDetail({
   const {value: isChange, on: onIsChange, off: offIsChange} = useBoolean(false);
 
   const onPressTierGuide = useCallbackNavigation('ProductTierGuide');
-  const onPressReport = useCallbackNavigation('ReportDetail', {
-    reportType: 'prohibited',
-  });
+  const onPressReport = useCallbackNavigation<Screen['ReportDetail']>(
+    'ReportDetail',
+    {
+      reportType: 'prohibited',
+    },
+  );
   const onPressShop = useCallbackNavigation('BusinessProfile');
   const onPressChattingTrade = useCallbackNavigation('ChattingDetail');
   const onPressSearch = useCallbackNavigation('Search');
@@ -159,13 +161,13 @@ export default function ProductDetail({
         </Shadow>
       </View>
     );
-  }, [isChange]);
+  }, [isChange, data]);
 
   const InnerHeader = useCallback(() => {
     return (
       <View style={styles.swiperView}>
         <ImageSwiper
-          imageArray={data?.file ?? []}
+          imageArray={data?.file && Array.isArray(data.file) ? data.file : []}
           setImageArray={setImageArray}
           width={getPixel(360)}
           height={getHeightPixel(250)}
@@ -199,9 +201,12 @@ export default function ProductDetail({
         </TouchableOpacity>
       </View>
     );
-  }, []);
-
-  console.log(data);
+  }, [data]);
+  if (isError) {
+    AlertButton(errorMessage);
+    navigation.goBack();
+    return null;
+  }
 
   if (isLoading || data === null) {
     return <Loading />;

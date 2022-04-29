@@ -122,6 +122,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   scrollContainer: {
+    marginTop: getHeightPixel(20),
     marginHorizontal: getPixel(16),
     width: getPixel(328),
   },

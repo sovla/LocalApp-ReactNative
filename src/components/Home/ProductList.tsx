@@ -42,7 +42,7 @@ const ProductList: React.FC<ProductListProps> = ({
                     ? {
                         uri: item.pt_file,
                       }
-                    : dummy // 수정필요 더미 이미지 요청
+                    : require('@assets/image/none_image_m.jpg') // 수정필요 더미 이미지 요청
                 }
                 status={
                   item?.fin_status === 'Y'

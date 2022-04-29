@@ -432,6 +432,10 @@ export const ko = {
     monthTime: '달전',
     yearTime: '년전',
     withinDistance: 'km이내',
+    home: 'Home',
+    favorite: 'Favorite',
+    chat: 'Message',
+    profile: 'Profile',
   },
 };
 export const es = {
