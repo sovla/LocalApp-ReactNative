@@ -1,22 +1,14 @@
 import {API} from '@/API/API';
 import {useIsFocused} from '@react-navigation/native';
 import {Axios, AxiosResponse} from 'axios';
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import {Dispatch, SetStateAction, useCallback, useEffect, useState} from 'react';
 import {check, RESULTS} from 'react-native-permissions';
 import useBoolean from './useBoolean';
+interface optionTypes {
+  isFirst?: boolean;
+}
 
-function useApi<T, D>(
-  defaultValue: T,
-  apiPath: string,
-  axiosData?: D,
-  isFirst: boolean = true,
-) {
+function useApi<T, D>(defaultValue: T, apiPath: string, axiosData?: D, option?: optionTypes) {
   const [data, setData] = useState<T>(defaultValue);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -26,7 +18,7 @@ function useApi<T, D>(
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    if (isFirst && isFocused && !isLoading && data === defaultValue) {
+    if (option?.isFirst && isFocused && !isLoading && data === defaultValue) {
       getData();
     }
   }, [isFocused]);
@@ -69,7 +61,7 @@ function useApi<T, D>(
           setisComplete(true);
         });
     },
-    [axiosData, apiPath, isFirst],
+    [axiosData, apiPath, option?.isFirst],
   );
 
   return {data, isLoading, isError, errorMessage, getData, isComplete, setData};

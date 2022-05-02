@@ -1,11 +1,4 @@
-import {
-  View,
-  StyleSheet,
-  TextInput,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import {View, StyleSheet, TextInput, Image, ScrollView, TouchableOpacity} from 'react-native';
 import React, {useCallback, useState} from 'react';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import Theme from '@/assets/global/Theme';
@@ -34,7 +27,7 @@ export default function Location({offIsModal}: {offIsModal: any}): JSX.Element {
     isError,
     errorMessage,
   } = useApi([], 'mt_location_history.php', {
-    mt_idx: user.mt_idx,
+    axiosData: {mt_idx: user.mt_idx},
   });
 
   const onPressLocation = useCallback(() => {
@@ -47,9 +40,7 @@ export default function Location({offIsModal}: {offIsModal: any}): JSX.Element {
       <View style={styles.space} />
       <Shadow>
         <View style={styles.whiteBox}>
-          <BoldText fontSize={`${20 * fontSize}`}>
-            {t('locationChange')}
-          </BoldText>
+          <BoldText fontSize={`${20 * fontSize}`}>{t('locationChange')}</BoldText>
 
           <View style={{marginTop: getHeightPixel(8)}}>
             <TextInput
@@ -62,26 +53,18 @@ export default function Location({offIsModal}: {offIsModal: any}): JSX.Element {
               onFocus={() => setIsFocus(true)}
               onBlur={() => setIsFocus(false)}
               onChangeText={setValue}>
-              {!isFocus && value?.length === 0 && (
-                <GrayText fontSize={`${11 * fontSize}`}>
-                  {t('locationPlaceholder')}
-                </GrayText>
-              )}
+              {!isFocus && value?.length === 0 && <GrayText fontSize={`${11 * fontSize}`}>{t('locationPlaceholder')}</GrayText>}
             </TextInput>
             <Image source={SearchIcon} style={styles.searchImage} />
           </View>
           <View style={styles.locationView}>
             <Image source={MyLocationIcon} style={styles.locationImage} />
             <TouchableOpacity hitSlop={getHitSlop(5)} onPress={onPressLocation}>
-              <MediumText fontSize={`${12 * fontSize}`}>
-                {t('nowLocation')}
-              </MediumText>
+              <MediumText fontSize={`${12 * fontSize}`}>{t('nowLocation')}</MediumText>
             </TouchableOpacity>
           </View>
           <View style={styles.line} />
-          {!isFocus && (
-            <BoldText fontSize={`${14 * fontSize}`}>{t('areaUsed')}</BoldText>
-          )}
+          {!isFocus && <BoldText fontSize={`${14 * fontSize}`}>{t('areaUsed')}</BoldText>}
 
           <ScrollView>
             {!isFocus &&
@@ -96,10 +79,7 @@ export default function Location({offIsModal}: {offIsModal: any}): JSX.Element {
                 );
               })}
           </ScrollView>
-          <TouchableOpacity
-            style={styles.closeBlackTouch}
-            onPress={offIsModal}
-            hitSlop={getHitSlop(5)}>
+          <TouchableOpacity style={styles.closeBlackTouch} onPress={offIsModal} hitSlop={getHitSlop(5)}>
             <Image source={CloseBlackIcon} style={styles.closeBlackImage} />
           </TouchableOpacity>
         </View>

@@ -18,13 +18,8 @@ export default function ProfileSellProduct({}: ProfileSellProductProps) {
   const {user} = useAppSelector(state => state);
   const isFocused = useIsFocused();
   const [list, setList] = useState<Array<ProductProps>>([1, 2, 3, 4, 5]);
-  const [selectMenu, setSelectMenu] = useState<any>(
-    t('ProfileSellProductComplete'),
-  );
-  const {data, isLoading, isError, errorMessage, getData} = useApi<
-    ProfileSellProductAPi['T'],
-    ProfileSellProductAPi['D']
-  >(null, 'sell_product_list.php', {
+  const [selectMenu, setSelectMenu] = useState<any>(t('ProfileSellProductComplete'));
+  const {data, isLoading, isError, errorMessage, getData} = useApi<ProfileSellProductAPi['T'], ProfileSellProductAPi['D']>(null, 'sell_product_list.php', {
     mt_idx: user?.mt_idx ?? 'error',
     type: selectMenu === t('ProfileSellProductComplete') ? 'Y' : 'N',
   });
@@ -38,11 +33,7 @@ export default function ProfileSellProduct({}: ProfileSellProductProps) {
     <View>
       <Header title={t('profileHomeSaleProduct')} />
       <View style={{height: getHeightPixel(20)}}></View>
-      <Menu
-        menuList={[t('ProfileSellProduct'), t('ProfileSellProductComplete')]}
-        selectMenu={selectMenu}
-        setSelectMenu={setSelectMenu}
-      />
+      <Menu menuList={[t('ProfileSellProduct'), t('ProfileSellProductComplete')]} selectMenu={selectMenu} setSelectMenu={setSelectMenu} />
       <FlatList
         contentContainerStyle={{
           paddingBottom: getHeightPixel(150),

@@ -1,13 +1,4 @@
-import {
-  Animated,
-  Easing,
-  Image,
-  PanResponder,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Animated, Easing, Image, PanResponder, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import Theme from '@/assets/global/Theme';
@@ -17,31 +8,17 @@ import {useTranslation} from 'react-i18next';
 import {useAppSelector} from '@/Hooks/CustomHook';
 
 import CloseBlackIcon from '@assets/image/close_black.png';
-import {
-  ModalFilterProps,
-  ProductState,
-  SearchApi,
-} from '@/Types/Components/HomeTypes';
+import {ModalFilterProps, ProductState, SearchApi} from '@/Types/Components/HomeTypes';
 import {CheckBox} from '../Global/button';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Slider} from '@miblanchard/react-native-slider';
 import {getHitSlop} from '@/Util/Util';
 
-export type FilterMenuTypes =
-  | 'searchModalSortItem1'
-  | 'searchModalSortItem2'
-  | 'searchModalSortItem3'
-  | 'searchModalSortItem4';
+export type FilterMenuTypes = 'searchModalSortItem1' | 'searchModalSortItem2' | 'searchModalSortItem3' | 'searchModalSortItem4';
 
-const ModalFilter: React.FC<ModalFilterProps> = ({
-  onClose,
-  setFilter,
-  filter,
-}) => {
+const ModalFilter: React.FC<ModalFilterProps> = ({onClose, setFilter, filter}) => {
   const ref = useRef(null);
-  const [selectFilter, setSelectFilter] = useState<FilterMenuTypes>(
-    'searchModalSortItem1',
-  );
+  const [selectFilter, setSelectFilter] = useState<FilterMenuTypes>('searchModalSortItem1');
   const [productState, setProductState] = useState<ProductState>({
     newProduct: false,
     Reaper: false,
@@ -54,12 +31,7 @@ const ModalFilter: React.FC<ModalFilterProps> = ({
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
 
-  const menu: FilterMenuTypes[] = [
-    'searchModalSortItem1',
-    'searchModalSortItem2',
-    'searchModalSortItem3',
-    'searchModalSortItem4',
-  ];
+  const menu: FilterMenuTypes[] = ['searchModalSortItem1', 'searchModalSortItem2', 'searchModalSortItem3', 'searchModalSortItem4'];
   const menu1: {
     text: string;
     name: keyof ProductState;
@@ -88,16 +60,12 @@ const ModalFilter: React.FC<ModalFilterProps> = ({
 
   const onCloseFn = () => {
     onClose();
-    setFilter(
-      (
-        prev: Omit<SearchApi, 'mt_idx' | 'search_txt' | 'page' | 'category'>,
-      ) => ({
-        ...prev,
-        order: menu.findIndex(v => v === selectFilter),
-        s_price: range[0],
-        e_price: range[1] > 1 ? range[1] : null,
-      }),
-    );
+    setFilter((prev: Omit<SearchApi, 'mt_idx' | 'search_txt' | 'page' | 'category'>) => ({
+      ...prev,
+      order: menu.findIndex(v => v === selectFilter),
+      s_price: range[0],
+      e_price: range[1] > 1 ? range[1] : null,
+    }));
   };
 
   useEffect(() => {
@@ -114,9 +82,7 @@ const ModalFilter: React.FC<ModalFilterProps> = ({
         <KeyboardAwareScrollView>
           <View style={styles.subContainer}>
             <View style={styles.titleView}>
-              <MediumText fontSize={`${20 * fontSize}`}>
-                {t('searchModalFilter')}
-              </MediumText>
+              <MediumText fontSize={`${20 * fontSize}`}>{t('searchModalFilter')}</MediumText>
               <TouchableOpacity hitSlop={getHitSlop(5)} onPress={onCloseFn}>
                 <Image source={CloseBlackIcon} style={styles.titleCloseImage} />
               </TouchableOpacity>
@@ -125,9 +91,7 @@ const ModalFilter: React.FC<ModalFilterProps> = ({
               style={{
                 marginTop: getHeightPixel(40),
               }}>
-              <MediumText fontSize={`${18 * fontSize}`}>
-                {t('searchModalsort')}
-              </MediumText>
+              <MediumText fontSize={`${18 * fontSize}`}>{t('searchModalsort')}</MediumText>
               {Array.isArray(menu) &&
                 menu.map(v => {
                   return (
@@ -143,15 +107,10 @@ const ModalFilter: React.FC<ModalFilterProps> = ({
                 })}
             </View>
 
-            <Line
-              backgroundColor={Theme.color.gray}
-              style={styles.lineMargin}
-            />
+            <Line backgroundColor={Theme.color.gray} style={styles.lineMargin} />
 
             <View>
-              <MediumText fontSize={`${18 * fontSize}`}>
-                {t('searchModalPriceRange')}
-              </MediumText>
+              <MediumText fontSize={`${18 * fontSize}`}>{t('searchModalPriceRange')}</MediumText>
               <Slider
                 value={range}
                 onValueChange={value => {
@@ -217,9 +176,7 @@ const ModalFilter: React.FC<ModalFilterProps> = ({
               style={{
                 marginTop: getHeightPixel(40),
               }}>
-              <MediumText fontSize={`${18 * fontSize}`}>
-                {t('searchModalProductState')}
-              </MediumText>
+              <MediumText fontSize={`${18 * fontSize}`}>{t('searchModalProductState')}</MediumText>
               <View style={styles.checkboxView}>
                 {menu1.map(item => {
                   return (
@@ -254,7 +211,7 @@ const ModalFilter: React.FC<ModalFilterProps> = ({
 export default ModalFilter;
 
 export const SlideRightModal: React.FC<any> = ({children, onClose}) => {
-  // const pan = useRef(new Animated.ValueXY({x: getPixel(310), y: 0})).current;
+  const pan = useRef(new Animated.ValueXY({x: getPixel(310), y: 0})).current;
 
   // const panResponder = PanResponder.create({
   //   onStartShouldSetPanResponder: () => true,
@@ -294,21 +251,21 @@ export const SlideRightModal: React.FC<any> = ({children, onClose}) => {
   //   },
   // });
 
-  // useEffect(() => {
-  //   Animated.spring(
-  //     pan, // Auto-multiplexed
-  //     {
-  //       toValue: {x: 0, y: 0},
-  //       useNativeDriver: true,
-  //       bounciness: 0,
-  //     }, // Back to zero
-  //   ).start();
-  // }, []);
+  useEffect(() => {
+    Animated.spring(
+      pan, // Auto-multiplexed
+      {
+        toValue: {x: 0, y: 0},
+        useNativeDriver: true,
+        bounciness: 0,
+      }, // Back to zero
+    ).start();
+  }, []);
 
   return (
     <Animated.View
-      // {...panResponder.panHandlers } pan.getTranslateTransform()
-      style={[styles.animatedContainer]}>
+      // {...panResponder.panHandlers }
+      style={[styles.animatedContainer, pan.getTranslateTransform()]}>
       {children}
     </Animated.View>
   );

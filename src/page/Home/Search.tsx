@@ -77,7 +77,7 @@ export default function Search({route: {params}, navigation}: SearchProps): JSX.
       mt_idx: user.mt_idx,
       search_txt: searchText,
     },
-    false,
+    {isFirst: false},
   );
 
   const {
@@ -94,7 +94,7 @@ export default function Search({route: {params}, navigation}: SearchProps): JSX.
       search_txt: searchText,
       ...filter,
     },
-    false,
+    {isFirst: false},
   );
 
   const {getData: sendAllDelete} = useApi<RecentAllDeleteApi['T'], RecentAllDeleteApi['D']>( // 모두 삭제
@@ -103,7 +103,7 @@ export default function Search({route: {params}, navigation}: SearchProps): JSX.
     {
       mt_idx: user.mt_idx,
     },
-    false,
+    {isFirst: false},
   );
   const {getData: sendDelete} = useApi<RecentDeleteApi['T'], RecentDeleteApi['D']>( // 검색어 삭제
     null,
@@ -111,7 +111,7 @@ export default function Search({route: {params}, navigation}: SearchProps): JSX.
     {
       mt_idx: user.mt_idx,
     },
-    false,
+    {isFirst: false},
   );
 
   const onPressCloseKeyword = useCallback(() => {
