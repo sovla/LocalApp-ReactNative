@@ -1,50 +1,19 @@
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useCallback, useState} from 'react';
-import {LikeProductProps, ProductProps} from '@/Types/Components/HomeTypes';
+import React from 'react';
+import {LikeProductProps} from '@/Types/Components/HomeTypes';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import Theme from '@/assets/global/Theme';
-import {
-  DarkBlueText,
-  GrayText,
-  MediumText,
-  Text,
-  WhiteText,
-} from '../Global/text';
-import {useTranslation} from 'react-i18next';
+import {DarkBlueText, Text} from '../Global/text';
 import {useAppSelector} from '@/Hooks/CustomHook';
-import LocationIcon from '@assets/image/map-marker.png';
-import ViewIcon from '@assets/image/view.png';
-import LikeIcon from '@assets/image/heart.png';
-import LikeEmptyIcon from '@assets/image/unlike.png';
-import LikeFillIcon from '@assets/image/love_pink.png';
 import dummy from '@assets/image/dummy.png';
-import {getHitSlop} from '@/Util/Util';
-import {CheckBox, CheckBoxImage} from '../Global/button';
+import {CheckBoxImage} from '../Global/button';
 
-const LikeProduct: React.FC<LikeProductProps> = ({
-  title,
-  price,
-  image,
-  isEdit,
-  isSelectEdit,
-  onPress,
-  idx,
-  categoryNum,
-}) => {
+const LikeProduct: React.FC<LikeProductProps> = ({title, price, image, isOn, onPressItem, isEdit, isSelectEdit, onPress, idx, categoryNum}) => {
   const fontSize = useAppSelector(state => state.fontSize.value);
-  const [isOn, setIsOn] = useState(false);
-
-  const onPressItem = useCallback(() => {
-    if (isEdit) {
-      setIsOn(prev => !prev);
-    } else if (!isEdit && onPress) {
-      onPress(idx, categoryNum);
-    }
-  }, [isEdit]);
 
   return (
     <TouchableOpacity
-      onPress={onPressItem}
+      onPress={!isEdit ? onPress : onPressItem}
       style={{
         flexDirection: 'row',
         alignItems: 'center',
@@ -82,10 +51,7 @@ const LikeProduct: React.FC<LikeProductProps> = ({
             {title}
           </Text>
 
-          <DarkBlueText
-            style={{marginTop: getHeightPixel(4)}}
-            fontSize={`${16 * fontSize}`}
-            medium>
+          <DarkBlueText style={{marginTop: getHeightPixel(4)}} fontSize={`${16 * fontSize}`} medium>
             {price}
           </DarkBlueText>
         </View>

@@ -97,8 +97,10 @@ export interface LikeProductProps {
   image?: any;
   status?: string;
   isEdit: boolean;
+  isOn?: boolean;
+  onPressItem?: any;
   isSelectEdit?: boolean;
-  onPress?: (idx: string, type: string) => void;
+  onPress?: any;
   idx: string;
   categoryNum: string;
 }
@@ -161,6 +163,7 @@ interface LikeApiTypes {
   pt_file?: string;
   pt_price?: string;
   pt_title?: string;
+  pt_idx: string;
   busi_check?: 'Y' | 'N';
   pt_cate?: string;
 }

@@ -6,11 +6,13 @@ import {check, RESULTS} from 'react-native-permissions';
 import useBoolean from './useBoolean';
 interface optionTypes {
   isFirst?: boolean;
+  focusRetry?: boolean;
 }
 
 function useApi<T, D>(defaultValue: T, apiPath: string, axiosData?: D, option?: optionTypes) {
-  const defaultOption = {
+  const defaultOption: optionTypes = {
     isFirst: true,
+    focusRetry: false,
     ...option,
   };
   const [data, setData] = useState<T>(defaultValue);
@@ -22,7 +24,7 @@ function useApi<T, D>(defaultValue: T, apiPath: string, axiosData?: D, option?: 
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    if (defaultOption?.isFirst && isFocused && !isLoading && data === defaultValue) {
+    if ((defaultOption?.isFirst && isFocused && !isLoading && data === defaultValue) || defaultOption.focusRetry) {
       getData();
     }
   }, [isFocused]);
@@ -92,7 +94,7 @@ export const usePostSend = <T, D>(apiPath: string, apiData: D) => {
           any
         >
       >(apiPath, {...apiData, ...data});
-
+      console.log(apiPath + '::::', res);
       if (res.data?.result === 'true') {
         setIsLoading(false);
         return res.data.data;
