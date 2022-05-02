@@ -1,9 +1,4 @@
-import {
-  categoryMenuTypes,
-  openingHoursTypes,
-  ProductTypes,
-  tierTypes,
-} from '@/Types/Components/global';
+import {categoryMenuTypes, openingHoursTypes, ProductTypes, tierTypes} from '@/Types/Components/global';
 
 export const categoryMenu: {
   name: categoryMenuTypes['menu'];
@@ -149,20 +144,63 @@ export const tierList: tierTypes[] = [
   },
 ];
 
+export const tierReverseList: tierTypes[] = [
+  {
+    name: 'Ftier',
+    title: 'FtierTitle',
+    content: 'FtierContent',
+  },
+  {
+    name: 'Ctier',
+    title: 'CtierTitle',
+    content: 'CtierContent',
+    image: require('@assets/image/c_tier.png'),
+  },
+  {
+    name: 'Btier',
+    title: 'BtierTitle',
+    content: 'BtierContent',
+    image: require('@assets/image/b_tier.png'),
+  },
+  {
+    name: 'Atier',
+    title: 'AtierTitle',
+    content: 'AtierContent',
+    image: require('@assets/image/a_tier.png'),
+  },
+  {
+    name: 'Stier',
+    title: 'StierTitle',
+    content: 'StierContent',
+    image: require('@assets/image/s_tier.png'),
+  },
+  {
+    name: 'Rtier',
+    title: 'RtierTitle',
+    content: 'RtierContent',
+    image: require('@assets/image/r_tier.png'),
+  },
+  {
+    name: 'Ntier',
+    title: 'NtierTitle',
+    content: 'NtierContent',
+    image: require('@assets/image/n_tier.png'),
+  },
+];
+
 export const productDummy: ProductTypes = {
-  title: 'Mac book Air 2020',
-  categoryMenu: 'car',
-  price: 'R$ 4.500,00',
-  tier: 'Atier',
-  tag: '#Apple  #Mac Book  # Mac book Air',
-  content: '하이',
-  imageArray: [
-    require('@assets/image/dummy.png'),
-    require('@assets/image/dummy.png'),
-    require('@assets/image/dummy.png'),
-  ],
+  title: '공원',
+  categoryMenu: 'digital',
+  price: '5000',
+  tier: 'Ftier',
+  tag: '공원 시민공원',
+  content: '설명설명',
   isNego: false,
-  location: 'Bom Retiro',
+  location: '임시용',
+  imageFile: [],
+  pt_lat: null,
+  pt_lng: null,
+  pt_location_detail: null,
 };
 
 export const openingHoursInit: openingHoursTypes = {

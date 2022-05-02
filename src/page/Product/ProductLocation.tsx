@@ -1,17 +1,9 @@
-import {
-  FlatList,
-  NativeSyntheticEvent,
-  StyleSheet,
-  TextInput,
-  TextInputSubmitEditingEventData,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import React from 'react';
+import {FlatList, NativeSyntheticEvent, StyleSheet, TextInput, TextInputSubmitEditingEventData, TouchableOpacity, View} from 'react-native';
+import React, {useEffect} from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {GrayText, Text} from '@Components/Global/text';
-import {useAppSelector} from '@/Hooks/CustomHook';
+import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
 import AutoHeightImage from 'react-native-auto-height-image';
@@ -23,39 +15,62 @@ import MyLocationIcon from '@assets/image/my_location.png';
 import {useCallback} from 'react';
 import axios from 'axios';
 import {useState} from 'react';
+import useGeocoding from '@/Hooks/useGeocoding';
 
 const ProductLocation = () => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
-  const [locationList, setLocationList] = useState<any>([]);
-  const onSubmit = useCallback(
-    (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
-      const config: any = {
-        method: 'get',
-        url: `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${e.nativeEvent.text}&types=establishment&location=37.76999%2C-122.44696&radius=500&key=AIzaSyAbfTo68JkJSdEi9emDHyMfGl7vxjYD704`,
-        headers: {},
-      };
-      axios(config)
-        .then(function (response) {
-          if (response.data.status === 'OK') {
-            setLocationList(response.data.predictions);
-          }
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+  const {
+    global: {
+      data: {token},
     },
-    [],
-  );
-  const onPress = useCallback(main_text => {
+  } = useAppSelector(state => state);
+  const navigation = useAppNavigation();
+  // const {} = useGeocoding()
+
+  const [locationList, setLocationList] = useState<any>([]);
+  const [text, setText] = useState('Bom retiro');
+
+  const onSubmit = useCallback(() => {
     const config: any = {
       method: 'get',
-      url: `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${main_text}&inputtype=textquery&locationbias=circle%3A2000%4047.6918452%2C-122.2226413&fields=formatted_address%2Cname%2Crating%2Copening_hours%2Cgeometry&key=AIzaSyAbfTo68JkJSdEi9emDHyMfGl7vxjYD704`,
+      url: `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${text}&types=establishment&location=37.76999%2C-122.44696&radius=500&key=AIzaSyAbfTo68JkJSdEi9emDHyMfGl7vxjYD704&sessionToken=${token}`,
       headers: {},
     };
     axios(config)
       .then(function (response) {
         console.log(response.data);
+
+        if (response.data.status === 'OK') {
+          setLocationList(response.data.predictions);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }, [text]);
+  useEffect(() => {
+    onSubmit();
+  }, [text]);
+  const onPress = useCallback(main_text => {
+    const config: any = {
+      method: 'get',
+      url: `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${main_text}&inputtype=textquery&locationbias=circle%3A2000%4047.6918452%2C-122.2226413&fields=formatted_address%2Cname%2Crating%2Copening_hours%2Cgeometry&key=AIzaSyAbfTo68JkJSdEi9emDHyMfGl7vxjYD704&sessionToken=${token}`,
+      headers: {},
+    };
+    axios(config)
+      .then(function (response) {
+        console.log(response);
+        if (response.data.status === 'OK') {
+          const item = response.data.candidates[0];
+
+          navigation.navigate('ProductUpdate', {
+            location: item?.name as string,
+            pt_location_detail: item?.formatted_address as string,
+            pt_lat: item?.geometry?.location?.lat as number,
+            pt_lng: item?.geometry?.location?.lng as number,
+          });
+        }
       })
       .catch(function (error) {
         console.log(error);
@@ -70,29 +85,7 @@ const ProductLocation = () => {
         ListHeaderComponent={
           <>
             <View style={styles.headerView}>
-              {/* <GooglePlacesAutocomplete
-                placeholder="Search"
-                debounce={2000}
-                onFail={v => console.log(v)}
-                styles={{
-                  textInput: {
-                    color: Theme.color.black,
-                  },
-                }}
-                onPress={(data, details = null) => {
-                  // 'details' is provided when fetchDetails = true
-                  console.log(data, details);
-                }}
-              
-                query={{
-                  key: 'AIzaSyAbfTo68JkJSdEi9emDHyMfGl7vxjYD704',
-                  language: 'en',
-                }}
-              /> */}
-              <Text
-                medium
-                fontSize={`${20 * fontSize}`}
-                style={styles.headerText}>
+              <Text medium fontSize={`${20 * fontSize}`} style={styles.headerText}>
                 {t('locationUpdateGuide1')}
               </Text>
               <View>
@@ -104,6 +97,8 @@ const ProductLocation = () => {
                       fontSize: fontSize * 16,
                     },
                   ]}
+                  value={text}
+                  onChangeText={setText}
                   placeholder="Run Tres Rios"
                   placeholderTextColor={Theme.color.gray_BB}
                 />
@@ -187,7 +182,8 @@ const styles = StyleSheet.create({
   },
   textInput: {
     width: getPixel(328),
-    height: getHeightPixel(40),
+    minHeight: getHeightPixel(40),
+
     backgroundColor: Theme.color.gray_F1,
     borderRadius: getPixel(4),
     color: Theme.color.black,

@@ -1,5 +1,5 @@
-import {categoryMenu} from '@/assets/global/dummy';
-import {categoryMenuTypes} from '@/Types/Components/global';
+import {categoryMenu, tierReverseList} from '@/assets/global/dummy';
+import {categoryMenuTypes, tierTypes} from '@/Types/Components/global';
 import i18next from 'i18next';
 import {Alert, NativeScrollEvent, NativeSyntheticEvent} from 'react-native';
 import {getPixel} from './pixelChange';
@@ -132,6 +132,13 @@ export const dateFormat = (date: string) => {
 export const findCategory = (str?: categoryMenuTypes['menu'] | null) => {
   if (str) {
     const result = categoryMenu.findIndex(v => v.name === str);
-    return result !== -1 ? result : undefined;
+    return result !== -1 ? result + 1 : undefined;
+  }
+};
+
+export const findTier = (str?: tierTypes['name'] | null) => {
+  if (str) {
+    const result = tierReverseList.findIndex(v => v.name === str);
+    return result !== -1 ? `${result}` : undefined;
   }
 };

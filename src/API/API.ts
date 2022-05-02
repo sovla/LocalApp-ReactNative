@@ -12,7 +12,7 @@ const baseURL = 'https://dmonster1786.cafe24.com/api/';
 
 const LOGON = true;
 
-const formFormatter = (data: any, isIndex = true) => {
+const formFormatter = (data: any, isIndex = false) => {
   const formData = new FormData();
 
   for (const key of Object.keys(data)) {
@@ -62,6 +62,7 @@ export const API = axios.create({
     if (typeof data?.imageField === 'string') {
       // 이미지 필드에 문자열 하나만 있는 경우
       const field = data.imageField; // 해당 필드명
+      console.log('field:::', field);
 
       let cloneData = Object.assign({}, data);
       //  객체복사
@@ -73,10 +74,10 @@ export const API = axios.create({
         imageData = [];
         for (const item of data[field]) {
           imageData.push({
-            //  아닌경우 하나의 배열에 푸쉬
+            //  하나의 배열에 푸쉬
             key: 'image' + new Date().getTime(),
             uri: Platform.OS === 'android' ? item.path : item.path.replace('file://', ''),
-            type: item.mime,
+            type: item?.mime ?? 'image/jpeg',
             name: 'auto.jpg',
           });
         }
@@ -85,13 +86,12 @@ export const API = axios.create({
         imageData = {
           key: 'image' + new Date().getTime(),
           uri: Platform.OS === 'android' ? item.path : item.path.replace('file://', ''),
-          type: item.mime,
+          type: item?.mime ?? 'image/jpeg',
           name: 'auto.jpg',
         };
       }
     }
     const jwt_data = jwt_encode(cloneData, SECRETKEY);
-
     const result = formFormatter(
       data
         ? imageData
@@ -99,9 +99,7 @@ export const API = axios.create({
               // 이미지 데이터+ 데이터가 있는경우
               {
                 jwt_data,
-                [Array.isArray(imageData)
-                  ? data.imageField + '[]' // 배열인 경우
-                  : data.imageField]: imageData, // 기본
+                [data.imageField]: imageData, // 기본
               },
               {
                 debug_jwt: JWT_TOKEN,

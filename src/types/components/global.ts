@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  GestureResponderEvent,
-  TextInputProps,
-  TextProps,
-  TouchableOpacityProps,
-  ViewStyle,
-} from 'react-native';
+import {GestureResponderEvent, TextInputProps, TextProps, TouchableOpacityProps, ViewStyle} from 'react-native';
 import {AnyStyledComponent} from 'styled-components';
 
 export interface DefaultButtonProps extends TouchableOpacityProps {
@@ -92,14 +86,21 @@ export interface ModalProps {
 
 export interface ProductTypes {
   title: string;
-  categoryMenu: categoryMenuTypes['menu'];
+  categoryMenu: categoryMenuTypes['menu'] | null;
   price: string;
-  tag?: string;
-  imageArray?: Array<any>;
-  tier?: tierTypes['name'];
+  tag?: string | null;
+  tier?: tierTypes['name'] | null;
   location?: string;
+  pt_location_detail: string | null;
+  pt_lat: number | null;
+  pt_lng: number | null;
   content?: string;
   isNego?: boolean;
+  imageFile: {
+    path: string;
+    mime: string;
+    isLocal: boolean;
+  }[];
 }
 export interface categoryMenuTypes {
   menu:

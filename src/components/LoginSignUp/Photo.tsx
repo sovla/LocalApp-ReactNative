@@ -18,14 +18,7 @@ interface PhotoProps {
   selectImage?: ImageOrVideo;
 }
 
-const Photo: React.FC<PhotoProps> = ({
-  returnFn = () => {},
-  width = getPixel(80),
-  height = getPixel(80),
-  imageWidth = getPixel(25),
-  isNavigation = false,
-  selectImage,
-}) => {
+const Photo: React.FC<PhotoProps> = ({returnFn = () => {}, width = getPixel(80), height = getPixel(80), imageWidth = getPixel(25), isNavigation = false, selectImage}) => {
   const navigation = useAppNavigation();
   const onPressImageCropPicker = useCallback(() => {
     if (isNavigation) {
@@ -35,15 +28,13 @@ const Photo: React.FC<PhotoProps> = ({
         width: 300,
         height: 400,
         cropping: true,
+        forceJpg: true,
       }).then(image => returnFn(image));
     }
   }, [returnFn, isNavigation]);
 
   return (
-    <TouchableOpacity
-      style={{...styles.photoTouch, width, height}}
-      onPress={onPressImageCropPicker}
-      disabled={selectImage !== undefined}>
+    <TouchableOpacity style={{...styles.photoTouch, width, height}} onPress={onPressImageCropPicker} disabled={selectImage !== undefined}>
       <AutoHeightImage
         source={selectImage ? {uri: selectImage.path} : CameraIcon}
         width={selectImage ? width : imageWidth}
@@ -56,10 +47,7 @@ const Photo: React.FC<PhotoProps> = ({
         }
       />
       {selectImage && (
-        <TouchableOpacity
-          onPress={onPressImageCropPicker}
-          hitSlop={getHitSlop(10)}
-          style={styles.absolute}>
+        <TouchableOpacity onPress={onPressImageCropPicker} hitSlop={getHitSlop(10)} style={styles.absolute}>
           <AutoHeightImage source={CameraIcon} width={getPixel(15)} />
         </TouchableOpacity>
       )}

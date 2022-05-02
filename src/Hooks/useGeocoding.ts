@@ -12,12 +12,8 @@ function useGeocoding(region: {latitude: number; longitude: number}) {
   const onSearchLocation = useCallback(() => {
     const config: any = {
       method: 'get',
-      url: `https://maps.googleapis.com/maps/api/geocode/json?latlng=${
-        region.latitude
-      },${
-        region.longitude
-      }&key=AIzaSyAbfTo68JkJSdEi9emDHyMfGl7vxjYD704&language=${geoLanguage(
-        i18n.language, //i18n.language
+      url: `https://maps.googleapis.com/maps/api/geocode/json?latlng=${region.latitude},${region.longitude}&key=AIzaSyAbfTo68JkJSdEi9emDHyMfGl7vxjYD704&language=${geoLanguage(
+        'br', //i18n.language
       )}&result_type=street_address|political|country`,
       headers: {},
     };
@@ -54,9 +50,7 @@ function useGeocoding(region: {latitude: number; longitude: number}) {
     let find = false;
     const length = location?.results?.length;
 
-    locationName = location?.results
-      ? location.results[length - 3].formatted_address
-      : '';
+    locationName = location?.results ? location.results[length - 3].formatted_address : '';
     detail = location !== null ? location.results[1].formatted_address : '';
 
     for (const result of location.results) {

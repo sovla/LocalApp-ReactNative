@@ -1,5 +1,5 @@
 import {StyleSheet, View} from 'react-native';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {GrayText} from '@Components/Global/text';
@@ -11,16 +11,41 @@ import {Button} from '@/Components/Global/button';
 import {productDummy} from '@/assets/global/dummy';
 import Input from '@/Components/Global/Input';
 import {ProductTagProps} from '@/Types/Screen/Screen';
+import {AlertButton} from '@/Util/Util';
 
-const ProductTag: React.FC<ProductTagProps> = ({navigation}) => {
+const ProductTag: React.FC<ProductTagProps> = ({navigation, route: {params}}) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
-  const [tag, setTag] = useState(productDummy.tag);
+  const [tag, setTag] = useState('');
   const onPressConfirm = useCallback(() => {
     navigation.navigate('ProductUpdate', {
       tag,
     });
   }, [tag]);
+
+  const onChangeTag = useCallback((text: string) => {
+    let isReg = true;
+    if (text) {
+      text.split(' ').forEach(v => {
+        if (v.length > 10) {
+          AlertButton(t('tagAlert'));
+          isReg = false;
+          return;
+        }
+      });
+      if (isReg) {
+        setTag(text);
+      }
+    } else {
+      setTag('');
+    }
+  }, []);
+
+  useEffect(() => {
+    if (params?.tag) {
+      setTag(params.tag);
+    }
+  }, []);
 
   return (
     <View>
@@ -30,19 +55,13 @@ const ProductTag: React.FC<ProductTagProps> = ({navigation}) => {
           marginHorizontal: getPixel(16),
         }}>
         <View style={{height: getHeightPixel(30)}} />
-        <Input value={tag} onChange={setTag} width={getPixel(328)} />
+        <Input value={tag} onChange={onChangeTag} width={getPixel(328)} />
         <View style={{height: getHeightPixel(30)}} />
-        <GrayText fontSize={`${12 * fontSize}`}>
-          {'- ' + t('tagGuide1')}
-        </GrayText>
+        <GrayText fontSize={`${12 * fontSize}`}>{'- ' + t('tagGuide1')}</GrayText>
         <View style={{height: getHeightPixel(10)}} />
-        <GrayText fontSize={`${12 * fontSize}`}>
-          {'- ' + t('tagGuide2')}
-        </GrayText>
+        <GrayText fontSize={`${12 * fontSize}`}>{'- ' + t('tagGuide2')}</GrayText>
         <View style={{height: getHeightPixel(10)}} />
-        <GrayText fontSize={`${12 * fontSize}`}>
-          {'- ' + t('tagGuide3')}
-        </GrayText>
+        <GrayText fontSize={`${12 * fontSize}`}>{'- ' + t('tagGuide3')}</GrayText>
         <Button
           content={t('confirm')}
           width="328px"

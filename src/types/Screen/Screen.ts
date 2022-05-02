@@ -92,11 +92,27 @@ type Screen = {
         content?: string;
         isNego?: boolean;
         isEdit?: boolean; // 해당 페이지 수정여부
+        imageFile?: {
+          path: string;
+          mime: string;
+          isLocal: boolean;
+        }[];
+        pt_location_detail?: string | null;
+        pt_lat?: number | null;
+        pt_lng?: number | null;
       }
     | undefined;
-  ProductPhoto: StackScreenProps<Screen> | undefined;
+  ProductPhoto:
+    | {
+        path: string;
+        mime: string;
+        isLocal: boolean;
+      }[]
+    | undefined;
   ProductCategory: StackScreenProps<Screen> | undefined;
-  ProductTag: StackScreenProps<Screen> | undefined;
+  ProductTag: {
+    tag?: string | null;
+  };
   ProductTier: StackScreenProps<Screen> | undefined;
   ProductLocation: StackScreenProps<Screen> | undefined;
   Setting: StackScreenProps<Screen> | undefined;
@@ -151,10 +167,7 @@ export type KeywordAlarmProps = StackScreenProps<Screen, 'KeywordAlarm'>;
 export type LikeListProps = StackScreenProps<Screen, 'LikeList'>;
 export type ChattingHomeProps = StackScreenProps<Screen, 'ChattingHome'>;
 export type ChattingDetailProps = StackScreenProps<Screen, 'ChattingDetail'>;
-export type ChattingLocationProps = StackScreenProps<
-  Screen,
-  'ChattingLocation'
->;
+export type ChattingLocationProps = StackScreenProps<Screen, 'ChattingLocation'>;
 export type ReportCategoryProps = StackScreenProps<Screen, 'ReportCategory'>;
 export type ReportDetailProps = StackScreenProps<Screen, 'ReportDetail'>;
 export type ProfileHomeProps = StackScreenProps<Screen, 'ProfileHome'>;
@@ -162,43 +175,19 @@ export type ProfileDetailProps = StackScreenProps<Screen, 'ProfileDetail'>;
 export type ProfileUpdateProps = StackScreenProps<Screen, 'ProfileUpdate'>;
 export type ProfileTelProps = StackScreenProps<Screen, 'ProfileTel'>;
 export type ProfileAuthProps = StackScreenProps<Screen, 'ProfileAuth'>;
-export type ProfileAuthCompleteProps = StackScreenProps<
-  Screen,
-  'ProfileAuthComplete'
->;
-export type ProfileSellerReviewProps = StackScreenProps<
-  Screen,
-  'ProfileSellerReview'
->;
+export type ProfileAuthCompleteProps = StackScreenProps<Screen, 'ProfileAuthComplete'>;
+export type ProfileSellerReviewProps = StackScreenProps<Screen, 'ProfileSellerReview'>;
 export type ReviewWriteProps = StackScreenProps<Screen, 'ReviewWrite'>;
-export type ProfileSellProductProps = StackScreenProps<
-  Screen,
-  'ProfileSellProduct'
->;
+export type ProfileSellProductProps = StackScreenProps<Screen, 'ProfileSellProduct'>;
 export type BusinessProfileProps = StackScreenProps<Screen, 'BusinessProfile'>;
-export type BusinessProfileMenuProps = StackScreenProps<
-  Screen,
-  'BusinessProfileMenu'
->;
-export type BusinessProfileSettingProps = StackScreenProps<
-  Screen,
-  'BusinessProfileSetting'
->;
-export type BusinessProfileBannerProps = StackScreenProps<
-  Screen,
-  'BusinessProfileBanner'
->;
+export type BusinessProfileMenuProps = StackScreenProps<Screen, 'BusinessProfileMenu'>;
+export type BusinessProfileSettingProps = StackScreenProps<Screen, 'BusinessProfileSetting'>;
+export type BusinessProfileBannerProps = StackScreenProps<Screen, 'BusinessProfileBanner'>;
 export type BusinessSignUpProps = StackScreenProps<Screen, 'BusinessSignUp'>;
 export type BusinessFormProps = StackScreenProps<Screen, 'BusinessForm'>;
 export type BusinessAddressProps = StackScreenProps<Screen, 'BusinessAddress'>;
-export type BusinessLocationProps = StackScreenProps<
-  Screen,
-  'BusinessLocation'
->;
-export type BusinessOpeningHoursProps = StackScreenProps<
-  Screen,
-  'BusinessOpeningHours'
->;
+export type BusinessLocationProps = StackScreenProps<Screen, 'BusinessLocation'>;
+export type BusinessOpeningHoursProps = StackScreenProps<Screen, 'BusinessOpeningHours'>;
 export type NoticeProps = StackScreenProps<Screen, 'Notice'>;
 export type NoticeDetailProps = StackScreenProps<Screen, 'NoticeDetail'>;
 export type AlarmListProps = StackScreenProps<Screen, 'AlarmList'>;
@@ -212,18 +201,9 @@ export type ProductTierProps = StackScreenProps<Screen, 'ProductTier'>;
 export type ProductLocationProps = StackScreenProps<Screen, 'ProductLocation'>;
 export type SettingProps = StackScreenProps<Screen, 'Setting'>;
 export type SettingPrivacyProps = StackScreenProps<Screen, 'SettingPrivacy'>;
-export type SettingPrivacyTelProps = StackScreenProps<
-  Screen,
-  'SettingPrivacyTel'
->;
-export type SettingPrivacyTelAuthProps = StackScreenProps<
-  Screen,
-  'SettingPrivacyTelAuth'
->;
-export type SettingDeleteAccountProps = StackScreenProps<
-  Screen,
-  'SettingDeleteAccount'
->;
+export type SettingPrivacyTelProps = StackScreenProps<Screen, 'SettingPrivacyTel'>;
+export type SettingPrivacyTelAuthProps = StackScreenProps<Screen, 'SettingPrivacyTelAuth'>;
+export type SettingDeleteAccountProps = StackScreenProps<Screen, 'SettingDeleteAccount'>;
 export type SettingAlarmProps = StackScreenProps<Screen, 'SettingAlarm'>;
 export type SettingChattingProps = StackScreenProps<Screen, 'SettingChatting'>;
 export type SettingLanguageProps = StackScreenProps<Screen, 'SettingLanguage'>;
@@ -232,10 +212,7 @@ export type FAQProps = StackScreenProps<Screen, 'FAQ'>;
 export type ToUProps = StackScreenProps<Screen, 'ToU'>;
 export type PrivacyPolicyProps = StackScreenProps<Screen, 'PrivacyPolicy'>;
 export type ProductCompleteProps = StackScreenProps<Screen, 'ProductComplete'>;
-export type ProductCompleteConfirmProps = StackScreenProps<
-  Screen,
-  'ProductCompleteConfirm'
->;
+export type ProductCompleteConfirmProps = StackScreenProps<Screen, 'ProductCompleteConfirm'>;
 export type CarRegisterProps = StackScreenProps<Screen, 'CarRegister'>;
 export type CarBrandProps = StackScreenProps<Screen, 'CarBrand'>;
 export type CarModelProps = StackScreenProps<Screen, 'CarModel'>;
@@ -245,8 +222,5 @@ export type CarGearProps = StackScreenProps<Screen, 'CarGear'>;
 export type CarEndNumberProps = StackScreenProps<Screen, 'CarEndNumber'>;
 export type CarLocationProps = StackScreenProps<Screen, 'CarLocation'>;
 export type MenuProps = StackScreenProps<Screen, 'Menu'>;
-export type ProductTierGuideProps = StackScreenProps<
-  Screen,
-  'ProductTierGuide'
->;
+export type ProductTierGuideProps = StackScreenProps<Screen, 'ProductTierGuide'>;
 export type BlockListProps = StackScreenProps<Screen, 'BlockList'>;

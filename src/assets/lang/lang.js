@@ -279,6 +279,7 @@ export const ko = {
     BtierContent: '중고 느낌 있는 편으로 스크래치, 마모감 등 사용흔적 있음 ',
     CtierContent: '스크래치, 마모감 등 사용흔적이 많이 느껴지는 상태',
     FtierContent: '정상 사용이 어려우며 부품사용, 교체용으로 추천',
+    pricePh: 'R$ 가격',
     noPriceOffer: '가격제안불가',
     tradeLocaition: '거래 지역',
     detailDescription: '상세 설명',
@@ -423,6 +424,7 @@ export const ko = {
     profile: 'Profile',
     noticeListTitle: '공지 목록',
     requireKeyword: '등록할 키워드를 적어주세요.',
+    tagAlert: '하나의 태그 길이는 10자 입니다.',
   },
 };
 export const es = {
