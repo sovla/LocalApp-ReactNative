@@ -10,7 +10,7 @@ const JWT_TOKEN = 'L0FONYcvjajULdjnaKpBP';
 
 const baseURL = 'https://dmonster1786.cafe24.com/api/';
 
-const LOGON = false;
+const LOGON = true;
 
 const formFormatter = (data: any, isIndex = true) => {
   const formData = new FormData();
