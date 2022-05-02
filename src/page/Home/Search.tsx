@@ -24,6 +24,11 @@ import {categoryMenuTypes} from '@/Types/Components/global';
 import {useIsFocused} from '@react-navigation/native';
 import useApi from '@/Hooks/useApi';
 import useUpdateEffect from '@/Hooks/useUpdateEffect';
+import {categoryMenu} from '@/assets/global/dummy';
+import useStateCallback from '@/Hooks/useStateCallback';
+import Loading from '@/Components/Global/Loading';
+import {AlertButton, findCategory} from '@/Util/Util';
+import {CheckBoxImage} from '@/Components/Global/button';
 
 export interface FilterState {
   order: undefined | 0 | 1 | 2 | 3;
@@ -42,9 +47,10 @@ export default function Search({route: {params}, navigation}: SearchProps): JSX.
   const [isMore, setIsMore] = useState<boolean>(false);
   const {value: isFilter, on: onIsFilter, off: offIsFilter} = useBoolean(false);
   const {value: isKeyword, on: onIsKeyword, off: offIsKeyword} = useBoolean(false);
+  const {value: isSale, toggle: toggleIsSale, on: onIsSale, off: offIsSale} = useBoolean(false);
 
-  const [searchText, setSearchText] = useState<string>('');
-  const [selectKeyword, setSelectKeyword] = useState<categoryMenuTypes['menu'] | null | undefined>();
+  const [searchText, setSearchText] = useStateCallback<string>(''); // 검색 텍스트
+  const [selectKeyword, setSelectKeyword] = useStateCallback<categoryMenuTypes['menu'] | null | undefined>(null); // 선택 키워드
   const [filter, setFilter] = useState<FilterState>({
     order: undefined,
     s_price: undefined,
@@ -83,6 +89,7 @@ export default function Search({route: {params}, navigation}: SearchProps): JSX.
   const {
     data: searchData,
     getData: sendSearch,
+    isLoading,
     isComplete,
   } = useApi<SearchApi['T'], SearchApi['D']>( // 검색 api
     {
@@ -93,6 +100,8 @@ export default function Search({route: {params}, navigation}: SearchProps): JSX.
       mt_idx: user.mt_idx,
       search_txt: searchText,
       ...filter,
+      category: findCategory(selectKeyword),
+      pt_fin: isSale ? 'N' : 'Y',
     },
     {isFirst: false},
   );
@@ -115,7 +124,11 @@ export default function Search({route: {params}, navigation}: SearchProps): JSX.
   );
 
   const onPressCloseKeyword = useCallback(() => {
-    setSelectKeyword(null);
+    setSelectKeyword(null, () => {
+      onSubmitEditing({
+        category: undefined,
+      });
+    });
   }, []);
 
   const onPressItem = useCallback((idx: string, cate: string) => {
@@ -125,10 +138,20 @@ export default function Search({route: {params}, navigation}: SearchProps): JSX.
     });
   }, []);
 
-  const onSubmitEditing = useCallback(() => {
-    sendSearchLog();
-    sendSearch();
-  }, [searchText, filter]);
+  const onSubmitEditing = (_data?: any) => {
+    if (searchText) {
+      sendSearchLog();
+    }
+    sendSearch(_data);
+  };
+
+  const onPressKeyword = () => {
+    if (searchText) {
+      onIsKeyword();
+    } else {
+      AlertButton(t('requireKeyword'));
+    }
+  };
 
   const onPressRecentDelete = useCallback(() => {}, []);
 
@@ -141,17 +164,43 @@ export default function Search({route: {params}, navigation}: SearchProps): JSX.
     if (isFocused) {
       onSubmitEditing();
     }
-  }, [filter]);
+  }, [filter, isSale]);
   useEffect(() => {
-    if (params?.category) {
+    if (params?.category && params?.keyword) {
       setSelectKeyword(params.category);
-    }
-    if (params?.keyword) {
       setSearchText(params.keyword);
+      onSubmitEditing({
+        category: findCategory(params.category),
+        search_txt: params.keyword,
+      });
+    } else {
+      if (params?.category) {
+        setSelectKeyword(params.category);
+        onSubmitEditing({
+          category: findCategory(params.category),
+        });
+      }
+      if (params?.keyword) {
+        setSearchText(params.keyword, (state: string) =>
+          onSubmitEditing({
+            search_txt: state,
+          }),
+        );
+      }
     }
   }, [isFocused]);
 
-  const isSearch = isComplete && searchData.list?.length > 0 && searchText.length > 0;
+  const isSearch = isComplete;
+
+  if (isLoading && !isComplete) {
+    return (
+      <View style={styles.mainContainer}>
+        <SearchHeader keyword={selectKeyword ?? undefined} text={searchText} setText={setSearchText} onPressCloseKeyword={onPressCloseKeyword} onSubmitEditing={onSubmitEditing} />
+
+        <Loading />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.mainContainer}>
@@ -160,12 +209,14 @@ export default function Search({route: {params}, navigation}: SearchProps): JSX.
       <ScrollView>
         {isSearch ? (
           <>
-            <SearchKeyword onPressFilter={onIsFilter} onPressKeyword={onIsKeyword} />
+            <SearchKeyword onPressFilter={onIsFilter} onPressKeyword={onPressKeyword} />
             <View style={styles.isSearchView}>
-              <View style={styles.checkboxView}>
-                <Image source={checkboxIcon} style={styles.checkboxImage} />
-                <Text fontSize={`${14 * fontSize}`}>{t('searchSale')}</Text>
-              </View>
+              <TouchableOpacity onPress={toggleIsSale} style={styles.checkboxView}>
+                <CheckBoxImage isBlue isOn={isSale} />
+                <Text style={{marginLeft: getPixel(5)}} fontSize={`${14 * fontSize}`}>
+                  {t('searchSale')}
+                </Text>
+              </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
                   setIsList(prev => !prev);
@@ -198,9 +249,12 @@ export default function Search({route: {params}, navigation}: SearchProps): JSX.
                   popularList.map((item, index) => (
                     <TouchableOpacity
                       key={item.title + index}
-                      onPress={async () => {
-                        await setSearchText(item.title);
-                        await onSubmitEditing();
+                      onPress={() => {
+                        setSearchText(item.title, (state: any) => {
+                          onSubmitEditing({
+                            search_txt: state,
+                          });
+                        });
                       }}
                       style={styles.popularListView}>
                       <MediumText fontSize={`${12 * fontSize}`} letterSpacing="0px">
@@ -221,9 +275,12 @@ export default function Search({route: {params}, navigation}: SearchProps): JSX.
                 {recentList.map((item, index) => {
                   return (
                     <TouchableOpacity
-                      onPress={async () => {
-                        await setSearchText(item.title);
-                        await onSubmitEditing();
+                      onPress={() => {
+                        setSearchText(item.title, (state: any) => {
+                          onSubmitEditing({
+                            search_txt: state,
+                          });
+                        });
                       }}
                       style={styles.searchListView}>
                       <View>

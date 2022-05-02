@@ -24,7 +24,6 @@ const ModalFilter: React.FC<ModalFilterProps> = ({onClose, setFilter, filter}) =
     Reaper: false,
     used: false,
     forParts: false,
-    donation: false,
   });
   const [range, setRange] = useState([0, 0.5]);
 
@@ -52,10 +51,6 @@ const ModalFilter: React.FC<ModalFilterProps> = ({onClose, setFilter, filter}) =
       text: 'searchModalProductState4',
       name: 'forParts',
     },
-    {
-      text: 'donation',
-      name: 'donation',
-    },
   ];
 
   const onCloseFn = () => {
@@ -65,6 +60,15 @@ const ModalFilter: React.FC<ModalFilterProps> = ({onClose, setFilter, filter}) =
       order: menu.findIndex(v => v === selectFilter),
       s_price: range[0],
       e_price: range[1] > 1 ? range[1] : null,
+      grade: Object.values(productState)
+        .map((v, i) => {
+          if (v) {
+            return i;
+          }
+        })
+        .join('')
+        .split('')
+        .join(','),
     }));
   };
 
@@ -72,7 +76,16 @@ const ModalFilter: React.FC<ModalFilterProps> = ({onClose, setFilter, filter}) =
     if (filter.order) {
       setSelectFilter(menu[filter.order]);
     }
+    if (filter.grade) {
+      const grade = filter.grade.split(',');
 
+      setProductState({
+        newProduct: grade.includes('0'),
+        Reaper: grade.includes('1'),
+        used: grade.includes('2'),
+        forParts: grade.includes('3'),
+      });
+    }
     setRange([filter?.s_price ?? 0, filter?.e_price ?? 0.5]);
   }, []);
 

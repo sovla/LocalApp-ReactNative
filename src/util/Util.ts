@@ -1,3 +1,5 @@
+import {categoryMenu} from '@/assets/global/dummy';
+import {categoryMenuTypes} from '@/Types/Components/global';
 import i18next from 'i18next';
 import {Alert, NativeScrollEvent, NativeSyntheticEvent} from 'react-native';
 import {getPixel} from './pixelChange';
@@ -11,11 +13,7 @@ export const getHitSlop = (number: number) => {
   };
 };
 
-export const onScrollSlide = (
-  e: NativeSyntheticEvent<NativeScrollEvent>,
-  setState: React.Dispatch<React.SetStateAction<number>>,
-  width?: number,
-) => {
+export const onScrollSlide = (e: NativeSyntheticEvent<NativeScrollEvent>, setState: React.Dispatch<React.SetStateAction<number>>, width?: number) => {
   if (typeof width === 'number') {
     setState(Math.round(e.nativeEvent.contentOffset.x / width));
   } else {
@@ -24,9 +22,7 @@ export const onScrollSlide = (
 };
 
 export const timer = (number: number) => {
-  return `${Math.floor(number / 60)}:${
-    number % 60 < 10 ? '0' + (number % 60) : number % 60
-  }`;
+  return `${Math.floor(number / 60)}:${number % 60 < 10 ? '0' + (number % 60) : number % 60}`;
 };
 
 export const checkEmpty = (_item: any) => {
@@ -43,11 +39,7 @@ export const strEmptyCheck = (_item: string | undefined | null) => {
   }
 };
 
-export const AlertButton = (
-  alertContent: string,
-  leftButtonText: string = '확인',
-  leftButtonPress: () => void = () => {},
-) => {
+export const AlertButton = (alertContent: string, leftButtonText: string = '확인', leftButtonPress: () => void = () => {}) => {
   Alert.alert('', alertContent, [
     {
       text: leftButtonText,
@@ -109,10 +101,7 @@ export const brPrice = (price: string) => {
   }
 };
 
-export const productTimeSetting = (
-  time: number | null,
-  timeType: 'now' | 'minute' | 'hour' | 'day' | 'month' | 'year' | null,
-) => {
+export const productTimeSetting = (time: number | null, timeType: 'now' | 'minute' | 'hour' | 'day' | 'month' | 'year' | null) => {
   if (!time || !timeType) {
     return '';
   }
@@ -137,5 +126,12 @@ export const dateFormat = (date: string) => {
     return `${year}. ${month}. ${day}.`;
   } else {
     return '';
+  }
+};
+
+export const findCategory = (str?: categoryMenuTypes['menu'] | null) => {
+  if (str) {
+    const result = categoryMenu.findIndex(v => v.name === str);
+    return result !== -1 ? result : undefined;
   }
 };

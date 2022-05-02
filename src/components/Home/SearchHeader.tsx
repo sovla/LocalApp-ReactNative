@@ -1,12 +1,4 @@
-import {
-  Image,
-  ImageBackground,
-  StyleSheet,
-  TextInput,
-  Touchable,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Image, ImageBackground, StyleSheet, TextInput, Touchable, TouchableOpacity, View} from 'react-native';
 import BackGroundImage from '@assets/image/BG.png';
 import React from 'react';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
@@ -22,13 +14,7 @@ import {Text} from '../Global/text';
 import AutoHeightImage from 'react-native-auto-height-image';
 import {getHitSlop} from '@/Util/Util';
 
-const SearchHeader: React.FC<SearchHeaderProps> = ({
-  text,
-  setText,
-  keyword,
-  onPressCloseKeyword,
-  onSubmitEditing,
-}) => {
+const SearchHeader: React.FC<SearchHeaderProps> = ({text, setText, keyword, onPressCloseKeyword, onSubmitEditing}) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const navigation = useAppNavigation();
@@ -44,14 +30,8 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
             <Text fontSize={`${12 * fontSize}`} medium>
               {t(keyword)}
             </Text>
-            <TouchableOpacity
-              onPress={onPressCloseKeyword}
-              hitSlop={getHitSlop(5)}>
-              <AutoHeightImage
-                source={CloseBlackIcon}
-                width={getPixel(10)}
-                style={styles.marginLeft5}
-              />
+            <TouchableOpacity onPress={onPressCloseKeyword} hitSlop={getHitSlop(5)}>
+              <AutoHeightImage source={CloseBlackIcon} width={getPixel(10)} style={styles.marginLeft5} />
             </TouchableOpacity>
           </View>
         )}
@@ -66,7 +46,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
           placeholder={t('searchPlaceholder')}
           value={text}
           onChangeText={setText}
-          onSubmitEditing={onSubmitEditing}
+          onSubmitEditing={() => onSubmitEditing()}
         />
 
         {/* <TouchableOpacity style={styles.closeGrayTouch}>

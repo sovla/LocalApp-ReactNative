@@ -1,21 +1,6 @@
-import {
-  Image,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import React, {useCallback, useState} from 'react';
-import {
-  BoldText,
-  DarkBlueText,
-  GrayText,
-  MediumText,
-  Text,
-  WhiteText,
-} from '@/Components/Global/text';
+import {Image, NativeScrollEvent, NativeSyntheticEvent, ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
+import React, {useCallback, useRef, useState} from 'react';
+import {BoldText, DarkBlueText, GrayText, MediumText, Text, WhiteText} from '@/Components/Global/text';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {useTranslation} from 'react-i18next';
 import {useAppSelector, useCallbackNavigation} from '@/Hooks/CustomHook';
@@ -34,38 +19,21 @@ import SearchWhiteIcon from '@assets/image/search_white.png';
 import SearchBlackIcon from '@assets/image/search_black.png';
 import ShareWhiteIcon from '@assets/image/share_white.png';
 import ShareIcon from '@assets/image/share.png';
-import {
-  AlertButton,
-  brPrice,
-  getHitSlop,
-  productTimeSetting,
-  viewCountCheck,
-} from '@/Util/Util';
+import {AlertButton, brPrice, getHitSlop, productTimeSetting, viewCountCheck} from '@/Util/Util';
 import Screen, {ProductDetailProps} from '@/Types/Screen/Screen';
 import useBoolean from '@/Hooks/useBoolean';
 import useApi from '@/Hooks/useApi';
-import {
-  ProduetDetailApiType,
-  ProduetDetailOtherApiType,
-} from '@/Types/Components/HomeTypes';
+import {ProduetDetailApiType, ProduetDetailOtherApiType} from '@/Types/Components/HomeTypes';
 import Loading from '@/Components/Global/Loading';
 
-export default function ProductDetail({
-  navigation,
-  route: {params},
-}: ProductDetailProps) {
+export default function ProductDetail({navigation, route: {params}}: ProductDetailProps) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const {user} = useAppSelector(state => state);
-  if (!params?.pt_cate || !params?.pt_idx) {
-    AlertButton(t('error'));
-    navigation.goBack();
-    return null;
-  }
-  const {data, isLoading, isError, errorMessage} = useApi<
-    ProduetDetailApiType['T'],
-    ProduetDetailApiType['D']
-  >(null, 'product_detail.php', {
+
+  const ref = useRef<any>(null);
+
+  const {data, isLoading, isError, errorMessage} = useApi<ProduetDetailApiType['T'], ProduetDetailApiType['D']>(null, 'product_detail.php', {
     mt_idx: user.mt_idx,
     pt_idx: params.pt_idx,
   });
@@ -75,23 +43,16 @@ export default function ProductDetail({
     isError: otherIsError,
     errorMessage: otherErrorMessage,
     getData,
-  } = useApi<ProduetDetailOtherApiType['T'], ProduetDetailOtherApiType['D']>(
-    null,
-    'product_detail_other.php',
-    {
-      mt_idx: user.mt_idx,
-      pt_idx: params.pt_idx,
-    },
-  );
+  } = useApi<ProduetDetailOtherApiType['T'], ProduetDetailOtherApiType['D']>(null, 'product_detail_other.php', {
+    mt_idx: user.mt_idx,
+    pt_idx: params.pt_idx,
+  });
   const {value: isChange, on: onIsChange, off: offIsChange} = useBoolean(false);
 
   const onPressTierGuide = useCallbackNavigation('ProductTierGuide');
-  const onPressReport = useCallbackNavigation<Screen['ReportDetail']>(
-    'ReportDetail',
-    {
-      reportType: 'prohibited',
-    },
-  );
+  const onPressReport = useCallbackNavigation<Screen['ReportDetail']>('ReportDetail', {
+    reportType: 'prohibited',
+  });
   const onPressShop = useCallbackNavigation('BusinessProfile');
   const onPressChattingTrade = useCallbackNavigation('ChattingDetail');
   const onPressSearch = useCallbackNavigation('Search');
@@ -125,48 +86,27 @@ export default function ProductDetail({
                   }}
                   hitSlop={getHitSlop(5)}
                   style={styles.marginRight10}>
-                  <Image
-                    source={BackBlackBoxIcon}
-                    style={styles.backWhiteImage}
-                  />
+                  <Image source={BackBlackBoxIcon} style={styles.backWhiteImage} />
                 </TouchableOpacity>
                 <Text medium fontSize={`${20 * fontSize}`}>
                   {t('productInformation')}
                 </Text>
               </View>
               <View style={styles._headerRow}>
-                <TouchableOpacity
-                  style={styles.marginRight10}
-                  onPress={onPressSearch}
-                  hitSlop={getHitSlop(5)}>
-                  <Image
-                    resizeMode="contain"
-                    source={SearchBlackIcon}
-                    style={styles.searchWhiteImage}
-                  />
+                <TouchableOpacity style={styles.marginRight10} onPress={onPressSearch} hitSlop={getHitSlop(5)}>
+                  <Image resizeMode="contain" source={SearchBlackIcon} style={styles.searchWhiteImage} />
                 </TouchableOpacity>
                 <TouchableOpacity hitSlop={getHitSlop(5)}>
-                  <Image
-                    resizeMode="contain"
-                    source={ShareIcon}
-                    style={styles.shareWhiteImage}
-                  />
+                  <Image resizeMode="contain" source={ShareIcon} style={styles.shareWhiteImage} />
                 </TouchableOpacity>
               </View>
             </View>
             <View style={styles._headerEndView}>
               <View style={styles._headerProductImageView}>
-                <Image
-                  source={require('@assets/image/dummy_i.png')}
-                  style={styles._headerProductImage}
-                />
+                <Image source={require('@assets/image/dummy_i.png')} style={styles._headerProductImage} />
               </View>
               <View style={styles.marginLeft15}>
-                <Text
-                  bold
-                  fontSize={`${14 * fontSize}`}
-                  numberOfLines={1}
-                  style={{width: getPixel(250)}}>
+                <Text bold fontSize={`${14 * fontSize}`} numberOfLines={1} style={{width: getPixel(250)}}>
                   {data?.pt_title}
                 </Text>
                 <DarkBlueText bold fontSize={`${14 * fontSize}`}>
@@ -184,12 +124,7 @@ export default function ProductDetail({
     // 이미지 스와이퍼와 그 상단 이모티콘
     return (
       <View style={styles.swiperView}>
-        <ImageSwiper
-          imageArray={data?.file && Array.isArray(data.file) ? data.file : []}
-          setImageArray={undefined}
-          width={getPixel(360)}
-          height={getHeightPixel(250)}
-        />
+        <ImageSwiper imageArray={data?.file && Array.isArray(data.file) ? data.file : []} setImageArray={undefined} width={getPixel(360)} height={getHeightPixel(250)} />
         <TouchableOpacity
           style={styles.backWhiteTouch}
           onPress={() => {
@@ -198,30 +133,18 @@ export default function ProductDetail({
           hitSlop={getHitSlop(5)}>
           <Image source={BackWhiteIcon} style={styles.backWhiteImage} />
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.searchWhiteTouch}
-          onPress={onPressSearch}
-          hitSlop={getHitSlop(5)}>
-          <Image
-            resizeMode="contain"
-            source={SearchWhiteIcon}
-            style={styles.searchWhiteImage}
-          />
+        <TouchableOpacity style={styles.searchWhiteTouch} onPress={onPressSearch} hitSlop={getHitSlop(5)}>
+          <Image resizeMode="contain" source={SearchWhiteIcon} style={styles.searchWhiteImage} />
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.shareWhiteTouch}
-          hitSlop={getHitSlop(5)}>
-          <Image
-            resizeMode="contain"
-            source={ShareWhiteIcon}
-            style={styles.shareWhiteImage}
-          />
+        <TouchableOpacity style={styles.shareWhiteTouch} hitSlop={getHitSlop(5)}>
+          <Image resizeMode="contain" source={ShareWhiteIcon} style={styles.shareWhiteImage} />
         </TouchableOpacity>
       </View>
     );
   }, [data]);
-
-  if (isError) {
+  if (isError && !ref.current) {
+    // 에러처리부분
+    ref.current = true;
     AlertButton(errorMessage);
     navigation.goBack();
     return null;
@@ -232,10 +155,7 @@ export default function ProductDetail({
   } else {
     const title = data.pt_title;
     const location = `${data.pt_location_detail} ${data.pt_location} / - ${data.dist}km`;
-    const classAndTimeText = `${data.pt_grade} / ${productTimeSetting(
-      data?.pt_time,
-      data?.pt_time_type,
-    )}`;
+    const classAndTimeText = `${data.pt_grade} / ${productTimeSetting(data?.pt_time, data?.pt_time_type)}`;
     const viewCount = viewCountCheck(data?.view_count ?? 0);
     const likeCount = viewCountCheck(data?.like_count ?? 0);
     const content = data.pt_detail;
@@ -275,29 +195,18 @@ export default function ProductDetail({
           </View>
           <View>
             <Line height={1} />
-            <TouchableOpacity
-              onPress={onPressTierGuide}
-              style={styles.tierGuideView}>
-              <MediumText fontSize={`${14 * fontSize}`}>
-                {t('tierGuide')}
-              </MediumText>
+            <TouchableOpacity onPress={onPressTierGuide} style={styles.tierGuideView}>
+              <MediumText fontSize={`${14 * fontSize}`}>{t('tierGuide')}</MediumText>
               <Image source={RightBlackIcon} style={styles.rightImage} />
             </TouchableOpacity>
             <Line height={1} />
-            <TouchableOpacity
-              onPress={onPressReport}
-              style={styles.tierGuideView}>
-              <MediumText fontSize={`${14 * fontSize}`}>
-                {t('ReportPost')}
-              </MediumText>
+            <TouchableOpacity onPress={onPressReport} style={styles.tierGuideView}>
+              <MediumText fontSize={`${14 * fontSize}`}>{t('ReportPost')}</MediumText>
               <Image source={RightBlackIcon} style={styles.rightImage} />
             </TouchableOpacity>
           </View>
           <Line height={getHeightPixel(9)} />
-          <ShopSellProduct
-            shopName={data?.sell_name}
-            productList={Array.isArray(otherData) ? otherData : undefined}
-          />
+          <ShopSellProduct shopName={data?.sell_name} productList={Array.isArray(otherData) ? otherData : undefined} />
         </ScrollView>
         <Shadow distance={5}>
           <View style={styles.footerView}>
@@ -307,9 +216,7 @@ export default function ProductDetail({
               </TouchableOpacity>
               <View style={styles.footerContentView} />
               <View>
-                <BoldText
-                  fontSize={`${16 * fontSize}`}
-                  color={Theme.color.darkBlue}>
+                <BoldText fontSize={`${16 * fontSize}`} color={Theme.color.darkBlue}>
                   {price}
                 </BoldText>
                 <Text color={Theme.color.aqua_00} fontSize={`${12 * fontSize}`}>
@@ -317,12 +224,8 @@ export default function ProductDetail({
                 </Text>
               </View>
             </View>
-            <TouchableOpacity
-              onPress={onPressChattingTrade}
-              style={styles.footerRightTouch}>
-              <WhiteText fontSize={`${14 * fontSize}`}>
-                {t('tradeInChat')}
-              </WhiteText>
+            <TouchableOpacity onPress={onPressChattingTrade} style={styles.footerRightTouch}>
+              <WhiteText fontSize={`${14 * fontSize}`}>{t('tradeInChat')}</WhiteText>
             </TouchableOpacity>
           </View>
         </Shadow>

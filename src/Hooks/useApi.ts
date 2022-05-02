@@ -9,6 +9,10 @@ interface optionTypes {
 }
 
 function useApi<T, D>(defaultValue: T, apiPath: string, axiosData?: D, option?: optionTypes) {
+  const defaultOption = {
+    isFirst: true,
+    ...option,
+  };
   const [data, setData] = useState<T>(defaultValue);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -18,7 +22,7 @@ function useApi<T, D>(defaultValue: T, apiPath: string, axiosData?: D, option?: 
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    if (option?.isFirst && isFocused && !isLoading && data === defaultValue) {
+    if (defaultOption?.isFirst && isFocused && !isLoading && data === defaultValue) {
       getData();
     }
   }, [isFocused]);
@@ -61,7 +65,7 @@ function useApi<T, D>(defaultValue: T, apiPath: string, axiosData?: D, option?: 
           setisComplete(true);
         });
     },
-    [axiosData, apiPath, option?.isFirst],
+    [axiosData, apiPath, defaultOption?.isFirst],
   );
 
   return {data, isLoading, isError, errorMessage, getData, isComplete, setData};

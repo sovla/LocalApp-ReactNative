@@ -68,7 +68,7 @@ export interface SearchHeaderProps {
   setText: React.Dispatch<React.SetStateAction<string>>;
   keyword?: categoryMenuTypes['menu'];
   onPressCloseKeyword?: () => void;
-  onSubmitEditing?: () => void;
+  onSubmitEditing: () => void;
 }
 
 export interface SearchKeywordProps {
@@ -85,7 +85,6 @@ export interface ProductState {
   Reaper: boolean;
   used: boolean;
   forParts: boolean;
-  donation: boolean;
 }
 
 export interface ModalKeywordProps extends ModalProps {
@@ -261,11 +260,12 @@ export interface SearchApi {
     mt_idx: string | null;
     search_txt: string;
     page?: number;
-    category?: string;
+    category?: number;
     order?: 0 | 1 | 2 | 3; //  정렬(0:최신순, 1 가격 높, 2:가격 낮, 3: 거리순)
     s_price?: number;
     e_price?: number;
     grade?: string;
+    pt_fin?: 'Y' | 'N';
   };
 }
 

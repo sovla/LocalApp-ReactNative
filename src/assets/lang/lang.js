@@ -9,11 +9,9 @@ export const ko = {
     storage: '저장공간',
     cameraGallery: '카메라/갤러리',
     appPermissionGuide: '앱 사용 권한 안내',
-    appPermissionGuide2:
-      '가입 및 서비스 이용시 확인을 위한 전화번호 조회  및 문자 자동인증',
+    appPermissionGuide2: '가입 및 서비스 이용시 확인을 위한 전화번호 조회  및 문자 자동인증',
     appPermissionGuide3: '앱 구동에 필요한 파일 저장',
-    appPermissionGuide4:
-      '내 주변 판매 물품 검색 및 위치 기반 추천 서비스를 제공 받기 위한 권한',
+    appPermissionGuide4: '내 주변 판매 물품 검색 및 위치 기반 추천 서비스를 제공 받기 위한 권한',
     appPermissionGuide5: '프로필 사진, 상품 등록시 사진 촬영',
     appPermissionGuide6: '관심 키워드 물품 소식을 제공받기 위한 필요한 권한',
     localApp: '로컬앱',
@@ -33,14 +31,11 @@ export const ko = {
     title: '제목',
     Skip: 'Skip',
     onBoardingGuide1: '우리 지역 기반\n직거래 마켓',
-    onBoardingGuide2:
-      '우리 동네 주민들과 안전하고\n믿을수 있는 직거래로 시작해보세요',
+    onBoardingGuide2: '우리 동네 주민들과 안전하고\n믿을수 있는 직거래로 시작해보세요',
     onBoardingGuide3: '키워드 알림',
-    onBoardingGuide4:
-      '찾는 상품이 없으세요?\n키워드만 등록하면  알림으로 바로\n알려줘 검색 시간까지 단축 된답니다',
+    onBoardingGuide4: '찾는 상품이 없으세요?\n키워드만 등록하면  알림으로 바로\n알려줘 검색 시간까지 단축 된답니다',
     onBoardingGuide5: '믿을 수 있는 거래',
-    onBoardingGuide6:
-      '거래하기 전, 프로필에 있는\n평점과 좋아요를 확인해보세요',
+    onBoardingGuide6: '거래하기 전, 프로필에 있는\n평점과 좋아요를 확인해보세요',
     onBoardingGuide7: '수수료',
     onBoardingGuide8: '모든 판매에 대한 수수료는 받지\n않습니다.',
     loginComplete: '로그인이 완료 되었습니다.',
@@ -134,8 +129,7 @@ export const ko = {
     searchModalKeyword: '키워드 알림을 등록하시겠습니까?',
     searchModalButton: '등록',
     KeywordAlarm: '키워드 알림',
-    KeywordAlarmText1:
-      '찾는 물건이 없을때는 키워드를 등록해 보세요.\n앱이 꺼져 있어도 해당 물건이 올라오면 바로 푸시 알림을 받게 됩니다.',
+    KeywordAlarmText1: '찾는 물건이 없을때는 키워드를 등록해 보세요.\n앱이 꺼져 있어도 해당 물건이 올라오면 바로 푸시 알림을 받게 됩니다.',
     KeywordAlarmText2: '알림 설정',
     KeywordAlarmText3: '알림 받을 키워드 ',
     KeywordAlarmPlaceHolder: '(예: 커피머신기)',
@@ -190,8 +184,7 @@ export const ko = {
     businessProfileSettingShopName: '상호명',
     businessProfileSettingShopNamePh: '상호명 입력',
     businessProfileSettingShopIntroduction: '소개문구',
-    businessProfileSettingShopIntroductionPh:
-      '간단한 업체 소개 문구를 작성해주세요',
+    businessProfileSettingShopIntroductionPh: '간단한 업체 소개 문구를 작성해주세요',
     businessProfileSettingShopTel: '핸드폰 번호',
     businessProfileSettingShopTelOpen: '핸드폰 정보 공개',
     businessProfileSettingShopEmail: '이메일',
@@ -207,8 +200,7 @@ export const ko = {
     save: '저장',
     businessProfileBannerTitle: '광고 배너 관리',
     businessProfileBannerSubTitle: '광고 배너 추가',
-    businessProfileBannerGuideText1:
-      '자신의 비즈니스 프로필 상단에 광고 배너를 삽입합니다.',
+    businessProfileBannerGuideText1: '자신의 비즈니스 프로필 상단에 광고 배너를 삽입합니다.',
     businessProfileBannerGuideText2: '사이즈: 288x130px  ( 최대 3개까지 )',
     modalMyPageLoginGuide: 'Login to your Account',
     modalMyPageNotice: '공지사항',
@@ -241,10 +233,8 @@ export const ko = {
     deleteAccountGuide: 'LocalApp에서 탈퇴시',
     deleteAccountGuide1: 'LocalApp 계정 삭제',
     deleteAccountGuide2: '친구 목록, 대화내용 기록 삭제',
-    deleteAccountGuide3:
-      '대화방에서 주고 받은 사진 또는 파일 등 정보가 즉시 삭제되오니, 탈퇴 전에 저장해 주세요.',
-    deleteAccountGuide4:
-      '사용자 계정이 30일간 비활성화되며,비활성화 동안 사용자 계정은 대중에게 표시되지 않습니다. 30일 후에 사용자 계정은 영구적으로 삭제됩니다.',
+    deleteAccountGuide3: '대화방에서 주고 받은 사진 또는 파일 등 정보가 즉시 삭제되오니, 탈퇴 전에 저장해 주세요.',
+    deleteAccountGuide4: '사용자 계정이 30일간 비활성화되며,비활성화 동안 사용자 계정은 대중에게 표시되지 않습니다. 30일 후에 사용자 계정은 영구적으로 삭제됩니다.',
     deleteAccountGuide5: '모든 정보를 삭제하는 것에 동의합니까?',
     message: '메시지',
     messageAlarm: '메시지 알림',
@@ -296,12 +286,9 @@ export const ko = {
     categoryUpdate: '카테고리 수정',
     categorySelect: '카테고리 선택',
     tagUpdate: '연관 Tag 수정',
-    tagGuide1:
-      '띄어쓰기를 통해 태그를 연속적으로 입력할수 있으며 최대 10자까지 입력가능합니다.',
-    tagGuide2:
-      '태그는 검색의 부가정보로 사용 되지만, 검색 결과 노출을 보장하지는 않습니다.',
-    tagGuide3:
-      '상품과 직접 관련이 없는 다른 상품명, 브랜드, 스팸성 키워드 등을 입력하면 노출이 중단되거나 상품이 삭제 될 수 있습니다.',
+    tagGuide1: '띄어쓰기를 통해 태그를 연속적으로 입력할수 있으며 최대 10자까지 입력가능합니다.',
+    tagGuide2: '태그는 검색의 부가정보로 사용 되지만, 검색 결과 노출을 보장하지는 않습니다.',
+    tagGuide3: '상품과 직접 관련이 없는 다른 상품명, 브랜드, 스팸성 키워드 등을 입력하면 노출이 중단되거나 상품이 삭제 될 수 있습니다.',
     confirm: '확인',
     confirmationRequest: '확인요청',
     tierNone: '해당사항 없음',
@@ -365,13 +352,11 @@ export const ko = {
     reportGuideTitle3: '사기 사용자입니다.',
     reportGuide1: '신고 내용을 입력해 주세요.',
     reportGuide2: '님을 신고하는 이유를 간략하게 알려주세요.',
-    reportGuide3:
-      '어떤 상황에서든 상대방을 비하/조롱/모욕 등의 언행을 하면 이용 제재를 받을 수 있습니다.',
+    reportGuide3: '어떤 상황에서든 상대방을 비하/조롱/모욕 등의 언행을 하면 이용 제재를 받을 수 있습니다.',
     reportGuide4:
       '불법상품 또는 상품 정보 오류, 부정한 거래를 요구하는 판매자를 발견하셨을 경우 상품 상세화면 하단에 있는 신고하기를 통해 신고하실수 있으며, 신고하실 때는 상품 또는 판매자명과 함께 위반한 내용을 상세하게 기재하여 주시기 바랍니다.',
     submit: '제출하기',
-    businessSignUpGuide1:
-      '비즈니스 계정으로 다양한 혜택과 고객과의 소통을 편리하게 이용하세요.',
+    businessSignUpGuide1: '비즈니스 계정으로 다양한 혜택과 고객과의 소통을 편리하게 이용하세요.',
     businessSignUpGuide2: '서비스 전환은 로그인만으로 프로필 전환이 됩니다.',
     businessSignUpGuide3: '아직 LocalApp 회원이 아니신가요?',
     signUp: '회원가입',
@@ -437,7 +422,7 @@ export const ko = {
     chat: 'Message',
     profile: 'Profile',
     noticeListTitle: '공지 목록',
-    noticeListTitle: '공지 목록',
+    requireKeyword: '등록할 키워드를 적어주세요.',
   },
 };
 export const es = {

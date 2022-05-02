@@ -4,14 +4,13 @@ import jwtDecode from 'jwt-decode';
 import {Platform} from 'react-native';
 import i18next from 'i18next';
 
-const SECRETKEY =
-  'AAAAUV9vLXY:APA91bHklBUTeYmzfdYLVhpYEa8irZKGWSq8PXQkD6nMXSkreECmUr_-iFhy7ZJauagMU7w8GgkdjbF5i2IPrEx-W6JGeHYBBp1NNvd73H34IqUBUNvCdS0wj1ZXs__CRjh_j1NikOPP';
+const SECRETKEY = 'AAAAUV9vLXY:APA91bHklBUTeYmzfdYLVhpYEa8irZKGWSq8PXQkD6nMXSkreECmUr_-iFhy7ZJauagMU7w8GgkdjbF5i2IPrEx-W6JGeHYBBp1NNvd73H34IqUBUNvCdS0wj1ZXs__CRjh_j1NikOPP';
 
 const JWT_TOKEN = 'L0FONYcvjajULdjnaKpBP';
 
 const baseURL = 'https://dmonster1786.cafe24.com/api/';
 
-const LOGON = true;
+const LOGON = false;
 
 const formFormatter = (data: any, isIndex = true) => {
   const formData = new FormData();
@@ -59,7 +58,7 @@ export const API = axios.create({
         lang: i18next.language,
       };
     }
-    if (LOGON) console.log('formData :::', cloneData);
+    console.log('formData :::', cloneData);
     if (typeof data?.imageField === 'string') {
       // 이미지 필드에 문자열 하나만 있는 경우
       const field = data.imageField; // 해당 필드명
@@ -76,10 +75,7 @@ export const API = axios.create({
           imageData.push({
             //  아닌경우 하나의 배열에 푸쉬
             key: 'image' + new Date().getTime(),
-            uri:
-              Platform.OS === 'android'
-                ? item.path
-                : item.path.replace('file://', ''),
+            uri: Platform.OS === 'android' ? item.path : item.path.replace('file://', ''),
             type: item.mime,
             name: 'auto.jpg',
           });
@@ -88,10 +84,7 @@ export const API = axios.create({
         const item = data[field];
         imageData = {
           key: 'image' + new Date().getTime(),
-          uri:
-            Platform.OS === 'android'
-              ? item.path
-              : item.path.replace('file://', ''),
+          uri: Platform.OS === 'android' ? item.path : item.path.replace('file://', ''),
           type: item.mime,
           name: 'auto.jpg',
         };

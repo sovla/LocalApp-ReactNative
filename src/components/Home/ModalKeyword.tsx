@@ -1,10 +1,4 @@
-import {
-  StyleSheet,
-  Image,
-  View,
-  TouchableWithoutFeedback,
-  TouchableOpacity,
-} from 'react-native';
+import {StyleSheet, Image, View, TouchableWithoutFeedback, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {Text} from '../Global/text';
 import {useTranslation} from 'react-i18next';
@@ -15,15 +9,32 @@ import Theme from '@/assets/global/Theme';
 import SettingIcon from '@assets/image/setting.png';
 import {CloseIconImage} from '../Global/image';
 import {Button} from '../Global/button';
-import {getHitSlop} from '@/Util/Util';
+import {AlertButton, getHitSlop} from '@/Util/Util';
+import {usePostSend} from '@/Hooks/useApi';
 
 const ModalKeyword: React.FC<ModalKeywordProps> = ({onClose, keyword}) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const {user} = useAppSelector(state => state);
   const navigation = useAppNavigation();
+
+  const {PostAPI} = usePostSend('keyword_list_add.php', {
+    mt_idx: user.mt_idx,
+    keyword: keyword,
+  });
 
   const onPressSetting = () => {
     navigation.navigate('KeywordAlarm');
+  };
+
+  const onPressEnrolled = () => {
+    PostAPI().then(res => {
+      if (res?.result === 'false') {
+        return AlertButton(res.msg);
+      } else {
+        onClose();
+      }
+    });
   };
   return (
     <View style={{flex: 1}}>
@@ -31,29 +42,20 @@ const ModalKeyword: React.FC<ModalKeywordProps> = ({onClose, keyword}) => {
         <View style={{height: getHeightPixel(740 - 210)}}></View>
       </TouchableWithoutFeedback>
       <View style={styles.whiteView}>
-        <TouchableOpacity
-          hitSlop={getHitSlop(5)}
-          style={styles.settingView}
-          onPress={onPressSetting}>
-          <Image
-            source={SettingIcon}
-            style={{width: getPixel(18.5), height: getPixel(20)}}
-          />
+        <TouchableOpacity hitSlop={getHitSlop(5)} style={styles.settingView} onPress={onPressSetting}>
+          <Image source={SettingIcon} style={{width: getPixel(18.5), height: getPixel(20)}} />
         </TouchableOpacity>
-        <TouchableOpacity
-          hitSlop={getHitSlop(5)}
-          style={styles.closeIconTouch}
-          onPress={onClose}>
+        <TouchableOpacity hitSlop={getHitSlop(5)} style={styles.closeIconTouch} onPress={onClose}>
           <CloseIconImage />
         </TouchableOpacity>
 
         <View style={styles.keywordContentView}>
           {/* <Text fontSize={`${20 * fontSize}`}>{`'${keyword}'`}</Text> */}
-          <Text fontSize={`${20 * fontSize}`}>{`'아이폰11'`}</Text>
+          <Text fontSize={`${20 * fontSize}`}>{`'${keyword}'`}</Text>
           <Text fontSize={`${20 * fontSize}`}>{t('searchModalKeyword')}</Text>
         </View>
 
-        <Button width="278px" height="36px" content={t('searchModalButton')} />
+        <Button onPress={onPressEnrolled} width="278px" height="36px" content={t('searchModalButton')} />
       </View>
     </View>
   );
