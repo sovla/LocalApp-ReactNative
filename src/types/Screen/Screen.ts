@@ -100,6 +100,10 @@ type Screen = {
         pt_location_detail?: string | null;
         pt_lat?: number | null;
         pt_lng?: number | null;
+        lc_idx?: string;
+        lc_lat?: string;
+        lc_lng?: string;
+        lc_title?: string;
       }
     | undefined;
   ProductPhoto:

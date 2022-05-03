@@ -425,6 +425,8 @@ export const ko = {
     noticeListTitle: '공지 목록',
     requireKeyword: '등록할 키워드를 적어주세요.',
     tagAlert: '하나의 태그 길이는 10자 입니다.',
+    carLocation: '판매 지역',
+    carLocationPh: '판매 지역 검색',
   },
 };
 export const es = {
