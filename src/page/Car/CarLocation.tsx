@@ -37,7 +37,9 @@ const CarLocation = ({navigation}: CarLocationProps) => {
 
   const onPressItem = useCallback((v: {lc_idx: string; lc_lat: string; lc_lng: string; lc_title: string}) => {
     navigation.navigate('ProductUpdate', {
-      ...v,
+      carLocation: {
+        ...v,
+      },
     });
   }, []);
 

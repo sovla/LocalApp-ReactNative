@@ -1,22 +1,18 @@
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {Fragment, useCallback, useState} from 'react';
+import React, {useCallback} from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import SearchBlackIcon from '@assets/image/search_black.png';
 import {Text} from '@Components/Global/text';
 import {useAppSelector} from '@/Hooks/CustomHook';
 import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
-import AutoHeightImage from 'react-native-auto-height-image';
 
 import Header from '@/Components/LoginSignUp/Header';
 import Line from '@/Components/Global/Line';
 import {CarLocationProps} from '@/Types/Screen/Screen';
-import {TextInput} from 'react-native-gesture-handler';
 
 import useApi from '@/Hooks/useApi';
-import {CarGearApi, CarLocationAPi} from '@/Types/API/CarTypes';
-import useDebounce from '@/Hooks/useDebounce';
+import {CarGearApi} from '@/Types/API/CarTypes';
 
 const CarLocation = ({navigation}: CarLocationProps) => {
   const {t} = useTranslation();
@@ -32,7 +28,7 @@ const CarLocation = ({navigation}: CarLocationProps) => {
 
   const onPressItem = useCallback((v: {cc_idx: string; cc_title: string}) => {
     navigation.navigate('ProductUpdate', {
-      ...v,
+      pt_gear: v.cc_title,
     });
   }, []);
 

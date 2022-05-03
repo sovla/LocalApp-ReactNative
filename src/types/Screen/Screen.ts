@@ -100,13 +100,15 @@ type Screen = {
         pt_location_detail?: string | null;
         pt_lat?: number | null;
         pt_lng?: number | null;
-        lc_idx?: string; // 차량 위치
-        lc_lat?: string; // 차량 위치
-        lc_lng?: string; // 차량 위치
-        lc_title?: string; // 차량 위치
+        carLocation?: {
+          lc_idx: string; // 차량 위치
+          lc_lat: string; // 차량 위치
+          lc_lng: string; // 차량 위치
+          lc_title: string; // 차량 위치
+        };
         pt_number?: number; // 차량 끝자리 번호
-        cc_idx?: string; // 차량 변속기
-        cc_title?: string; // 차량 변속기
+        pt_gear?: string; // 차량 변속기
+        pt_year?: string; // 차량 연식
       }
     | undefined;
   ProductPhoto:

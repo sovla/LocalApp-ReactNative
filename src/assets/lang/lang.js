@@ -428,6 +428,8 @@ export const ko = {
     carLocation: '판매 지역',
     carLocationPh: '판매 지역 검색',
     carEndNumber: '차량 끝자리 번호',
+    carYear: '차량 연식',
+    carYearPh: '차량 연식 검색',
   },
 };
 export const es = {
