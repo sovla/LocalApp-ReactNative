@@ -427,6 +427,7 @@ export const ko = {
     tagAlert: '하나의 태그 길이는 10자 입니다.',
     carLocation: '판매 지역',
     carLocationPh: '판매 지역 검색',
+    carEndNumber: '차량 끝자리 번호',
   },
 };
 export const es = {
