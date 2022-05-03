@@ -1,5 +1,11 @@
 import React from 'react';
-import {GestureResponderEvent, TextInputProps, TextProps, TouchableOpacityProps, ViewStyle} from 'react-native';
+import {
+  GestureResponderEvent,
+  TextInputProps,
+  TextProps,
+  TouchableOpacityProps,
+  ViewStyle,
+} from 'react-native';
 import {AnyStyledComponent} from 'styled-components';
 
 export interface DefaultButtonProps extends TouchableOpacityProps {
@@ -101,6 +107,26 @@ export interface ProductTypes {
     mime: string;
     isLocal: boolean;
   }[];
+  pt_brand?: string;
+  pt_model?: string;
+  pt_model_datail?: string;
+  pt_color?: string;
+  pt_year?: string;
+  pt_kilo?: string;
+  pt_disp?: string;
+  pt_fuel?: string;
+  pt_gear?: string;
+  pt_door?: '2' | '4';
+  pt_number?: string;
+  pt_detail_option?: string;
+  pt_history?: string;
+  pt_owner?: 'Y' | 'N';
+  carLocation?: {
+    lc_idx: string; // 차량 위치
+    lc_lat: string; // 차량 위치
+    lc_lng: string; // 차량 위치
+    lc_title: string; // 차량 위치
+  };
 }
 export interface categoryMenuTypes {
   menu:

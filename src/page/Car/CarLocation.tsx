@@ -1,4 +1,4 @@
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import React, {Fragment, useCallback, useState} from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
@@ -18,7 +18,7 @@ import useApi from '@/Hooks/useApi';
 import {CarLocationAPi} from '@/Types/API/CarTypes';
 import useDebounce from '@/Hooks/useDebounce';
 
-const CarLocation = ({navigation}: CarLocationProps) => {
+const CarLocation = ({navigation, route: {params}}: CarLocationProps) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
 
@@ -33,18 +33,22 @@ const CarLocation = ({navigation}: CarLocationProps) => {
       search_txt: text,
     },
   );
+
   const _useDebounc = useDebounce(text, () => getData(), 500);
 
-  const onPressItem = useCallback((v: {lc_idx: string; lc_lat: string; lc_lng: string; lc_title: string}) => {
-    navigation.navigate('ProductUpdate', {
-      carLocation: {
-        ...v,
-      },
-    });
-  }, []);
+  const onPressItem = useCallback(
+    (v: {lc_idx: string; lc_lat: string; lc_lng: string; lc_title: string}) => {
+      navigation.navigate('ProductUpdate', {
+        carLocation: {
+          ...v,
+        },
+      });
+    },
+    [],
+  );
 
   return (
-    <View>
+    <View style={{flex: 1}}>
       <Header title={t('carLocation')}>
         <TouchableOpacity>
           <Text fontSize={`${16 * fontSize}`} medium>
@@ -53,23 +57,39 @@ const CarLocation = ({navigation}: CarLocationProps) => {
         </TouchableOpacity>
       </Header>
       <View style={styles.searchView}>
-        <AutoHeightImage style={styles.marginHori11} source={SearchBlackIcon} width={getPixel(18)} />
-        <TextInput placeholder={t('carLocationPh')} placeholderTextColor={Theme.color.gray} onChangeText={setText} style={{...styles.textInput, fontSize: fontSize * 16}} />
+        <AutoHeightImage
+          style={styles.marginHori11}
+          source={SearchBlackIcon}
+          width={getPixel(18)}
+        />
+        <TextInput
+          placeholder={t('carLocationPh')}
+          placeholderTextColor={Theme.color.gray}
+          onChangeText={setText}
+          style={{...styles.textInput, fontSize: fontSize * 16}}
+        />
       </View>
-      {data.list.map(v => {
-        return (
-          <Fragment key={v.lc_idx}>
-            <TouchableOpacity
-              onPress={() => {
-                onPressItem(v);
-              }}
-              style={styles.touchItem}>
-              <Text>{v.lc_title}</Text>
-            </TouchableOpacity>
-            <Line isGray />
-          </Fragment>
-        );
-      })}
+      <View style={{flex: 1}}>
+        <ScrollView
+          contentContainerStyle={{
+            paddingBottom: getHeightPixel(80),
+          }}>
+          {data.list.map(v => {
+            return (
+              <View style={styles.itemView} key={v.lc_idx}>
+                <TouchableOpacity
+                  onPress={() => {
+                    onPressItem(v);
+                  }}
+                  style={styles.touchItem}>
+                  <Text>{v.lc_title}</Text>
+                </TouchableOpacity>
+                <Line isGray />
+              </View>
+            );
+          })}
+        </ScrollView>
+      </View>
     </View>
   );
 };
@@ -77,10 +97,12 @@ const CarLocation = ({navigation}: CarLocationProps) => {
 export default CarLocation;
 
 const styles = StyleSheet.create({
+  itemView: {
+    marginHorizontal: getPixel(16),
+  },
   touchItem: {
     height: getHeightPixel(52),
     width: getPixel(328),
-    marginHorizontal: getPixel(16),
     justifyContent: 'center',
     paddingLeft: getPixel(10),
   },

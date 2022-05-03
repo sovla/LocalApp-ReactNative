@@ -13,7 +13,11 @@ export const getHitSlop = (number: number) => {
   };
 };
 
-export const onScrollSlide = (e: NativeSyntheticEvent<NativeScrollEvent>, setState: React.Dispatch<React.SetStateAction<number>>, width?: number) => {
+export const onScrollSlide = (
+  e: NativeSyntheticEvent<NativeScrollEvent>,
+  setState: React.Dispatch<React.SetStateAction<number>>,
+  width?: number,
+) => {
   if (typeof width === 'number') {
     setState(Math.round(e.nativeEvent.contentOffset.x / width));
   } else {
@@ -22,7 +26,9 @@ export const onScrollSlide = (e: NativeSyntheticEvent<NativeScrollEvent>, setSta
 };
 
 export const timer = (number: number) => {
-  return `${Math.floor(number / 60)}:${number % 60 < 10 ? '0' + (number % 60) : number % 60}`;
+  return `${Math.floor(number / 60)}:${
+    number % 60 < 10 ? '0' + (number % 60) : number % 60
+  }`;
 };
 
 export const checkEmpty = (_item: any) => {
@@ -39,7 +45,11 @@ export const strEmptyCheck = (_item: string | undefined | null) => {
   }
 };
 
-export const AlertButton = (alertContent: string, leftButtonText: string = '확인', leftButtonPress: () => void = () => {}) => {
+export const AlertButton = (
+  alertContent: string,
+  leftButtonText: string = '확인',
+  leftButtonPress: () => void = () => {},
+) => {
   Alert.alert('', alertContent, [
     {
       text: leftButtonText,
@@ -92,16 +102,21 @@ export const viewCountCheck = (count?: number | null) => {
   }
 };
 
-export const brPrice = (price: string) => {
+export const brPrice = (price: string, isMoney = true) => {
   // 가격 3자리 . 표시
   if (price.includes('R$')) {
     return price.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   } else {
-    return 'R$ ' + price.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    return isMoney
+      ? 'R$ ' + price.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+      : price.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   }
 };
 
-export const productTimeSetting = (time: number | null, timeType: 'now' | 'minute' | 'hour' | 'day' | 'month' | 'year' | null) => {
+export const productTimeSetting = (
+  time: number | null,
+  timeType: 'now' | 'minute' | 'hour' | 'day' | 'month' | 'year' | null,
+) => {
   if (!time || !timeType) {
     return '';
   }

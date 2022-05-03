@@ -1,4 +1,4 @@
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import React, {Fragment, useCallback, useState} from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
@@ -11,84 +11,78 @@ import AutoHeightImage from 'react-native-auto-height-image';
 
 import Header from '@/Components/LoginSignUp/Header';
 import Line from '@/Components/Global/Line';
-import {CarLocationProps, CarYearProps} from '@/Types/Screen/Screen';
+import {
+  CarDisplacementProps,
+  CarFuelProps,
+  CarLocationProps,
+  CarModelProps,
+  CarYearProps,
+} from '@/Types/Screen/Screen';
 import {TextInput} from 'react-native-gesture-handler';
 
 import useApi from '@/Hooks/useApi';
-import {CarBrandAPi, CarGearApi, CarYearApi} from '@/Types/API/CarTypes';
+import {
+  CarFuelApi,
+  CarGearApi,
+  CarModelAPi,
+  CarYearApi,
+} from '@/Types/API/CarTypes';
 import useDebounce from '@/Hooks/useDebounce';
 
-const CarYear = ({
-  navigation,
-  route: {
-    params: {isMotor},
-  },
-}: CarYearProps) => {
+const CarDisplacement = ({navigation}: CarDisplacementProps) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
 
-  const [text, setText] = useState<string>('');
-  const {getData, data} = useApi<CarBrandAPi['T'], CarBrandAPi['D']>(
+  const {getData, data} = useApi<CarFuelApi['T'], CarFuelApi['D']>(
     {
       cnt: 0,
       list: [],
     },
-    'car_year.php',
-    {
-      search_txt: text,
-    },
-    {isFirst: false},
+    'car_displacement.php',
   );
-  const _useDebounc = useDebounce(text, () => getData(), 500);
 
-  const onPressItem = useCallback((v: string) => {
+  const onPressItem = useCallback((v: {cc_idx: string; cc_title: string}) => {
     navigation.navigate('ProductUpdate', {
-      pt_year: v,
+      pt_disp: v.cc_title,
     });
   }, []);
 
   return (
-    <View>
-      <Header title={t(isMotor ? 'motorYear' : 'carYear')}>
+    <View style={{flex: 1}}>
+      <Header title={t('carDisplacement')}>
         <TouchableOpacity>
           <Text fontSize={`${16 * fontSize}`} medium>
             {t('complete')}
           </Text>
         </TouchableOpacity>
       </Header>
-      <View style={styles.searchView}>
-        <AutoHeightImage
-          style={styles.marginHori11}
-          source={SearchBlackIcon}
-          width={getPixel(18)}
-        />
-        <TextInput
-          placeholder={t(isMotor ? 'motorYearPh' : 'carYearPh')}
-          placeholderTextColor={Theme.color.gray}
-          onChangeText={setText}
-          style={{...styles.textInput, fontSize: fontSize * 16}}
-        />
+
+      <View style={{flex: 1}}>
+        <ScrollView
+          contentContainerStyle={{
+            paddingBottom: getHeightPixel(80),
+          }}>
+          {data.list.map(v => {
+            return (
+              <View style={styles.itemView} key={v.cc_idx}>
+                <TouchableOpacity
+                  onPress={() => {
+                    onPressItem(v);
+                  }}
+                  style={styles.touchItem}>
+                  <Text>{v.cc_title}</Text>
+                </TouchableOpacity>
+                <Line isGray />
+              </View>
+            );
+          })}
+        </ScrollView>
       </View>
-      {data.list.map((v, i) => {
-        const title = 'cc_title' in v ? v.cc_title : v.ac_title;
-        return (
-          <View style={styles.itemView} key={i}>
-            <TouchableOpacity
-              onPress={() => {
-                onPressItem(title);
-              }}
-              style={styles.touchItem}>
-              <Text>{title}</Text>
-            </TouchableOpacity>
-            <Line isGray />
-          </View>
-        );
-      })}
     </View>
   );
 };
 
-export default CarYear;
+export default CarDisplacement;
 
 const styles = StyleSheet.create({
   itemView: {

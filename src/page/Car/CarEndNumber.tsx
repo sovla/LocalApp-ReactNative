@@ -1,5 +1,5 @@
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {Fragment, useCallback} from 'react';
+import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
+import React, {useCallback} from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {Text} from '@Components/Global/text';
@@ -11,21 +11,35 @@ import Header from '@/Components/LoginSignUp/Header';
 import Line from '@/Components/Global/Line';
 import {CarEndNumberProps} from '@/Types/Screen/Screen';
 
-const CarEndNumber = ({navigation}: CarEndNumberProps) => {
+import useApi from '@/Hooks/useApi';
+import {CarNumberApi} from '@/Types/API/CarTypes';
+
+const CarEndNumber = ({
+  navigation,
+  route: {
+    params: {isMotor},
+  },
+}: CarEndNumberProps) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
 
-  const data = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+  const {data} = useApi<CarNumberApi['T'], CarNumberApi['D']>(
+    {
+      cnt: 0,
+      list: [],
+    },
+    isMotor ? 'auto_number.php' : 'car_number.php',
+  );
 
-  const onPressItem = useCallback((v: number) => {
+  const onPressItem = useCallback((v: string) => {
     navigation.navigate('ProductUpdate', {
       pt_number: v,
     });
   }, []);
 
   return (
-    <View>
-      <Header title={t('carEndNumber')}>
+    <View style={{flex: 1}}>
+      <Header title={t(isMotor ? 'motorEndNumber' : 'carEndNumber')}>
         <TouchableOpacity>
           <Text fontSize={`${16 * fontSize}`} medium>
             {t('complete')}
@@ -33,20 +47,28 @@ const CarEndNumber = ({navigation}: CarEndNumberProps) => {
         </TouchableOpacity>
       </Header>
 
-      {data.map(v => {
-        return (
-          <Fragment key={v}>
-            <TouchableOpacity
-              onPress={() => {
-                onPressItem(v);
-              }}
-              style={styles.touchItem}>
-              <Text>{v}</Text>
-            </TouchableOpacity>
-            <Line isGray />
-          </Fragment>
-        );
-      })}
+      <View style={{flex: 1}}>
+        <ScrollView
+          contentContainerStyle={{
+            paddingBottom: getHeightPixel(80),
+          }}>
+          {data.list.map((v, i) => {
+            const title = 'cc_title' in v ? v.cc_title : v.ac_title;
+            return (
+              <View style={styles.itemView} key={i}>
+                <TouchableOpacity
+                  onPress={() => {
+                    onPressItem(title);
+                  }}
+                  style={styles.touchItem}>
+                  <Text>{title}</Text>
+                </TouchableOpacity>
+                <Line isGray />
+              </View>
+            );
+          })}
+        </ScrollView>
+      </View>
     </View>
   );
 };
@@ -54,10 +76,12 @@ const CarEndNumber = ({navigation}: CarEndNumberProps) => {
 export default CarEndNumber;
 
 const styles = StyleSheet.create({
+  itemView: {
+    marginHorizontal: getPixel(16),
+  },
   touchItem: {
     height: getHeightPixel(52),
     width: getPixel(328),
-    marginHorizontal: getPixel(16),
     justifyContent: 'center',
     paddingLeft: getPixel(10),
   },

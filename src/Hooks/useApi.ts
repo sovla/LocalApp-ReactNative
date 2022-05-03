@@ -1,7 +1,13 @@
 import {API} from '@/API/API';
 import {useIsFocused} from '@react-navigation/native';
 import {Axios, AxiosResponse} from 'axios';
-import {Dispatch, SetStateAction, useCallback, useEffect, useState} from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import {check, RESULTS} from 'react-native-permissions';
 import useBoolean from './useBoolean';
 interface optionTypes {
@@ -9,7 +15,12 @@ interface optionTypes {
   focusRetry?: boolean;
 }
 
-function useApi<T, D>(defaultValue: T, apiPath: string, axiosData?: D, option?: optionTypes) {
+function useApi<T, D>(
+  defaultValue: T,
+  apiPath: string,
+  axiosData?: D,
+  option?: optionTypes,
+) {
   const defaultOption: optionTypes = {
     isFirst: true,
     focusRetry: false,
@@ -22,12 +33,6 @@ function useApi<T, D>(defaultValue: T, apiPath: string, axiosData?: D, option?: 
   const [isComplete, setisComplete] = useState(false);
 
   const isFocused = useIsFocused();
-
-  useEffect(() => {
-    if ((defaultOption?.isFirst && isFocused && !isLoading && data === defaultValue) || defaultOption.focusRetry) {
-      getData();
-    }
-  }, [isFocused]);
 
   const getData = useCallback(
     async (_data?: any) => {
@@ -70,6 +75,18 @@ function useApi<T, D>(defaultValue: T, apiPath: string, axiosData?: D, option?: 
     [axiosData, apiPath, defaultOption?.isFirst],
   );
 
+  useEffect(() => {
+    if (
+      (defaultOption?.isFirst &&
+        isFocused &&
+        !isLoading &&
+        data === defaultValue) ||
+      defaultOption.focusRetry
+    ) {
+      getData();
+    }
+  }, [isFocused]);
+
   return {data, isLoading, isError, errorMessage, getData, isComplete, setData};
 }
 
@@ -81,7 +98,13 @@ export const usePostSend = <D>(apiPath: string, apiData: D) => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const PostAPI = useCallback(
-    async (data?: any): Promise<{result: 'true' | 'false' | null; data: any; msg: null | string}> => {
+    async (
+      data?: any,
+    ): Promise<{
+      result: 'true' | 'false' | null;
+      data: any;
+      msg: null | string;
+    }> => {
       setIsLoading(true);
       const res = await API.post<
         any,

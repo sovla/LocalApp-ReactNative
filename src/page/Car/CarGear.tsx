@@ -9,12 +9,17 @@ import Theme from '@/assets/global/Theme';
 
 import Header from '@/Components/LoginSignUp/Header';
 import Line from '@/Components/Global/Line';
-import {CarLocationProps} from '@/Types/Screen/Screen';
+import {CarGearProps, CarLocationProps} from '@/Types/Screen/Screen';
 
 import useApi from '@/Hooks/useApi';
 import {CarGearApi} from '@/Types/API/CarTypes';
 
-const CarLocation = ({navigation}: CarLocationProps) => {
+const CarGear = ({
+  navigation,
+  route: {
+    params: {isMotor},
+  },
+}: CarGearProps) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
 
@@ -23,12 +28,12 @@ const CarLocation = ({navigation}: CarLocationProps) => {
       cnt: 0,
       list: [],
     },
-    'car_gear.php',
+    isMotor ? 'auto_gear.php' : 'car_gear.php',
   );
 
-  const onPressItem = useCallback((v: {cc_idx: string; cc_title: string}) => {
+  const onPressItem = useCallback((v: string) => {
     navigation.navigate('ProductUpdate', {
-      pt_gear: v.cc_title,
+      pt_gear: v,
     });
   }, []);
 
@@ -42,17 +47,18 @@ const CarLocation = ({navigation}: CarLocationProps) => {
         </TouchableOpacity> */}
       </Header>
 
-      {data.list.map(v => {
+      {data.list.map((v, i) => {
+        const title = 'cc_title' in v ? v.cc_title : v.ac_title;
         return (
-          <View key={v.cc_idx} style={{marginLeft: getPixel(16)}}>
+          <View style={styles.itemView} key={i}>
             <TouchableOpacity
               onPress={() => {
-                onPressItem(v);
+                onPressItem(title);
               }}
               style={styles.touchItem}>
-              <Text>{v.cc_title}</Text>
+              <Text>{title}</Text>
             </TouchableOpacity>
-            <Line isGray width={getPixel(328)} />
+            <Line isGray />
           </View>
         );
       })}
@@ -60,9 +66,12 @@ const CarLocation = ({navigation}: CarLocationProps) => {
   );
 };
 
-export default CarLocation;
+export default CarGear;
 
 const styles = StyleSheet.create({
+  itemView: {
+    marginHorizontal: getPixel(16),
+  },
   touchItem: {
     height: getHeightPixel(52),
     width: getPixel(328),

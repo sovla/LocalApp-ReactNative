@@ -18,7 +18,7 @@ import {usePostSend} from '@/Hooks/useApi';
 const Product: React.FC<ProductProps> = ({title, location, time, viewCount, likeCount, price, image, isLike, status, isList, isBorder, onPress, idx, cate}) => {
   const fontSize = useAppSelector(state => state.fontSize.value);
   const {user} = useAppSelector(state => state);
-  const {PostAPI} = usePostSend<ProductLike['T'], ProductLike['D']>('product_like.php', {
+  const {PostAPI} = usePostSend<ProductLike['D']>('product_like.php', {
     mt_idx: user?.mt_idx ?? '0',
     pt_idx: idx,
   });

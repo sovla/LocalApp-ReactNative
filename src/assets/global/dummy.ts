@@ -1,4 +1,9 @@
-import {categoryMenuTypes, openingHoursTypes, ProductTypes, tierTypes} from '@/Types/Components/global';
+import {
+  categoryMenuTypes,
+  openingHoursTypes,
+  ProductTypes,
+  tierTypes,
+} from '@/Types/Components/global';
 
 export const categoryMenu: {
   name: categoryMenuTypes['menu'];
@@ -189,18 +194,34 @@ export const tierReverseList: tierTypes[] = [
 ];
 
 export const productDummy: ProductTypes = {
-  title: '공원',
-  categoryMenu: 'digital',
-  price: '5000',
-  tier: 'Ftier',
-  tag: '공원 시민공원',
-  content: '설명설명',
+  title: '',
+  categoryMenu: null,
+  price: '',
+  tier: null,
+  tag: null,
+  content: '',
   isNego: false,
-  location: '임시용',
+  location: '',
   imageFile: [],
   pt_lat: null,
   pt_lng: null,
   pt_location_detail: null,
+
+  // 차량용 추가 데이터
+  pt_brand: undefined,
+  pt_model: undefined,
+  pt_model_datail: undefined,
+  pt_color: undefined,
+  pt_year: undefined,
+  pt_kilo: undefined,
+  pt_disp: undefined,
+  pt_fuel: undefined,
+  pt_gear: undefined,
+  pt_door: undefined,
+  pt_number: undefined,
+  pt_detail_option: undefined,
+  pt_history: undefined,
+  pt_owner: undefined,
 };
 
 export const openingHoursInit: openingHoursTypes = {

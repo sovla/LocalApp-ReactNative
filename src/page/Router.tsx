@@ -1,10 +1,28 @@
 import Theme from '@/assets/global/Theme';
 import {Text} from '@/Components/Global/text';
-import {createNavigationContainerRef, NavigationContainer, NavigationContainerRef} from '@react-navigation/native';
+import {
+  createNavigationContainerRef,
+  NavigationContainer,
+  NavigationContainerRef,
+} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import React, {RefObject, Suspense, useEffect, useLayoutEffect, useRef, useState} from 'react';
-import {SafeAreaView, View, ActivityIndicator, StyleSheet, Dimensions, Platform} from 'react-native';
+import React, {
+  RefObject,
+  Suspense,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
+import {
+  SafeAreaView,
+  View,
+  ActivityIndicator,
+  StyleSheet,
+  Dimensions,
+  Platform,
+} from 'react-native';
 
 import i18n from 'i18next';
 import {initReactI18next, useTranslation} from 'react-i18next';
@@ -88,6 +106,7 @@ import CarFuel from './Car/CarFuel';
 import CarGear from './Car/CarGear';
 import CarEndNumber from './Car/CarEndNumber';
 import CarLocation from './Car/CarLocation';
+import CarDisplacement from './Car/CarDisplacement';
 import Menu from './Menu';
 import ProductTierGuide from './Product/ProductTierGuide';
 import BlockList from './Chatting/BlockList';
@@ -123,7 +142,10 @@ export default function Router() {
   useEffect(() => {
     (async () => {
       const authorizationStatus = await messaging().requestPermission();
-      if (authorizationStatus === messaging.AuthorizationStatus.AUTHORIZED || authorizationStatus === messaging.AuthorizationStatus.PROVISIONAL) {
+      if (
+        authorizationStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+        authorizationStatus === messaging.AuthorizationStatus.PROVISIONAL
+      ) {
         if (Platform.OS === 'ios') {
           const token = await messaging().getAPNSToken();
           if (token) {
@@ -187,7 +209,7 @@ export default function Router() {
         if (result === 'AppPermission') {
           setInitRoute(result);
         } else if (result === 'Login') {
-          setInitRoute('CarYear');
+          setInitRoute('ProductUpdate');
         }
       })
       .finally(() => {
@@ -207,7 +229,11 @@ export default function Router() {
             <Stack.Screen
               name={item.name}
               key={item.name + index}
-              component={item.name !== 'ChattingDetail' ? withScrollView(item.component) : item.component}
+              component={
+                item.name !== 'ChattingDetail'
+                  ? withScrollView(item.component)
+                  : item.component
+              }
               options={{
                 headerShown: false,
                 cardStyleInterpolator: forFade,
@@ -328,6 +354,10 @@ export const RouterSetting: RouterTypes[] = [
   {
     name: 'CarLocation',
     component: CarLocation,
+  },
+  {
+    name: 'CarDisplacement',
+    component: CarDisplacement,
   },
   {
     name: 'CarModel',

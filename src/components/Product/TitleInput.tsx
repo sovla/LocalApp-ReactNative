@@ -1,4 +1,4 @@
-import {TouchableOpacity, View} from 'react-native';
+import {StyleSheet, TextInputProps, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
@@ -10,6 +10,8 @@ import AutoHeightImage from 'react-native-auto-height-image';
 import Line from '@/Components/Global/Line';
 
 import ArrowUpDownGrayIcon from '@assets/image/arrow_updown_gray.png';
+import {TextInput} from 'react-native-gesture-handler';
+import Theme from '@/assets/global/Theme';
 
 const TitleInput: React.FC<{
   title?: string;
@@ -18,6 +20,9 @@ const TitleInput: React.FC<{
   width?: number;
   onPress?: () => void;
   unitText?: string;
+  value?: string;
+  onChangeText?: (text: string) => void;
+  keyboardType?: TextInputProps['keyboardType'];
 }> = ({
   isSelect,
   title,
@@ -25,6 +30,9 @@ const TitleInput: React.FC<{
   unitText,
   placeHolder,
   width = getPixel(328),
+  value,
+  onChangeText,
+  keyboardType,
 }) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
@@ -33,26 +41,74 @@ const TitleInput: React.FC<{
       <Text fontSize={`${12 * fontSize}`} medium>
         {title}
       </Text>
-      <TouchableOpacity
-        disabled={!isSelect}
-        style={{
-          width: width,
-          height: getHeightPixel(35),
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}>
-        <GrayText fontSize={`${16 * fontSize}`}>{placeHolder}</GrayText>
-        {isSelect && (
-          <AutoHeightImage source={ArrowUpDownGrayIcon} width={getPixel(8)} />
-        )}
-        {unitText && unitText.length > 0 && (
-          <Text fontSize={`${16 * fontSize}`}>{unitText}</Text>
-        )}
-      </TouchableOpacity>
+      {onPress ? (
+        <>
+          <TouchableOpacity
+            disabled={!isSelect}
+            onPress={onPress}
+            style={{
+              width: width,
+              ...styles.touch,
+              paddingLeft: getPixel(5),
+            }}>
+            {value && value?.length > 0 ? (
+              <Text fontSize={`${16 * fontSize}`}>{value}</Text>
+            ) : (
+              <GrayText fontSize={`${16 * fontSize}`}>{placeHolder}</GrayText>
+            )}
+
+            {isSelect && (
+              <AutoHeightImage
+                source={ArrowUpDownGrayIcon}
+                width={getPixel(8)}
+              />
+            )}
+            {unitText && unitText.length > 0 && (
+              <Text fontSize={`${16 * fontSize}`}>{unitText}</Text>
+            )}
+          </TouchableOpacity>
+        </>
+      ) : (
+        <View
+          style={{
+            width: width,
+            flexDirection: 'row',
+          }}>
+          <TextInput
+            keyboardType={keyboardType}
+            style={{
+              flex: 1,
+              ...styles.touch,
+              color: Theme.color.black,
+              fontSize: fontSize * 16,
+              includeFontPadding: false,
+            }}
+            placeholder={placeHolder}
+            placeholderTextColor={Theme.color.gray}
+            onChangeText={onChangeText}
+          />
+          {unitText && unitText.length > 0 && (
+            <Text
+              style={{marginRight: getPixel(5)}}
+              fontSize={`${16 * fontSize}`}>
+              {unitText}
+            </Text>
+          )}
+        </View>
+      )}
+
       <Line isGray width={width} />
     </View>
   );
 };
 
 export default TitleInput;
+
+const styles = StyleSheet.create({
+  touch: {
+    minHeight: getHeightPixel(35),
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+});
