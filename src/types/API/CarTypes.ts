@@ -15,3 +15,17 @@ export interface CarLocationAPi {
     search_txt: string;
   };
 }
+
+export interface CarGearApi {
+  // 자동차 원동기 지역 선택 API
+  T: {
+    cnt: number;
+    list:
+      | {
+          cc_idx: string;
+          cc_title: string;
+        }[]
+      | [];
+  };
+  D: undefined | null;
+}

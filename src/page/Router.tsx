@@ -187,7 +187,7 @@ export default function Router() {
         if (result === 'AppPermission') {
           setInitRoute(result);
         } else if (result === 'Login') {
-          setInitRoute('CarEndNumber');
+          setInitRoute('CarGear');
         }
       })
       .finally(() => {

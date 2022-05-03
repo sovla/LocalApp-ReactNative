@@ -105,6 +105,8 @@ type Screen = {
         lc_lng?: string; // 차량 위치
         lc_title?: string; // 차량 위치
         pt_number?: number; // 차량 끝자리 번호
+        cc_idx?: string; // 차량 변속기
+        cc_title?: string; // 차량 변속기
       }
     | undefined;
   ProductPhoto:
