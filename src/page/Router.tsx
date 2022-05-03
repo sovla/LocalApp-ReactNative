@@ -113,6 +113,7 @@ import BlockList from './Chatting/BlockList';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import messaging from '@react-native-firebase/messaging';
 import {changeToken} from '@/Store/globalState';
+import {Button} from '@/Components/Global/button';
 
 const resources = {
   en,
@@ -209,7 +210,7 @@ export default function Router() {
         if (result === 'AppPermission') {
           setInitRoute(result);
         } else if (result === 'Login') {
-          setInitRoute('ProductUpdate');
+          setInitRoute(result);
         }
       })
       .finally(() => {
@@ -260,6 +261,13 @@ const withScrollView = (WrappedComponent: any) => {
             <WrappedComponent {...props} />
             <View style={[styles.position]}>
               <Text>{props.route.name}</Text>
+              {props.route.name === 'Login' && (
+                <Button
+                  onPress={() => props.navigation.navigate('Home')}
+                  width={'100'}
+                  content="홈으로"
+                />
+              )}
             </View>
           </View>
         </SafeAreaView>
