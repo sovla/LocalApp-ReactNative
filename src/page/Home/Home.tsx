@@ -23,7 +23,7 @@ export default function Home({navigation}: HomeProps): JSX.Element {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const {user} = useAppSelector(state => state);
-  const [isList, setIsList] = useState(false);
+  const [isList, setIsList] = useState(true);
   const {value: isUpload, on: onUpload, off: offUpload} = useBoolean(false);
   const {value: isPopup, on: onIsPopup, off: offIsPopup} = useBoolean(false);
   const {value: isChange, on: onIsChange, off: offIsChange} = useBoolean(false);

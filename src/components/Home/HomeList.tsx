@@ -23,7 +23,7 @@ const HomeList: React.FC<{
       <View style={styles.titleBetween}>
         <BoldText fontSize={`${20 * fontSize}px`}>{t('HomeTitle1')}</BoldText>
         <RowBox>
-          <TouchBox
+          {/* <TouchBox
             onPress={() => {
               setIsList(true);
             }}>
@@ -40,7 +40,7 @@ const HomeList: React.FC<{
               source={isList ? MenuOffIcon : MenuOnIcon}
               style={[styles.menuImage, styles.menuImageMarginLeft]}
             />
-          </TouchBox>
+          </TouchBox> */}
         </RowBox>
       </View>
     </View>
