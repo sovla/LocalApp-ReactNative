@@ -90,8 +90,8 @@ export default function ProductUpdate({route: {params}}: ProductUpdateProps) {
 
   const onPressConfirm = () => {
     registerProduct().then(res => {
-      if (res.result === 'false') {
-        return AlertButton(res.msg);
+      if ('result' in res && res.result === 'false') {
+        return AlertButton(res?.msg ?? '');
       } else {
         navigation.navigate('ProductComplete');
       }
@@ -218,6 +218,8 @@ export default function ProductUpdate({route: {params}}: ProductUpdateProps) {
                     fontFamily: Theme.fontWeight.medium,
                     fontSize: 14 * fontSize,
                     color: Theme.color.black,
+                    height: getHeightPixel(50),
+                    width: isNotCar && isNotMotor ? getPixel(170) : getPixel(328),
                   }}
                   placeholder={t('pricePh')}
                   placeholderTextColor={Theme.color.gray}
@@ -227,16 +229,18 @@ export default function ProductUpdate({route: {params}}: ProductUpdateProps) {
                   }}
                 />
               </View>
-              <TouchableOpacity
-                style={styles.negoView}
-                onPress={() => {
-                  onChangeProduct('isNego', !product.isNego);
-                }}>
-                <AutoHeightImage source={product.isNego ? require('@assets/image/check_on.png') : require('@assets/image/check_off.png')} width={getPixel(22)} />
-                <Text fontSize={`${14 * fontSize}`} medium>
-                  {t('noPriceOffer')}
-                </Text>
-              </TouchableOpacity>
+              {isNotCar && isNotMotor && (
+                <TouchableOpacity
+                  style={styles.negoView}
+                  onPress={() => {
+                    onChangeProduct('isNego', !product.isNego);
+                  }}>
+                  <AutoHeightImage source={product.isNego ? require('@assets/image/check_on.png') : require('@assets/image/check_off.png')} width={getPixel(22)} />
+                  <Text fontSize={`${14 * fontSize}`} medium>
+                    {t('noPriceOffer')}
+                  </Text>
+                </TouchableOpacity>
+              )}
             </View>
             <Line isGray />
 

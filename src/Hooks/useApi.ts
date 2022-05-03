@@ -75,26 +75,25 @@ function useApi<T, D>(defaultValue: T, apiPath: string, axiosData?: D, option?: 
 
 export default useApi;
 
-export const usePostSend = <T, D>(apiPath: string, apiData: D) => {
+export const usePostSend = <D>(apiPath: string, apiData: D) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   const PostAPI = useCallback(
-    async (data?: any) => {
+    async (data?: any): Promise<{result: 'true' | 'false' | null; data: any; msg: null | string}> => {
       setIsLoading(true);
       const res = await API.post<
         any,
         AxiosResponse<
           {
             result: 'true' | 'false' | null;
-            data: any | T;
+            data: any;
             msg: null | string;
           },
           any
         >
       >(apiPath, {...apiData, ...data});
-      console.log(apiPath + '::::', res);
       if (res.data?.result === 'true') {
         setIsLoading(false);
         return res.data.data;
@@ -107,7 +106,7 @@ export const usePostSend = <T, D>(apiPath: string, apiData: D) => {
         return res.data;
       } else {
         setIsLoading(false);
-        return null;
+        return res.data;
       }
     },
     [apiPath, apiData],

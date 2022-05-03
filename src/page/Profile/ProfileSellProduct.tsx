@@ -38,9 +38,27 @@ export default function ProfileSellProduct({}: ProfileSellProductProps) {
         contentContainerStyle={{
           paddingBottom: getHeightPixel(150),
         }}
-        data={list}
+        data={data}
         renderItem={({item, index}) => {
-          return <Product isList />;
+          return (
+            <Product
+              isList
+              // title={item.pt_title}
+              // location={item.}
+              // time={}
+              // viewCount={}
+              // likeCount={}
+              // price={}
+              // image={}
+              // isLike={}
+              // status={}
+              // isList={}
+              // isBorder={}
+              // onPress={}
+              // idx={}
+              // cate={}
+            />
+          );
         }}
       />
     </View>

@@ -14,7 +14,18 @@ export interface MenuProps {
 
 export interface ProfileSellProductAPi {
   // 판매상품 API
-  T: any | null;
+  T:
+    | {
+        bump_up_check: 'Y' | 'N';
+        bump_up_time: string;
+        fin_status: 'Y' | 'N';
+        pt_cate: string;
+        pt_file: string;
+        pt_idx: string;
+        pt_price: string;
+        pt_title: string;
+      }[]
+    | null;
   D: {
     mt_idx: string;
     type: 'Y' | 'N';
