@@ -189,6 +189,64 @@ export interface ProduetDetailApiType {
     pt_time_type: 'now' | 'minute' | 'hour' | 'day' | 'month' | 'year';
     pt_title: string;
     view_count: number;
+
+    // 자동차 전용 옵션
+    car_detail?:
+      | {
+          detail_idx: string;
+          detail_title: string;
+          detail_type: 'Y' | 'N';
+        }[]
+      | [];
+    car_history?:
+      | {
+          history_idx: string;
+          history_title: string;
+          history_type: 'Y' | 'N';
+        }
+      | [];
+    car_option?: {
+      pt_brand: string;
+      pt_color: string;
+      pt_disp: string;
+      pt_door: '2' | '4';
+      pt_fuel: string;
+      pt_gear: string;
+      pt_kilo: string;
+      pt_model: string;
+      pt_model_detail: string;
+      pt_number: string;
+      pt_owner: 'Y' | 'N';
+      pt_year: string;
+    };
+    // 원동기
+    auto_detail?:
+      | {
+          detail_idx: string;
+          detail_title: string;
+          detail_type: 'Y' | 'N';
+        }[]
+      | [];
+    auto_history?:
+      | {
+          history_idx: string;
+          history_title: string;
+          history_type: 'Y' | 'N';
+        }
+      | [];
+    auto_option?: {
+      pt_brand: string;
+      pt_color: string;
+      pt_disp: string;
+      pt_fuel: string;
+      pt_gear: string;
+      pt_kilo: string;
+      pt_model: string;
+      pt_model_detail: string;
+      pt_number: string;
+      pt_owner: 'Y' | 'N';
+      pt_year: string;
+    };
   } | null;
   D: {
     mt_idx: string | null;
@@ -198,7 +256,12 @@ export interface ProduetDetailApiType {
 
 export interface ProduetDetailOtherApiType {
   // 상품 상세보기 하단 다른 판매 품목 보기
-  T: Array<Omit<ProductApiTypes, 'like_count' | 'fin_status' | 'pt_cate' | 'busi_check'>> | null;
+  T: Array<
+    Omit<
+      ProductApiTypes,
+      'like_count' | 'fin_status' | 'pt_cate' | 'busi_check'
+    >
+  > | null;
   D: {
     mt_idx: string | null;
     pt_idx: string;

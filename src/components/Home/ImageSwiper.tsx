@@ -1,12 +1,4 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Image,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
-} from 'react-native';
+import {View, StyleSheet, ScrollView, Image} from 'react-native';
 import React, {useState} from 'react';
 import {ImageSwiperProps} from '@/Types/Components/HomeTypes';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
@@ -34,7 +26,11 @@ export default function ImageSwiper({
           imageArray.map((item, index) => {
             const image = typeof item === 'string' ? {uri: item} : item;
             return (
-              <Image source={image} style={{width: width, height: height}} />
+              <Image
+                source={image}
+                style={{width: width, height: height}}
+                resizeMethod="resize"
+              />
             );
           })}
         {(!Array.isArray(imageArray) || imageArray?.length < 1) && (

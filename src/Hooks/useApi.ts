@@ -119,7 +119,7 @@ export const usePostSend = <D>(apiPath: string, apiData: D) => {
       >(apiPath, {...apiData, ...data});
       if (res.data?.result === 'true') {
         setIsLoading(false);
-        return res.data.data;
+        return res.data.data as any;
       } else if (res.data?.result === 'false') {
         setIsLoading(false);
         setIsError(true);

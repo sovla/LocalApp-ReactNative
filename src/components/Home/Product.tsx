@@ -3,7 +3,13 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {ProductLike, ProductProps} from '@/Types/Components/HomeTypes';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import Theme from '@/assets/global/Theme';
-import {DarkBlueText, GrayText, MediumText, Text, WhiteText} from '../Global/text';
+import {
+  DarkBlueText,
+  GrayText,
+  MediumText,
+  Text,
+  WhiteText,
+} from '../Global/text';
 import {useTranslation} from 'react-i18next';
 import {useAppSelector} from '@/Hooks/CustomHook';
 import LocationIcon from '@assets/image/map-marker.png';
@@ -15,7 +21,22 @@ import dummy from '@assets/image/dummy.png';
 import {checkEmpty, getHitSlop, strEmptyCheck} from '@/Util/Util';
 import {usePostSend} from '@/Hooks/useApi';
 
-const Product: React.FC<ProductProps> = ({title, location, time, viewCount, likeCount, price, image, isLike, status, isList, isBorder, onPress, idx, cate}) => {
+const Product: React.FC<ProductProps> = ({
+  title,
+  location,
+  time,
+  viewCount,
+  likeCount,
+  price,
+  image,
+  isLike,
+  status,
+  isList,
+  isBorder,
+  onPress,
+  idx,
+  cate,
+}) => {
   const fontSize = useAppSelector(state => state.fontSize.value);
   const {user} = useAppSelector(state => state);
   const {PostAPI} = usePostSend<ProductLike['D']>('product_like.php', {
@@ -50,11 +71,21 @@ const Product: React.FC<ProductProps> = ({title, location, time, viewCount, like
       disabled={!onPress}
       style={stylesNoneList.productContainer}>
       <View style={stylesNoneList.centerView}>
-        <Image source={image} style={[stylesNoneList.productImage]} />
+        <Image
+          source={image}
+          style={[stylesNoneList.productImage]}
+          resizeMethod="resize"
+        />
 
         {/* 하트 아이콘 */}
-        <TouchableOpacity onPress={onPressLike} hitSlop={getHitSlop(5)} style={stylesNoneList.absoluteTouch}>
-          <Image source={!like ? LikeEmptyIcon : LikeFillIcon} style={stylesNoneList.isLikeImage} />
+        <TouchableOpacity
+          onPress={onPressLike}
+          hitSlop={getHitSlop(5)}
+          style={stylesNoneList.absoluteTouch}>
+          <Image
+            source={!like ? LikeEmptyIcon : LikeFillIcon}
+            style={stylesNoneList.isLikeImage}
+          />
         </TouchableOpacity>
 
         {/* 스테이터스 - 예약중, 판매완료 */}
@@ -65,7 +96,10 @@ const Product: React.FC<ProductProps> = ({title, location, time, viewCount, like
               {
                 left: status === '예약중' ? getPixel(24) : getPixel(15),
                 width: status === '예약중' ? getPixel(45.2) : getPixel(64.2),
-                backgroundColor: status === '예약중' ? Theme.color.aqua_04 : Theme.color.whiteGray_B7,
+                backgroundColor:
+                  status === '예약중'
+                    ? Theme.color.aqua_04
+                    : Theme.color.whiteGray_B7,
               },
             ]}>
             <WhiteText medium fontSize={`${12 * fontSize}`}>
@@ -128,9 +162,19 @@ const Product: React.FC<ProductProps> = ({title, location, time, viewCount, like
         },
       ]}>
       <View style={[stylesNoneList.centerView, {borderRadius: 0}]}>
-        <Image source={image} style={styles.isListMainImage} />
-        <TouchableOpacity onPress={onPressLike} hitSlop={getHitSlop(5)} style={styles.likeTouch}>
-          <Image source={!like ? LikeEmptyIcon : LikeFillIcon} style={stylesNoneList.isLikeImage} />
+        <Image
+          resizeMethod="resize"
+          source={image}
+          style={styles.isListMainImage}
+        />
+        <TouchableOpacity
+          onPress={onPressLike}
+          hitSlop={getHitSlop(5)}
+          style={styles.likeTouch}>
+          <Image
+            source={!like ? LikeEmptyIcon : LikeFillIcon}
+            style={stylesNoneList.isLikeImage}
+          />
         </TouchableOpacity>
         {typeof status === 'string' && status?.length > 0 && (
           <View
@@ -139,7 +183,10 @@ const Product: React.FC<ProductProps> = ({title, location, time, viewCount, like
               {
                 left: status === '예약중' ? getPixel(57.4) : getPixel(47.4),
                 width: status === '예약중' ? getPixel(45.2) : getPixel(64.2),
-                backgroundColor: status === '예약중' ? Theme.color.aqua_04 : Theme.color.whiteGray_B7,
+                backgroundColor:
+                  status === '예약중'
+                    ? Theme.color.aqua_04
+                    : Theme.color.whiteGray_B7,
               },
             ]}>
             <WhiteText medium fontSize={`${12 * fontSize}`}>

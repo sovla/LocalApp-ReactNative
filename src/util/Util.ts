@@ -102,13 +102,26 @@ export const viewCountCheck = (count?: number | null) => {
   }
 };
 
-export const brPrice = (price: string, isMoney = true) => {
+export const brPrice = (
+  price: string,
+  option?: {
+    isMoney?: boolean;
+    isPadding?: boolean;
+  },
+) => {
+  option = {
+    isMoney: true,
+    isPadding: false,
+  };
+
   // 가격 3자리 . 표시
   if (price.includes('R$')) {
     return price.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   } else {
-    return isMoney
-      ? 'R$ ' + price.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+    return option.isMoney
+      ? option.isPadding
+        ? 'R$ ' + price.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+        : 'R$' + price.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
       : price.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   }
 };

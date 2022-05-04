@@ -10,10 +10,15 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 export const useAppNavigation = () =>
   useNavigation<ProfileScreenNavigationProp>();
 
-export const useCallbackNavigation = <T>(path: keyof Screen, data?: T) => {
+export const useCallbackNavigation = <T extends keyof Screen>(
+  path: T,
+  data?: Screen[T],
+) => {
   const navigation = useAppNavigation();
-
+  const realData = {
+    ...data,
+  } as Screen[T];
   return useCallback(() => {
-    navigation.navigate(path, data);
+    navigation.navigate(path, realData);
   }, []);
 };

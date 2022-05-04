@@ -111,41 +111,48 @@ export const tierList: tierTypes[] = [
     title: 'NtierTitle',
     content: 'NtierContent',
     image: require('@assets/image/n_tier.png'),
+    ProductDetailName: 'Classe N',
   },
   {
     name: 'Rtier',
     title: 'RtierTitle',
     content: 'RtierContent',
     image: require('@assets/image/r_tier.png'),
+    ProductDetailName: 'Classe R',
   },
   {
     name: 'Stier',
     title: 'StierTitle',
     content: 'StierContent',
     image: require('@assets/image/s_tier.png'),
+    ProductDetailName: 'Classe S',
   },
   {
     name: 'Atier',
     title: 'AtierTitle',
     content: 'AtierContent',
     image: require('@assets/image/a_tier.png'),
+    ProductDetailName: 'Classe A',
   },
   {
     name: 'Btier',
     title: 'BtierTitle',
     content: 'BtierContent',
     image: require('@assets/image/b_tier.png'),
+    ProductDetailName: 'Classe B',
   },
   {
     name: 'Ctier',
     title: 'CtierTitle',
     content: 'CtierContent',
     image: require('@assets/image/c_tier.png'),
+    ProductDetailName: 'Classe C',
   },
   {
     name: 'Ftier',
     title: 'FtierTitle',
     content: 'FtierContent',
+    ProductDetailName: 'Classe F',
   },
 ];
 
@@ -154,42 +161,49 @@ export const tierReverseList: tierTypes[] = [
     name: 'Ftier',
     title: 'FtierTitle',
     content: 'FtierContent',
+    ProductDetailName: 'Classe F',
   },
   {
     name: 'Ctier',
     title: 'CtierTitle',
     content: 'CtierContent',
     image: require('@assets/image/c_tier.png'),
+    ProductDetailName: 'Classe C',
   },
   {
     name: 'Btier',
     title: 'BtierTitle',
     content: 'BtierContent',
     image: require('@assets/image/b_tier.png'),
+    ProductDetailName: 'Classe B',
   },
   {
     name: 'Atier',
     title: 'AtierTitle',
     content: 'AtierContent',
     image: require('@assets/image/a_tier.png'),
+    ProductDetailName: 'Classe A',
   },
   {
     name: 'Stier',
     title: 'StierTitle',
     content: 'StierContent',
     image: require('@assets/image/s_tier.png'),
+    ProductDetailName: 'Classe S',
   },
   {
     name: 'Rtier',
     title: 'RtierTitle',
     content: 'RtierContent',
     image: require('@assets/image/r_tier.png'),
+    ProductDetailName: 'Classe R',
   },
   {
     name: 'Ntier',
     title: 'NtierTitle',
     content: 'NtierContent',
     image: require('@assets/image/n_tier.png'),
+    ProductDetailName: 'Classe N',
   },
 ];
 
@@ -207,7 +221,7 @@ export const productDummy: ProductTypes = {
   pt_lng: null,
   pt_location_detail: null,
 
-  // 차량용 추가 데이터
+  // 차량용 원동기 추가 데이터
   pt_brand: undefined,
   pt_model: undefined,
   pt_model_datail: undefined,

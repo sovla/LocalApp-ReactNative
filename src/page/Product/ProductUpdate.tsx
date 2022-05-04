@@ -160,7 +160,7 @@ export default function ProductUpdate({route: {params}}: ProductUpdateProps) {
     }
     setProduct;
   }, [product.categoryMenu]);
-
+  console.log(product);
   useEffect(() => {
     onChangeProduct('pt_detail_option', selectDetail.join(','));
   }, [selectDetail]);
@@ -224,6 +224,8 @@ export default function ProductUpdate({route: {params}}: ProductUpdateProps) {
               }}
               placeholderTextColor={Theme.color.gray}
               placeholder={t('title')}
+              value={product.title}
+              onChangeText={text => onChangeProduct('title', text)}
             />
             <Line isGray />
 
@@ -403,7 +405,12 @@ export default function ProductUpdate({route: {params}}: ProductUpdateProps) {
               {t('detailDescription')}
             </Text>
 
-            <TextInput multiline style={styles.textAreaInput} />
+            <TextInput
+              multiline
+              style={styles.textAreaInput}
+              value={product.content}
+              onChangeText={text => onChangeProduct('content', text)}
+            />
           </View>
 
           {(!isNotCar || !isNotMotor) && (

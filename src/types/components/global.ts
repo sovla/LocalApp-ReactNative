@@ -158,6 +158,14 @@ export interface tierTypes {
   title: string;
   content: string;
   image?: any;
+  ProductDetailName:
+    | 'Classe N'
+    | 'Classe R'
+    | 'Classe S'
+    | 'Classe A'
+    | 'Classe B'
+    | 'Classe C'
+    | 'Classe F';
 }
 
 export interface openingHoursTypes {
