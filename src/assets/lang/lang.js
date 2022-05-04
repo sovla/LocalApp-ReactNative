@@ -477,6 +477,7 @@ export const ko = {
     pt_number: '차량 끝자리 번호',
     pt_owner: '소유자 변경 이력',
     pt_year: '연식',
+    reportComplete: '신고 완료',
   },
 };
 export const es = {
