@@ -43,3 +43,41 @@ export interface ProfileSellerProductApi {
     sell_status: 'Y' | 'N';
   };
 }
+
+export interface ProfileApi {
+  T: {
+    mt_country: string;
+    mt_hp: string;
+    mt_like: string;
+    mt_memo: string;
+    mt_name: string;
+    mt_profile: string;
+    mt_rate: number;
+    mt_regdate_month: string;
+    mt_regdate_year: string;
+    mt_review: string;
+    my_like_check: 'Y' | 'N';
+  } | null;
+  D: {
+    mt_idx: string;
+    sell_idx: string;
+  };
+}
+export interface ProfileGetInformationApi {
+  T: {
+    mt_country: string;
+    mt_hp: string;
+    mt_like: string;
+    mt_memo: string;
+    mt_name: string;
+    mt_profile: string;
+    mt_birth: string;
+    mt_email: string;
+    mt_gender: 'M' | 'W';
+    mt_hp_open: 'N' | 'Y';
+    mt_uid: string;
+  } | null;
+  D: {
+    mt_idx: string;
+  };
+}

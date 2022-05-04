@@ -54,9 +54,24 @@ type Screen = {
     reportType: 'prohibited' | 'unmanned' | 'scam';
     pt_idx: string;
   };
-  ProfileHome: StackScreenProps<Screen> | undefined;
+  ProfileHome: {
+    sell_idx: string;
+  };
   ProfileDetail: StackScreenProps<Screen> | undefined;
-  ProfileUpdate: StackScreenProps<Screen> | undefined;
+  ProfileUpdate: {
+    mt_country: string;
+    mt_hp: string;
+    mt_like: string;
+    mt_memo: string;
+    mt_name: string;
+    mt_profile: string;
+    mt_birth: string;
+    mt_email: string;
+    mt_gender: 'M' | 'W';
+    mt_hp_open: 'N' | 'Y';
+    mt_uid: string;
+  };
+
   ProfileTel: StackScreenProps<Screen> | undefined;
   ProfileAuth: StackScreenProps<Screen> | undefined;
   ProfileAuthComplete: StackScreenProps<Screen> | undefined;

@@ -5,14 +5,14 @@ import {
   TouchableOpacity,
   TextStyle,
 } from 'react-native';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useAppSelector} from '@/Hooks/CustomHook';
 import Header from '@/Components/Profile/Header';
 import {ProfileBackground} from './ProfileHome';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import EditIcon from '@assets/image/edit_ver.png';
-import {getHitSlop} from '@/Util/Util';
+import {changeBirthDate, getHitSlop} from '@/Util/Util';
 import {GrayText, Text, WhiteText} from '@/Components/Global/text';
 import CameraWhiteIcon from '@assets/image/camera_white.png';
 import CopyIcon from '@assets/image/copy.png';
@@ -21,19 +21,39 @@ import Theme from '@/assets/global/Theme';
 import {Toggle} from '@/Components/Global/button';
 import {ProfileDetailProps} from '@/Types/Screen/Screen';
 import AutoHeightImage from 'react-native-auto-height-image';
+import useApi from '@/Hooks/useApi';
+import {ProfileGetInformationApi} from '@/Types/API/ProfileTypes';
 
 export default function ProfileDetail({navigation}: ProfileDetailProps) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const {user} = useAppSelector(state => state);
   const [isOn, setIsOn] = useState(false);
 
+  const {data} = useApi<
+    ProfileGetInformationApi['T'],
+    ProfileGetInformationApi['D']
+  >(null, 'member_profile_info.php', {
+    mt_idx: user.mt_idx as string,
+  });
+
   const onPressProfileEdit = useCallback(() => {
-    navigation.navigate('ProfileUpdate');
+    if (data) {
+      navigation.navigate('ProfileUpdate', {
+        ...data,
+      });
+    }
   }, []);
 
   const onPressTelNumber = useCallback(() => {
     navigation.navigate('ProfileTel');
   }, []);
+
+  useEffect(() => {
+    if (data) {
+      setIsOn(data?.mt_hp_open === 'Y');
+    }
+  }, [data]);
 
   return (
     <View style={{flex: 1}}>
@@ -58,13 +78,13 @@ export default function ProfileDetail({navigation}: ProfileDetailProps) {
           </View>
           <View>
             <WhiteText fontSize={`${16 * fontSize}`} medium>
-              Leandro
+              {data?.mt_name}
             </WhiteText>
-            <GrayText fontSize={`${12 * fontSize}`}>
-              Love what you have.
-            </GrayText>
+            <GrayText fontSize={`${12 * fontSize}`}>{data?.mt_memo}</GrayText>
             <View style={styles.uidView}>
-              <WhiteText fontSize={`${14 * fontSize}`}>NC : 0000abcd</WhiteText>
+              <WhiteText fontSize={`${14 * fontSize}`}>
+                NC :{data?.mt_uid}
+              </WhiteText>
               <TouchableOpacity
                 style={styles.marginLeft10}
                 hitSlop={getHitSlop(5)}>
@@ -75,13 +95,16 @@ export default function ProfileDetail({navigation}: ProfileDetailProps) {
         </View>
       </View>
       <View style={styles.mainViewStyle}>
-        <BetweenText leftText={t('profileDetailName')} rightText={'Leandro'} />
+        <BetweenText
+          leftText={t('profileDetailName')}
+          rightText={data?.mt_name}
+        />
         <View>
           <Text style={styles.marginView} fontSize={`${16 * fontSize}`}>
             {t('profileDetailState')}
           </Text>
           <Text style={styles.marginBottom16} fontSize={`${12 * fontSize}`}>
-            asldjask djajsdkasjdkjas
+            {data?.mt_memo}
           </Text>
         </View>
         <Line
@@ -91,13 +114,13 @@ export default function ProfileDetail({navigation}: ProfileDetailProps) {
         />
         <BetweenText
           leftText={t('profileDetailTel')}
-          rightText={'+55 11 964845016'}
+          rightText={`+${data?.mt_country} ${data?.mt_hp}`}
           onPressRight={onPressTelNumber}
           isLine={false}
         />
         <View style={styles.betweenTextView}>
           <Text fontSize={`${16 * fontSize}`}>{t('profileDetailTelOpen')}</Text>
-          <Toggle isOn={isOn} setIsOn={setIsOn} />
+          <Toggle isOn={isOn} setIsOn={() => {}} />
         </View>
         <Line
           backgroundColor={Theme.color.gray}
@@ -106,12 +129,15 @@ export default function ProfileDetail({navigation}: ProfileDetailProps) {
         />
         <BetweenText
           leftText={t('profileDetailEmail')}
-          rightText={'onestore@gmail.com'}
+          rightText={data?.mt_email}
         />
-        <BetweenText leftText={t('profileDetailSex')} rightText={'남성'} />
+        <BetweenText
+          leftText={t('profileDetailSex')}
+          rightText={data?.mt_gender === 'M' ? t('man') : t('woman')}
+        />
         <BetweenText
           leftText={t('profileDetailDate')}
-          rightText={'2000. 12. 12'}
+          rightText={changeBirthDate(data?.mt_birth)} //'2000. 12. 12'
         />
       </View>
     </View>
@@ -169,7 +195,7 @@ const styles = StyleSheet.create({
   marginBottom16: {marginBottom: getHeightPixel(16)},
   marginView: {
     marginTop: getHeightPixel(16),
-    marginBottom: getHeightPixel(6),
+    marginBottom: getHeightPixel(26),
   },
   mainViewStyle: {
     marginHorizontal: getPixel(16),

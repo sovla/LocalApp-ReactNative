@@ -121,13 +121,18 @@ export default function ProductDetail({
     reportType: 'prohibited',
     pt_idx: params.pt_idx,
   });
-  const onPressShop = useCallbackNavigation(
-    data?.sell_type === '1' ? 'BusinessProfile' : 'ProfileHome',
-    {
-      sell_idx: data?.sell_idx as string, // 수정필요
-      sell_type: data?.sell_type as '0' | '1',
-    },
-  );
+  const onPressShop = useCallback(() => {
+    if (data?.sell_type === '0') {
+      navigation.navigate('BusinessProfile', {
+        sell_idx: data?.sell_idx as string, // 수정필요
+        sell_type: data?.sell_type as '0' | '1',
+      });
+    } else if (data?.sell_type === '1') {
+      navigation.navigate('ProfileHome', {
+        sell_idx: data?.sell_idx,
+      });
+    }
+  }, [data?.sell_type]);
   const onPressChattingTrade = useCallbackNavigation('ChattingDetail');
   const onPressSearch = useCallbackNavigation('Search');
   const onPressUserReport = useCallbackNavigation('ReportCategory', {

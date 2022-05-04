@@ -208,3 +208,10 @@ export const getOpeningTime = (arr?: {
     return ['', '', '', '', '', '', ''];
   }
 };
+
+export const changeBirthDate = (str?: string) => {
+  if (str) {
+    const [year, month, day] = str.split('-');
+    return `${year}. ${month}. ${day}`;
+  }
+};

@@ -13,7 +13,7 @@ import Header from '@/Components/Profile/Header';
 import {ProfileBackground} from './ProfileHome';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import EditIcon from '@assets/image/edit_ver.png';
-import {getHitSlop} from '@/Util/Util';
+import {changeBirthDate, getHitSlop} from '@/Util/Util';
 import {GrayText, Text, WhiteText} from '@/Components/Global/text';
 import CameraWhiteIcon from '@assets/image/camera_white.png';
 import CopyIcon from '@assets/image/copy.png';
@@ -24,10 +24,15 @@ import {ProfileDetailProps, ProfileUpdateProps} from '@/Types/Screen/Screen';
 import AutoHeightImage from 'react-native-auto-height-image';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
-export default function ProfileUpdate({navigation}: ProfileUpdateProps) {
+export default function ProfileUpdate({
+  navigation,
+  route: {params},
+}: ProfileUpdateProps) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const [isOn, setIsOn] = useState(false);
+
+  const data = params;
 
   const onPressSave = useCallback(() => {
     navigation.navigate('ProfileDetail');
@@ -55,14 +60,12 @@ export default function ProfileUpdate({navigation}: ProfileUpdateProps) {
             </View>
             <View>
               <WhiteText fontSize={`${16 * fontSize}`} medium>
-                Leandro
+                {data?.mt_name}
               </WhiteText>
-              <GrayText fontSize={`${12 * fontSize}`}>
-                Love what you have.
-              </GrayText>
+              <GrayText fontSize={`${12 * fontSize}`}>{data?.mt_memo}</GrayText>
               <View style={styles.uidView}>
                 <WhiteText fontSize={`${14 * fontSize}`}>
-                  NC : 0000abcd
+                  NC :{data?.mt_uid}
                 </WhiteText>
                 <TouchableOpacity
                   style={styles.marginLeft10}
@@ -76,14 +79,14 @@ export default function ProfileUpdate({navigation}: ProfileUpdateProps) {
         <View style={styles.mainViewStyle}>
           <BetweenTextInput
             leftText={t('profileDetailName')}
-            rightText={'Leandro'}
+            rightText={data?.mt_name}
           />
           <View>
             <Text style={styles.marginView} fontSize={`${16 * fontSize}`}>
               {t('profileDetailState')}
             </Text>
             <TextInput
-              placeholder={'asldjask djajsdkasjdkjas'}
+              placeholder={data?.mt_memo}
               placeholderTextColor={Theme.color.gray}
               onChangeText={() => {
                 //    추가필요
@@ -102,7 +105,7 @@ export default function ProfileUpdate({navigation}: ProfileUpdateProps) {
           />
           <BetweenTextInput
             leftText={t('profileDetailTel')}
-            rightText={'+55 11 964845016'}
+            rightText={`+${data?.mt_country} ${data?.mt_hp}`}
             isLine={false}
           />
           <View style={styles.betweenTextView}>
@@ -118,15 +121,15 @@ export default function ProfileUpdate({navigation}: ProfileUpdateProps) {
           />
           <BetweenTextInput
             leftText={t('profileDetailEmail')}
-            rightText={'onestore@gmail.com'}
+            rightText={data?.mt_email}
           />
           <BetweenTextInput
             leftText={t('profileDetailSex')}
-            rightText={'남성'}
+            rightText={data?.mt_gender === 'M' ? t('man') : t('woman')}
           />
           <BetweenTextInput
             leftText={t('profileDetailDate')}
-            rightText={'2000. 12. 12'}
+            rightText={changeBirthDate(data?.mt_birth)}
           />
         </View>
       </KeyboardAwareScrollView>

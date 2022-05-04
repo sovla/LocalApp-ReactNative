@@ -35,6 +35,7 @@ import {Button} from '../Global/button';
 const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const {user} = useAppSelector(state => state);
   const navigation = useAppNavigation();
 
   const [isBusiness, setIsBusiness] = useState(false);
@@ -96,10 +97,8 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
 
   const isLogin = true;
   const login = {
-    name: isBusiness ? 'NOB MOBILE SERVICE' : 'Leandro',
-    statusMessage: isBusiness
-      ? '모바일 단말기 판매 / AS 서비스 '
-      : 'Love what you have',
+    name: user?.mt_name ?? '',
+    statusMessage: user?.mt_memo ?? '',
     image: isBusiness
       ? require('@assets/image/dummy_b.png')
       : require('@assets/image/dummy.png'),
@@ -116,7 +115,7 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
               zIndex: 100,
             }}>
             <Button
-              width={getPixel(100)}
+              width={`${getPixel(100)}px`}
               content="비즈니스계정전환(테스트용)"
               onPress={() => setIsBusiness(p => !p)}
             />
