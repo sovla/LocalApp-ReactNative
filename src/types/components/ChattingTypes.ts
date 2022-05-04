@@ -36,3 +36,13 @@ export interface ModalAlertViewProps extends ModalProps {
   isBang?: boolean;
   onPressCancle: () => void;
 }
+
+export interface ReportApi {
+  // 신고 API
+
+  mt_idx: string;
+  dl_type: 'P' | 'M' | 'S';
+  pt_idx: string;
+  dl_check?: string;
+  dl_memo: string;
+}

@@ -47,9 +47,12 @@ type Screen = {
   ChattingHome: StackScreenProps<Screen> | undefined;
   ChattingDetail: StackScreenProps<Screen> | undefined;
   ChattingLocation: StackScreenProps<Screen> | undefined;
-  ReportCategory: StackScreenProps<Screen> | undefined;
+  ReportCategory: {
+    pt_idx: string;
+  };
   ReportDetail: {
     reportType: 'prohibited' | 'unmanned' | 'scam';
+    pt_idx: string;
   };
   ProfileHome: StackScreenProps<Screen> | undefined;
   ProfileDetail: StackScreenProps<Screen> | undefined;

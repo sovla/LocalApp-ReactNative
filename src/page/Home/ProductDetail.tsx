@@ -119,11 +119,14 @@ export default function ProductDetail({
   const onPressTierGuide = useCallbackNavigation('ProductTierGuide');
   const onPressReport = useCallbackNavigation('ReportDetail', {
     reportType: 'prohibited',
+    pt_idx: params.pt_idx,
   });
   const onPressShop = useCallbackNavigation('BusinessProfile');
   const onPressChattingTrade = useCallbackNavigation('ChattingDetail');
   const onPressSearch = useCallbackNavigation('Search');
-  const onPressUserReport = useCallbackNavigation('ReportCategory');
+  const onPressUserReport = useCallbackNavigation('ReportCategory', {
+    pt_idx: params.pt_idx,
+  });
   const onPressLike = useCallback(() => {
     likeApi().then((res: any) => {
       if (res?.result === 'false' && res?.msg) {

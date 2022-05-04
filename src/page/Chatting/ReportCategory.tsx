@@ -11,7 +11,11 @@ import Header from '@/Components/LoginSignUp/Header';
 import ArrowRightIcon from '@assets/image/arrow_right.png';
 import {ReportCategoryProps} from '@/Types/Screen/Screen';
 
-export default function ReportCategory({}: ReportCategoryProps) {
+export default function ReportCategory({
+  route: {
+    params: {pt_idx},
+  },
+}: ReportCategoryProps) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const navigation = useAppNavigation();
@@ -32,6 +36,7 @@ export default function ReportCategory({}: ReportCategoryProps) {
         onPress={() => {
           navigation.navigate('ReportDetail', {
             reportType: 'unmanned',
+            pt_idx,
           });
         }}
         style={styles.touch}>
@@ -48,6 +53,7 @@ export default function ReportCategory({}: ReportCategoryProps) {
         onPress={() => {
           navigation.navigate('ReportDetail', {
             reportType: 'scam',
+            pt_idx,
           });
         }}
         style={styles.touch}>
