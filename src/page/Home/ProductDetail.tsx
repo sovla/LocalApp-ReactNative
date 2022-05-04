@@ -199,7 +199,14 @@ export default function ProductDetail({
             <View style={styles._headerEndView}>
               <View style={styles._headerProductImageView}>
                 <Image
-                  source={require('@assets/image/dummy_i.png')}
+                  resizeMethod="resize"
+                  source={
+                    data?.file?.length > 0
+                      ? {
+                          uri: data.file[0],
+                        }
+                      : require('@assets/image/none_image_l.png')
+                  }
                   style={styles._headerProductImage}
                 />
               </View>
