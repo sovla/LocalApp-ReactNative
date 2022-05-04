@@ -6,18 +6,23 @@ import {
   StyleSheet,
   ImageSourcePropType,
 } from 'react-native';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {ProfileBackground} from '../Profile/ProfileHome';
 import Header from '@/Components/Profile/Header';
 import {useTranslation} from 'react-i18next';
-import {useAppSelector} from '@/Hooks/CustomHook';
+import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import AutoHeightImage from 'react-native-auto-height-image';
 import ShareWhiteIcon from '@assets/image/share_white.png';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import ImageSwiper from '@/Components/Home/ImageSwiper';
 import Theme from '@/assets/global/Theme';
 import dummy from '@assets/image/dummy.png';
-import {onScrollSlide} from '@/Util/Util';
+import {
+  AlertButton,
+  getOpeningTime,
+  onScrollSlide,
+  viewCountCheck,
+} from '@/Util/Util';
 import BannerList from '@/Components/Profile/BannerList';
 import StarIcon from '@assets/image/star.png';
 import LikeIcon from '@assets/image/like.png';
@@ -37,30 +42,56 @@ import WhatsAppIcon from '@assets/image/whatsapp.png';
 import DribbleIcon from '@assets/image/dribbble.png';
 import {BusinessProfileProps} from '@/Types/Screen/Screen';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import useApi, {usePostSend} from '@/Hooks/useApi';
+import {
+  BusinessProfileAPi,
+  BusinessProfileLikeApi,
+} from '@/Types/API/BusinessTypes';
 
-export default function BusinessProfile({navigation}: BusinessProfileProps) {
+export default function BusinessProfile({
+  navigation,
+  route: {params},
+}: BusinessProfileProps) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const {user} = useAppSelector(state => state);
   const [isShow, setIsShow] = useState<boolean>(false);
-  const name = 'Leandro';
-  const stateMessage = 'Love what you have.';
-  const star = '4.3';
-  const likeCount = 999;
-  const hp = '(11) 99999-9999';
-  const mobile = '(11) 99999-9999';
-  const location =
-    'Rua Tres rios 199, Bom Retiro, São Paulo SP. CEP: 01123-001';
-  const openingTime = [
-    '10:00~20:00',
-    '10:00~20:00',
-    '10:00~20:00',
-    '10:00~20:00',
-    '10:00~20:00',
-    '',
-    '10:00~20:00',
-  ];
+
+  const {data, getData, setData} = useApi<
+    BusinessProfileAPi['T'],
+    BusinessProfileAPi['D']
+  >(
+    null,
+    'sell_busi_profile.php',
+    {
+      mt_idx: user.mt_idx as string,
+      sell_idx: params.sell_idx,
+    },
+    {isFirst: false},
+  );
+
+  const {PostAPI: sendLike} = usePostSend<BusinessProfileLikeApi>(
+    'sell_profile_like.php',
+    {
+      mt_idx: user.mt_idx as string,
+      sell_type: '1',
+      sell_idx: params.sell_idx,
+    },
+  );
+
+  const name = data?.busi_name;
+  const stateMessage = data?.busi_memo;
+  const star = data?.busi_rate;
+  const likeCount = viewCountCheck(data?.busi_like);
+  const hp = `(${data?.busi_tel_country}) ${data?.busi_tel_number}`;
+  const mobile = `(${data?.busi_cell_country}) ${data?.busi_cell_number}`;
+  const location = `${data?.busi_location} ${data?.busi_location_detail}`;
+  const openingTime = getOpeningTime(data?.busi_open_list);
   const onPressProductSale = useCallback(() => {
-    navigation.navigate('ProfileSellProduct');
+    navigation.navigate('ProfileSellProduct', {
+      sell_idx: params.sell_idx,
+      sell_type: '1',
+    });
   }, []);
 
   const onPressChatting = useCallback(() => {
@@ -68,7 +99,24 @@ export default function BusinessProfile({navigation}: BusinessProfileProps) {
   }, []);
 
   const onPressReviews = useCallback(() => {
-    navigation.navigate('ProfileSellerReview');
+    navigation.navigate('ProfileSellerReview', {
+      sell_idx: params.sell_idx,
+      sell_type: '1',
+    });
+  }, []);
+
+  const onPressLike = useCallback(() => {
+    sendLike().then(res => {
+      if (res?.result === 'false' && res?.msg) {
+        return AlertButton(res.msg);
+      }
+
+      getData();
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!data) getData();
   }, []);
   return (
     <View style={{flex: 1}}>
@@ -78,7 +126,7 @@ export default function BusinessProfile({navigation}: BusinessProfileProps) {
           <ShareIcon />
         </Header>
         <View style={{marginHorizontal: getPixel(16)}}>
-          <BannerList imageArray={[dummy, dummy, dummy, dummy]} />
+          <BannerList imageArray={data?.banner_list} />
         </View>
         <View
           style={{
@@ -101,7 +149,7 @@ export default function BusinessProfile({navigation}: BusinessProfileProps) {
                   <View style={styles.starView}>
                     <Image source={StarIcon} style={styles.starImage} />
                     <Text medium fontSize={`${16 * fontSize}`}>
-                      {star.toString()}
+                      {star}
                     </Text>
                   </View>
                 </View>
@@ -195,12 +243,14 @@ export default function BusinessProfile({navigation}: BusinessProfileProps) {
                       />
                     </TouchableOpacity>
                   </View>
-                  <View style={styles.likeView}>
+                  <TouchableOpacity
+                    onPress={onPressLike}
+                    style={styles.likeView}>
                     <Image source={LikeIcon} style={styles.likeImage} />
                     <GrayText fontSize={`${14 * fontSize}`}>
                       {likeCount.toString()}
                     </GrayText>
-                  </View>
+                  </TouchableOpacity>
                 </View>
               </View>
 

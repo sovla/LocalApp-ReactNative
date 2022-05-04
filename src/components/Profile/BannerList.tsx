@@ -11,7 +11,7 @@ import Theme from '@/assets/global/Theme';
 import {onScrollSlide} from '@/Util/Util';
 
 const BannerList: React.FC<{
-  imageArray?: Array<ImageSourcePropType>;
+  imageArray?: Array<string>;
   width?: number;
   height?: number;
 }> = ({imageArray, width = getPixel(328), height = getHeightPixel(130)}) => {
@@ -35,11 +35,14 @@ const BannerList: React.FC<{
           imageArray.map(item => {
             return (
               <Image
-                source={item}
+                source={{
+                  uri: item,
+                }}
                 style={{
                   width,
                   height,
                 }}
+                resizeMethod="resize"
               />
             );
           })}

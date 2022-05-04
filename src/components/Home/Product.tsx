@@ -36,6 +36,7 @@ const Product: React.FC<ProductProps> = ({
   onPress,
   idx,
   cate,
+  isLikeShow = true,
 }) => {
   const fontSize = useAppSelector(state => state.fontSize.value);
   const {user} = useAppSelector(state => state);
@@ -78,15 +79,17 @@ const Product: React.FC<ProductProps> = ({
         />
 
         {/* 하트 아이콘 */}
-        <TouchableOpacity
-          onPress={onPressLike}
-          hitSlop={getHitSlop(5)}
-          style={stylesNoneList.absoluteTouch}>
-          <Image
-            source={!like ? LikeEmptyIcon : LikeFillIcon}
-            style={stylesNoneList.isLikeImage}
-          />
-        </TouchableOpacity>
+        {isLikeShow && (
+          <TouchableOpacity
+            onPress={onPressLike}
+            hitSlop={getHitSlop(5)}
+            style={stylesNoneList.absoluteTouch}>
+            <Image
+              source={!like ? LikeEmptyIcon : LikeFillIcon}
+              style={stylesNoneList.isLikeImage}
+            />
+          </TouchableOpacity>
+        )}
 
         {/* 스테이터스 - 예약중, 판매완료 */}
         {typeof status === 'string' && status?.length > 0 && (

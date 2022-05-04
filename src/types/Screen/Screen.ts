@@ -60,10 +60,19 @@ type Screen = {
   ProfileTel: StackScreenProps<Screen> | undefined;
   ProfileAuth: StackScreenProps<Screen> | undefined;
   ProfileAuthComplete: StackScreenProps<Screen> | undefined;
-  ProfileSellerReview: StackScreenProps<Screen> | undefined;
+  ProfileSellerReview: {
+    sell_idx: string;
+    sell_type: '0' | '1';
+  };
   ReviewWrite: StackScreenProps<Screen> | undefined;
-  ProfileSellProduct: StackScreenProps<Screen> | undefined;
-  BusinessProfile: StackScreenProps<Screen> | undefined;
+  ProfileSellProduct: {
+    sell_idx: string;
+    sell_type: '0' | '1';
+  };
+  BusinessProfile: {
+    sell_idx: string;
+    sell_type: '0' | '1';
+  };
   BusinessProfileMenu: StackScreenProps<Screen> | undefined;
   BusinessProfileSetting: StackScreenProps<Screen> | undefined;
   BusinessProfileBanner: StackScreenProps<Screen> | undefined;

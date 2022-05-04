@@ -121,7 +121,13 @@ export default function ProductDetail({
     reportType: 'prohibited',
     pt_idx: params.pt_idx,
   });
-  const onPressShop = useCallbackNavigation('BusinessProfile');
+  const onPressShop = useCallbackNavigation(
+    data?.sell_type === '1' ? 'BusinessProfile' : 'ProfileHome',
+    {
+      sell_idx: data?.sell_idx as string, // 수정필요
+      sell_type: data?.sell_type as '0' | '1',
+    },
+  );
   const onPressChattingTrade = useCallbackNavigation('ChattingDetail');
   const onPressSearch = useCallbackNavigation('Search');
   const onPressUserReport = useCallbackNavigation('ReportCategory', {

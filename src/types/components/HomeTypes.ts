@@ -17,13 +17,14 @@ export interface ProductProps {
   likeCount?: string;
   price: string;
   image?: any;
-  isLike: boolean;
+  isLike?: boolean;
   status?: string;
   isList: boolean;
   isBorder?: boolean;
   onPress?: (idx: string, cate: string) => void;
   idx: string;
   cate: string;
+  isLikeShow?: boolean;
 }
 
 export interface MenuBoxProps {
@@ -178,7 +179,7 @@ export interface ProduetDetailApiType {
     sell_memo: string;
     sell_name: string;
     sell_profile: string;
-    sell_type: string;
+    sell_type: '0' | '1';
     dist: number;
     like_count: number;
     my_like: 'Y' | 'N';

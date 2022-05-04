@@ -1,4 +1,5 @@
 import {categoryMenu, tierReverseList} from '@/assets/global/dummy';
+import {BusinessProfileAPi} from '@/Types/API/BusinessTypes';
 import {categoryMenuTypes, tierTypes} from '@/Types/Components/global';
 import i18next from 'i18next';
 import {Alert, NativeScrollEvent, NativeSyntheticEvent} from 'react-native';
@@ -91,7 +92,7 @@ export const geoLanguage = (str: string) => {
   return str === 'br' ? 'pt-BR' : str;
 };
 
-export const viewCountCheck = (count?: number | null) => {
+export const viewCountCheck = (count?: number | string | null) => {
   // view count 999+표시
   if (count && count > 999) {
     return '999+';
@@ -168,5 +169,42 @@ export const findTier = (str?: tierTypes['name'] | null) => {
   if (str) {
     const result = tierReverseList.findIndex(v => v.name === str);
     return result !== -1 ? `${result}` : undefined;
+  }
+};
+
+export const getOpeningTime = (arr?: {
+  busi_mon_check: 'N' | 'Y';
+  busi_mon_end: string;
+  busi_mon_start: string;
+  busi_pri_check: 'N' | 'Y';
+  busi_pri_end: string;
+  busi_pri_start: string;
+  busi_sat_check: 'N' | 'Y';
+  busi_sat_end: string;
+  busi_sat_start: string;
+  busi_sun_check: 'N' | 'Y';
+  busi_sun_end: string;
+  busi_sun_start: string;
+  busi_thur_check: 'N' | 'Y';
+  busi_thur_end: string;
+  busi_thur_start: string;
+  busi_tue_check: 'N' | 'Y';
+  busi_tue_end: string;
+  busi_tue_start: string;
+  busi_wed_check: 'N' | 'Y';
+  busi_wed_end: string;
+  busi_wed_start: string;
+}) => {
+  const dayList: any[] = ['mon', 'tue', 'wed', 'thur', 'pri', 'sat', 'sun'];
+  if (arr) {
+    return dayList.map(
+      (v: 'mon' | 'tue' | 'wed' | 'thur' | 'pri' | 'sat' | 'sun') => {
+        return arr[`busi_${v}_check`] === 'Y'
+          ? `${arr[`busi_${v}_start`]}~${arr[`busi_${v}_end`]}`
+          : '';
+      },
+    );
+  } else {
+    return ['', '', '', '', '', '', ''];
   }
 };

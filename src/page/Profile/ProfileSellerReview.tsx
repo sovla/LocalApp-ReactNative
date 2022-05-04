@@ -9,12 +9,28 @@ import StarIcon from '@/Components/Profile/StarIcon';
 import Line from '@/Components/Global/Line';
 import Review from '@/Components/Profile/Review';
 import Theme from '@/assets/global/Theme';
+import useApi from '@/Hooks/useApi';
+import {ProfileSellerReviewProps} from '@/Types/Screen/Screen';
+import {ProfileSellerReviewApi} from '@/Types/API/ProfileTypes';
 
-export default function ProfileSellerReview() {
+export default function ProfileSellerReview({
+  route: {params},
+  navigation,
+}: ProfileSellerReviewProps) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const {user} = useAppSelector(state => state);
 
   const [reviewList, setReviewList] = useState<Array<any>>([1, 2, 3, 4, 5]);
+
+  const {data} = useApi<
+    ProfileSellerReviewApi['T'],
+    ProfileSellerReviewApi['D']
+  >(null, 'sell_profile_review.php', {
+    mt_idx: user.mt_idx as string,
+    sell_type: params.sell_type,
+    sell_idx: params.sell_idx,
+  });
   return (
     <View style={{flex: 1}}>
       <Header title={t('profileHomeSellerReviews') + ' 15개'} />
@@ -44,7 +60,7 @@ export default function ProfileSellerReview() {
             </View>
           </>
         }
-        data={reviewList}
+        data={data?.list}
         contentContainerStyle={{
           marginHorizontal: getPixel(16),
         }}

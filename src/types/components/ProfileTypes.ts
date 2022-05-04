@@ -28,6 +28,9 @@ export interface ProfileSellProductAPi {
     | null;
   D: {
     mt_idx: string;
-    type: 'Y' | 'N';
+
+    sell_type: string;
+    sell_idx: string;
+    sell_status: 'Y' | 'N';
   };
 }
