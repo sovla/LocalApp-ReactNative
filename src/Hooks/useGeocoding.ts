@@ -6,10 +6,12 @@ import {useTranslation} from 'react-i18next';
 function useGeocoding(region: {latitude: number; longitude: number}) {
   const {i18n} = useTranslation();
   const [timer, setTimer] = useState<any>(0);
+  const [isLoading, setIsLoading] = useState(false);
   const [location, setLocation] = useState<null | {
     results: Array<any> | undefined;
   }>(null);
   const onSearchLocation = useCallback(() => {
+    setIsLoading(true);
     const config: any = {
       method: 'get',
       url: `https://maps.googleapis.com/maps/api/geocode/json?latlng=${
@@ -30,7 +32,8 @@ function useGeocoding(region: {latitude: number; longitude: number}) {
       })
       .catch(function (error) {
         console.log(error);
-      });
+      })
+      .finally(() => setIsLoading(false));
   }, [region]);
   useEffect(() => {
     if (timer) {
@@ -81,7 +84,7 @@ function useGeocoding(region: {latitude: number; longitude: number}) {
     }
   }
 
-  return {location, detail, city, locationName};
+  return {location, detail, city, locationName, isLoading};
 }
 
 export default useGeocoding;

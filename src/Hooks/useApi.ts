@@ -92,14 +92,14 @@ function useApi<T, D>(
 
 export default useApi;
 
-export const usePostSend = <D>(apiPath: string, apiData: D) => {
+export const usePostSend = <D>(apiPath: string, apiData: NonNullable<D>) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   const PostAPI = useCallback(
     async (
-      data?: any,
+      data?: Partial<D>,
     ): Promise<{
       result: 'true' | 'false' | null;
       data: any;

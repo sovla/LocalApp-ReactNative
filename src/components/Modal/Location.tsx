@@ -1,4 +1,11 @@
-import {View, StyleSheet, TextInput, Image, ScrollView, TouchableOpacity} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TextInput,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import React, {useCallback, useState} from 'react';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import Theme from '@/assets/global/Theme';
@@ -8,10 +15,15 @@ import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import SearchIcon from '@assets/image/search.png';
 import MyLocationIcon from '@assets/image/my-location.png';
 import CloseIcon from '@assets/image/close.png';
-import {getHitSlop} from '@/Util/Util';
+import {AlertButton, getHitSlop} from '@/Util/Util';
 import CloseBlackIcon from '@assets/image/close_black.png';
 import {Shadow} from 'react-native-shadow-2';
-import useApi from '@/Hooks/useApi';
+import useApi, {usePostSend} from '@/Hooks/useApi';
+import {
+  LocationChangeApi,
+  LocationListApi,
+  locationListItem,
+} from '@/Types/API/HomeTypes';
 
 export default function Location({offIsModal}: {offIsModal: any}): JSX.Element {
   const {t} = useTranslation();
@@ -26,8 +38,21 @@ export default function Location({offIsModal}: {offIsModal: any}): JSX.Element {
     isLoading,
     isError,
     errorMessage,
-  } = useApi([], 'mt_location_history.php', {
-    axiosData: {mt_idx: user.mt_idx},
+    getData,
+  } = useApi<LocationListApi['T'], LocationListApi['D']>(
+    null,
+    'mt_location_history.php',
+    {mt_idx: user.mt_idx as string},
+  );
+
+  const {PostAPI} = usePostSend<LocationChangeApi>('mt_location_modify.php', {
+    mt_idx: user.mt_idx as string,
+  });
+  const {PostAPI: deleteLocationHistory} = usePostSend<{
+    mt_idx: string;
+    his_idx?: string;
+  }>('mt_location_history_del.php', {
+    mt_idx: user.mt_idx as string,
   });
 
   const onPressLocation = useCallback(() => {
@@ -35,12 +60,41 @@ export default function Location({offIsModal}: {offIsModal: any}): JSX.Element {
     navigation.navigate('LocationChange');
   }, []);
 
+  const onPressItem = useCallback((item: locationListItem) => {
+    PostAPI({
+      mt_lat: item.his_lat,
+      mt_limit: item.his_limit,
+      mt_lng: item.his_lng,
+      mt_location: item.his_location,
+    }).then(res => {
+      if (res?.result === 'false' && res?.msg) {
+        AlertButton(res.msg);
+      } else {
+        offIsModal();
+      }
+    });
+  }, []);
+
+  const onPressDeleteItem = useCallback((his_idx: string) => {
+    deleteLocationHistory({
+      his_idx: his_idx,
+    }).then(res => {
+      if (res?.result === 'false' && res?.msg) {
+        AlertButton(res.msg);
+      } else {
+        getData();
+      }
+    });
+  }, []);
+
   return (
     <View style={{flex: 1}}>
       <View style={styles.space} />
       <Shadow>
         <View style={styles.whiteBox}>
-          <BoldText fontSize={`${20 * fontSize}`}>{t('locationChange')}</BoldText>
+          <BoldText fontSize={`${20 * fontSize}`}>
+            {t('locationChange')}
+          </BoldText>
 
           <View style={{marginTop: getHeightPixel(8)}}>
             <TextInput
@@ -53,33 +107,51 @@ export default function Location({offIsModal}: {offIsModal: any}): JSX.Element {
               onFocus={() => setIsFocus(true)}
               onBlur={() => setIsFocus(false)}
               onChangeText={setValue}>
-              {!isFocus && value?.length === 0 && <GrayText fontSize={`${11 * fontSize}`}>{t('locationPlaceholder')}</GrayText>}
+              {!isFocus && value?.length === 0 && (
+                <GrayText fontSize={`${11 * fontSize}`}>
+                  {t('locationPlaceholder')}
+                </GrayText>
+              )}
             </TextInput>
             <Image source={SearchIcon} style={styles.searchImage} />
           </View>
           <View style={styles.locationView}>
             <Image source={MyLocationIcon} style={styles.locationImage} />
             <TouchableOpacity hitSlop={getHitSlop(5)} onPress={onPressLocation}>
-              <MediumText fontSize={`${12 * fontSize}`}>{t('nowLocation')}</MediumText>
+              <MediumText fontSize={`${12 * fontSize}`}>
+                {t('nowLocation')}
+              </MediumText>
             </TouchableOpacity>
           </View>
           <View style={styles.line} />
-          {!isFocus && <BoldText fontSize={`${14 * fontSize}`}>{t('areaUsed')}</BoldText>}
+          {!isFocus && (
+            <BoldText fontSize={`${14 * fontSize}`}>{t('areaUsed')}</BoldText>
+          )}
 
           <ScrollView>
             {!isFocus &&
+              Array.isArray(usedList) &&
               usedList.map(item => {
                 return (
-                  <TouchableOpacity style={styles.usedLocationView}>
-                    <Text fontSize={`${14 * fontSize}`}>{item}</Text>
-                    <TouchableOpacity hitSlop={getHitSlop(5)}>
+                  <TouchableOpacity
+                    onPress={() => onPressItem(item)}
+                    style={styles.usedLocationView}>
+                    <Text fontSize={`${14 * fontSize}`}>
+                      {item.his_location}
+                    </Text>
+                    <TouchableOpacity
+                      onPress={() => onPressDeleteItem(item.his_idx)}
+                      hitSlop={getHitSlop(5)}>
                       <Image source={CloseIcon} style={styles.deleteIcon} />
                     </TouchableOpacity>
                   </TouchableOpacity>
                 );
               })}
           </ScrollView>
-          <TouchableOpacity style={styles.closeBlackTouch} onPress={offIsModal} hitSlop={getHitSlop(5)}>
+          <TouchableOpacity
+            style={styles.closeBlackTouch}
+            onPress={offIsModal}
+            hitSlop={getHitSlop(5)}>
             <Image source={CloseBlackIcon} style={styles.closeBlackImage} />
           </TouchableOpacity>
         </View>

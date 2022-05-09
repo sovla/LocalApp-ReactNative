@@ -35,32 +35,56 @@ import {rangeList} from '@/assets/global/dummy';
 import {LocationChangeProps} from '@/Types/Screen/Screen';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
-import {geoLanguage} from '@/Util/Util';
+import {AlertButton, geoLanguage} from '@/Util/Util';
 import useGeocoding from '@/Hooks/useGeocoding';
+import {usePostSend} from '@/Hooks/useApi';
+import {selectUser} from '@/Store/userState';
+import Loading from '@/Components/Global/Loading';
+import {LocationChangeApi} from '@/Types/API/HomeTypes';
 
 export default function LocationChange({
   navigation,
 }: LocationChangeProps): JSX.Element | null {
   const {t, i18n} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const {user} = useAppSelector(state => state);
   const [selectRange, setSelectRange] = useState<number>(4);
   const [isLocation, setIsLocation] = useState(true);
   const [region, setRegion] = useState<{latitude: number; longitude: number}>({
     latitude: -23.5279688,
     longitude: -46.6365761,
   });
-  const {location, detail, city, locationName} = useGeocoding(region);
+  const {location, detail, city, locationName, isLoading} =
+    useGeocoding(region);
+
+  const {PostAPI} = usePostSend<LocationChangeApi>('mt_location_modify.php', {
+    mt_idx: user.mt_idx as string,
+    mt_location: city,
+    mt_lat: region.latitude,
+    mt_lng: region.longitude,
+    mt_limit: selectRange * 5,
+  });
   useLayoutEffect(() => {
     Geolocation.getCurrentPosition(info => {
-      // setRegion({
-      //   latitude: info.coords.latitude,
-      //   longitude: info.coords.longitude,
-      // });
+      setRegion({
+        latitude: info.coords.latitude,
+        longitude: info.coords.longitude,
+      });
       setIsLocation(false);
     });
 
     return () => {};
   }, []);
+
+  const onPressSubmit = () => {
+    PostAPI().then(res => {
+      if (res?.result === 'false' && res?.msg) {
+        AlertButton(res?.msg);
+      } else {
+        navigation.goBack();
+      }
+    });
+  };
 
   if (isLocation) {
     return null;
@@ -71,6 +95,11 @@ export default function LocationChange({
       style={{
         flex: 1,
       }}>
+      {isLoading && (
+        <View style={styles.loading}>
+          <Loading />
+        </View>
+      )}
       <Header title={t('locationChangeTitle')} />
       <View
         style={{
@@ -112,7 +141,7 @@ export default function LocationChange({
         <Slider
           value={selectRange}
           onValueChange={value => {
-            if (typeof value === 'object' && value[0]) {
+            if (typeof value === 'object' && value[0] && value[0] !== 1) {
               setSelectRange(value[0]);
             }
           }}
@@ -162,9 +191,7 @@ export default function LocationChange({
           </View>
         </View>
       </View>
-      <TouchableOpacity
-        onPress={() => navigation.goBack()}
-        style={styles.button}>
+      <TouchableOpacity onPress={onPressSubmit} style={styles.button}>
         <WhiteText medium fontSize={`${18 * fontSize}`}>
           선택한 위치로 설정
         </WhiteText>
@@ -174,6 +201,15 @@ export default function LocationChange({
 }
 
 const styles = StyleSheet.create({
+  loading: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#0004',
+    zIndex: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   button: {
     position: 'absolute',
     bottom: 0,
