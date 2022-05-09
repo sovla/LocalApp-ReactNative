@@ -50,7 +50,6 @@ export default function LocationChange({
     longitude: -46.6365761,
   });
   const {location, detail, city, locationName} = useGeocoding(region);
-
   useLayoutEffect(() => {
     Geolocation.getCurrentPosition(info => {
       // setRegion({

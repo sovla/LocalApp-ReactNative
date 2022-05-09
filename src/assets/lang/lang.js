@@ -478,6 +478,8 @@ export const ko = {
     pt_owner: '소유자 변경 이력',
     pt_year: '연식',
     reportComplete: '신고 완료',
+    man: '남자',
+    woman: '여자',
   },
 };
 export const es = {

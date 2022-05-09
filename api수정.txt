@@ -1,9 +1,10 @@
-member_login.php  
-자동 로그인 체크여부 추가
-에러 발생 select * from member_t where mt_idx!='4' and mt_app_token='d1K1hA0oRASWxELfgeE5T9:APA91bEcLmG-L4Xgiu6X1QV8MopJxfoIqGzfSVYranHvnyQcdwdjiXJXJ-TOMd5jMMadIA1GEJyVsps8XBxGk6tYpHVO_bgT8iCa-NpfwFtgaq7rn3cw3Je3kJ4YZHL_vp3f0V4Tsr7U'<br/>Unknown column 'mt_idx' in 'where clause'
+
 
 notice_info.php
 에러 발생 insert into notice_t (mt_idx,nt_idx,nvt_wdate) value ('3','1',now())<br/>Unknown column 'mt_idx' in 'field list'
 
 product_car_add.php 
 기어 넣는 값
+
+member_login.php
+프로필 이미지 값 추가

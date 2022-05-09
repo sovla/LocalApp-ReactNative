@@ -6,13 +6,12 @@ import {
   TextStyle,
   TextInput,
 } from 'react-native';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useAppSelector} from '@/Hooks/CustomHook';
 import Header from '@/Components/Profile/Header';
 import {ProfileBackground} from './ProfileHome';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import EditIcon from '@assets/image/edit_ver.png';
 import {changeBirthDate, getHitSlop} from '@/Util/Util';
 import {GrayText, Text, WhiteText} from '@/Components/Global/text';
 import CameraWhiteIcon from '@assets/image/camera_white.png';
@@ -20,9 +19,12 @@ import CopyIcon from '@assets/image/copy.png';
 import Line from '@/Components/Global/Line';
 import Theme from '@/assets/global/Theme';
 import {Toggle} from '@/Components/Global/button';
-import {ProfileDetailProps, ProfileUpdateProps} from '@/Types/Screen/Screen';
+import {ProfileUpdateProps} from '@/Types/Screen/Screen';
 import AutoHeightImage from 'react-native-auto-height-image';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import ArrowDownIcon from '@assets/image/arrow_down.png';
+import SexPicker from '@/Components/Profile/SexPicker';
+import {Picker} from '@react-native-picker/picker';
 
 export default function ProfileUpdate({
   navigation,
@@ -30,7 +32,17 @@ export default function ProfileUpdate({
 }: ProfileUpdateProps) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const [user, setUser] = useState({
+    mt_name: '',
+    mt_memo: '',
+    mt_hp_open: '',
+    mt_email: '',
+    mt_sex: '',
+    mt_birth: '',
+  });
   const [isOn, setIsOn] = useState(false);
+
+  const pickerRef = useRef<any>(null);
 
   const data = params;
 
@@ -62,7 +74,11 @@ export default function ProfileUpdate({
               <WhiteText fontSize={`${16 * fontSize}`} medium>
                 {data?.mt_name}
               </WhiteText>
-              <GrayText fontSize={`${12 * fontSize}`}>{data?.mt_memo}</GrayText>
+              <GrayText
+                style={{width: getPixel(240)}}
+                fontSize={`${12 * fontSize}`}>
+                {data?.mt_memo}
+              </GrayText>
               <View style={styles.uidView}>
                 <WhiteText fontSize={`${14 * fontSize}`}>
                   NC :{data?.mt_uid}
@@ -123,9 +139,34 @@ export default function ProfileUpdate({
             leftText={t('profileDetailEmail')}
             rightText={data?.mt_email}
           />
-          <BetweenTextInput
-            leftText={t('profileDetailSex')}
-            rightText={data?.mt_gender === 'M' ? t('man') : t('woman')}
+          <View style={styles.betweenTextView}>
+            <Text
+              fontSize={`${16 * fontSize}`}
+              style={{
+                width: getPixel(100),
+              }}>
+              {t('profileDetailSex')}
+            </Text>
+            <TouchableOpacity
+              onPress={() => {
+                pickerRef?.current?.focus();
+              }}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <GrayText
+                fontSize={`${14 * fontSize}`}
+                style={styles.marginRight10}>
+                {data.mt_gender === 'M' ? t('man') : t('woman')}
+              </GrayText>
+              <AutoHeightImage source={ArrowDownIcon} width={getPixel(7)} />
+            </TouchableOpacity>
+          </View>
+          <Line
+            backgroundColor={Theme.color.gray}
+            height={0.4}
+            width={getPixel(320)}
           />
           <BetweenTextInput
             leftText={t('profileDetailDate')}
@@ -133,6 +174,11 @@ export default function ProfileUpdate({
           />
         </View>
       </KeyboardAwareScrollView>
+      <SexPicker
+        ref={pickerRef}
+        select={user.mt_sex}
+        setSelect={(text: string) => setUser(prev => ({...prev, mt_sex: text}))}
+      />
     </View>
   );
 }
@@ -186,6 +232,9 @@ export const BetweenTextInput: React.FC<{
 };
 
 const styles = StyleSheet.create({
+  marginRight10: {
+    marginRight: getPixel(10),
+  },
   mainContainer: {
     height: getHeightPixel(200),
     marginBottom: getHeightPixel(20),

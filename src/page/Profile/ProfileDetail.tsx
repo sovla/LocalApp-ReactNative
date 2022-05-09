@@ -38,12 +38,13 @@ export default function ProfileDetail({navigation}: ProfileDetailProps) {
   });
 
   const onPressProfileEdit = useCallback(() => {
+    console.log(data);
     if (data) {
       navigation.navigate('ProfileUpdate', {
         ...data,
       });
     }
-  }, []);
+  }, [data]);
 
   const onPressTelNumber = useCallback(() => {
     navigation.navigate('ProfileTel');
@@ -80,7 +81,11 @@ export default function ProfileDetail({navigation}: ProfileDetailProps) {
             <WhiteText fontSize={`${16 * fontSize}`} medium>
               {data?.mt_name}
             </WhiteText>
-            <GrayText fontSize={`${12 * fontSize}`}>{data?.mt_memo}</GrayText>
+            <GrayText
+              style={{width: getPixel(240)}}
+              fontSize={`${12 * fontSize}`}>
+              {data?.mt_memo}
+            </GrayText>
             <View style={styles.uidView}>
               <WhiteText fontSize={`${14 * fontSize}`}>
                 NC :{data?.mt_uid}

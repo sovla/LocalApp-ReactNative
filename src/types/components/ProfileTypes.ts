@@ -1,3 +1,6 @@
+import {Picker} from '@react-native-picker/picker';
+import React from 'react';
+
 export interface ReviewProps {
   image: any;
   name: string;
@@ -33,4 +36,9 @@ export interface ProfileSellProductAPi {
     sell_idx: string;
     sell_status: 'Y' | 'N';
   };
+}
+
+export interface SexPickerProps {
+  select: string;
+  setSelect: (text: string) => void;
 }
