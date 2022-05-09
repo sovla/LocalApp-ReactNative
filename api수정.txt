@@ -1,10 +1,12 @@
 
+product_car_add.php 
+기어 넣는 값
 
 notice_info.php
 에러 발생 insert into notice_t (mt_idx,nt_idx,nvt_wdate) value ('3','1',now())<br/>Unknown column 'mt_idx' in 'field list'
 
-product_car_add.php 
-기어 넣는 값
-
 member_login.php
 프로필 이미지 값 추가
+
+member_busi_modi_info.php 
+비즈니스 핸드폰 정보 공개 여부 추가
