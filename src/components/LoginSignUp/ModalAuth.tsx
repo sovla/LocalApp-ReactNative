@@ -32,6 +32,7 @@ export default function ModalAuth({
   onPressRetry,
   tel,
   selectNum,
+  isBusiness = false,
 }: ModalAuthProps) {
   const {t, i18n} = useTranslation();
   const {
@@ -53,22 +54,33 @@ export default function ModalAuth({
     if (authNum.length !== 6) {
       return AlertButton(t('authAlert2'));
     }
-
-    const result = await API.post('member_login.php', {
-      jct_country: selectNum.replace('+', ''),
-      jct_hp: tel,
-      lang: i18n.language,
-      passcode: authNum,
-      mt_app_token: token,
-    });
-    if (result.data.result === 'true') {
-      const user = result.data.data as userState;
-      dispatch(changeUser(user));
-      navigation.navigate('LoginComplete');
+    const result = await API.post(
+      isBusiness ? 'member_busi_check.php' : 'member_login.php',
+      {
+        jct_country: selectNum.replace('+', ''),
+        jct_hp: tel,
+        lang: i18n.language,
+        passcode: authNum,
+        mt_app_token: token,
+      },
+    );
+    if (!isBusiness) {
+      if (result.data.result === 'true') {
+        dispatch(changeUser(result.data.data.data));
+        navigation.navigate('LoginComplete');
+      } else {
+        AlertButton(result.data?.msg);
+      }
     } else {
-      AlertButton(result.data?.msg);
+      if (result.data.result === 'true') {
+        dispatch(changeUser(result.data.data.data));
+        onClose();
+        navigation.navigate('BusinessForm');
+      } else {
+        AlertButton(result.data?.msg);
+      }
     }
-  }, [authNum, count]);
+  }, [authNum, count, isBusiness]);
   useInterval(() => {
     if (count > 0) setCount(prev => prev - 1);
   }, 1000);

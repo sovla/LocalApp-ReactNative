@@ -14,6 +14,7 @@ const store = configureStore({
     global: globalState,
     user: userState,
   },
+  devTools: true,
 });
 
 export default store;

@@ -71,26 +71,33 @@ import SuccessIcon from '@assets/image/success.png';
 import Header from '@/Components/Profile/Header';
 import CommunicationImage from '@assets/image/communication.png';
 import Input from '@/Components/Global/Input';
-import {getHitSlop} from '@/Util/Util';
+import {AlertButton, getHitSlop} from '@/Util/Util';
 import CountryPicker from '@/Components/Profile/CountryPicker';
+import {usePostSend} from '@/Hooks/useApi';
+import ModalAuth from '@/Components/LoginSignUp/ModalAuth';
 
 export default function BusinessSignUp({navigation}: BusinessSignUpProps) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
-  const [autoLogin, setAutoLogin] = useState<boolean>(false);
-  const [isView, setIsView] = useState<boolean>(false);
   const [selectNum, setSelectNum] = useState('+55');
   const [tel, setTel] = useState('');
+  const [isAuthModal, setIsAuthModal] = useState<boolean>(false);
 
-  const onPressAutoLogin = useCallback(() => {
-    setAutoLogin(prev => !prev);
-  }, []);
-  const onPressIsView = useCallback(() => {
-    setIsView(prev => !prev);
-  }, []);
-  const onPressLogin = useCallback(() => {
-    navigation.navigate('Home');
-  }, []);
+  const {PostAPI} = usePostSend('member_busi_certi.php', {
+    jct_hp: tel,
+    jct_country: selectNum.replace('+', ''),
+  });
+
+  const onPressLogin = () => {
+    PostAPI().then(res => {
+      if (res.result === 'false' && res?.msg) {
+        return AlertButton(res.msg);
+      }
+
+      setIsAuthModal(true);
+    });
+    // navigation.navigate('Home');
+  };
 
   return (
     <View style={styles.container}>
@@ -140,6 +147,15 @@ export default function BusinessSignUp({navigation}: BusinessSignUpProps) {
           />
         </View>
       </KeyboardAwareScrollView>
+      {isAuthModal && (
+        <ModalAuth
+          onPressRetry={onPressLogin}
+          tel={tel}
+          selectNum={selectNum}
+          onClose={() => setIsAuthModal(false)}
+          isBusiness
+        />
+      )}
     </View>
   );
 }

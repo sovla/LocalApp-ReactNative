@@ -1,10 +1,16 @@
-import {Image, ImageBackground, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  ImageBackground,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, {useCallback, useState} from 'react';
 
 import ProfileBackGroundImage from '@assets/image/profile_bg.png';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {GrayText, Text} from '@Components/Global/text';
-import {useAppSelector} from '@/Hooks/CustomHook';
+import {useAppDispatch, useAppSelector} from '@/Hooks/CustomHook';
 import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -18,6 +24,7 @@ import {AlertButton, getHitSlop} from '@/Util/Util';
 import CountryPicker from '@/Components/Profile/CountryPicker';
 import {API} from '@/API/API';
 import ModalAuth from '@/Components/LoginSignUp/ModalAuth';
+import {changeUser} from '@/Store/userState';
 
 export default function Login({navigation}: LoginProps) {
   const {t, i18n} = useTranslation();
@@ -26,6 +33,7 @@ export default function Login({navigation}: LoginProps) {
   const [isAuthModal, setIsAuthModal] = useState<boolean>(false);
   const [selectNum, setSelectNum] = useState('+55');
   const [tel, setTel] = useState('');
+
   const titleFontsize = fontSize * 36;
 
   const onPressAutoLogin = useCallback(() => {
@@ -60,25 +68,57 @@ export default function Login({navigation}: LoginProps) {
   return (
     <View style={styles.container}>
       <KeyboardAwareScrollView>
-        <ImageBackground source={ProfileBackGroundImage} style={styles.backGroundImage} />
-        <Image source={require('@assets/image/logo.png')} style={styles.logoImage} resizeMode="contain" />
-        <Image source={require('@assets/image/location.png')} style={styles.locationImage} resizeMode="contain" />
-        <Image source={require('@assets/image/location_deal.png')} style={styles.locationDeal} resizeMode="contain" />
-        <Image source={require('@assets/image/people.png')} style={styles.peopleImage} resizeMode="contain" />
+        <ImageBackground
+          source={ProfileBackGroundImage}
+          style={styles.backGroundImage}
+        />
+        <Image
+          source={require('@assets/image/logo.png')}
+          style={styles.logoImage}
+          resizeMode="contain"
+        />
+        <Image
+          source={require('@assets/image/location.png')}
+          style={styles.locationImage}
+          resizeMode="contain"
+        />
+        <Image
+          source={require('@assets/image/location_deal.png')}
+          style={styles.locationDeal}
+          resizeMode="contain"
+        />
+        <Image
+          source={require('@assets/image/people.png')}
+          style={styles.peopleImage}
+          resizeMode="contain"
+        />
         <View style={styles.titleView}>
           <View style={[styles.rowCenter1]}>
-            <Text color={Theme.color.aqua_00} bold fontSize={`${getPixel(titleFontsize)}`}>
+            <Text
+              color={Theme.color.aqua_00}
+              bold
+              fontSize={`${getPixel(titleFontsize)}`}>
               {t('localApp')}
             </Text>
-            <Text color={Theme.color.white} bold fontSize={`${getPixel(titleFontsize)}`}>
+            <Text
+              color={Theme.color.white}
+              bold
+              fontSize={`${getPixel(titleFontsize)}`}>
               {t('loginGuide1')}
             </Text>
           </View>
           <View style={[styles.rowCenter1]}>
-            <Text color={Theme.color.white} bold fontSize={`${getPixel(42 * fontSize)}`}>
+            <Text
+              color={Theme.color.white}
+              bold
+              fontSize={`${getPixel(42 * fontSize)}`}>
               {t('loginGuide2')}
             </Text>
-            <Text color={Theme.color.white} style={styles.loginGuide3Text} bold fontSize={`${getPixel(titleFontsize)}`}>
+            <Text
+              color={Theme.color.white}
+              style={styles.loginGuide3Text}
+              bold
+              fontSize={`${getPixel(titleFontsize)}`}>
               {t('loginGuide3')}
             </Text>
             <Text
@@ -93,7 +133,14 @@ export default function Login({navigation}: LoginProps) {
           </View>
         </View>
         <View style={styles.whiteView}>
-          <CountryPicker width={getPixel(270)} setSelectNum={setSelectNum} selectNum={selectNum} isLabelNumber pickerFontSize={14} height={getHeightPixel(45)} />
+          <CountryPicker
+            width={getPixel(270)}
+            setSelectNum={setSelectNum}
+            selectNum={selectNum}
+            isLabelNumber
+            pickerFontSize={14}
+            height={getHeightPixel(45)}
+          />
           <Line
             isGray
             width={getPixel(270)}
@@ -108,15 +155,23 @@ export default function Login({navigation}: LoginProps) {
             value={tel}
             onChange={setTel}
             inputFontSize={14}
-            PlaceHolderComponent={() => <GrayText fontSize={`${14 * fontSize}`}>{t('telPh')}</GrayText>}
+            PlaceHolderComponent={() => (
+              <GrayText fontSize={`${14 * fontSize}`}>{t('telPh')}</GrayText>
+            )}
           />
           <View style={styles.w270}>
-            <GrayText fontSize={`${10 * fontSize}`}>{t('loginGuide5')}</GrayText>
+            <GrayText fontSize={`${10 * fontSize}`}>
+              {t('loginGuide5')}
+            </GrayText>
           </View>
           <View style={styles.w270}>
-            <TouchableOpacity onPress={onPressAutoLogin} style={styles.rowCenter}>
+            <TouchableOpacity
+              onPress={onPressAutoLogin}
+              style={styles.rowCenter}>
               <CheckBoxImage isOn={autoLogin} isBlue />
-              <Text fontSize={`${12 * fontSize}`} style={{marginLeft: getPixel(10)}}>
+              <Text
+                fontSize={`${12 * fontSize}`}
+                style={{marginLeft: getPixel(10)}}>
                 {t('autoLogin')}
               </Text>
             </TouchableOpacity>
@@ -128,10 +183,16 @@ export default function Login({navigation}: LoginProps) {
               width: 'auto',
               marginTop: getHeightPixel(25),
             }}>
-            <Text color={Theme.color.whiteBlack_53} fontSize={`${12 * fontSize}`} letterSpacing={'0px'}>
+            <Text
+              color={Theme.color.whiteBlack_53}
+              fontSize={`${12 * fontSize}`}
+              letterSpacing={'0px'}>
               {t('businessSignUpGuide3')}
             </Text>
-            <TouchableOpacity onPress={onPressSignUp} hitSlop={getHitSlop(5)} style={styles.marginLeft}>
+            <TouchableOpacity
+              onPress={onPressSignUp}
+              hitSlop={getHitSlop(5)}
+              style={styles.marginLeft}>
               <Text fontSize={`${12 * fontSize}`} color={Theme.color.blue_3D}>
                 {t('signUp')}
               </Text>
@@ -139,7 +200,13 @@ export default function Login({navigation}: LoginProps) {
           </View>
         </View>
       </KeyboardAwareScrollView>
-      {isAuthModal && <ModalAuth onPressRetry={onPressLogin} tel={tel} selectNum={selectNum} onClose={() => setIsAuthModal(false)}></ModalAuth>}
+      {isAuthModal && (
+        <ModalAuth
+          onPressRetry={onPressLogin}
+          tel={tel}
+          selectNum={selectNum}
+          onClose={() => setIsAuthModal(false)}></ModalAuth>
+      )}
     </View>
   );
 }

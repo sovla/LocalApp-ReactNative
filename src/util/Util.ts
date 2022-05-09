@@ -142,10 +142,8 @@ export const productTimeSetting = (
     return time + i18next.t('hourTime');
   } else if (timeType === 'day') {
     return time + i18next.t('dayTime');
-  } else if (timeType === 'month') {
-    return time + i18next.t('monthTime');
   } else if (timeType === 'year') {
-    return time + i18next.t('yearTime');
+    return time;
   }
 };
 

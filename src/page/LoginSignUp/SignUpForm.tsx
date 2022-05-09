@@ -49,14 +49,14 @@ export default function SignUpForm({
   } | null>(null);
 
   const [user, setUser, onChangeUser] = useObject<userState>({
-    mt_country: '55',
-    mt_hp: '0101234',
-    mt_name: '사용자명',
-    mt_birth: '1994-07-11',
-    mt_gender: 'M',
-    mt_email: 'test@naver.com',
-    mt_memo: '상태메시지',
-    mt_marketing: 'N',
+    mt_country: '',
+    mt_hp: '',
+    mt_name: '',
+    mt_birth: '',
+    mt_gender: '',
+    mt_email: '',
+    mt_memo: '',
+    mt_marketing: '',
   });
 
   const inputRefs = useRef<any[]>([]);

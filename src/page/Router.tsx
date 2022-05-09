@@ -223,28 +223,26 @@ export default function Router() {
   }
 
   return (
-    <Suspense fallback={<View></View>}>
-      <NavigationContainer ref={ref}>
-        <Stack.Navigator initialRouteName={initRoute}>
-          {RouterSetting.map((item, index) => (
-            <Stack.Screen
-              name={item.name}
-              key={item.name + index}
-              component={
-                item.name !== 'ChattingDetail'
-                  ? withScrollView(item.component)
-                  : item.component
-              }
-              options={{
-                headerShown: false,
-                cardStyleInterpolator: forFade,
-                gestureDirection: 'horizontal',
-              }}
-            />
-          ))}
-        </Stack.Navigator>
-      </NavigationContainer>
-    </Suspense>
+    <NavigationContainer ref={ref}>
+      <Stack.Navigator initialRouteName={initRoute}>
+        {RouterSetting.map((item, index) => (
+          <Stack.Screen
+            name={item.name}
+            key={item.name + index}
+            component={
+              item.name !== 'ChattingDetail'
+                ? withScrollView(item.component)
+                : item.component
+            }
+            options={{
+              headerShown: false,
+              cardStyleInterpolator: forFade,
+              gestureDirection: 'horizontal',
+            }}
+          />
+        ))}
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 

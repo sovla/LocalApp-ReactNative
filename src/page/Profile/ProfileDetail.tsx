@@ -23,6 +23,7 @@ import {ProfileDetailProps} from '@/Types/Screen/Screen';
 import AutoHeightImage from 'react-native-auto-height-image';
 import useApi from '@/Hooks/useApi';
 import {ProfileGetInformationApi} from '@/Types/API/ProfileTypes';
+import Loading from '@/Components/Global/Loading';
 
 export default function ProfileDetail({navigation}: ProfileDetailProps) {
   const {t} = useTranslation();
@@ -30,7 +31,7 @@ export default function ProfileDetail({navigation}: ProfileDetailProps) {
   const {user} = useAppSelector(state => state);
   const [isOn, setIsOn] = useState(false);
 
-  const {data} = useApi<
+  const {data, isLoading} = useApi<
     ProfileGetInformationApi['T'],
     ProfileGetInformationApi['D']
   >(null, 'member_profile_info.php', {
@@ -38,7 +39,6 @@ export default function ProfileDetail({navigation}: ProfileDetailProps) {
   });
 
   const onPressProfileEdit = useCallback(() => {
-    console.log(data);
     if (data) {
       navigation.navigate('ProfileUpdate', {
         ...data,
@@ -55,6 +55,9 @@ export default function ProfileDetail({navigation}: ProfileDetailProps) {
       setIsOn(data?.mt_hp_open === 'Y');
     }
   }, [data]);
+  if (isLoading && data == null) {
+    return <Loading />;
+  }
 
   return (
     <View style={{flex: 1}}>

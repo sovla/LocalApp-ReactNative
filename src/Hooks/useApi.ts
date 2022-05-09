@@ -13,6 +13,7 @@ import useBoolean from './useBoolean';
 interface optionTypes {
   isFirst?: boolean;
   focusRetry?: boolean;
+  firstLoading?: boolean;
 }
 
 function useApi<T, D>(
@@ -24,14 +25,14 @@ function useApi<T, D>(
   const defaultOption: optionTypes = {
     isFirst: true,
     focusRetry: false,
+    firstLoading: false,
     ...option,
   };
   const [data, setData] = useState<T>(defaultValue);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(defaultOption.firstLoading);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isComplete, setisComplete] = useState(false);
-
   const isFocused = useIsFocused();
 
   const getData = useCallback(
@@ -77,10 +78,7 @@ function useApi<T, D>(
 
   useEffect(() => {
     if (
-      (defaultOption?.isFirst &&
-        isFocused &&
-        !isLoading &&
-        data === defaultValue) ||
+      (defaultOption?.isFirst && isFocused && data === defaultValue) ||
       defaultOption.focusRetry
     ) {
       getData();
