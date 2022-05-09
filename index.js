@@ -25,5 +25,8 @@ TextInput.defaultProps.allowFontScaling = false;
 TouchableOpacity.defaultProps = TouchableOpacity.defaultProps || {
   hitSlop: getHitSlop(5),
 };
+Image.defaultProps = Image.defaultProps || {
+  resizeMethod: 'resize',
+};
 
 AppRegistry.registerComponent(appName, () => App);
