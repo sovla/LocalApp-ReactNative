@@ -1,19 +1,9 @@
-import {
-  View,
-  StyleSheet,
-  Image,
-  TextInput,
-  ScrollView,
-  ImageSourcePropType,
-  TouchableOpacity,
-} from 'react-native';
-import React, {useCallback, useState} from 'react';
+import {View, StyleSheet, TextInput, TouchableOpacity} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useAppSelector} from '@/Hooks/CustomHook';
-import Header from '@/Components/Profile/Header';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import {GrayText, RedText, Text, WhiteText} from '@/Components/Global/text';
-import CameraWhiteIcon from '@assets/image/camera_white.png';
+import {GrayText, RedText, Text} from '@/Components/Global/text';
 import {ProfileBackground} from '../Profile/ProfileHome';
 
 import Line from '@/Components/Global/Line';
@@ -34,17 +24,31 @@ import InstagramBlueIcon from '@assets/image/instagram_blue.png';
 import ArrowRightNewIcon from '@assets/image/arrow_right_new.png';
 import WhatsappBlueIcon from '@assets/image/whatsapp_blue.png';
 import AutoHeightImage from 'react-native-auto-height-image';
-import CopyIcon from '@assets/image/copy.png';
-import {getHitSlop} from '@/Util/Util';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import BusinessProfileHeader from '@/Components/Business/BusinessProfileHeader';
+import useApi from '@/Hooks/useApi';
+import {
+  BusinessProfileInfoAPi,
+  BusinessProfileInformation,
+} from '@Types/API/BusinessTypes';
+import {useIsFocused} from '@react-navigation/native';
 
 export default function BusinessProfileSetting({
   navigation,
-  route,
+  route: {params},
 }: StackScreenProps<Screen>) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const isFocused = useIsFocused();
+  const {user} = useAppSelector(state => state);
   const [isOn, setIsOn] = useState<boolean>(false);
+
+  const {data, setData} = useApi<
+    BusinessProfileInfoAPi['T'],
+    BusinessProfileInfoAPi['D']
+  >(null, 'member_busi_modi_info.php', {
+    mt_idx: user.mt_idx as string,
+  });
   const onPressSave = useCallback(() => {
     navigation.goBack();
   }, []);
@@ -53,9 +57,78 @@ export default function BusinessProfileSetting({
     navigation.navigate('ProductLocation');
   }, []);
   const onPressShopTime = useCallback(() => {
-    navigation.navigate('BusinessOpeningHours');
-  }, []);
+    if (data) {
+      navigation.navigate('BusinessOpeningHours', {
+        isFull: data.busi_all_open === 'Y',
+        openingHoursTypes: {
+          mon: {
+            isOn: data.busi_mon_check === 'Y',
+            endTime: data.busi_mon_end,
+            startTime: data.busi_mon_start,
+          },
+          tue: {
+            isOn: data.busi_tue_check === 'Y',
+            endTime: data.busi_tue_end,
+            startTime: data.busi_tue_start,
+          },
+          wed: {
+            isOn: data.busi_wed_check === 'Y',
+            endTime: data.busi_wed_end,
+            startTime: data.busi_wed_start,
+          },
+          thu: {
+            isOn: data.busi_thur_check === 'Y',
+            endTime: data.busi_thur_end,
+            startTime: data.busi_thur_start,
+          },
+          fri: {
+            isOn: data.busi_pri_check === 'Y',
+            endTime: data.busi_pri_end,
+            startTime: data.busi_pri_start,
+          },
+          sat: {
+            isOn: data.busi_sat_check === 'Y',
+            endTime: data.busi_sat_end,
+            startTime: data.busi_sat_start,
+          },
+          sun: {
+            isOn: data.busi_sun_check === 'Y',
+            endTime: data.busi_sun_end,
+            startTime: data.busi_sun_start,
+          },
+        },
+      });
+    }
+  }, [data]);
 
+  const onChangeData = <K extends keyof BusinessProfileInformation>(
+    key: K,
+    value: BusinessProfileInformation[K],
+  ) => {
+    setData((prev: any) => ({...prev, [key]: value}));
+  };
+  useEffect(() => {
+    if (data) {
+      // 휴대전화 공개 여부
+      // setIsOn(data.)
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (isFocused && params) {
+      setData((prev: any) => ({...prev, ...params}));
+    }
+  }, [isFocused]);
+
+  const isSetTime =
+    data?.busi_all_open === 'Y' || // 전체 시간 체크 혹은
+    (data &&
+      Object.entries(data).filter(([key, value]) => {
+        // 7 일 중 하나라도 Y 라면
+        if (key.includes('check') && value === 'Y') {
+          return true;
+        }
+      }).length > 0);
   return (
     <View
       style={{
@@ -66,38 +139,8 @@ export default function BusinessProfileSetting({
           height={getHeightPixel(200)}
           style={styles.imageBackground}
         />
-        <Header isBack title={t('BusinessProfileMenuTitle')} />
-        <View style={styles.headerView}>
-          <View style={styles.profileContainer}>
-            <View>
-              <View style={styles.profileView}>
-                <Image
-                  source={require('@assets/image/dummy.png')}
-                  style={styles.profileImage}
-                />
-              </View>
-              <Image source={CameraWhiteIcon} style={styles.cameraWhiteImage} />
-            </View>
-            <View>
-              <WhiteText fontSize={`${16 * fontSize}`} medium>
-                Leandro
-              </WhiteText>
-              <GrayText fontSize={`${12 * fontSize}`}>
-                Love what you have.
-              </GrayText>
-              <View style={styles.uidView}>
-                <WhiteText fontSize={`${14 * fontSize}`}>
-                  NC : 0000abcd
-                </WhiteText>
-                <TouchableOpacity
-                  style={styles.marginLeft10}
-                  hitSlop={getHitSlop(5)}>
-                  <AutoHeightImage source={CopyIcon} width={getPixel(16)} />
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </View>
+
+        <BusinessProfileHeader title={t('BusinessProfileMenuTitle')} />
 
         <View
           style={{
@@ -115,6 +158,8 @@ export default function BusinessProfileSetting({
                   fontSize: 14 * fontSize,
                 },
               ]}
+              value={data?.busi_title}
+              onChangeText={text => onChangeData('busi_title', text)}
             />
           </View>
           <Line
@@ -125,7 +170,6 @@ export default function BusinessProfileSetting({
           <View>
             <RedDotText content={t('businessProfileSettingShopIntroduction')} />
             <Input
-              value=""
               width={getPixel(328)}
               height={getHeightPixel(45)}
               PlaceHolderComponent={() => (
@@ -133,13 +177,15 @@ export default function BusinessProfileSetting({
                   {t('businessProfileSettingShopIntroductionPh')}
                 </GrayText>
               )}
+              value={data?.busi_info}
+              onChange={text => onChangeData('busi_info', text)}
             />
           </View>
           <BetweenText
             leftText={t('businessProfileSettingShopTel')}
-            rightText="+55 11 964845016"
+            rightText={`+${data?.busi_cell_country} ${data?.busi_cell_number}`}
             rightTextStyle={{
-              color: Theme.color.gray,
+              color: Theme.color.black,
               fontSize: 14 * fontSize,
             }}
             isLine={false}
@@ -156,7 +202,7 @@ export default function BusinessProfileSetting({
           />
           <BetweenText
             leftText={t('businessProfileSettingShopEmail')}
-            rightText="onestore@gmail.com"
+            rightText={data?.email ?? '이메일 추가 필요'}
             rightTextStyle={{
               fontSize: 14 * fontSize,
             }}
@@ -178,6 +224,11 @@ export default function BusinessProfileSetting({
                 content={t('businessProfileSettingShopAddress')}
                 color={Theme.color.gray}
                 isView={true}
+                value={
+                  data?.busi_location
+                    ? t('businessProfileSettingShopAddress')
+                    : ''
+                }
               />
             </View>
             <AutoHeightImage source={ArrowRightNewIcon} width={getPixel(20)} />
@@ -186,7 +237,7 @@ export default function BusinessProfileSetting({
           {/* 전화번호 */}
           <ImageInput
             image={PhoneBlueIcon}
-            value=""
+            value={data?.busi_tel_number ?? ''}
             onChange={() => {}}
             PlaceHolder={() => (
               <RedDotText
@@ -225,6 +276,9 @@ export default function BusinessProfileSetting({
                 content={t('businessProfileSettingShopOpeningTime')}
                 color={Theme.color.gray}
                 isView={true}
+                value={
+                  isSetTime ? t('businessProfileSettingShopOpeningTime') : ''
+                }
               />
             </View>
             <AutoHeightImage source={ArrowRightNewIcon} width={getPixel(20)} />
@@ -232,8 +286,8 @@ export default function BusinessProfileSetting({
 
           <ImageInput
             image={WebIcon}
-            value=""
-            onChange={() => {}}
+            value={data?.busi_website ?? ''}
+            onChange={(text: string) => onChangeData('busi_website', text)}
             PlaceHolder={() => (
               <GrayText fontSize={`${14 * fontSize}`}>
                 {t('businessProfileSettingShopWebSite')}
@@ -242,8 +296,8 @@ export default function BusinessProfileSetting({
           />
           <ImageInput
             image={FacebookBlueIcon}
-            value=""
-            onChange={() => {}}
+            value={data?.busi_facebook ?? ''}
+            onChange={(text: string) => onChangeData('busi_facebook', text)}
             PlaceHolder={() => (
               <GrayText fontSize={`${14 * fontSize}`}>
                 {t('businessProfileSettingShopFacebook')}
@@ -253,8 +307,8 @@ export default function BusinessProfileSetting({
 
           <ImageInput
             image={InstagramBlueIcon}
-            value=""
-            onChange={() => {}}
+            value={data?.busi_insta ?? ''}
+            onChange={(text: string) => onChangeData('busi_insta', text)}
             PlaceHolder={() => (
               <GrayText fontSize={`${14 * fontSize}`}>
                 {t('businessProfileSettingShopInstagram')}
@@ -263,8 +317,8 @@ export default function BusinessProfileSetting({
           />
           <ImageInput
             image={WhatsappBlueIcon}
-            value=""
-            onChange={() => {}}
+            value={data?.busi_whats ?? ''}
+            onChange={(text: string) => onChangeData('busi_whats', text)}
             PlaceHolder={() => (
               <GrayText fontSize={`${14 * fontSize}`}>
                 {t('businessProfileSettingShopWhatsApp')}
@@ -290,18 +344,29 @@ const RedDotText: React.FC<{
   content: string;
   color?: string;
   isView?: boolean;
-}> = ({fontSize, content, color = Theme.color.black, isView = true}) => {
+  value?: string;
+}> = ({fontSize, content, color = Theme.color.black, isView = true, value}) => {
   const fontSizeState = useAppSelector(state => state.fontSize.value);
   const applyFontSize = fontSize ?? fontSizeState * 16;
 
   return isView ? (
     <View style={styles.redDotView}>
-      <Text color={color} fontSize={`${applyFontSize}`}>
-        {content}
-      </Text>
-      <RedText style={{marginLeft: getPixel(5)}} fontSize={`${applyFontSize}`}>
-        *
-      </RedText>
+      {!(value == null) && value?.length > 0 ? (
+        <Text color={Theme.color.black} fontSize={`${applyFontSize}`}>
+          {value}
+        </Text>
+      ) : (
+        <>
+          <Text color={color} fontSize={`${applyFontSize}`}>
+            {content}
+          </Text>
+          <RedText
+            style={{marginLeft: getPixel(5)}}
+            fontSize={`${applyFontSize}`}>
+            *
+          </RedText>
+        </>
+      )}
     </View>
   ) : (
     <>
@@ -316,7 +381,7 @@ const RedDotText: React.FC<{
 const ImageInput: React.FC<{
   value: string;
   onChange: any;
-  PlaceHolder: React.FC;
+  PlaceHolder?: React.FC;
   image: any;
   imageWidth?: number;
 }> = ({value, onChange, PlaceHolder, image, imageWidth = getPixel(20)}) => {
@@ -336,9 +401,8 @@ const ImageInput: React.FC<{
             fontSize: fontSize * 14,
           },
         ]}>
-        {!isFocus && !value?.length && PlaceHolder !== undefined && (
-          <PlaceHolder />
-        )}
+        {!isFocus && !value && PlaceHolder !== undefined && <PlaceHolder />}
+        {value?.length > 0 && <Text>{value}</Text>}
       </TextInput>
     </View>
   );

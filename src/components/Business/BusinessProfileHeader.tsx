@@ -8,7 +8,6 @@ import EditIcon from '@assets/image/edit_ver.png';
 import {getHitSlop} from '@/Util/Util';
 import {GrayText, Text, WhiteText} from '@/Components/Global/text';
 import CameraWhiteIcon from '@assets/image/camera_white.png';
-import {ProfileBackground} from '../Profile/ProfileHome';
 
 import StoreIcon from '@assets/image/store.png';
 import AdIcon from '@assets/image/ad.png';
@@ -18,65 +17,50 @@ import ArrowRightIcon from '@assets/image/arrow_right.png';
 import Theme from '@/assets/global/Theme';
 import {StackScreenProps} from '@react-navigation/stack';
 import Screen from 'Types/Screen/Screen';
-import BusinessProfileHeader from '@/Components/Business/BusinessProfileHeader';
 
-export default function BusinessProfileMenu({
-  navigation,
-  route,
-}: StackScreenProps<Screen>) {
+const BusinessProfileHeader: React.FC<{
+  title?: string;
+}> = ({title}) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const {user} = useAppSelector(state => state);
+
   return (
-    <View
-      style={{
-        flex: 1,
-      }}>
-      <ProfileBackground
-        height={getHeightPixel(200)}
-        style={styles.imageBackground}
-      />
-      <BusinessProfileHeader />
-      <View style={styles.menuContainer}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('BusinessProfileSetting');
-          }}
-          style={styles.menuTouch}>
-          <View style={styles.menuView}>
-            <AutoHeightImage source={StoreIcon} width={getPixel(20)} />
-            <Text fontSize={`${16 * fontSize}`} style={styles.menuText}>
-              {t('businessProfileMenu1')}
-            </Text>
+    <View style={styles.headerView}>
+      <Header isBack title={title ?? t('BusinessProfileMenuTitle')} />
+      <View style={styles.profileContainer}>
+        <View>
+          <View style={styles.profileView}>
+            <Image
+              source={require('@assets/image/dummy.png')}
+              style={styles.profileImage}
+            />
           </View>
-          <AutoHeightImage
-            style={styles.menuArrowImage}
-            source={ArrowRightIcon}
-            width={getPixel(6)}
-          />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.menuContainer}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('BusinessProfileBanner');
-          }}
-          style={styles.menuTouch}>
-          <View style={styles.menuView}>
-            <AutoHeightImage source={AdIcon} width={getPixel(20)} />
-            <Text fontSize={`${16 * fontSize}`} style={styles.menuText}>
-              {t('businessProfileMenu2')}
-            </Text>
+          <Image source={CameraWhiteIcon} style={styles.cameraWhiteImage} />
+        </View>
+        <View>
+          <WhiteText fontSize={`${16 * fontSize}`} medium>
+            {user.mt_name}
+          </WhiteText>
+          <GrayText fontSize={`${12 * fontSize}`}>{user.mt_memo}</GrayText>
+          <View style={styles.uidView}>
+            <WhiteText fontSize={`${14 * fontSize}`}>
+              NC : {user.mt_uid}
+            </WhiteText>
+            <TouchableOpacity
+              style={styles.marginLeft10}
+              hitSlop={getHitSlop(5)}>
+              <AutoHeightImage source={CopyIcon} width={getPixel(16)} />
+            </TouchableOpacity>
           </View>
-          <AutoHeightImage
-            style={styles.menuArrowImage}
-            source={ArrowRightIcon}
-            width={getPixel(6)}
-          />
-        </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
-}
+};
+
+export default BusinessProfileHeader;
+
 const styles = StyleSheet.create({
   uidView: {
     flexDirection: 'row',

@@ -122,12 +122,12 @@ export default function ProductDetail({
     pt_idx: params.pt_idx,
   });
   const onPressShop = useCallback(() => {
-    if (data?.sell_type === '0') {
+    if (data?.sell_type === '1') {
       navigation.navigate('BusinessProfile', {
         sell_idx: data?.sell_idx as string, // 수정필요
         sell_type: data?.sell_type as '0' | '1',
       });
-    } else if (data?.sell_type === '1') {
+    } else if (data?.sell_type === '0') {
       navigation.navigate('ProfileHome', {
         sell_idx: data?.sell_idx,
       });

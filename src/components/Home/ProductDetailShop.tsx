@@ -21,9 +21,9 @@ const ProductDetailShop: React.FC<ProductDetailShopProps> = ({
     <Shadow sides={['bottom']} distance={5}>
       <View style={styles.betweenView}>
         <View style={styles.rowView}>
-          <View style={styles.shopImageRoundView}>
+          <TouchableOpacity onPress={onPress} style={styles.shopImageRoundView}>
             <Image source={image} style={styles.shopImage} />
-          </View>
+          </TouchableOpacity>
           <View style={styles.contentView}>
             <MediumText fontSize={`${16 * fontSize}`}>{shopName}</MediumText>
             <GrayText fontSize={`${12 * fontSize}`}>{shopSubTitle}</GrayText>

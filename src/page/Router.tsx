@@ -224,7 +224,7 @@ export default function Router() {
 
   return (
     <NavigationContainer ref={ref}>
-      <Stack.Navigator initialRouteName={initRoute}>
+      <Stack.Navigator initialRouteName={'Menu'}>
         {RouterSetting.map((item, index) => (
           <Stack.Screen
             name={item.name}

@@ -21,20 +21,20 @@ export interface userState {
 
 // Define the initial state using that type
 const initialState: userState = {
-  mt_busi: null,
-  mt_country: null,
-  mt_hp: null,
-  mt_idx: null,
-  mt_keyword: null,
-  mt_level: null,
-  mt_marketing: null,
-  mt_memo: null,
-  mt_message: null,
-  mt_message_id: null,
-  mt_name: null,
-  mt_pushcon: null,
-  mt_uid: null,
-  mt_vibrate: null,
+  mt_busi: 'Y',
+  mt_country: '55',
+  mt_hp: '01088085727',
+  mt_idx: '3',
+  mt_keyword: 'N',
+  mt_level: '2',
+  mt_marketing: 'Y',
+  mt_memo: '',
+  mt_message: 'Y',
+  mt_message_id: 'sound1',
+  mt_name: 'kyoujin',
+  mt_pushcon: 'Y',
+  mt_uid: 'Takymp4EKW',
+  mt_vibrate: 'Y',
 };
 
 export const userSlice = createSlice({

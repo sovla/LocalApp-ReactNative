@@ -38,7 +38,15 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
   const {user} = useAppSelector(state => state);
   const navigation = useAppNavigation();
 
-  const [isBusiness, setIsBusiness] = useState(false);
+  const isLogin = true;
+  const isBusiness = user.mt_busi === 'Y';
+  const login = {
+    name: user?.mt_name ?? '',
+    statusMessage: user?.mt_memo ?? '',
+    image: isBusiness
+      ? require('@assets/image/dummy_b.png')
+      : require('@assets/image/dummy.png'),
+  };
 
   const onPressSaleProduct = useCallback(() => {
     //  판매상품 눌럿을 때
@@ -95,14 +103,6 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
     onClose();
   }, []);
 
-  const isLogin = true;
-  const login = {
-    name: user?.mt_name ?? '',
-    statusMessage: user?.mt_memo ?? '',
-    image: isBusiness
-      ? require('@assets/image/dummy_b.png')
-      : require('@assets/image/dummy.png'),
-  };
   return (
     <View style={modalDim}>
       <SlideRightModal onClose={onClose}>
@@ -113,13 +113,7 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
               top: 0,
               right: 0,
               zIndex: 100,
-            }}>
-            <Button
-              width={`${getPixel(100)}px`}
-              content="비즈니스계정전환(테스트용)"
-              onPress={() => setIsBusiness(p => !p)}
-            />
-          </View>
+            }}></View>
 
           <TouchableOpacity style={styles.backImageView} onPress={onClose}>
             <Image source={BackBlackBoxIcon} style={styles.backImage} />

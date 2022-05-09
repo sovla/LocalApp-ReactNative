@@ -55,3 +55,52 @@ export interface BusinessProfileLikeApi {
   sell_idx: string;
   sell_type: '1' | '0';
 }
+
+export interface BusinessProfileInformation {
+  busi_all_open: 'N' | 'Y';
+  busi_cell_country: string;
+  busi_cell_number: string;
+  busi_facebook: string;
+  busi_insta: string;
+  busi_location: string;
+  busi_location_detail: string;
+  busi_mon_check: 'N' | 'Y';
+  busi_mon_end: string;
+  busi_mon_start: string;
+  busi_pri_check: 'N' | 'Y';
+  busi_pri_end: string;
+  busi_pri_start: string;
+  busi_sat_check: 'N' | 'Y';
+  busi_sat_end: string;
+  busi_sat_start: string;
+  busi_sun_check: 'N' | 'Y';
+  busi_sun_end: string;
+  busi_sun_start: string;
+  busi_thur_check: 'N' | 'Y';
+  busi_thur_end: string;
+  busi_thur_start: string;
+  busi_tue_check: 'N' | 'Y';
+  busi_tue_end: string;
+  busi_tue_start: string;
+  busi_wed_check: 'N' | 'Y';
+  busi_wed_end: string;
+  busi_wed_start: string;
+  busi_tel_country: string;
+  busi_tel_number: string;
+  busi_website: string;
+  busi_whats: string;
+  busi_cnpj: string;
+  busi_file: string;
+  busi_info: string;
+  busi_lat: string;
+  busi_lng: string;
+  busi_title: string;
+}
+
+export interface BusinessProfileInfoAPi {
+  // 비즈니스 프로필 수정 불러오기
+  T: BusinessProfileInformation | null;
+  D: {
+    mt_idx: string;
+  };
+}

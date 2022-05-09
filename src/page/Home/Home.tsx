@@ -32,7 +32,7 @@ export default function Home({navigation}: HomeProps): JSX.Element {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const {user} = useAppSelector(state => state);
-  const state = useSelector(state => state);
+
   const [isList, setIsList] = useState(true);
   const {value: isUpload, on: onUpload, off: offUpload} = useBoolean(false);
   const {value: isPopup, on: onIsPopup, off: offIsPopup} = useBoolean(false);
@@ -52,7 +52,6 @@ export default function Home({navigation}: HomeProps): JSX.Element {
       focusRetry: true,
     },
   );
-  console.log('user:::', state?.user);
   const isFocused = useIsFocused();
   useLayoutEffect(() => {
     AsyncStorage.getItem('isPopup').then(result => {

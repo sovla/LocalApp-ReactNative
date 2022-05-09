@@ -17,12 +17,15 @@ import ArrowDownGrayIcon from '@assets/image/arrow_down_gray.png';
 import {openingHoursTypes} from '@/Types/Components/global';
 import {Picker} from '@react-native-picker/picker';
 import {BusinessOpeningHoursProps} from '@/Types/Screen/Screen';
+import {useIsFocused} from '@react-navigation/native';
 
 export default function BusinessOpeningHours({
   navigation,
+  route: {params},
 }: BusinessOpeningHoursProps) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+  const isFocused = useIsFocused();
 
   const ref = useRef<any>(null);
 
@@ -38,7 +41,7 @@ export default function BusinessOpeningHours({
 
   const onPressFull = useCallback(() => {
     // 24시간 영업 클릭
-    setIsFull(prev => !prev);
+    setIsFull(true);
     setOpeningHours(openingHoursInit);
   }, []);
 
@@ -71,7 +74,7 @@ export default function BusinessOpeningHours({
         }));
       }
     },
-    [],
+    [isFull],
   );
 
   const onChangePicker = useCallback(
@@ -85,14 +88,74 @@ export default function BusinessOpeningHours({
   );
 
   const onPressSave = useCallback(() => {
-    navigation.navigate('BusinessProfileSetting');
-  }, []);
+    navigation.navigate(
+      'BusinessProfileSetting',
+      isFull
+        ? {
+            busi_all_open: 'Y',
+            busi_mon_check: 'N',
+            busi_mon_end: '00:00',
+            busi_mon_start: '00:00',
+            busi_pri_check: 'N',
+            busi_pri_end: '00:00',
+            busi_pri_start: '00:00',
+            busi_sat_check: 'N',
+            busi_sat_end: '00:00',
+            busi_sat_start: '00:00',
+            busi_sun_check: 'N',
+            busi_sun_end: '00:00',
+            busi_sun_start: '00:00',
+            busi_thur_check: 'N',
+            busi_thur_end: '00:00',
+            busi_thur_start: '00:00',
+            busi_tue_check: 'N',
+            busi_tue_end: '00:00',
+            busi_tue_start: '00:00',
+            busi_wed_check: 'N',
+            busi_wed_end: '00:00',
+            busi_wed_start: '00:00',
+          }
+        : {
+            busi_all_open: 'N',
+            busi_mon_check: openingHours.mon.isOn ? 'Y' : 'N',
+            busi_mon_end: openingHours.mon.endTime,
+            busi_mon_start: openingHours.mon.startTime,
+            busi_pri_check: openingHours.fri.isOn ? 'Y' : 'N',
+            busi_pri_end: openingHours.fri.endTime,
+            busi_pri_start: openingHours.fri.startTime,
+            busi_sat_check: openingHours.sat.isOn ? 'Y' : 'N',
+            busi_sat_end: openingHours.sat.endTime,
+            busi_sat_start: openingHours.sat.startTime,
+            busi_sun_check: openingHours.sun.isOn ? 'Y' : 'N',
+            busi_sun_end: openingHours.sun.endTime,
+            busi_sun_start: openingHours.sun.startTime,
+            busi_thur_check: openingHours.thu.isOn ? 'Y' : 'N',
+            busi_thur_end: openingHours.thu.endTime,
+            busi_thur_start: openingHours.thu.startTime,
+            busi_tue_check: openingHours.tue.isOn ? 'Y' : 'N',
+            busi_tue_end: openingHours.tue.endTime,
+            busi_tue_start: openingHours.tue.startTime,
+            busi_wed_check: openingHours.wed.isOn ? 'Y' : 'N',
+            busi_wed_end: openingHours.wed.endTime,
+            busi_wed_start: openingHours.wed.startTime,
+          },
+    );
+  }, [isFull, openingHours]);
 
   useEffect(() => {
     if (focusItem?.key && ref?.current) {
       ref.current.focus();
     }
   }, [focusItem]);
+
+  useEffect(() => {
+    if (!(params?.isFull == null)) {
+      setIsFull(params.isFull);
+    }
+    if (params?.openingHoursTypes) {
+      setOpeningHours(params.openingHoursTypes);
+    }
+  }, [isFocused]);
 
   return (
     <View style={styles.container}>
