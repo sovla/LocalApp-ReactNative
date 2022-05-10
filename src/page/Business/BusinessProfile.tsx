@@ -138,8 +138,21 @@ export default function BusinessProfile({
               <View style={styles.whiteBoxTopView}>
                 <View style={styles.row}>
                   <View style={styles.profileContentView}>
-                    <Image source={dummy} style={styles.profileImage} />
-                    <View>
+                    <View
+                      style={{
+                        ...styles.profileImage,
+                        borderRadius: 10,
+                        overflow: 'hidden',
+                      }}>
+                      <Image
+                        source={{uri: data?.busi_profile}}
+                        style={styles.profileImage}
+                      />
+                    </View>
+                    <View
+                      style={{
+                        marginBottom: getHeightPixel(5),
+                      }}>
                       <BoldText fontSize={`${16 * fontSize}`}>{name}</BoldText>
                       <GrayText fontSize={`${12 * fontSize}`}>
                         {stateMessage}

@@ -2,9 +2,6 @@
 product_car_add.php 
 기어 넣는 값
 
-1. notice_info.php
-에러 발생 insert into notice_t (mt_idx,nt_idx,nvt_wdate) value ('3','1',now())<br/>Unknown column 'mt_idx' in 'field list'
-
 4. 비즈니스 광고 배너 관리 이미지 받아오는 api 추가 필요
 
 5. member_logout.php
