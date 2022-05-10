@@ -144,7 +144,6 @@ export type HomeProductListType = {
   } | null;
   D: {
     mt_idx: string | null;
-    page: string | number;
   };
 };
 

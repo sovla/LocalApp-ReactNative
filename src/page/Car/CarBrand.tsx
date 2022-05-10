@@ -29,10 +29,7 @@ const CarBrand = ({
 
   const [text, setText] = useState<string>('');
   const {getData, data} = useApi<CarBrandAPi['T'], CarBrandAPi['D']>(
-    {
-      cnt: 0,
-      list: [],
-    },
+    null,
     isMotor ? 'auto_brand.php' : 'car_brand.php',
     {
       search_txt: text,
@@ -80,21 +77,22 @@ const CarBrand = ({
           contentContainerStyle={{
             paddingBottom: getHeightPixel(80),
           }}>
-          {data.list.map((v, i) => {
-            const title = 'cc_title' in v ? v.cc_title : v.ac_title;
-            return (
-              <View style={styles.itemView} key={i}>
-                <TouchableOpacity
-                  onPress={() => {
-                    onPressItem(v);
-                  }}
-                  style={styles.touchItem}>
-                  <Text>{title}</Text>
-                </TouchableOpacity>
-                <Line isGray />
-              </View>
-            );
-          })}
+          {data?.list &&
+            data.list.map((v, i) => {
+              const title = 'cc_title' in v ? v.cc_title : v.ac_title;
+              return (
+                <View style={styles.itemView} key={i}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      onPressItem(v);
+                    }}
+                    style={styles.touchItem}>
+                    <Text>{title}</Text>
+                  </TouchableOpacity>
+                  <Line isGray />
+                </View>
+              );
+            })}
         </ScrollView>
       </View>
     </View>

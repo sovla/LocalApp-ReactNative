@@ -63,18 +63,19 @@ const CarDisplacement = ({navigation}: CarDisplacementProps) => {
             paddingBottom: getHeightPixel(80),
           }}>
           {data.list.map(v => {
-            return (
-              <View style={styles.itemView} key={v.cc_idx}>
-                <TouchableOpacity
-                  onPress={() => {
-                    onPressItem(v);
-                  }}
-                  style={styles.touchItem}>
-                  <Text>{v.cc_title}</Text>
-                </TouchableOpacity>
-                <Line isGray />
-              </View>
-            );
+            if ('cc_idx' in v)
+              return (
+                <View style={styles.itemView} key={v.cc_idx}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      onPressItem(v);
+                    }}
+                    style={styles.touchItem}>
+                    <Text>{v.cc_title}</Text>
+                  </TouchableOpacity>
+                  <Line isGray />
+                </View>
+              );
           })}
         </ScrollView>
       </View>

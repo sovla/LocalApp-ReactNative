@@ -19,7 +19,6 @@ import Theme from '@/assets/global/Theme';
 import {onScrollSlide} from '@/Util/Util';
 
 const CategoryScroll = () => {
-  const ref = useRef<ScrollView>(null);
   const [dotList, setDotList] = useState<Array<number>>(
     new Array(Math.floor(categoryMenu.length / 5 + 1)).fill(0),
   );
@@ -27,12 +26,12 @@ const CategoryScroll = () => {
 
   return (
     <View style={styles.scrollContainer}>
-      <ScrollView
-        ref={ref}
+      <FlatList
         horizontal
         pagingEnabled
-        onMomentumScrollEnd={e => onScrollSlide(e, setDotNumber)}>
-        {categoryMenu.map((item, index) => {
+        onMomentumScrollEnd={e => onScrollSlide(e, setDotNumber)}
+        data={categoryMenu}
+        renderItem={({item, index}) => {
           return (
             <>
               <CategoryCard name={item.name} image={item.image} />
@@ -43,13 +42,16 @@ const CategoryScroll = () => {
               />
             </>
           );
-        })}
-        <View
-          style={{
-            width: getPixel((5 - (categoryMenu.length % 5)) * 66),
-          }}
-        />
-      </ScrollView>
+        }}
+        ListFooterComponent={
+          <View
+            style={{
+              width: getPixel((5 - (categoryMenu.length % 5)) * 66),
+            }}
+          />
+        }
+      />
+
       <View style={styles.dotContainer}>
         {dotList.map((item, index) => {
           return <Dot isOn={dotNumber === index} />;

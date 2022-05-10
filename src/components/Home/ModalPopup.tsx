@@ -30,12 +30,8 @@ const ModalPopup: React.FC<ModalPopupProps> = ({onClose}) => {
   }, []);
   const [page, setPage] = useState<number>(0);
 
-  const {data: List, isLoading} = useApi<ModalPopupAPI, any>(
-    {
-      link: null,
-      file: null,
-      status: 'N',
-    },
+  const {data: List, isLoading} = useApi<ModalPopupAPI | null, any>(
+    null,
     'home_popup.php',
   );
 
@@ -59,7 +55,8 @@ const ModalPopup: React.FC<ModalPopupProps> = ({onClose}) => {
               onMomentumScrollEnd={e => {
                 onScrollSlide(e, setPage, getPixel(280));
               }}>
-              {Array.isArray(List?.file) &&
+              {List?.file &&
+                Array.isArray(List?.file) &&
                 List.file.map((v: string, i: React.Key | null | undefined) => {
                   return (
                     <TouchableOpacity onPress={onPressItem}>
@@ -69,7 +66,8 @@ const ModalPopup: React.FC<ModalPopupProps> = ({onClose}) => {
                 })}
             </ScrollView>
             <View style={styles.positionDot}>
-              {Array.isArray(List?.file) &&
+              {List?.file &&
+                Array.isArray(List?.file) &&
                 List.file.map((v: string, i: number) => {
                   return (
                     <View

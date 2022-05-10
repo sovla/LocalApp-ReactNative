@@ -69,21 +69,22 @@ const CarYear = ({
           style={{...styles.textInput, fontSize: fontSize * 16}}
         />
       </View>
-      {data.list.map((v, i) => {
-        const title = 'cc_title' in v ? v.cc_title : v.ac_title;
-        return (
-          <View style={styles.itemView} key={i}>
-            <TouchableOpacity
-              onPress={() => {
-                onPressItem(title);
-              }}
-              style={styles.touchItem}>
-              <Text>{title}</Text>
-            </TouchableOpacity>
-            <Line isGray />
-          </View>
-        );
-      })}
+      {data?.list &&
+        data.list.map((v, i) => {
+          const title = 'cc_title' in v ? v.cc_title : v.ac_title;
+          return (
+            <View style={styles.itemView} key={i}>
+              <TouchableOpacity
+                onPress={() => {
+                  onPressItem(title);
+                }}
+                style={styles.touchItem}>
+                <Text>{title}</Text>
+              </TouchableOpacity>
+              <Line isGray />
+            </View>
+          );
+        })}
     </View>
   );
 };

@@ -6,8 +6,9 @@ import {
   StyleSheet,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  FlatList,
 } from 'react-native';
-import React, {useCallback, useLayoutEffect, useState} from 'react';
+import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
 import Header from '@/Components/Home/Header';
 import CategoryScroll from '@/Components/Home/CategoryScroll';
 import HomeList from '@/Components/Home/HomeList';
@@ -38,8 +39,9 @@ export default function Home({navigation}: HomeProps): JSX.Element {
   const {value: isUpload, on: onUpload, off: offUpload} = useBoolean(false);
   const {value: isPopup, on: onIsPopup, off: offIsPopup} = useBoolean(false);
   const {value: isChange, on: onIsChange, off: offIsChange} = useBoolean(false);
-  const [page, setPage] = useState(1);
-  const {data, isLoading, isError, errorMessage} = useApi<
+  const [isScroll, setIsScroll] = useState(false);
+  const [isRefresh, setIsRefresh] = useState(false);
+  const {data, isLoading, isError, errorMessage, getData, reset} = useApi<
     HomeProductListType['T'],
     HomeProductListType['D']
   >(
@@ -47,10 +49,11 @@ export default function Home({navigation}: HomeProps): JSX.Element {
     'product_home_list.php',
     {
       mt_idx: user.mt_idx,
-      page: page,
     },
     {
       focusRetry: true,
+      isList: true,
+      listField: 'list',
     },
   );
   const isFocused = useIsFocused();
@@ -79,24 +82,59 @@ export default function Home({navigation}: HomeProps): JSX.Element {
     },
     [],
   );
+  useEffect(() => {
+    if (data && !isLoading) {
+      getData();
+    }
+    if (data && isRefresh) {
+      setIsRefresh(false);
+    }
+  }, [data]);
+
   return (
     <View style={{flex: 1, backgroundColor: Theme.color.whiteGray_F6}}>
       <Header isChange={isChange} />
-      <ScrollView onScroll={onScroll}>
-        <CategoryScroll key="CategoryScroll" />
-        <HomeList
-          key="HomeList"
-          location="Bom Retiro"
-          isList={isList}
-          setIsList={setIsList}
-        />
+      <FlatList
+        onScroll={onScroll}
+        onEndReachedThreshold={1}
+        onRefresh={() => {
+          reset();
+          setIsRefresh(true);
+        }}
+        refreshing={isRefresh}
+        onEndReached={() => {
+          if (isScroll) getData();
+        }}
+        onScrollBeginDrag={() => {
+          setIsScroll(true);
+        }}
+        data={[1]}
+        renderItem={({item, index}) => {
+          return (
+            <View
+              style={{
+                height: getHeightPixel(30),
+              }}></View>
+          );
+        }}
+        ListHeaderComponent={
+          <>
+            <CategoryScroll key="CategoryScroll" />
+            <HomeList
+              key="HomeList"
+              location="Bom Retiro"
+              isList={isList}
+              setIsList={setIsList}
+            />
 
-        <ProductList
-          isList={isList}
-          list={data?.list ? data.list : []}
-          onPressItem={onPressItem}
-        />
-      </ScrollView>
+            <ProductList
+              isList={isList}
+              list={data?.list ? data.list : []}
+              onPressItem={onPressItem}
+            />
+          </>
+        }
+      />
 
       <TouchableOpacity onPress={onUpload} style={styles.uploadTouch}>
         {!isUpload && (

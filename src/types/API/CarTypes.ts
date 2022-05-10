@@ -82,7 +82,7 @@ export interface CarBrandAPi {
           ac_title: string;
         }[]
       | [];
-  };
+  } | null;
   D: {
     search_txt: string;
   };

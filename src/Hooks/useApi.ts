@@ -11,9 +11,11 @@ import {
 import {check, RESULTS} from 'react-native-permissions';
 import useBoolean from './useBoolean';
 interface optionTypes {
-  isFirst?: boolean;
-  focusRetry?: boolean;
-  firstLoading?: boolean;
+  isFirst?: boolean; // isFocused 로 실행 여부
+  focusRetry?: boolean; // 해당 페이지에 접근할때마다 실행여부
+  firstLoading?: boolean; // 처음에 로딩 true 여부
+  isList?: boolean; // 페이징 여부
+  listField?: string; // 페이징 리스트
 }
 
 function useApi<T, D>(
@@ -26,6 +28,8 @@ function useApi<T, D>(
     isFirst: true,
     focusRetry: false,
     firstLoading: false,
+    isList: false,
+    listField: 'list',
     ...option,
   };
   const [data, setData] = useState<T>(defaultValue);
@@ -33,48 +37,83 @@ function useApi<T, D>(
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isComplete, setisComplete] = useState(false);
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
+
   const isFocused = useIsFocused();
 
-  const getData = useCallback(
-    async (_data?: any) => {
-      setIsLoading(true);
-      await API.post<
-        any,
-        AxiosResponse<
-          {
-            result: 'true' | 'false' | null;
-            data: any | T;
-            msg: null | string;
-          } | null,
-          any
-        >
-      >(apiPath, {...axiosData, ..._data})
-        .then(result => {
-          console.log(apiPath + '::::', result);
-          if (result.data?.result === 'true') {
+  const getData = async (_data?: any) => {
+    if (defaultOption.isList && page > totalPage) {
+      return;
+    }
+    setIsLoading(true);
+
+    await API.post<
+      any,
+      AxiosResponse<
+        {
+          result: 'true' | 'false' | null;
+          data: any | T;
+          msg: null | string;
+        } | null,
+        any
+      >
+    >(apiPath, {...axiosData, ..._data, page})
+      .then(result => {
+        console.log(apiPath + '::::', result);
+        // console.log(
+        //   'first if',
+        //   data !== defaultValue && defaultOption.isList && page !== 1,
+        // );
+        if (result.data?.result === 'true') {
+          if (data !== defaultValue && defaultOption.isList && page !== 1) {
+            // 리스트 인경우
+            const {listField} = defaultOption;
+            if (
+              result?.data?.data?.data &&
+              typeof defaultOption?.listField === 'string' &&
+              listField &&
+              listField in data &&
+              listField in result.data.data.data
+            ) {
+              setData((prev: any) => {
+                if (prev)
+                  return {
+                    ...prev,
+                    [listField]: [
+                      ...prev[listField],
+                      ...result.data?.data?.data[listField],
+                    ],
+                  };
+              });
+            } else if (result?.data?.data) {
+              setData(result.data.data);
+            }
+          } else {
             if (result?.data?.data?.data) {
               setData(result.data.data.data);
             } else if (result?.data?.data) {
               setData(result.data.data);
             }
-          } else {
-            if (result.data?.msg) {
-              setErrorMessage(result.data.msg);
-            }
-            setIsError(true);
           }
-        })
-        .catch(err => {
+          setPage(prev => prev + 1);
+          setTotalPage(result?.data?.data?.data?.total_page);
+        } else {
+          if (result.data?.msg) {
+            setErrorMessage(result.data.msg);
+          }
           setIsError(true);
-          setErrorMessage(err);
-        })
-        .finally(() => {
-          setIsLoading(false);
-          setisComplete(true);
-        });
-    },
-    [axiosData, apiPath, defaultOption?.isFirst],
-  );
+        }
+      })
+      .catch(err => {
+        setIsError(true);
+        setErrorMessage(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+        setisComplete(true);
+      });
+  };
 
   useEffect(() => {
     if (
@@ -85,7 +124,26 @@ function useApi<T, D>(
     }
   }, [isFocused]);
 
-  return {data, isLoading, isError, errorMessage, getData, isComplete, setData};
+  const reset = async () => {
+    await setPage(1);
+    await setTotalPage(1);
+    await setisComplete(false);
+    await setData(defaultValue);
+    await setErrorMessage('');
+    await setIsLoading(false);
+    await setIsError(false);
+  };
+
+  return {
+    data,
+    isLoading,
+    isError,
+    errorMessage,
+    getData,
+    isComplete,
+    setData,
+    reset,
+  };
 }
 
 export default useApi;
