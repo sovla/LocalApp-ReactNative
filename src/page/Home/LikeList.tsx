@@ -1,4 +1,11 @@
-import {View, ImageBackground, StyleSheet, Image, TouchableOpacity, FlatList} from 'react-native';
+import {
+  View,
+  ImageBackground,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  FlatList,
+} from 'react-native';
 import React, {useCallback, useState} from 'react';
 import BackGroundImage from '@assets/image/BG.png';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
@@ -21,12 +28,23 @@ export default function LikeList({navigation}: LikeListProps) {
 
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [deleteList, setDeleteList] = useState<string[]>([]);
-  const [page, setPage] = useState(1);
 
-  const {data, isLoading, isError, errorMessage, getData} = useApi<LikeListType['T'], LikeListType['D']>(null, 'product_like_list.php', {
-    mt_idx: user.mt_idx,
-    page: page,
-  });
+  const [isScroll, setIsScroll] = useState<boolean>(false);
+
+  const {data, isLoading, isError, errorMessage, getData} = useApi<
+    LikeListType['T'],
+    LikeListType['D']
+  >(
+    null,
+    'product_like_list.php',
+    {
+      mt_idx: user.mt_idx,
+    },
+    {
+      isList: true,
+      listField: 'list',
+    },
+  );
 
   const {PostAPI} = usePostSend('product_like_list_del.php', {
     mt_idx: user.mt_idx,
@@ -35,7 +53,7 @@ export default function LikeList({navigation}: LikeListProps) {
 
   const onPressDelete = () => {
     PostAPI().then(res => {
-      if (res?.result === 'false') {
+      if (res?.result === 'false' && res?.msg) {
         return AlertButton(res.msg);
       } else {
         getData();
@@ -63,7 +81,9 @@ export default function LikeList({navigation}: LikeListProps) {
   const _renderItem = useCallback(
     ({item, index}) => {
       const isOn = deleteList.find(v => v === item?.like_idx) ? true : false;
-      const _onPressItem = !isOn ? () => onPressEditAddItem(item?.like_idx ?? '0') : () => onPressEditDeleteItem(item?.like_idx ?? '0');
+      const _onPressItem = !isOn
+        ? () => onPressEditAddItem(item?.like_idx ?? '0')
+        : () => onPressEditDeleteItem(item?.like_idx ?? '0');
       const _onPress = () => onPressItem(item.pt_idx, item.pt_cate);
       return (
         <LikeProduct
@@ -117,13 +137,22 @@ export default function LikeList({navigation}: LikeListProps) {
           </WhiteText>
         </View>
         {!isEdit ? (
-          <TouchableOpacity hitSlop={getHitSlop(5)} onPress={() => setIsEdit(prev => !prev)}>
-            <WhiteText fontSize={`${16 * fontSize}`}>{t('likeListEdit')}</WhiteText>
+          <TouchableOpacity
+            hitSlop={getHitSlop(5)}
+            onPress={() => setIsEdit(prev => !prev)}>
+            <WhiteText fontSize={`${16 * fontSize}`}>
+              {t('likeListEdit')}
+            </WhiteText>
           </TouchableOpacity>
         ) : (
           <View style={{flexDirection: 'row'}}>
-            <TouchableOpacity onPress={onPressDelete} hitSlop={getHitSlop(5)} style={{}}>
-              <WhiteText fontSize={`${16 * fontSize}`}>{t('likeListDelete')}</WhiteText>
+            <TouchableOpacity
+              onPress={onPressDelete}
+              hitSlop={getHitSlop(5)}
+              style={{}}>
+              <WhiteText fontSize={`${16 * fontSize}`}>
+                {t('likeListDelete')}
+              </WhiteText>
             </TouchableOpacity>
             {/* <TouchableOpacity hitSlop={getHitSlop(5)} onPress={onPressSave}>
               <WhiteText fontSize={`${16 * fontSize}`}>
@@ -152,6 +181,12 @@ export default function LikeList({navigation}: LikeListProps) {
         }
         data={data?.list ?? []}
         renderItem={_renderItem}
+        onEndReached={() => {
+          if (isScroll) getData();
+        }}
+        onScrollBeginDrag={() => {
+          setIsScroll(true);
+        }}
       />
       <Footer menu="favorite" />
     </View>

@@ -155,7 +155,6 @@ export type LikeListType = {
   } | null;
   D: {
     mt_idx: string | null;
-    page: string | number;
   };
 };
 

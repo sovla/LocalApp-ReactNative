@@ -32,7 +32,8 @@ export default function ProfileUpdate({
 }: ProfileUpdateProps) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
-  const [user, setUser] = useState({
+  const {user} = useAppSelector(state => state);
+  const [userInfo, setUserInfo] = useState({
     mt_name: '',
     mt_memo: '',
     mt_hp_open: '',
@@ -64,7 +65,7 @@ export default function ProfileUpdate({
             <View>
               <View style={styles.profileView}>
                 <Image
-                  source={require('@assets/image/dummy.png')}
+                  source={{uri: user.mt_profile as string}}
                   style={styles.profileImage}
                 />
               </View>
@@ -176,8 +177,10 @@ export default function ProfileUpdate({
       </KeyboardAwareScrollView>
       <SexPicker
         ref={pickerRef}
-        select={user.mt_sex}
-        setSelect={(text: string) => setUser(prev => ({...prev, mt_sex: text}))}
+        select={userInfo.mt_sex}
+        setSelect={(text: string) =>
+          setUserInfo(prev => ({...prev, mt_sex: text}))
+        }
       />
     </View>
   );

@@ -74,7 +74,7 @@ export default function ProfileDetail({navigation}: ProfileDetailProps) {
           <View>
             <View style={styles.profileView}>
               <Image
-                source={require('@assets/image/dummy.png')}
+                source={{uri: user.mt_profile as string}}
                 style={styles.profileImage}
               />
             </View>

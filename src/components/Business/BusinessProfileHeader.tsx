@@ -44,7 +44,7 @@ const BusinessProfileHeader: React.FC<{
           <View style={styles.profileView}>
             <Image
               source={
-                image ? {uri: image.path} : require('@assets/image/dummy.png')
+                image ? {uri: image.path} : {uri: user.mt_profile as string}
               }
               style={styles.profileImage}
             />

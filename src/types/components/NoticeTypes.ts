@@ -28,14 +28,11 @@ export interface NoticeApi {
 
 export interface NoticeDetailApi {
   // 공지사항 상세보기 API
-  T:
-    | {
-        new_check: 'Y' | 'N';
-        nt_idx: string;
-        nt_title: string;
-        nt_wdate: string;
-      }[]
-    | null;
+  T: {
+    nt_content: string;
+    nt_title: string;
+    nt_wdate: string;
+  } | null;
   D: {
     mt_idx: string;
     nt_idx: string;

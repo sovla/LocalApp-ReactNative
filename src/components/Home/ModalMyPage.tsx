@@ -50,9 +50,7 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
   const login = {
     name: user?.mt_name ?? '',
     statusMessage: user?.mt_memo ?? '',
-    image: isBusiness
-      ? require('@assets/image/dummy_b.png')
-      : require('@assets/image/dummy.png'),
+    image: {uri: user?.mt_profile},
   };
 
   const onPressSaleProduct = useCallback(() => {
@@ -106,6 +104,8 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
     onClose();
   }, []);
   const onPressLogout = useCallback(() => {
+    navigation.navigate('Login');
+    return; // 로그아웃 작업전
     PostAPI().then(res => {
       if (res?.result === 'false' && res?.msg) {
         AlertButton(res.msg);

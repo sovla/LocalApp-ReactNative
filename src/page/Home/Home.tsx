@@ -108,8 +108,9 @@ export default function Home({navigation}: HomeProps): JSX.Element {
         onScrollBeginDrag={() => {
           setIsScroll(true);
         }}
-        data={[1]}
+        data={[1]} // 꼼수
         renderItem={({item, index}) => {
+          // 꼼수
           return (
             <View
               style={{

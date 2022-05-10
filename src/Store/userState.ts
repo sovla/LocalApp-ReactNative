@@ -6,6 +6,7 @@ export interface userState {
   mt_busi: 'Y' | 'N' | null;
   mt_country: string | null;
   mt_hp: string | null;
+  mt_hp_open: 'Y' | 'N' | null;
   mt_idx: string | null;
   mt_keyword: 'Y' | 'N' | null;
   mt_level: string | null;
@@ -14,6 +15,7 @@ export interface userState {
   mt_message: 'Y' | 'N' | null;
   mt_message_id: null | string;
   mt_name: string | null;
+  mt_profile: string | null;
   mt_pushcon: 'Y' | 'N' | null;
   mt_uid: string | null;
   mt_vibrate: 'Y' | 'N' | null;
@@ -24,6 +26,7 @@ const initialState: userState = {
   mt_busi: 'Y',
   mt_country: '55',
   mt_hp: '01088085727',
+  mt_hp_open: 'Y',
   mt_idx: '3',
   mt_keyword: 'N',
   mt_level: '2',
@@ -32,6 +35,8 @@ const initialState: userState = {
   mt_message: 'Y',
   mt_message_id: 'sound1',
   mt_name: 'kyoujin',
+  mt_profile:
+    'https://dmonster1786.cafe24.com/images/uploads/mt_profile_14_6JuqS2vf.jpg',
   mt_pushcon: 'Y',
   mt_uid: 'Takymp4EKW',
   mt_vibrate: 'Y',
