@@ -152,6 +152,7 @@ type Screen = {
         content?: string;
         isNego?: boolean;
         isEdit?: boolean; // 해당 페이지 수정여부
+        pt_idx?: string; // 업데이트시 넘겨주는 값
         imageFile?: {
           path: string;
           mime: string;

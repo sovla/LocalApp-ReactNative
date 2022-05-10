@@ -44,6 +44,7 @@ import useApi, {usePostSend} from '@/Hooks/useApi';
 import {CarFuelApi} from '@/Types/API/CarTypes';
 import {ProductInfoApi} from '@/Types/API/ProductTypes';
 import Product from '@/Components/Home/Product';
+import Loading from '@/Components/Global/Loading';
 
 export default function ProductUpdate({route: {params}}: ProductUpdateProps) {
   const {t} = useTranslation();
@@ -65,7 +66,7 @@ export default function ProductUpdate({route: {params}}: ProductUpdateProps) {
     'product_modify_info.php',
     {
       mt_idx: user.mt_idx as string,
-      pt_idx: '19', // params.pt_idx
+      pt_idx: params?.pt_idx, // params.pt_idx
     },
     {
       isFirst: false,
@@ -231,6 +232,10 @@ export default function ProductUpdate({route: {params}}: ProductUpdateProps) {
       setSelectHistory(ProductInfo.pt_history);
     }
   }, [ProductInfo]);
+
+  if (params?.isEdit && !ProductInfo) {
+    return <Loading />;
+  }
   return (
     <View style={{flex: 1}}>
       <Header

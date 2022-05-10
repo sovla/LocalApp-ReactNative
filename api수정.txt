@@ -6,3 +6,6 @@ product_car_add.php
 
 5. member_logout.php
 404 에러 발생 
+
+sell_product_delete_arr.php 
+에러발생 select * from product_t where mt_idx='3' and pt_idx='5'<br/>Unknown column 'pt_idx' in 'where clause'
