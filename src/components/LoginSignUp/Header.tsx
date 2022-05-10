@@ -10,11 +10,18 @@ import {MediumText} from '../Global/text';
 import {useTranslation} from 'react-i18next';
 import {useAppSelector} from '@/Hooks/CustomHook';
 
-const Header: React.FC<NavigationHeaderProps> = ({title, children}) => {
+const Header: React.FC<NavigationHeaderProps> = ({
+  title,
+  children,
+  onClose,
+}) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const navigation = useNavigation();
   const onPressBack = () => {
+    if (onClose) {
+      return onClose();
+    }
     if (navigation.canGoBack()) {
       navigation.goBack();
     }

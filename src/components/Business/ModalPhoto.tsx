@@ -1,6 +1,7 @@
 import {
   FlatList,
   Image,
+  Modal,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -18,19 +19,21 @@ import {ProductPhotoProps} from '@/Types/Screen/Screen';
 
 import CameraRoll from '@react-native-community/cameraroll';
 import Photo from '@Components/LoginSignUp/Photo';
+import {ModalPhotoProps} from '@/Types/Components/BusinessTypes';
 
-export default function ProductPhoto({
-  navigation,
-  route: {params},
-}: ProductPhotoProps) {
+export default function ModalPhoto({
+  onClose,
+  count = 1,
+  returnFn,
+}: ModalPhotoProps) {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const [imageArray, setImageArray] = useState<any>([]);
   const [number, setNumber] = useState<number>(1000);
   const [selectNumber, setSelectNumber] = useState<number[]>([]);
-  const [isDone, setIsDone] = useState(false);
   const getPhotos = () => {
     CameraRoll.getPhotos({
+      mimeTypes: ['image/jpeg'], // 타입지정
       first: number, // 1000 여개 사진을 가져온다
     }).then(value => {
       setImageArray(value.edges);
@@ -44,50 +47,27 @@ export default function ProductPhoto({
           return prev; // 없으면 그대로
         }
       });
-      if (
-        params &&
-        Array.isArray(params) &&
-        !isDone &&
-        Array.isArray(value.edges)
-      ) {
-        // 파라미터로 넘어온 이미지가 해당 배열안에 있으면 체크
-        let _image: string[] = [];
-        let _number: number[] = [];
-
-        value.edges.forEach((v: {node: {image: {uri: string}}}, i: number) => {
-          const result = params.find(fv => fv.path === v?.node?.image?.uri);
-          if (result) {
-            _number.push(i + 2);
-          }
-        });
-        params.forEach(v => {
-          if (v.isLocal) {
-            _image.push(v.path);
-          }
-        });
-        setSelectNumber(_number);
-        setIsDone(true);
-        setImageArray((prev: any) => [
-          ..._image.map(v => ({
-            path: v,
-          })),
-          ...value.edges,
-        ]);
-      }
     });
   };
-
-  const onPressComplete = () => {
-    navigation.navigate('ProductUpdate', {
-      imageFile: selectNumber.map(v => ({
-        path: imageArray[v - 2]?.path ?? imageArray[v - 2]?.node?.image?.uri,
-        mime: imageArray[v - 2]?.path
-          ? imageArray[v - 2].mime
-          : imageArray[v - 2].node?.type,
-        isLocal: imageArray[v - 2]?.path ? true : false,
-      })),
-    });
-  };
+  const onPressComplete = useCallback(() => {
+    const _imageArray = selectNumber
+      .map(v => imageArray[v - 2])
+      .map(v => {
+        // 이미지는 두가지 형태로 들어옴
+        if (v?.node) {
+          return {
+            path: v.node.image.uri as string,
+            mime: v.node.type as string,
+          };
+        } else {
+          return {
+            path: v.path as string,
+            mime: v.mime as string,
+          };
+        }
+      });
+    if (returnFn) returnFn(_imageArray);
+  }, [selectNumber, imageArray]);
 
   const _renderItem = useCallback(
     ({item, index}) => {
@@ -101,7 +81,12 @@ export default function ProductPhoto({
 
       const onPress =
         select === -1
-          ? () => setSelectNumber(prev => [...prev, index + 1])
+          ? () =>
+              setSelectNumber(prev => {
+                return prev.length === count
+                  ? [...prev.slice(1), index + 1] // 이전값에서 하나 짤라서 갯수 맞추기
+                  : [...prev, index + 1]; // 추가
+              })
           : () => setSelectNumber(prev => prev.filter(v => v !== index + 1));
 
       if (index === 0) {
@@ -151,51 +136,42 @@ export default function ProductPhoto({
   useLayoutEffect(() => {
     getPhotos();
   }, []);
-  useEffect(() => {
-    if (selectNumber.length > 10) {
-      setSelectNumber(prev =>
-        prev.filter((v, i) => {
-          if (i !== 0) {
-            return true;
-          }
-        }),
-      );
-    }
-  }, [selectNumber]);
 
   return (
-    <View style={{flex: 1}}>
-      <Header title={t('allPhoto')}>
-        <TouchableOpacity onPress={onPressComplete}>
-          <Text fontSize={`${16 * fontSize}`} medium>
-            {t('complete')}
-          </Text>
-        </TouchableOpacity>
-      </Header>
-      <FlatList
-        data={[1, ...imageArray]}
-        numColumns={3}
-        keyExtractor={keyExtractor}
-        style={{
-          paddingTop: getHeightPixel(20),
-          marginHorizontal: getPixel(16),
-          paddingBottom: getHeightPixel(40),
-        }}
-        getItemLayout={(data, index) => ({
-          length: getPixel(110),
-          offset: getHeightPixel(112) * index,
-          index,
-        })}
-        onEndReached={() => {
-          getPhotos();
-        }}
-        onEndReachedThreshold={0.3}
-        renderItem={_renderItem}
-        maxToRenderPerBatch={25}
-        initialNumToRender={25}
-        removeClippedSubviews
-      />
-    </View>
+    <Modal visible onRequestClose={onClose}>
+      <View style={{flex: 1}}>
+        <Header title={t('allPhoto')} onClose={onClose}>
+          <TouchableOpacity onPress={onPressComplete}>
+            <Text fontSize={`${16 * fontSize}`} medium>
+              {t('complete')}
+            </Text>
+          </TouchableOpacity>
+        </Header>
+        <FlatList
+          data={[1, ...imageArray]}
+          numColumns={3}
+          keyExtractor={keyExtractor}
+          style={{
+            paddingTop: getHeightPixel(20),
+            marginHorizontal: getPixel(16),
+            paddingBottom: getHeightPixel(40),
+          }}
+          getItemLayout={(data, index) => ({
+            length: getPixel(110),
+            offset: getHeightPixel(112) * index,
+            index,
+          })}
+          onEndReached={() => {
+            getPhotos();
+          }}
+          onEndReachedThreshold={0.3}
+          renderItem={_renderItem}
+          maxToRenderPerBatch={25}
+          initialNumToRender={25}
+          removeClippedSubviews
+        />
+      </View>
+    </Modal>
   );
 }
 

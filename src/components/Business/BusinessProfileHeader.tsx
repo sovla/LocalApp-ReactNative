@@ -1,5 +1,5 @@
 import {View, StyleSheet, Image, TouchableOpacity} from 'react-native';
-import React from 'react';
+import React, {Dispatch, SetStateAction, useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useAppSelector} from '@/Hooks/CustomHook';
 import Header from '@/Components/Profile/Header';
@@ -17,13 +17,24 @@ import ArrowRightIcon from '@assets/image/arrow_right.png';
 import Theme from '@/assets/global/Theme';
 import {StackScreenProps} from '@react-navigation/stack';
 import Screen from 'Types/Screen/Screen';
+import ImageCropPicker from 'react-native-image-crop-picker';
 
 const BusinessProfileHeader: React.FC<{
   title?: string;
-}> = ({title}) => {
+  isUpdate?: boolean;
+  setIsModalPhoto?: Dispatch<SetStateAction<boolean>>;
+  image?: {
+    path: string;
+    mime: string;
+  } | null;
+}> = ({title, isUpdate, setIsModalPhoto, image}) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const {user} = useAppSelector(state => state);
+
+  const onPressCamera = useCallback(() => {
+    if (setIsModalPhoto) setIsModalPhoto(true);
+  }, []);
 
   return (
     <View style={styles.headerView}>
@@ -32,11 +43,15 @@ const BusinessProfileHeader: React.FC<{
         <View>
           <View style={styles.profileView}>
             <Image
-              source={require('@assets/image/dummy.png')}
+              source={
+                image ? {uri: image.path} : require('@assets/image/dummy.png')
+              }
               style={styles.profileImage}
             />
           </View>
-          <Image source={CameraWhiteIcon} style={styles.cameraWhiteImage} />
+          <TouchableOpacity disabled={!isUpdate} onPress={onPressCamera}>
+            <Image source={CameraWhiteIcon} style={styles.cameraWhiteImage} />
+          </TouchableOpacity>
         </View>
         <View>
           <WhiteText fontSize={`${16 * fontSize}`} medium>

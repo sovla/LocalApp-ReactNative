@@ -32,6 +32,7 @@ import {
   BusinessProfileInformation,
 } from '@Types/API/BusinessTypes';
 import {useIsFocused} from '@react-navigation/native';
+import ModalPhoto from '@/Components/Business/ModalPhoto';
 
 export default function BusinessProfileSetting({
   navigation,
@@ -42,6 +43,12 @@ export default function BusinessProfileSetting({
   const isFocused = useIsFocused();
   const {user} = useAppSelector(state => state);
   const [isOn, setIsOn] = useState<boolean>(false);
+
+  const [isModalPhoto, setIsModalPhoto] = useState<boolean>(false);
+  const [image, setImage] = useState<null | {
+    path: string;
+    mime: string;
+  }>(null);
 
   const {data, setData} = useApi<
     BusinessProfileInfoAPi['T'],
@@ -107,6 +114,12 @@ export default function BusinessProfileSetting({
   ) => {
     setData((prev: any) => ({...prev, [key]: value}));
   };
+
+  const imageReturnFn = (image: {path: string; mime: string}[]) => {
+    // 이미지 모달 완료 버튼 -> 이미지 저장 및 모달 끄기
+    setImage(image[0]);
+    setIsModalPhoto(false);
+  };
   useEffect(() => {
     if (data) {
       // 휴대전화 공개 여부
@@ -140,7 +153,12 @@ export default function BusinessProfileSetting({
           style={styles.imageBackground}
         />
 
-        <BusinessProfileHeader title={t('BusinessProfileMenuTitle')} />
+        <BusinessProfileHeader
+          title={t('BusinessProfileMenuTitle')}
+          isUpdate
+          setIsModalPhoto={setIsModalPhoto}
+          image={image}
+        />
 
         <View
           style={{
@@ -335,6 +353,12 @@ export default function BusinessProfileSetting({
           <Button onPress={onPressSave} content={t('save')} width="328px" />
         </View>
       </KeyboardAwareScrollView>
+      {isModalPhoto && (
+        <ModalPhoto
+          onClose={() => setIsModalPhoto(false)}
+          returnFn={imageReturnFn}
+        />
+      )}
     </View>
   );
 }

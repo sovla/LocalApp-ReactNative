@@ -28,6 +28,7 @@ import useApi from '@/Hooks/useApi';
 import {useAppSelector} from '@/Hooks/CustomHook';
 import {HomeProductListType} from '@/Types/Components/HomeTypes';
 import {useSelector} from 'react-redux';
+
 export default function Home({navigation}: HomeProps): JSX.Element {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);

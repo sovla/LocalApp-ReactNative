@@ -94,30 +94,32 @@ type Screen = {
     sell_type: '0' | '1';
   };
   BusinessProfileMenu: StackScreenProps<Screen> | undefined;
-  BusinessProfileSetting: {
-    busi_all_open: 'Y' | 'N';
-    busi_mon_check?: 'Y' | 'N';
-    busi_mon_end?: string;
-    busi_mon_start?: string;
-    busi_pri_check?: 'Y' | 'N';
-    busi_pri_end?: string;
-    busi_pri_start?: string;
-    busi_sat_check?: 'Y' | 'N';
-    busi_sat_end?: string;
-    busi_sat_start?: string;
-    busi_sun_check?: 'Y' | 'N';
-    busi_sun_end?: string;
-    busi_sun_start?: string;
-    busi_thur_check?: 'Y' | 'N';
-    busi_thur_end?: string;
-    busi_thur_start?: string;
-    busi_tue_check?: 'Y' | 'N';
-    busi_tue_end?: string;
-    busi_tue_start?: string;
-    busi_wed_check?: 'Y' | 'N';
-    busi_wed_end?: string;
-    busi_wed_start?: string;
-  };
+  BusinessProfileSetting:
+    | {
+        busi_all_open?: 'Y' | 'N';
+        busi_mon_check?: 'Y' | 'N';
+        busi_mon_end?: string;
+        busi_mon_start?: string;
+        busi_pri_check?: 'Y' | 'N';
+        busi_pri_end?: string;
+        busi_pri_start?: string;
+        busi_sat_check?: 'Y' | 'N';
+        busi_sat_end?: string;
+        busi_sat_start?: string;
+        busi_sun_check?: 'Y' | 'N';
+        busi_sun_end?: string;
+        busi_sun_start?: string;
+        busi_thur_check?: 'Y' | 'N';
+        busi_thur_end?: string;
+        busi_thur_start?: string;
+        busi_tue_check?: 'Y' | 'N';
+        busi_tue_end?: string;
+        busi_tue_start?: string;
+        busi_wed_check?: 'Y' | 'N';
+        busi_wed_end?: string;
+        busi_wed_start?: string;
+      }
+    | undefined;
   BusinessProfileBanner: StackScreenProps<Screen> | undefined;
   BusinessSignUp: StackScreenProps<Screen> | undefined;
   BusinessForm: StackScreenProps<Screen> | undefined;

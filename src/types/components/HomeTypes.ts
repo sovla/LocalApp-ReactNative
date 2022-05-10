@@ -1,6 +1,6 @@
 import {FilterMenuTypes} from '@/Components/Home/ModalFilter';
 import {FilterState} from '@/Page/Home/Search';
-import React from 'react';
+import React, {Dispatch, SetStateAction} from 'react';
 import {GestureResponderEvent} from 'react-native';
 import {categoryMenuTypes, ModalProps} from './global';
 
@@ -41,6 +41,7 @@ export interface HeaderProps {
 
 export interface NavigationHeaderProps {
   title?: string;
+  onClose?: any;
 }
 
 export interface ImageSwiperProps {
