@@ -31,7 +31,8 @@ export interface NoticeDetailApi {
   T: {
     nt_content: string;
     nt_title: string;
-    nt_wdate: string;
+    nt_time: string;
+    nt_time_type: 'now' | 'minute' | 'hour' | 'day' | 'month' | 'year';
   } | null;
   D: {
     mt_idx: string;

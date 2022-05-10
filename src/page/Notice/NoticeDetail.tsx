@@ -15,6 +15,7 @@ import {NoticeDetailApi} from '@/Types/Components/NoticeTypes';
 import useApi from '@/Hooks/useApi';
 import RenderHTML from 'react-native-render-html';
 import Loading from '@/Components/Global/Loading';
+import {productTimeSetting} from '@/Util/Util';
 
 export default function NoticeDetail({route: {params}}: NoticeDetailProps) {
   const {t} = useTranslation();
@@ -29,13 +30,13 @@ export default function NoticeDetail({route: {params}}: NoticeDetailProps) {
     nt_idx: params.nt_idx,
   });
 
-  const date = data?.nt_wdate;
-  const title = data?.nt_title;
-
-  const content = `${data?.nt_content}`;
   if (isLoading || !data) {
     return <Loading />;
   }
+  const date = productTimeSetting(data?.nt_time, data?.nt_time_type);
+  const title = data?.nt_title;
+
+  const content = `${data?.nt_content}`;
   return (
     <View style={{flex: 1}}>
       <Header isBlack title={t('noticeListTitle')} isBack />

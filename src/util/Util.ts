@@ -128,7 +128,7 @@ export const brPrice = (
 };
 
 export const productTimeSetting = (
-  time: number | null,
+  time: number | string | null,
   timeType: 'now' | 'minute' | 'hour' | 'day' | 'month' | 'year' | null,
 ) => {
   if (!time || !timeType) {
