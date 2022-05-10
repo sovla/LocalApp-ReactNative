@@ -79,7 +79,7 @@ function useApi<T, D>(
   useEffect(() => {
     if (
       (defaultOption?.isFirst && isFocused && data === defaultValue) ||
-      defaultOption.focusRetry
+      (defaultOption.focusRetry && isFocused)
     ) {
       getData();
     }

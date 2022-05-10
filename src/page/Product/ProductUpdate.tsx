@@ -32,14 +32,18 @@ import {
   findCategory,
   findTier,
   getHitSlop,
+  reverseFindCategory,
+  reverseFindTier,
 } from '@/Util/Util';
-import {ProductTypes} from '@/Types/Components/global';
+import {categoryMenuTypes, ProductTypes} from '@/Types/Components/global';
 import {ProductUpdateProps} from '@/Types/Screen/Screen';
 import {useIsFocused} from '@react-navigation/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import TitleInput from '@/Components/Product/TitleInput';
 import useApi, {usePostSend} from '@/Hooks/useApi';
 import {CarFuelApi} from '@/Types/API/CarTypes';
+import {ProductInfoApi} from '@/Types/API/ProductTypes';
+import Product from '@/Components/Home/Product';
 
 export default function ProductUpdate({route: {params}}: ProductUpdateProps) {
   const {t} = useTranslation();
@@ -53,12 +57,23 @@ export default function ProductUpdate({route: {params}}: ProductUpdateProps) {
   const [selectDetail, setSelectDetail] = useState<string[]>([]);
   const [selectHistory, setSelectHistory] = useState<string[]>([]);
 
+  const {data: ProductInfo, getData} = useApi<
+    ProductInfoApi['T'],
+    ProductInfoApi['D']
+  >(
+    null,
+    'product_modify_info.php',
+    {
+      mt_idx: user.mt_idx as string,
+      pt_idx: '19', // params.pt_idx
+    },
+    {
+      isFirst: false,
+    },
+  );
+
   const {PostAPI: registerProduct} = usePostSend(
-    product.categoryMenu === 'car'
-      ? 'product_car_add.php'
-      : product.categoryMenu === 'motorcycle'
-      ? 'product_auto_add.php'
-      : 'product_add.php',
+    productApiSelector(params?.isEdit ?? false, product.categoryMenu),
     {
       imageField: 'pt_file',
       mt_idx: user.mt_idx,
@@ -147,6 +162,9 @@ export default function ProductUpdate({route: {params}}: ProductUpdateProps) {
         ...params,
       }));
     }
+    if (params?.isEdit) {
+      getData(); // 물품 불러오기
+    }
 
     return () => {};
   }, [isFocused]);
@@ -160,7 +178,6 @@ export default function ProductUpdate({route: {params}}: ProductUpdateProps) {
     }
     setProduct;
   }, [product.categoryMenu]);
-  console.log(product);
   useEffect(() => {
     onChangeProduct('pt_detail_option', selectDetail.join(','));
   }, [selectDetail]);
@@ -168,6 +185,52 @@ export default function ProductUpdate({route: {params}}: ProductUpdateProps) {
     onChangeProduct('pt_history', selectHistory.join(','));
   }, [selectHistory]);
 
+  // 물품 불러오기 API
+  useEffect(() => {
+    if (ProductInfo) {
+      setProduct({
+        categoryMenu: reverseFindCategory(ProductInfo.pt_cate),
+        content: ProductInfo.pt_detail,
+        imageFile: ProductInfo.pt_file.map(v => ({
+          path: v,
+          mime: '',
+          isLocal: false,
+        })),
+        isNego: ProductInfo.pt_price_check === 'Y',
+        location: ProductInfo.pt_location,
+        price: ProductInfo.pt_price,
+        pt_brand: ProductInfo.pt_brand,
+        pt_color: ProductInfo.pt_color,
+        pt_detail_option: ProductInfo.pt_detail_option.join(','),
+        pt_disp: ProductInfo.pt_disp,
+        pt_door: ProductInfo.pt_door,
+        pt_fuel: ProductInfo.pt_fuel,
+        pt_gear: ProductInfo.pt_gear,
+        pt_history: ProductInfo.pt_history.join(','),
+        pt_kilo: ProductInfo.pt_kilo,
+        pt_lat: +ProductInfo.pt_lat,
+        pt_lng: +ProductInfo.pt_lng,
+        pt_location_detail: ProductInfo.pt_location_detail,
+        pt_model: ProductInfo.pt_model,
+        pt_model_datail: ProductInfo.pt_model_detail,
+        pt_number: ProductInfo.pt_number,
+        pt_owner: ProductInfo.pt_owner,
+        pt_year: ProductInfo.pt_year,
+        tag: ProductInfo.pt_tag.join(' '),
+        tier: reverseFindTier(ProductInfo.pt_grade),
+        title: ProductInfo.pt_title,
+
+        //         carLocation:{
+        //           lc_idx:,
+        // lc_lat:,
+        // lc_lng:,
+        // lc_title:,
+        //         }
+      });
+      setSelectDetail(ProductInfo.pt_detail_option);
+      setSelectHistory(ProductInfo.pt_history);
+    }
+  }, [ProductInfo]);
   return (
     <View style={{flex: 1}}>
       <Header
@@ -883,4 +946,24 @@ function productSendData(product: ProductTypes): any {
       pt_detail: product.content,
     };
   }
+}
+
+function productApiSelector(
+  isEdit: boolean,
+  categoryMenuName: categoryMenuTypes['menu'] | null,
+) {
+  let result = '';
+  if (categoryMenuName === 'car') {
+    result = 'product_car_';
+  } else if (categoryMenuName === 'motorcycle') {
+    result = 'product_auto_';
+  } else {
+    result = 'product_';
+  }
+  if (isEdit) {
+    result += 'modify.php';
+  } else {
+    result += 'add.php';
+  }
+  return result;
 }

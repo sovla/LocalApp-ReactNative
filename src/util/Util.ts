@@ -162,11 +162,19 @@ export const findCategory = (str?: categoryMenuTypes['menu'] | null) => {
     return result !== -1 ? result + 1 : undefined;
   }
 };
+export const reverseFindCategory = (str: string) => {
+  return categoryMenu[+str - 1].name as any;
+};
 
 export const findTier = (str?: tierTypes['name'] | null) => {
   if (str) {
     const result = tierReverseList.findIndex(v => v.name === str);
     return result !== -1 ? `${result}` : undefined;
+  }
+};
+export const reverseFindTier = (str: string) => {
+  if (str) {
+    return tierReverseList[+str].name;
   }
 };
 

@@ -36,6 +36,7 @@ const TitleInput: React.FC<{
 }) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
+
   return (
     <View style={{marginBottom: getHeightPixel(25)}}>
       <Text fontSize={`${12 * fontSize}`} medium>
@@ -86,6 +87,7 @@ const TitleInput: React.FC<{
             placeholder={placeHolder}
             placeholderTextColor={Theme.color.gray}
             onChangeText={onChangeText}
+            value={value}
           />
           {unitText && unitText.length > 0 && (
             <Text
@@ -102,7 +104,7 @@ const TitleInput: React.FC<{
   );
 };
 
-export default TitleInput;
+export default React.memo(TitleInput);
 
 const styles = StyleSheet.create({
   touch: {

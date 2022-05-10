@@ -4,7 +4,8 @@ import jwtDecode from 'jwt-decode';
 import {Platform} from 'react-native';
 import i18next from 'i18next';
 
-const SECRETKEY = 'AAAAUV9vLXY:APA91bHklBUTeYmzfdYLVhpYEa8irZKGWSq8PXQkD6nMXSkreECmUr_-iFhy7ZJauagMU7w8GgkdjbF5i2IPrEx-W6JGeHYBBp1NNvd73H34IqUBUNvCdS0wj1ZXs__CRjh_j1NikOPP';
+const SECRETKEY =
+  'AAAAUV9vLXY:APA91bHklBUTeYmzfdYLVhpYEa8irZKGWSq8PXQkD6nMXSkreECmUr_-iFhy7ZJauagMU7w8GgkdjbF5i2IPrEx-W6JGeHYBBp1NNvd73H34IqUBUNvCdS0wj1ZXs__CRjh_j1NikOPP';
 
 const JWT_TOKEN = 'L0FONYcvjajULdjnaKpBP';
 
@@ -73,22 +74,33 @@ export const API = axios.create({
         // 배열인 경우
         imageData = [];
         for (const item of data[field]) {
+          if (!item?.mime) {
+            continue;
+          }
           imageData.push({
             //  하나의 배열에 푸쉬
             key: 'image' + new Date().getTime(),
-            uri: Platform.OS === 'android' ? item.path : item.path.replace('file://', ''),
-            type: item?.mime ?? 'image/jpeg',
+            uri:
+              Platform.OS === 'android'
+                ? item.path
+                : item.path.replace('file://', ''),
+            type: item?.mime,
             name: 'auto.jpg',
           });
         }
       } else {
         const item = data[field];
-        imageData = {
-          key: 'image' + new Date().getTime(),
-          uri: Platform.OS === 'android' ? item.path : item.path.replace('file://', ''),
-          type: item?.mime ?? 'image/jpeg',
-          name: 'auto.jpg',
-        };
+        if (item?.mime) {
+          imageData = {
+            key: 'image' + new Date().getTime(),
+            uri:
+              Platform.OS === 'android'
+                ? item.path
+                : item.path.replace('file://', ''),
+            type: item?.mime,
+            name: 'auto.jpg',
+          };
+        }
       }
     }
     const jwt_data = jwt_encode(cloneData, SECRETKEY);
