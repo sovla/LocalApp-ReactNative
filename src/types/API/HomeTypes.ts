@@ -20,3 +20,7 @@ export type LocationChangeApi = {
   mt_lng?: string | number;
   mt_limit?: string | number;
 };
+
+export type LogoutAPi = {
+  mt_idx: string;
+};

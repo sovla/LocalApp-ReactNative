@@ -31,12 +31,19 @@ import NoticeOn from '@assets/image/notice_on.png';
 import SettingsIcon from '@assets/image/settings.png';
 import ServiceCenterIcon from '@assets/image/service_center.png';
 import {Button} from '../Global/button';
+import {usePostSend} from '@/Hooks/useApi';
+import {LogoutAPi} from '@/Types/API/HomeTypes';
+import {AlertButton} from '@/Util/Util';
 
 const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
   const {t} = useTranslation();
   const fontSize = useAppSelector(state => state.fontSize.value);
   const {user} = useAppSelector(state => state);
   const navigation = useAppNavigation();
+
+  const {PostAPI} = usePostSend<LogoutAPi>('member_logout.php', {
+    mt_idx: user.mt_idx as string,
+  });
 
   const isLogin = true;
   const isBusiness = user.mt_busi === 'Y';
@@ -99,8 +106,14 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
     onClose();
   }, []);
   const onPressLogout = useCallback(() => {
-    navigation.navigate('Login');
-    onClose();
+    PostAPI().then(res => {
+      if (res?.result === 'false' && res?.msg) {
+        AlertButton(res.msg);
+      } else {
+        navigation.navigate('Login');
+        onClose();
+      }
+    });
   }, []);
 
   return (

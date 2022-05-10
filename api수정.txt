@@ -12,3 +12,6 @@ member_busi_modi_info.php
 비즈니스 핸드폰 정보 공개 여부 추가
 
 비즈니스 광고 배너 관리 이미지 받아오는 api 추가 필요
+
+member_logout.php
+404 에러 발생 
