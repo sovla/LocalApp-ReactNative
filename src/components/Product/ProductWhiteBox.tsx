@@ -1,5 +1,5 @@
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {DarkBlueText, Text} from '@Components/Global/text';
@@ -13,8 +13,9 @@ import {ProductWhiteBoxProps} from '@/Types/Components/ProductTypes';
 import useBoolean from '@/Hooks/useBoolean';
 import EditModal from './EditModal';
 import ModalReviewRequest from './ModalReviewRequest';
+import {CheckBoxImage} from '../Global/button';
 
-const ProductWhiteBox: React.FC<ProductWhiteBoxProps> = ({title = '', price = '', image, isComplete, selectMenu, item}) => {
+const ProductWhiteBox: React.FC<ProductWhiteBoxProps> = ({title = '', price = '', image, isComplete, selectMenu, item, setIsChange, isDelete, onPress, isOn}) => {
     const {t} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
 
@@ -22,60 +23,105 @@ const ProductWhiteBox: React.FC<ProductWhiteBoxProps> = ({title = '', price = ''
 
     const {value: isReview, on: onIsReview, off: offIsReview} = useBoolean(false);
 
+    useEffect(() => {
+        setIsChange(prev => !prev);
+    }, [isEditProduct]);
+
     return (
-        <View
-            style={[
-                styles.container,
-                {
-                    height: isComplete ? getHeightPixel(132) : getHeightPixel(90),
-                },
-            ]}>
-            <View style={styles.contentContainer}>
-                <View
-                    style={{
-                        ...styles.image,
-                        borderRadius: 6,
-                        overflow: 'hidden',
-                    }}>
-                    <Image source={image?.length > 0 ? {uri: image} : require('@assets/image/none_image_s.png')} style={[styles.image, isComplete && styles.opacity5]} />
-                </View>
-                <View style={[styles.contentView, isComplete && styles.opacity5]}>
-                    <Text numberOfLines={2} fontSize={`${14 * fontSize}`}>
-                        {title}
-                    </Text>
-                    <DarkBlueText bold fontSize={`${16 * fontSize}`}>
-                        {price}
-                    </DarkBlueText>
-                </View>
-                <TouchableOpacity onPress={onIsEditProduct}>
-                    <AutoHeightImage source={MoreIcon} width={getPixel(19.2)} />
-                </TouchableOpacity>
-            </View>
-            {isComplete && (
-                <View style={styles.menuView}>
-                    <TouchableOpacity style={styles.menuLeftTouch}>
-                        <Text fontSize={`${12 * fontSize}`}>{t(isComplete ? 'MyProductMenu3' : 'MyProductMenu1')}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={isComplete ? onIsReview : () => {}} style={styles.menuRightTouch}>
-                        <Text fontSize={`${12 * fontSize}`}>{t(isComplete ? 'MyProductMenu4' : 'MyProductMenu2')}</Text>
-                    </TouchableOpacity>
+        <TouchableOpacity onPress={onPress} style={styles.rowCenter} disabled={!isDelete}>
+            {isDelete && (
+                <View style={styles.marginLeft16}>
+                    <CheckBoxImage isOn={isOn} isBox width={getPixel(14)} height={getPixel(14)} />
                 </View>
             )}
 
-            {isEditProduct && <EditModal onClose={offIsEditProduct} isBump={selectMenu === t('ProfileSellProduct')} item={item} />}
-            {isReview && <ModalReviewRequest onClose={offIsReview} />}
-        </View>
+            <View
+                style={[
+                    styles.container,
+                    {
+                        minHeight: isComplete ? getHeightPixel(132) : getHeightPixel(90),
+                        width: isDelete ? getPixel(296) : getPixel(328),
+                    },
+                ]}>
+                <View style={styles.contentContainer}>
+                    <View
+                        style={{
+                            ...styles.image,
+                            borderRadius: 6,
+                            overflow: 'hidden',
+                        }}>
+                        <Image source={image?.length > 0 ? {uri: image} : require('@assets/image/none_image_s.png')} style={[styles.image, isComplete && styles.opacity5]} />
+
+                        {/* 예약중일때 노출 */}
+                        {item.fin_status === 'R' && (
+                            <View
+                                style={{
+                                    ...styles.image,
+                                    ...styles.reserveAbsoluteView,
+                                }}>
+                                <View style={styles.reservedView}>
+                                    <Text color={Theme.color.white} fontSize={`${12 * fontSize}`} medium>
+                                        {t('reserved')}
+                                    </Text>
+                                </View>
+                            </View>
+                        )}
+                    </View>
+                    <View style={[styles.contentView, isComplete && styles.opacity5]}>
+                        <Text numberOfLines={2} fontSize={`${14 * fontSize}`}>
+                            {title}
+                        </Text>
+                        <DarkBlueText bold fontSize={`${16 * fontSize}`}>
+                            {price}
+                        </DarkBlueText>
+                    </View>
+                    {!isDelete && ( // 삭제 모드 켜져있을경우 메뉴 사라짐
+                        <TouchableOpacity onPress={onIsEditProduct}>
+                            <AutoHeightImage source={MoreIcon} width={getPixel(19.2)} />
+                        </TouchableOpacity>
+                    )}
+                </View>
+                {isComplete && (
+                    <View style={styles.menuView}>
+                        <TouchableOpacity style={styles.menuLeftTouch}>
+                            <Text fontSize={`${12 * fontSize}`}>{t(isComplete ? 'MyProductMenu3' : 'MyProductMenu1')}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={isComplete ? onIsReview : () => {}} style={styles.menuRightTouch}>
+                            <Text fontSize={`${12 * fontSize}`}>{t(isComplete ? 'MyProductMenu4' : 'MyProductMenu2')}</Text>
+                        </TouchableOpacity>
+                    </View>
+                )}
+
+                {isEditProduct && <EditModal onClose={offIsEditProduct} isBump={selectMenu === 'ProfileSellProduct'} item={item} />}
+                {isReview && <ModalReviewRequest onClose={offIsReview} />}
+            </View>
+        </TouchableOpacity>
     );
 };
 
 export default ProductWhiteBox;
 
 const styles = StyleSheet.create({
+    rowCenter: {flexDirection: 'row', alignItems: 'center'},
+    marginLeft16: {
+        marginLeft: getPixel(16),
+    },
+    reserveAbsoluteView: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 100,
+        position: 'absolute',
+    },
+    reservedView: {
+        paddingHorizontal: getPixel(6.6),
+        paddingVertical: getHeightPixel(3),
+        backgroundColor: Theme.color.aqua_04,
+        borderRadius: 6,
+    },
     opacity5: {
         opacity: 0.5,
     },
     container: {
-        width: getPixel(328),
         backgroundColor: Theme.color.white,
         borderRadius: 10,
         marginBottom: getHeightPixel(8),

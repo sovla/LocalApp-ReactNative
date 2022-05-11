@@ -1,5 +1,5 @@
 import {Dimensions, FlatList, Image, ImageBackground, Modal, ScrollView, StyleSheet, TouchableOpacity, View, ViewStyle} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 
 import BackGroundImage from '@assets/image/BG.png';
 import {fontSizeChange, getHeightPixel, getPixel} from '@/Util/pixelChange';
@@ -7,7 +7,7 @@ import LocationWhiteIcon from '@assets/image/location_white.png';
 import SearchIcon from '@assets/image/search_white.png';
 import MenuIcon from '@assets/image/bar_white.png';
 import AlarmIcon from '@assets/image/notice_white.png';
-import {DarkBlueText, GrayText, Text, WhiteText} from '@Components/Global/text';
+import {DarkBlueText, GrayText, RedText, Text, WhiteText} from '@Components/Global/text';
 import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
@@ -38,6 +38,7 @@ import i18next from 'i18next';
 import {languageList} from '@/assets/global/dummy';
 import Menu from '@/Components/Profile/Menu';
 import ProductWhiteBox from '@/Components/Product/ProductWhiteBox';
+import NotAllowedRedIcon from '@assets/image/not_allowed_red.png';
 import {EditModalProps} from '@/Types/Components/ProductTypes';
 import {TextInput} from 'react-native-gesture-handler';
 import {brPrice} from '@Util/Util';
@@ -49,6 +50,7 @@ const EditModal: React.FC<EditModalProps> = ({onClose, isBump, item}) => {
     const fontSize = useAppSelector(state => state.fontSize.value);
     const {user} = useAppSelector(state => state);
     const [isBumpUp, setIsBumpUp] = useState(false);
+    const [isAlert, setIsAlert] = useState(false);
     const [bumpPrice, setBumpPrice] = useState('');
     const navigation = useAppNavigation();
     const onPressUpdate = () => {
@@ -71,7 +73,6 @@ const EditModal: React.FC<EditModalProps> = ({onClose, isBump, item}) => {
         // 판매중
         mt_idx: user.mt_idx as string,
         pt_idx: item.pt_idx,
-        pt_price: bumpPrice,
     });
     const {PostAPI: finishApi} = usePostSend('sell_product_finish.php', {
         // 판매 완료
@@ -80,6 +81,11 @@ const EditModal: React.FC<EditModalProps> = ({onClose, isBump, item}) => {
         pt_price: bumpPrice,
     });
     const {PostAPI: deleteApi} = usePostSend('sell_product_delete_arr.php', {
+        // 게시글 삭제
+        mt_idx: user.mt_idx as string,
+        pt_idx: item.pt_idx,
+    });
+    const {PostAPI: resaleApi} = usePostSend('sell_product_resell.php', {
         // 게시글 삭제
         mt_idx: user.mt_idx as string,
         pt_idx: item.pt_idx,
@@ -98,7 +104,7 @@ const EditModal: React.FC<EditModalProps> = ({onClose, isBump, item}) => {
         }
     };
 
-    const onPressBumpUp = () => {
+    const onPressBumpUp = useCallback(() => {
         bumpUpApi().then(res => {
             if (res?.result === 'false' && res?.msg) {
                 AlertButton(res.msg);
@@ -106,16 +112,72 @@ const EditModal: React.FC<EditModalProps> = ({onClose, isBump, item}) => {
                 onClose();
             }
         });
-    };
+    }, []);
+
+    const onPressFinish = useCallback(() => {
+        finishApi().then(res => {
+            if (res?.result === 'false' && res?.msg) {
+                AlertButton(res.msg);
+            } else {
+                if (res?.data.all_finish === 'Y') {
+                    setIsAlert(true);
+                }
+            }
+        });
+    }, []);
+
+    const onPressResale = useCallback(() => {
+        resaleApi().then(res => {
+            if (res?.result === 'false' && res?.msg) {
+                AlertButton(res.msg);
+            } else {
+                onClose();
+                navigation.navigate('ProductUpdate', {
+                    isEdit: true,
+                    pt_idx: item.pt_idx,
+                });
+            }
+        });
+    }, []);
     return (
         <Modal visible transparent animationType="fade" onRequestClose={onClose}>
             <View style={styles.dim}>
+                {isAlert && (
+                    <View style={styles.alertAbsoluteContainer}>
+                        <View style={styles.alertView}>
+                            <Image source={NotAllowedRedIcon} style={styles.alertImage} />
+                            {/* 물건명 */}
+                            <RedText style={{width: getPixel(212)}} fontSize={`${18 * fontSize}`} medium textAlign="center" numberOfLines={1}>
+                                "{item.pt_title}"
+                            </RedText>
+                            <RedText fontSize={`${18 * fontSize}`} medium textAlign="center">
+                                {t('productExhaustion')}
+                            </RedText>
+                            <View style={styles.alertBottomRow}>
+                                {/* 재판매 */}
+                                <TouchableOpacity onPress={onPressResale} style={{...styles.alertButton, borderWidth: 1, borderColor: Theme.color.blue_3D}}>
+                                    <Text color={Theme.color.blue_3D} fontSize={`${16 * fontSize}`}>
+                                        {t('MyProductMenu3')}
+                                    </Text>
+                                </TouchableOpacity>
+                                {/* 판매완료 */}
+                                <TouchableOpacity onPress={onClose} style={{...styles.alertButton, backgroundColor: Theme.color.blue_3D, marginLeft: getPixel(24)}}>
+                                    <Text color={Theme.color.white} fontSize={`${16 * fontSize}`}>
+                                        {t('ProfileSellProductComplete')}
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                )}
                 <View
                     style={{
                         flex: 1,
+                        zIndex: 100,
                     }}
                     onStartShouldSetResponder={() => {
                         // 모달끄기
+                        console.log('확인');
                         onClose();
                         return false;
                     }}></View>
@@ -135,25 +197,26 @@ const EditModal: React.FC<EditModalProps> = ({onClose, isBump, item}) => {
                                             {t('bumpUp')}
                                         </WhiteText>
                                     </TouchableOpacity>
-                                    {/* 예약중 */}
+                                    {/* 예약중 / 판매중 으로 변경 */}
                                     <TouchableOpacity
                                         onPress={() => {
-                                            reservationApi();
+                                            if (item.fin_status === 'R') {
+                                                // 예약중 -> 판매중
+                                                sellingApi();
+                                            } else {
+                                                reservationApi(); // 판매중 -> 예약중
+                                            }
+
                                             onClose();
                                         }}
                                         style={styles.whiteView}>
                                         <Text medium fontSize={`${16 * fontSize}`}>
-                                            {t('MyProductMenu1')}
+                                            {item.fin_status === 'R' ? t('MyProductMenu5') : t('MyProductMenu1')}
                                         </Text>
                                     </TouchableOpacity>
                                     <Line isGray />
                                     {/* 판매완료 */}
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            finishApi();
-                                            onClose();
-                                        }}
-                                        style={styles.whiteView}>
+                                    <TouchableOpacity onPress={onPressFinish} style={styles.whiteView}>
                                         <Text medium fontSize={`${16 * fontSize}`}>
                                             {t('MyProductMenu2')}
                                         </Text>
@@ -261,6 +324,35 @@ const EditModal: React.FC<EditModalProps> = ({onClose, isBump, item}) => {
 export default EditModal;
 
 const styles = StyleSheet.create({
+    alertImage: {width: getPixel(50), height: getPixel(50), marginTop: getHeightPixel(40), marginBottom: getHeightPixel(20)},
+    alertAbsoluteContainer: {
+        width: getPixel(360),
+        height: getHeightPixel(740),
+        backgroundColor: '#0007',
+        position: 'absolute',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 150,
+    },
+    alertView: {
+        width: getPixel(280),
+        height: getHeightPixel(295),
+        backgroundColor: Theme.color.white,
+        borderRadius: 16,
+        alignItems: 'center',
+    },
+    alertBottomRow: {
+        position: 'absolute',
+        left: getPixel(20),
+        bottom: getHeightPixel(20),
+        flexDirection: 'row',
+    },
+    alertButton: {
+        width: getPixel(108),
+        height: getHeightPixel(36),
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     widthView: {
         width: getPixel(328),
         marginHorizontal: getPixel(16),

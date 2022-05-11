@@ -6,9 +6,10 @@ export interface ProductWhiteBoxProps {
     isComplete?: boolean;
     selectMenu: string;
     image: any;
+    isDelete: boolean;
     item: {
         bump_up_time: string;
-        fin_status: 'Y' | 'N';
+        fin_status: 'Y' | 'N' | 'R';
         bump_up_check: 'Y' | 'N';
         pt_cate: string;
         pt_file: string;
@@ -16,13 +17,16 @@ export interface ProductWhiteBoxProps {
         pt_price: string;
         pt_title: string;
     };
+    setIsChange: React.Dispatch<React.SetStateAction<boolean>>;
+    onPress: () => void;
+    isOn: boolean;
 }
 
 export interface EditModalProps extends ModalProps {
     isBump?: boolean;
     item: {
         bump_up_time: string;
-        fin_status: 'Y' | 'N';
+        fin_status: 'Y' | 'N' | 'R';
         pt_cate: string;
         pt_file: string;
         pt_idx: string;

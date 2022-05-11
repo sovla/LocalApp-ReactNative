@@ -141,6 +141,7 @@ export const usePostSend = <D>(apiPath: string, apiData: NonNullable<D>) => {
             msg: null | string;
         }> => {
             setIsLoading(true);
+            console.log(apiPath + ':::', apiData);
             const res = await API.post<
                 any,
                 AxiosResponse<
