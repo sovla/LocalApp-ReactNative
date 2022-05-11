@@ -52,6 +52,12 @@ export const userSlice = createSlice({
                 ...action.payload,
             });
         },
+        changeOptionalUser: (state, action: PayloadAction<Partial<userState>>) => {
+            return (state = {
+                ...state,
+                ...action.payload,
+            });
+        },
         changeProfileImage: (state, action: PayloadAction<userState['mt_profile']>) => {
             return (state = {
                 ...state,
@@ -68,7 +74,7 @@ export const userSlice = createSlice({
     },
 });
 
-export const {changeUser, changeProfileImage, changeTell} = userSlice.actions;
+export const {changeUser, changeProfileImage, changeTell, changeOptionalUser} = userSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectUser = (state: RootState) => state;
