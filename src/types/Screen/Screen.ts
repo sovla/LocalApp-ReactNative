@@ -187,7 +187,10 @@ type Screen = {
     Setting: StackScreenProps<Screen> | undefined;
     SettingPrivacy: StackScreenProps<Screen> | undefined;
     SettingPrivacyTel: StackScreenProps<Screen> | undefined;
-    SettingPrivacyTelAuth: StackScreenProps<Screen> | undefined;
+    SettingPrivacyTelAuth: {
+        jct_country: string;
+        jct_hp: string;
+    };
     SettingDeleteAccount: StackScreenProps<Screen> | undefined;
     SettingAlarm: StackScreenProps<Screen> | undefined;
     SettingChatting: StackScreenProps<Screen> | undefined;

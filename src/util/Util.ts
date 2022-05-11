@@ -194,3 +194,11 @@ export const changeBirthDate = (str?: string) => {
         return `${year}. ${month}. ${day}`;
     }
 };
+
+export const apiResult = (res: {result: 'true' | 'false' | null; data: any; msg: string | null}) => {
+    if (res?.result === 'false' && res?.msg) {
+        AlertButton(res.msg);
+    } else {
+        return res;
+    }
+};
