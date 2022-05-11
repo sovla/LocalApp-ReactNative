@@ -1,4 +1,4 @@
-import {StyleSheet, Touchable, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import React, {useRef, useState} from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
@@ -13,14 +13,14 @@ import Line from '@/Components/Global/Line';
 import {Picker} from '@react-native-picker/picker';
 import {usePostSend} from '@/Hooks/useApi';
 import useUpdateEffect from '@/Hooks/useUpdateEffect';
-import useDebounce from '@/Hooks/useDebounce';
-import {useDispatch} from 'react-redux';
 import {apiResult} from '@/Util/Util';
 import {changeOptionalUser} from '@/Store/userState';
+import {setAlramPushApi} from '@/Types/Components/SettingTypes';
 
-interface channerId {
+export interface channerId {
     type: 'sound1' | 'sound2' | 'sound3' | 'default';
 }
+
 export default function SettingAlarm() {
     const {t} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
@@ -33,13 +33,7 @@ export default function SettingAlarm() {
     const [isShow, setIsShow] = useState(user.mt_pushcon === 'Y');
     const [channerId, setChannerId] = useState<channerId['type']>('default');
 
-    const {PostAPI: setSetting} = usePostSend<{
-        mt_idx: string;
-        mt_message: 'Y' | 'N';
-        mt_message_id: channerId['type'];
-        mt_vibrate: 'Y' | 'N';
-        mt_pushcon: 'Y' | 'N';
-    }>('member_message_modify.php', {
+    const {PostAPI: setSetting} = usePostSend<setAlramPushApi>('member_message_modify.php', {
         mt_idx: user.mt_idx as string,
         mt_message: messageAlarm ? 'Y' : 'N',
         mt_message_id: channerId,
