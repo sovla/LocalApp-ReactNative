@@ -466,6 +466,7 @@ export const ko = {
         productExhaustion: '제품이 모두 소진 되었습니다.',
         reserved: '예약중',
         soldOut: '판매완료',
+        imageAlert: '이미지는 총 3장까지 등록 가능합니다.',
     },
 };
 export const es = {

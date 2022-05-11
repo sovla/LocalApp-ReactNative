@@ -17,11 +17,13 @@ import {MyProductProps} from '@/Types/Screen/Screen';
 import useApi, {usePostSend} from '@/Hooks/useApi';
 import {ProductFinishListApi, ProductSaleListApi} from '@/Types/API/ProductTypes';
 import {AlertButton, AlertButtons, brPrice} from '@/Util/Util';
+import {useIsFocused} from '@react-navigation/native';
 
 const MyProduct: React.FC<MyProductProps> = ({navigation}) => {
     const {t} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
     const {user} = useAppSelector(state => state);
+    const isFocused = useIsFocused();
 
     const [selectMenu, setSelectMenu] = useState<any>('ProfileSellProduct');
     const [isChange, setIsChange] = useState(false); // 모달 꺼졌다 켜졌을때 새로 API 치기위한 상태
@@ -29,7 +31,7 @@ const MyProduct: React.FC<MyProductProps> = ({navigation}) => {
     const [isDelete, setIsDelete] = useState(false);
     const [deleteList, setDeleteList] = useState<string[]>([]);
 
-    const {data, getData} = useApi<ProductSaleListApi['T'], ProductSaleListApi['D']>(
+    const {data: productSaleList, getData: getProductSaleList} = useApi<ProductSaleListApi['T'], ProductSaleListApi['D']>(
         null,
         'sell_product_list.php',
         {
@@ -37,7 +39,7 @@ const MyProduct: React.FC<MyProductProps> = ({navigation}) => {
         },
         {isFirst: false},
     );
-    const {data: finishData, getData: finishGetData} = useApi<ProductFinishListApi['T'], ProductFinishListApi['D']>(
+    const {data: finishList, getData: getFinishList} = useApi<ProductFinishListApi['T'], ProductFinishListApi['D']>(
         null,
         'sell_product_finish_list.php',
         {
@@ -96,10 +98,10 @@ const MyProduct: React.FC<MyProductProps> = ({navigation}) => {
     );
 
     const onPressListAllDelete = useCallback(() => {
-        if (data && deleteList.length !== data.length) {
-            setDeleteList(data.map(v => v.pt_idx));
+        if (productSaleList && deleteList.length !== productSaleList.length) {
+            setDeleteList(productSaleList.map(v => v.pt_idx));
         }
-    }, [data, deleteList]);
+    }, [productSaleList, deleteList]);
 
     const _renderItem = useCallback(
         ({item, index}) => {
@@ -123,9 +125,9 @@ const MyProduct: React.FC<MyProductProps> = ({navigation}) => {
 
     useLayoutEffect(() => {
         if (selectMenu === 'ProfileSellProduct') {
-            getData();
+            if (isFocused) getProductSaleList();
         } else {
-            finishGetData();
+            if (isFocused) getFinishList();
         }
 
         return () => {};
@@ -152,7 +154,7 @@ const MyProduct: React.FC<MyProductProps> = ({navigation}) => {
             </ImageBackground>
             {selectMenu === 'ProfileSellProduct' ? (
                 <FlatList
-                    data={data}
+                    data={productSaleList}
                     keyExtractor={(item, index) => index.toString()}
                     ListHeaderComponent={
                         <>
@@ -171,7 +173,7 @@ const MyProduct: React.FC<MyProductProps> = ({navigation}) => {
                 />
             ) : (
                 <FlatList
-                    data={finishData}
+                    data={finishList}
                     keyExtractor={(item, index) => index.toString()}
                     ListHeaderComponent={
                         <>

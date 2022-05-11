@@ -140,7 +140,7 @@ export const findCategory = (str?: categoryMenuTypes['menu'] | null) => {
     }
 };
 export const reverseFindCategory = (str: string) => {
-    return categoryMenu[+str - 1].name as any;
+    return categoryMenu[+str - 1].name;
 };
 
 export const findTier = (str?: tierTypes['name'] | null) => {

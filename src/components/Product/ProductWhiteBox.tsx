@@ -24,7 +24,7 @@ const ProductWhiteBox: React.FC<ProductWhiteBoxProps> = ({title = '', price = ''
     const {value: isReview, on: onIsReview, off: offIsReview} = useBoolean(false);
 
     useEffect(() => {
-        setIsChange(prev => !prev);
+        if (!isEditProduct) setIsChange(prev => !prev);
     }, [isEditProduct]);
 
     return (

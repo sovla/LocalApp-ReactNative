@@ -157,10 +157,12 @@ export default function ProductUpdate({route: {params}}: ProductUpdateProps) {
     useEffect(() => {
         onChangeProduct('pt_history', selectHistory.join(','));
     }, [selectHistory]);
-
     // 물품 불러오기 API
     useEffect(() => {
         if (ProductInfo) {
+            const categoryName = reverseFindCategory(ProductInfo.pt_cate);
+            const isCarAndMotor: boolean = categoryName === 'car' || categoryName === 'motorcycle';
+
             setProduct({
                 categoryMenu: reverseFindCategory(ProductInfo.pt_cate),
                 content: ProductInfo.pt_detail,
@@ -170,7 +172,7 @@ export default function ProductUpdate({route: {params}}: ProductUpdateProps) {
                     isLocal: false,
                 })),
                 isNego: ProductInfo.pt_price_check === 'Y',
-                location: ProductInfo.pt_location,
+
                 price: ProductInfo.pt_price,
                 pt_brand: ProductInfo.pt_brand,
                 pt_color: ProductInfo.pt_color,
@@ -192,13 +194,14 @@ export default function ProductUpdate({route: {params}}: ProductUpdateProps) {
                 tag: ProductInfo.pt_tag.join(' '),
                 tier: reverseFindTier(ProductInfo.pt_grade),
                 title: ProductInfo.pt_title,
-
-                //         carLocation:{
-                //           lc_idx:,
-                // lc_lat:,
-                // lc_lng:,
-                // lc_title:,
-                //         }
+                location: isCarAndMotor ? '' : ProductInfo.pt_location,
+                carLocation: isCarAndMotor
+                    ? {
+                          lc_lat: ProductInfo.pt_lat,
+                          lc_lng: ProductInfo.pt_lng,
+                          lc_title: ProductInfo.pt_location,
+                      }
+                    : undefined,
             });
             setSelectDetail(ProductInfo.pt_detail_option);
             setSelectHistory(ProductInfo.pt_history);
