@@ -1,4 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {Dimensions} from 'react-native';
 import type {RootState} from './store';
 
 // Define a type for the slice state
@@ -37,7 +38,7 @@ const initialState: userState = {
     mt_name: 'kyoujin',
     mt_profile: 'https://dmonster1786.cafe24.com/images/uploads/mt_profile_14_6JuqS2vf.jpg',
     mt_pushcon: 'Y',
-    mt_uid: 'Takymp4EKW',
+    mt_uid: Dimensions.get('window').height > 750 ? 'Takymp4EKW' : '7LorEVehbz',
     mt_vibrate: 'Y',
 };
 

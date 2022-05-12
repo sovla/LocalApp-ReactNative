@@ -1,5 +1,5 @@
-import {Image, ImageBackground, Keyboard, StyleSheet, TouchableOpacity, View, TextInput} from 'react-native';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {Image, ImageBackground, Keyboard, StyleSheet, TouchableOpacity, View, TextInput, Platform, FlatList, KeyboardAvoidingView} from 'react-native';
+import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {Text, WhiteText} from '@Components/Global/text';
@@ -20,7 +20,7 @@ import MoreWhiteIcon from '@assets/image/more_white.png';
 import StoreWhiteIcon from '@assets/image/store_white.png';
 import {getHitSlop} from '@/Util/Util';
 import OtherChatting from '@/Components/Chatting/OtherChatting';
-import Date from '@/Components/Chatting/Date';
+import ChatDate from '@/Components/Chatting/ChatDate';
 import MyChatting from '@/Components/Chatting/MyChatting';
 import ProductChatting from '@/Components/Chatting/ProductChatting';
 import SendGrayIcon from '@assets/image/send_gray.png';
@@ -31,13 +31,17 @@ import LocationOrangeIcon from '@assets/image/location_orange.png';
 import LocationChatting from '@/Components/Chatting/LocationChatting';
 import ModalChattingSetting from '@/Components/Chatting/ModalChattingSetting';
 import SendBird from 'sendbird';
+import messaging from '@react-native-firebase/messaging';
+import ModalPhoto from '@/Components/Business/ModalPhoto';
+import ImageCropPicker from 'react-native-image-crop-picker';
 
 export default function ChattingDetail({navigation}: ChattingDetailProps) {
     const {t} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
+
     const {
         global: {
-            data: {token},
+            data: {token, sb},
         },
         user,
     } = useAppSelector(state => state);
@@ -45,63 +49,204 @@ export default function ChattingDetail({navigation}: ChattingDetailProps) {
     const [isOn, setIsOn] = useState<boolean>(false);
 
     const [chatting, setChatting] = useState<string>('');
+    const [Channel, setChannel] = useState<SendBird.GroupChannel | undefined>();
+    const [chatList, setChatList] = useState<(SendBird.UserMessage | SendBird.FileMessage | SendBird.AdminMessage)[]>([]);
+    const [query, setQuery] = useState<SendBird.PreviousMessageListQuery>();
 
-    const [Channel, setChannel] = useState<SendBird.OpenChannel | undefined>();
-    const [UserList, setUserList] = useState([]);
-    const [UserChannelList, setUserChannelList] = useState([]);
-    const sb = new SendBird({appId: 'AA15B76B-F3DD-4FF8-9FCB-F53751AC169A'});
+    const [isAlbum, setIsAlbum] = useState(false);
+
+    // const [chatIdSet, setChatIdSet] = useState(new Set()); 필요 없을듯
+
+    const flatListRef = useRef<FlatList>(null);
+    const scrollPosition = useRef({
+        position: 0,
+        keyboardHeight: 0,
+    });
+
     const channelHandler = new sb.ChannelHandler();
-    channelHandler.onMessageReceived = (targetChannel, message) => {
-        console.log('onMessageReceived', targetChannel, message);
+    channelHandler.onMessageReceived = async (targetChannel, message) => {
+        setChatList(prev => [...prev, message]);
     };
 
-    const name = 'Designplus';
-    const viewRef = useRef<View>(null);
-    const _onButtonPress = () => {};
+    sb.addChannelHandler('chat', channelHandler);
+
+    const getSendBirdMessage = async () => {
+        if (Channel) {
+            if (query?.hasMore) {
+                const messages = await query.load(100, true);
+                console.log('getMessages ::: ', messages);
+                setChatList(messages);
+            }
+        }
+    };
+
+    const channelName = 'chat_chat_uid';
 
     const onPressLocation = useCallback(() => {
         navigation.navigate('ChattingLocation');
     }, []);
 
     const onPressShopIcon = useCallback(() => {
-        navigation.navigate('ProfileHome');
+        navigation.navigate('ProfileHome', {
+            sell_idx: '1', // 수정필요 고정값
+        });
     }, []);
 
+    const scrollToEnd = () => {
+        if (flatListRef?.current)
+            flatListRef.current?.scrollToOffset({
+                offset: chatList.length > 0 ? 500 * chatList.length : 20000,
+                animated: true,
+            });
+    };
+
     async function StartChat() {
-        console.log('채팅의 아이디를 확인 합니다--------------');
-        console.log('채팅 유저의 아이디      :   ' + chatting);
-        console.log('채팅하는 대상자의 아이디  :   ' + name);
-        console.log('----------------------------------');
-        //이미 방이 다시 방을 만들지 않으므로
-        let UserIds = [];
-        UserIds.push(name);
-        UserIds.push(chatting);
         const params = new sb.UserMessageParams();
 
         params.message = chatting;
 
         if (Channel) {
-            Channel.sendUserMessage(params);
+            Channel.sendUserMessage(params, (error, message) => {
+                setChatList(prev => [...prev, message]);
+                console.log('보낸 메시지 에러', error);
+                // setChatList(prev => [...prev, message]);
+            });
         }
     }
+
+    const fileSend = async (images: {path: string; mime: string}[]) => {
+        setIsAlbum(false);
+
+        const params = new sb.FileMessageParams();
+        const image = images[0];
+        const cropImage = await ImageCropPicker.openCropper({
+            path: image.path,
+            mediaType: 'photo',
+            compressImageMaxHeight: 1000,
+            compressImageMaxWidth: 1000,
+            enableRotationGesture: false,
+            forceJpg: true,
+        });
+        params.file = {
+            size: cropImage.size,
+            url: Platform.OS === 'android' ? cropImage.path.replace('file://', '') : cropImage.path.replace('file://', ''),
+            type: cropImage.mime,
+            name: 'auto.jpg',
+        };
+        params.fileName = 'auto.jpg';
+        params.fileSize = cropImage.size;
+        params.fileUrl = Platform.OS === 'android' ? cropImage.path.replace('file://', '') : cropImage.path.replace('file://', '');
+        params.mimeType = cropImage.mime;
+        console.log(cropImage);
+        Channel?.sendFileMessage(params, (error, message) => {
+            if (error) {
+                console.log('Error Send File', error);
+            }
+            console.log('message File Send', message);
+        });
+    };
+
+    const onPressAlbum = useCallback(() => {
+        setIsAlbum(true);
+    }, []);
+    const onPressCamera = useCallback(() => {}, []);
+
     useEffect(() => {
         (async () => {
-            sb.registerGCMPushTokenForCurrentUser(token);
+            if (user?.mt_idx) {
+                // 토큰 셋팅
+                const authorizationStatus = await messaging().requestPermission();
+                if (authorizationStatus === messaging.AuthorizationStatus.AUTHORIZED || authorizationStatus === messaging.AuthorizationStatus.PROVISIONAL) {
+                    if (Platform.OS === 'ios') {
+                        const token = await messaging().getAPNSToken();
+
+                        sb.registerAPNSPushTokenForCurrentUser(token as string);
+                    } else {
+                        const token = await messaging().getToken();
+                        sb.registerGCMPushTokenForCurrentUser(token);
+                    }
+                }
+            }
+
             await sb.connect(user.mt_uid as string, (err, user) => {
-                console.log(err);
+                console.log('connect ::: ', err, user);
             });
-            const params = new sb.OpenChannelParams();
-            const channel = await sb.OpenChannel.createChannel(params, (openChannel, error) => {
-                console.log(openChannel, error);
-            });
-            setChannel(channel);
+            const listQuery = sb.GroupChannel.createMyGroupChannelListQuery(); // 그룹 채널 찾기
+            let find = false; // 그룹 채널 있을경우 true
+            listQuery.includeEmpty = true; // 빈곳도 찾기
+
+            // listQuery.userIdsIncludeFilter = [user.mt_idx as string];
+            listQuery.channelUrlsFilter = ['sendbird_group_channel_72905088_31d25895a7e551fe62b50faa2af6c29bcc194717'];
+            if (listQuery.hasNext) {
+                await listQuery.next((err, groupChannels) => {
+                    if (err) {
+                        // 에러 거르기
+                        console.log('groupChannelsFind Err', err);
+                    }
+                    console.log('groupChannels', groupChannels);
+                    if (groupChannels && Array.isArray(groupChannels))
+                        groupChannels.forEach(channel => {
+                            console.log('channelFind', channel);
+                            if (channel.name === channelName) {
+                                setChannel(channel);
+                                find = true;
+                            }
+                        });
+                });
+            }
+            if (!find) {
+                const params = new sb.GroupChannelParams();
+                params.isDistinct = false; // 재생성
+                params.isPublic = false; // 프라이빗한 공간 생성
+                params.isSuper = false; //  슈퍼 그룹방 X
+                params.addUserIds([user.mt_uid as string, '7LorEVehbz']); // 560  수정필요
+                params.name = channelName; // 수정필요
+
+                const channel = await sb.GroupChannel.createChannel(params, (openChannel, error) => {
+                    console.log('openChannel :::', openChannel, error);
+                });
+                setChannel(channel);
+            }
         })();
+
+        return () => {
+            sb.disconnect();
+        };
     }, []);
     useEffect(() => {
         if (Channel) {
-            Channel.enter();
+            setQuery(Channel.createPreviousMessageListQuery());
         }
     }, [Channel]);
+
+    useEffect(() => {
+        if (query) getSendBirdMessage();
+    }, [query]);
+    useEffect(() => {
+        scrollToEnd();
+    }, [chatList]);
+
+    useEffect(() => {
+        // 키보드 높이 에 따라 화면 이동 되도록
+        Keyboard.addListener('keyboardDidShow', e => {
+            scrollPosition.current.keyboardHeight = e.endCoordinates.height;
+            flatListRef.current?.scrollToOffset({
+                offset: e.endCoordinates.height + scrollPosition.current.position,
+                animated: false,
+            });
+        });
+        Keyboard.addListener('keyboardDidHide', e => {
+            console.log(scrollPosition.current.position - e.endCoordinates.height, e.endCoordinates);
+            flatListRef.current?.scrollToOffset({
+                offset: scrollPosition.current.position - scrollPosition.current.keyboardHeight,
+                animated: false,
+            });
+        });
+        return () => {
+            Keyboard.removeAllListeners('keyboardDidShow');
+            Keyboard.removeAllListeners('keyboardDidHide');
+        };
+    }, []);
 
     return (
         <View
@@ -117,9 +262,7 @@ export default function ChattingDetail({navigation}: ChattingDetailProps) {
                             }}>
                             <AutoHeightImage source={BackWhiteIcon} width={getPixel(30)} />
                         </TouchableOpacity>
-                        <WhiteText bold fontSize={`${16 * fontSize}`} style={styles.marginLeft}>
-                            {name}
-                        </WhiteText>
+                        <WhiteText bold fontSize={`${16 * fontSize}`} style={styles.marginLeft}></WhiteText>
                     </View>
                     <View style={styles.rowCenter}>
                         <TouchableOpacity onPress={onPressShopIcon} hitSlop={getHitSlop(5)} style={styles.marginRight}>
@@ -134,20 +277,35 @@ export default function ChattingDetail({navigation}: ChattingDetailProps) {
                     </View>
                 </ImageBackground>
             </View>
-            <View>
-                <KeyboardAwareFlatList
-                    data={[1, 2, 3, 4, 5, 6, 7, 81, 2, 3, 4, 5, 6, 7, 81, 2, 3, 4, 5, 6, 7, 81, 2, 3, 4, 5, 6, 7, 81, 2, 3, 4, 5, 6, 7, 8]}
-                    contentContainerStyle={{
-                        paddingBottom: getHeightPixel(200),
+            <View
+                style={{
+                    flex: 1,
+                }}>
+                <FlatList
+                    ref={flatListRef}
+                    data={chatList}
+                    keyExtractor={(item, index) => index.toString()}
+                    // onEndReached={() => {
+                    //     getSendBirdMessage();
+                    // }}
+                    onScroll={e => {
+                        scrollPosition.current.position = e.nativeEvent.contentOffset.y;
                     }}
-                    renderItem={({v, index}) => {
+                    renderItem={({item, index}) => {
+                        let isMy = null;
+                        if (item?.message && typeof item.message === 'string' && '_sender' in item) {
+                            isMy = item._sender.userId === user.mt_uid;
+                            return (
+                                <>
+                                    {isMy === false && <OtherChatting date="11:20" content={item.message} />}
+                                    {isMy === true && <MyChatting date="11:20" isCheck={2} content={item.message} />}
+                                </>
+                            );
+                        }
+
                         return (
                             <>
-                                {index === 0 && <Date />}
-                                {index === 1 && <OtherChatting date="11:20" content="Neque porro quisquam est." />}
-                                {index === 2 && <MyChatting date="11:20" isCheck={2} content="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque." />}
-                                {index === 3 && <OtherChatting date="11:30" content="Error sit?" />}
-                                {index === 4 && <MyChatting date="11:20" isCheck={2} content="Error sit?" />}
+                                {index === 0 && <ChatDate />}
                                 {index === 5 && (
                                     <LocationChatting
                                         date="11:20"
@@ -166,14 +324,15 @@ export default function ChattingDetail({navigation}: ChattingDetailProps) {
                                         isMy={index % 2 === 1}
                                     />
                                 )}
-                                {index === 7 && <MyChatting date="11:20" isCheck={2} content="Unde omnis iste natus.." />}
                                 {index > 8 && <ProductChatting isMyProduct={index % 2 === 1} content={''} date={''} />}
                             </>
                         );
                     }}
-                    initialNumToRender={10}
+                    initialNumToRender={20}
+                    ListFooterComponent={<View style={{height: getHeightPixel(10)}}></View>}
                 />
             </View>
+            <View style={{height: getHeightPixel(50)}}></View>
             <View
                 style={{
                     position: 'absolute',
@@ -207,11 +366,11 @@ export default function ChattingDetail({navigation}: ChattingDetailProps) {
                 </View>
                 {isOn && (
                     <View style={[styles.footerOnContainer]}>
-                        <TouchableOpacity style={[styles.footerImageTouch, styles.footerMarginRight]}>
+                        <TouchableOpacity onPress={onPressAlbum} style={[styles.footerImageTouch, styles.footerMarginRight]}>
                             <Image source={GalleryPurpleIcon} style={styles.footerOnImage} />
                             <Text fontSize={`${14 * fontSize}`}>{t('album')}</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={[styles.footerImageTouch, styles.footerMarginRight]}>
+                        <TouchableOpacity onPress={onPressCamera} style={[styles.footerImageTouch, styles.footerMarginRight]}>
                             <Image source={CameraSkyIcon} style={styles.footerOnImage} />
                             <Text fontSize={`${14 * fontSize}`}>{t('camera')}</Text>
                         </TouchableOpacity>
@@ -223,6 +382,7 @@ export default function ChattingDetail({navigation}: ChattingDetailProps) {
                 )}
             </View>
             {isSetting && <ModalChattingSetting onClose={offIsSetting} />}
+            {isAlbum && <ModalPhoto onClose={() => setIsAlbum(false)} returnFn={fileSend} />}
         </View>
     );
 }
