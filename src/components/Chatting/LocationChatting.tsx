@@ -56,6 +56,7 @@ const LocationChatting: React.FC<LocationChattingProps> = ({date, content, isChe
                     },
                 ]}>
                 <MapView
+                    liteMode={true}
                     initialRegion={{
                         ...location,
                     }}
@@ -64,6 +65,9 @@ const LocationChatting: React.FC<LocationChattingProps> = ({date, content, isChe
                     zoomControlEnabled={false}
                     rotateEnabled={false}
                     scrollEnabled={false}
+                    toolbarEnabled={false}
+                    loadingEnabled={true}
+                    cacheEnabled={true}
                     region={{
                         ...location,
                     }}

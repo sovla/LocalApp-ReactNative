@@ -50,7 +50,7 @@ import QuetionIcon from '@assets/image/quetion.png';
 import AnswerIcon from '@assets/image/answer.png';
 import {FAQItemProps} from '@/Types/Components/SettingTypes';
 import SuccessIcon from '@assets/image/success.png';
-import MapView, {Marker} from 'react-native-maps';
+import MapView, {Callout, Marker} from 'react-native-maps';
 const Map: React.FC<{
     region: {
         latitude: number;
@@ -74,7 +74,7 @@ const Map: React.FC<{
     const debounceRef = useRef<any>(null);
     useEffect(() => {
         ref.current?.showCallout();
-    }, [region]);
+    }, [markerInfo]);
 
     const timerCount = 5;
 
@@ -91,14 +91,13 @@ const Map: React.FC<{
             debounceRef.current = setTimeout(() => {}, timerCount);
         }
     }, []);
-
     return (
-        <MapView style={{flex: 1}} initialRegion={{...region, latitudeDelta: 0.003, longitudeDelta: 0.003}} onRegionChange={onRegionChange} onPress={e => console.log(e)} zoomControlEnabled mapType="standard" showsUserLocation>
-            {isMarker && <Marker coordinate={{...region, latitudeDelta: 0.003, longitudeDelta: 0.003}} title={markerInfo?.title} description={markerInfo?.description} ref={ref} onCalloutPress={onPressMarker} onPress={onPressMarker} />}
+        <MapView style={{flex: 1}} initialRegion={{...region, latitudeDelta: 0.003, longitudeDelta: 0.003}} onRegionChange={onRegionChange} onPress={e => console.log(e.nativeEvent.coordinate)} zoomControlEnabled mapType="standard" showsUserLocation>
+            {isMarker && <Marker ref={ref} coordinate={{...region, latitudeDelta: 0.003, longitudeDelta: 0.003}} title={markerInfo?.title} description={markerInfo?.description} onCalloutPress={onPressMarker} onPress={onPressMarker} />}
         </MapView>
     );
 };
 
-export default React.memo(Map);
+export default Map;
 
 const styles = StyleSheet.create({});
