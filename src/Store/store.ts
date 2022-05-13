@@ -5,16 +5,27 @@ import langState from './langState';
 import userState from './userState';
 
 const store = configureStore({
-  reducer: {
-    // the convention is to name this photos rather than photosStore but photosStore is clearer to me.
-    // anyOtherStore: anyOtherSlice,
-    // middleware: ['array of middlewares'],
-    fontSize: fontSizeState,
-    lang: langState,
-    global: globalState,
-    user: userState,
-  },
-  devTools: true,
+    reducer: {
+        // the convention is to name this photos rather than photosStore but photosStore is clearer to me.
+        // anyOtherStore: anyOtherSlice,
+        // middleware: ['array of middlewares'],
+        fontSize: fontSizeState,
+        lang: langState,
+        global: globalState,
+        user: userState,
+    },
+    devTools: true,
+    middleware: getDefaultMiddleware =>
+        getDefaultMiddleware({
+            serializableCheck: {
+                // Ignore these action types
+                ignoredActions: ['global/changeToken'],
+                // Ignore these field paths in all actions
+                ignoredActionPaths: ['global'],
+                // Ignore these paths in the state
+                ignoredPaths: ['global.data.sb'],
+            },
+        }),
 });
 
 export default store;

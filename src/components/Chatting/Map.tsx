@@ -1,14 +1,4 @@
-import {
-  Dimensions,
-  FlatList,
-  Image,
-  ImageBackground,
-  Modal,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from 'react-native';
+import {Dimensions, FlatList, Image, ImageBackground, Modal, StyleSheet, TouchableOpacity, View, ViewStyle} from 'react-native';
 import React, {Fragment, useCallback, useEffect, useRef, useState} from 'react';
 
 import BackGroundImage from '@assets/image/BG.png';
@@ -22,11 +12,7 @@ import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
 import TrianglePinkIcon from '@assets/image/triangle_pink.png';
-import {
-  HeaderProps,
-  ModalMyPageProps,
-  ModalUploadModalProps,
-} from '@/Types/Components/HomeTypes';
+import {HeaderProps, ModalMyPageProps, ModalUploadModalProps} from '@/Types/Components/HomeTypes';
 import useBoolean from '@/Hooks/useBoolean';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import BackBlackBoxIcon from '@assets/image/back_black_box.png';
@@ -43,12 +29,7 @@ import NoticeOn from '@assets/image/notice_on.png';
 import SettingsIcon from '@assets/image/settings.png';
 import ServiceCenterIcon from '@assets/image/service_center.png';
 import Header from '@/Components/LoginSignUp/Header';
-import {
-  Button,
-  CheckBox,
-  CheckBoxImage,
-  Toggle,
-} from '@/Components/Global/button';
+import {Button, CheckBox, CheckBoxImage, Toggle} from '@/Components/Global/button';
 import Line from '@/Components/Global/Line';
 import {Shadow} from 'react-native-shadow-2';
 import {useDispatch} from 'react-redux';
@@ -71,55 +52,53 @@ import {FAQItemProps} from '@/Types/Components/SettingTypes';
 import SuccessIcon from '@assets/image/success.png';
 import MapView, {Marker} from 'react-native-maps';
 const Map: React.FC<{
-  region: {
-    latitude: number;
-    longitude: number;
-  };
-  setRegion: React.Dispatch<
-    React.SetStateAction<{
-      latitude: number;
-      longitude: number;
-    }>
-  >;
-  isMarker?: boolean;
-}> = ({region, setRegion, isMarker = true}) => {
-  const navigation = useAppNavigation();
-  const ref = useRef<Marker | null>(null);
+    region: {
+        latitude: number;
+        longitude: number;
+    };
+    setRegion: React.Dispatch<
+        React.SetStateAction<{
+            latitude: number;
+            longitude: number;
+        }>
+    >;
+    isMarker?: boolean;
+    markerInfo?: {
+        title: string;
+        description: string;
+    };
+    onPressMarker?: () => void;
+}> = ({region, setRegion, isMarker = true, markerInfo = {},onPressMarker} ) => {
+    const navigation = useAppNavigation();
+    const ref = useRef<Marker | null>(null);
+    const debounceRef = useRef<any>(null);
+    useEffect(() => {
+        ref.current?.showCallout();
+    }, [region]);
 
-  const onPressMarker = useCallback(e => {
-    navigation.goBack();
-  }, []);
+    const timerCount = 10;
 
-  useEffect(() => {
-    ref.current?.showCallout();
-  }, [region]);
+    const onRegionChange = useCallback(region => {
+        if (debounceRef?.current) {
+            clearTimeout(debounceRef.current);
+            debounceRef.current = null;
+            debounceRef.current = setTimeout(() => {
+                setRegion(region);
+            }, timerCount);
+        } else {
+            debounceRef.current = setTimeout(() => {
+                setRegion(region);
+            }, timerCount);
+        }
+    }, []);
 
-  const markerInfo = isMarker
-    ? {
-        title: '위치 정보 보내기',
-        description: 'Rasdsadasdsa',
-      }
-    : {};
-
-  return (
-    <MapView
-      style={{flex: 1}}
-      initialRegion={{...region, latitudeDelta: 0.003, longitudeDelta: 0.003}}
-      onRegionChange={setRegion}
-      onPress={e => console.log(e)}
-      zoomControlEnabled
-      mapType="standard"
-      showsUserLocation>
-      <Marker
-        coordinate={{...region, latitudeDelta: 0.003, longitudeDelta: 0.003}}
-        {...markerInfo}
-        ref={ref}
-        onCalloutPress={onPressMarker}
-        onPress={onPressMarker}></Marker>
-    </MapView>
-  );
+    return (
+        <MapView style={{flex: 1}} initialRegion={{...region, latitudeDelta: 0.003, longitudeDelta: 0.003}} onRegionChange={onRegionChange} onPress={e => console.log(e)} zoomControlEnabled mapType="standard" showsUserLocation>
+            {isMarker && <Marker coordinate={{...region, latitudeDelta: 0.003, longitudeDelta: 0.003}} title={markerInfo?.title} description={markerInfo?.description} ref={ref} onCalloutPress={ onPressMarker} onPress={onPressMarker} />}
+        </MapView>
+    );
 };
 
-export default Map;
+export default React.memo(Map);
 
 const styles = StyleSheet.create({});

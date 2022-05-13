@@ -45,7 +45,14 @@ type Screen = {
     KeywordAlarm: StackScreenProps<Screen> | undefined;
     LikeList: StackScreenProps<Screen> | undefined;
     ChattingHome: StackScreenProps<Screen> | undefined;
-    ChattingDetail: StackScreenProps<Screen> | undefined;
+    ChattingDetail:
+        | {
+              region: {
+                  latitude: number;
+                  longitude: number;
+              };
+          }
+        | undefined;
     ChattingLocation: StackScreenProps<Screen> | undefined;
     ReportCategory: {
         pt_idx: string;

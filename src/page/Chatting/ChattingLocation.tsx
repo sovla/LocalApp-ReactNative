@@ -1,14 +1,4 @@
-import {
-  Dimensions,
-  FlatList,
-  Image,
-  ImageBackground,
-  Modal,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from 'react-native';
+import {ActivityIndicator, Dimensions, FlatList, Image, ImageBackground, Modal, StyleSheet, TouchableOpacity, View, ViewStyle} from 'react-native';
 import React, {Fragment, useCallback, useEffect, useRef, useState} from 'react';
 
 import BackGroundImage from '@assets/image/BG.png';
@@ -22,11 +12,7 @@ import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
 import TrianglePinkIcon from '@assets/image/triangle_pink.png';
-import {
-  HeaderProps,
-  ModalMyPageProps,
-  ModalUploadModalProps,
-} from '@/Types/Components/HomeTypes';
+import {HeaderProps, ModalMyPageProps, ModalUploadModalProps} from '@/Types/Components/HomeTypes';
 import useBoolean from '@/Hooks/useBoolean';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import BackBlackBoxIcon from '@assets/image/back_black_box.png';
@@ -43,12 +29,7 @@ import NoticeOn from '@assets/image/notice_on.png';
 import SettingsIcon from '@assets/image/settings.png';
 import ServiceCenterIcon from '@assets/image/service_center.png';
 import Header from '@/Components/LoginSignUp/Header';
-import {
-  Button,
-  CheckBox,
-  CheckBoxImage,
-  Toggle,
-} from '@/Components/Global/button';
+import {Button, CheckBox, CheckBoxImage, Toggle} from '@/Components/Global/button';
 import Line from '@/Components/Global/Line';
 import {Shadow} from 'react-native-shadow-2';
 import {useDispatch} from 'react-redux';
@@ -71,17 +52,64 @@ import {FAQItemProps} from '@/Types/Components/SettingTypes';
 import SuccessIcon from '@assets/image/success.png';
 import MapView, {Marker} from 'react-native-maps';
 import Map from '@/Components/Chatting/Map';
+import useGeoLocation from '@/Hooks/useGeoLocation';
+import Loading from '@/Components/Global/Loading';
+import useGeocoding from '@/Hooks/useGeocoding';
 
 export default function ChattingLocation({navigation}: ChattingLocationProps) {
-  const {t} = useTranslation();
-  const fontSize = useAppSelector(state => state.fontSize.value);
+    const {t} = useTranslation();
+    const fontSize = useAppSelector(state => state.fontSize.value);
+    const {isLoading, region, setRegion} = useGeoLocation();
 
-  return (
-    <View style={{flex: 1}}>
-      <Header title={t('locationInformation')} />
-      <View style={{flex: 1}}>
-        <Map />
-      </View>
-    </View>
-  );
+    const {locationName, detail, isLoading: isGeoLoading} = useGeocoding(isLoading ? null : region);
+
+    const onPressMarker = useCallback(() => {
+        navigation.navigate('ChattingDetail', {
+            region,
+        });
+    }, [region]);
+
+    if (isLoading) {
+        return <Loading />;
+    }
+
+    return (
+        <View style={{flex: 1}}>
+            {isGeoLoading && (
+                <View
+                    style={{
+                        position: 'absolute',
+                        width: getPixel(360),
+                        height: getHeightPixel(740),
+                        backgroundColor: '#0001',
+                        zIndex: 100,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}>
+                    <ActivityIndicator />
+                </View>
+            )}
+            <Header title={t('locationInformation')} />
+            <View style={{flex: 1}}>
+                <Map region={region} setRegion={setRegion} isMarker={true} markerInfo={{title: locationName, description: detail}} onPressMarker={onPressMarker} />
+                <View style={styles.absoluteLocation}>
+                    <WhiteText fontSize={`${12 * fontSize}`}>{t('mapPh')}</WhiteText>
+                </View>
+            </View>
+        </View>
+    );
 }
+
+const styles = StyleSheet.create({
+    absoluteLocation: {
+        position: 'absolute',
+        left: getPixel(76),
+        top: getHeightPixel(26),
+        width: getPixel(208),
+        height: getHeightPixel(34),
+        backgroundColor: Theme.color.blue_3D,
+        borderRadius: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+});
