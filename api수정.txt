@@ -1,11 +1,2 @@
-
-product_car_add.php 
-기어 넣는 값
-
-4. 비즈니스 광고 배너 관리 이미지 받아오는 api 추가 필요
-
-5. member_logout.php
-404 에러 발생 
-
-sell_product_delete_arr.php 
-에러발생 select * from product_t where mt_idx='3' and pt_idx='5'<br/>Unknown column 'pt_idx' in 'where clause'
+1. member_logout.php
+작업전

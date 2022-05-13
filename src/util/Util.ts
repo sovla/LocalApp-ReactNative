@@ -188,10 +188,21 @@ export const getOpeningTime = (arr?: {
     }
 };
 
-export const changeBirthDate = (str?: string) => {
+export const changeBirthDate = (str?: string | undefined, isBack?: boolean | undefined) => {
     if (str) {
-        const [year, month, day] = str.split('-');
-        return `${year}. ${month}. ${day}`;
+        if (isBack) {
+            const [year, month, day] = str.split('.');
+            if (typeof year === 'string' && typeof month === 'string' && typeof day === 'string') {
+                return `${year.replace(' ', '')}-${month.replace(' ', '')}-${day.replace(' ', '')}`;
+            } else {
+                return '';
+            }
+        } else {
+            const [year, month, day] = str.split('-');
+            return `${year}. ${month}. ${day}`;
+        }
+    } else {
+        return '';
     }
 };
 

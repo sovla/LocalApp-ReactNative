@@ -92,7 +92,7 @@ export default function ProductDetail({navigation, route: {params}}: ProductDeta
     const onPressShop = useCallback(() => {
         if (data?.sell_type === '1') {
             navigation.navigate('BusinessProfile', {
-                sell_idx: data?.sell_idx as string, // 수정필요
+                sell_idx: data?.sell_idx as string,
                 sell_type: data?.sell_type as '0' | '1',
             });
         } else if (data?.sell_type === '0') {
@@ -106,6 +106,13 @@ export default function ProductDetail({navigation, route: {params}}: ProductDeta
     const onPressUserReport = useCallbackNavigation('ReportCategory', {
         pt_idx: params.pt_idx,
     });
+    const onPressAllView = useCallback(() => {
+        navigation.navigate('ProfileSellProduct', {
+            sell_idx: data?.sell_idx as string,
+            sell_type: data?.sell_type as '0' | '1',
+        });
+    }, [data]);
+
     const onPressLike = useCallback(() => {
         likeApi().then((res: any) => {
             if (res?.result === 'false' && res?.msg) {
@@ -383,7 +390,7 @@ export default function ProductDetail({navigation, route: {params}}: ProductDeta
                         </TouchableOpacity>
                     </View>
                     <Line height={getHeightPixel(9)} />
-                    <ShopSellProduct shopName={data?.sell_name} productList={Array.isArray(otherData) ? otherData : undefined} />
+                    <ShopSellProduct shopName={data?.sell_name} productList={Array.isArray(otherData) ? otherData : undefined} onPressAllView={onPressAllView} />
                 </ScrollView>
                 <Shadow distance={5}>
                     <View style={styles.footerView}>

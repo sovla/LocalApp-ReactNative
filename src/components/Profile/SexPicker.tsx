@@ -1,23 +1,5 @@
-import {
-  Dimensions,
-  FlatList,
-  Image,
-  ImageBackground,
-  Modal,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from 'react-native';
-import React, {
-  forwardRef,
-  Fragment,
-  Ref,
-  RefObject,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import {Dimensions, FlatList, Image, ImageBackground, Modal, StyleSheet, TouchableOpacity, View, ViewStyle} from 'react-native';
+import React, {forwardRef, Fragment, Ref, RefObject, useEffect, useRef, useState} from 'react';
 
 import BackGroundImage from '@assets/image/BG.png';
 import {fontSizeChange, getHeightPixel, getPixel} from '@/Util/pixelChange';
@@ -30,11 +12,7 @@ import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
 import TrianglePinkIcon from '@assets/image/triangle_pink.png';
-import {
-  HeaderProps,
-  ModalMyPageProps,
-  ModalUploadModalProps,
-} from '@/Types/Components/HomeTypes';
+import {HeaderProps, ModalMyPageProps, ModalUploadModalProps} from '@/Types/Components/HomeTypes';
 import useBoolean from '@/Hooks/useBoolean';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import BackBlackBoxIcon from '@assets/image/back_black_box.png';
@@ -51,12 +29,7 @@ import NoticeOn from '@assets/image/notice_on.png';
 import SettingsIcon from '@assets/image/settings.png';
 import ServiceCenterIcon from '@assets/image/service_center.png';
 import Header from '@/Components/LoginSignUp/Header';
-import {
-  Button,
-  CheckBox,
-  CheckBoxImage,
-  Toggle,
-} from '@/Components/Global/button';
+import {Button, CheckBox, CheckBoxImage, Toggle} from '@/Components/Global/button';
 import Line from '@/Components/Global/Line';
 import {Shadow} from 'react-native-shadow-2';
 import {useDispatch} from 'react-redux';
@@ -83,33 +56,26 @@ import {Picker} from '@react-native-picker/picker';
 import {SexPickerProps} from '@/Types/Components/ProfileTypes';
 
 const SexPicker = forwardRef<any, SexPickerProps>((props, ref) => {
-  const {select, setSelect} = props;
-  const {t} = useTranslation();
-  const fontSize = useAppSelector(state => state.fontSize.value);
-  return (
-    <View
-      style={{
-        display: 'none',
-      }}>
-      <Picker
-        ref={ref}
-        enabled
-        focusable
-        selectedValue={select}
-        onValueChange={(itemValue, itemIndex) => setSelect(itemValue)}>
-        {list.map(v => (
-          <Picker.Item key={v.label} label={t(v.label)} value={v.value} />
-        ))}
-      </Picker>
-    </View>
-  );
+    const {select, setSelect} = props;
+    const {t} = useTranslation();
+    const fontSize = useAppSelector(state => state.fontSize.value);
+    return (
+        <View
+            style={{
+                display: 'none',
+            }}>
+            <Picker ref={ref} enabled focusable selectedValue={select} onValueChange={(itemValue, itemIndex) => setSelect(itemValue)}>
+                {list.map(v => (
+                    <Picker.Item key={v.label} label={t(v.label)} value={v.value} />
+                ))}
+            </Picker>
+        </View>
+    );
 });
 
 const list = [
-  {label: 'man', value: 'man'},
-  {label: 'woman', value: 'woman'},
+    {label: 'man', value: 'M'},
+    {label: 'woman', value: 'W'},
 ];
 
 export default SexPicker;
-
-const styles = StyleSheet.create({});
