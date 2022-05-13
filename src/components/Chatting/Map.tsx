@@ -68,7 +68,7 @@ const Map: React.FC<{
         description: string;
     };
     onPressMarker?: () => void;
-}> = ({region, setRegion, isMarker = true, markerInfo = {},onPressMarker} ) => {
+}> = ({region, setRegion, isMarker = true, markerInfo = {}, onPressMarker}) => {
     const navigation = useAppNavigation();
     const ref = useRef<Marker | null>(null);
     const debounceRef = useRef<any>(null);
@@ -76,9 +76,11 @@ const Map: React.FC<{
         ref.current?.showCallout();
     }, [region]);
 
-    const timerCount = 10;
+    const timerCount = 5;
 
     const onRegionChange = useCallback(region => {
+        setRegion(region);
+        return;
         if (debounceRef?.current) {
             clearTimeout(debounceRef.current);
             debounceRef.current = null;
@@ -86,15 +88,13 @@ const Map: React.FC<{
                 setRegion(region);
             }, timerCount);
         } else {
-            debounceRef.current = setTimeout(() => {
-                setRegion(region);
-            }, timerCount);
+            debounceRef.current = setTimeout(() => {}, timerCount);
         }
     }, []);
 
     return (
         <MapView style={{flex: 1}} initialRegion={{...region, latitudeDelta: 0.003, longitudeDelta: 0.003}} onRegionChange={onRegionChange} onPress={e => console.log(e)} zoomControlEnabled mapType="standard" showsUserLocation>
-            {isMarker && <Marker coordinate={{...region, latitudeDelta: 0.003, longitudeDelta: 0.003}} title={markerInfo?.title} description={markerInfo?.description} ref={ref} onCalloutPress={ onPressMarker} onPress={onPressMarker} />}
+            {isMarker && <Marker coordinate={{...region, latitudeDelta: 0.003, longitudeDelta: 0.003}} title={markerInfo?.title} description={markerInfo?.description} ref={ref} onCalloutPress={onPressMarker} onPress={onPressMarker} />}
         </MapView>
     );
 };

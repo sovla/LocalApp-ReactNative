@@ -1,15 +1,16 @@
-import {geoLanguage} from '@/Util/Util';
+import {geoLanguage, refDebounce} from '@/Util/Util';
 import axios from 'axios';
-import {useCallback, useEffect, useState} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 
 function useGeocoding(region: {latitude: number; longitude: number} | null) {
     const {i18n} = useTranslation();
-    const [timer, setTimer] = useState<any>(0);
     const [isLoading, setIsLoading] = useState(false);
     const [location, setLocation] = useState<null | {
         results: Array<any> | undefined;
     }>(null);
+
+    const refTimer = useRef<any>(null);
     const onSearchLocation = useCallback(() => {
         if (region) {
             console.log('onSearchLocation', region);
@@ -35,17 +36,7 @@ function useGeocoding(region: {latitude: number; longitude: number} | null) {
         }
     }, [region]);
     useEffect(() => {
-        if (timer) {
-            clearTimeout(timer);
-        }
-        const newTimer = setTimeout(async () => {
-            try {
-                onSearchLocation();
-            } catch (e) {
-                console.error('error', e);
-            }
-        }, 500);
-        setTimer(newTimer);
+        refDebounce(refTimer, 100, onSearchLocation);
     }, [region]);
     useEffect(() => {
         console.log(location);

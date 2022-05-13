@@ -1,5 +1,5 @@
 import {Image, ImageBackground, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useLayoutEffect, useState} from 'react';
 
 import ProfileBackGroundImage from '@assets/image/profile_bg.png';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
@@ -60,9 +60,13 @@ export default function Login({navigation}: LoginProps) {
         //
     }, [selectNum, tel, i18n]);
 
-    if (user?.mt_idx) {
-        navigation.replace('Home');
-    }
+    useLayoutEffect(() => {
+        if (user?.mt_idx) {
+            navigation.replace('Home');
+        }
+
+        return () => {};
+    }, [user]);
 
     return (
         <View style={styles.container}>

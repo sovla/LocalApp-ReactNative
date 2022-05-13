@@ -202,3 +202,21 @@ export const apiResult = (res: {result: 'true' | 'false' | null; data: any; msg:
         return res;
     }
 };
+
+export const refDebounce = (ref: React.MutableRefObject<null | NodeJS.Timer>, count: number, func: Function) => {
+    if (ref.current) {
+        clearTimeout(ref.current);
+        ref.current = null;
+        ref.current = setTimeout(() => {
+            try {
+                func();
+            } catch (error) {}
+        }, count);
+    } else {
+        ref.current = setTimeout(() => {
+            try {
+                func();
+            } catch (error) {}
+        }, count);
+    }
+};
