@@ -1,14 +1,4 @@
-import {
-  Dimensions,
-  FlatList,
-  Image,
-  ImageBackground,
-  Modal,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from 'react-native';
+import {Dimensions, FlatList, Image, ImageBackground, Modal, StyleSheet, TouchableOpacity, View, ViewStyle} from 'react-native';
 import React, {Fragment, useEffect, useState} from 'react';
 
 import BackGroundImage from '@assets/image/BG.png';
@@ -22,11 +12,7 @@ import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
 import TrianglePinkIcon from '@assets/image/triangle_pink.png';
-import {
-  HeaderProps,
-  ModalMyPageProps,
-  ModalUploadModalProps,
-} from '@/Types/Components/HomeTypes';
+import {HeaderProps, ModalMyPageProps, ModalUploadModalProps} from '@/Types/Components/HomeTypes';
 import useBoolean from '@/Hooks/useBoolean';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import BackBlackBoxIcon from '@assets/image/back_black_box.png';
@@ -43,12 +29,7 @@ import NoticeOn from '@assets/image/notice_on.png';
 import SettingsIcon from '@assets/image/settings.png';
 import ServiceCenterIcon from '@assets/image/service_center.png';
 import Header from '@/Components/LoginSignUp/Header';
-import {
-  Button,
-  CheckBox,
-  CheckBoxImage,
-  Toggle,
-} from '@/Components/Global/button';
+import {Button, CheckBox, CheckBoxImage, Toggle} from '@/Components/Global/button';
 import Line from '@/Components/Global/Line';
 import {Shadow} from 'react-native-shadow-2';
 import {useDispatch} from 'react-redux';
@@ -68,31 +49,38 @@ import {TextInput} from 'react-native-gesture-handler';
 import QuetionIcon from '@assets/image/quetion.png';
 import AnswerIcon from '@assets/image/answer.png';
 import {FAQItemProps} from '@/Types/Components/SettingTypes';
+import WebView from 'react-native-webview';
 
 export default function PrivacyPolicy() {
-  const {t} = useTranslation();
-  const fontSize = useAppSelector(state => state.fontSize.value);
-  return (
-    <View>
-      <Header title={t('PrivacyPolicyTitle')} />
-      <View
-        style={{
-          width: getPixel(328),
-          marginHorizontal: getPixel(16),
-        }}>
-        <Text
-          style={{
-            marginTop: getHeightPixel(40),
-            marginBottom: getHeightPixel(8),
-          }}
-          fontSize={`${14 * fontSize}`}
-          medium>
-          {t('PrivacyPolicyTitle')}
-        </Text>
-        <Text color={Theme.color.darkGray_78} fontSize={`${14 * fontSize}`}>
-          {t('privacyPolicyGuide')}
-        </Text>
-      </View>
-    </View>
-  );
+    const {t} = useTranslation();
+    const fontSize = useAppSelector(state => state.fontSize.value);
+    return (
+        <View
+            style={{
+                flex: 1,
+            }}>
+            <Header title={t('PrivacyPolicyTitle')} />
+            {/* <View
+                    style={{
+                        width: getPixel(328),
+                        marginHorizontal: getPixel(16),
+                    }}>
+                    <Text
+                        style={{
+                            marginTop: getHeightPixel(40),
+                            marginBottom: getHeightPixel(8),
+                        }}
+                        fontSize={`${14 * fontSize}`}
+                        medium>
+                        {t('PrivacyPolicyTitle')}
+                    </Text>
+                    <Text color={Theme.color.darkGray_78} fontSize={`${14 * fontSize}`}>
+                        {t('privacyPolicyGuide')}
+                    </Text>
+                </View> */}
+            <View style={{flex: 1}}>
+                <WebView source={{uri: 'https://dmonster1786.cafe24.com/webview/agree_privacy.php'}} />
+            </View>
+        </View>
+    );
 }
