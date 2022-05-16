@@ -1,4 +1,4 @@
-import {Dimensions, FlatList, Image, ImageBackground, Modal, StyleSheet, TouchableOpacity, View, ViewStyle} from 'react-native';
+import {Dimensions, FlatList, Image, ImageBackground, Text as RNText, StyleSheet, TouchableOpacity, View, ViewStyle} from 'react-native';
 import React, {Fragment, useCallback, useEffect, useRef, useState} from 'react';
 
 import BackGroundImage from '@assets/image/BG.png';
@@ -40,7 +40,7 @@ import Menu from '@/Components/Profile/Menu';
 import ProductWhiteBox from '@/Components/Product/ProductWhiteBox';
 import EditModal from '@/Components/Product/EditModal';
 import Screen, {ChattingLocationProps} from '@/Types/Screen/Screen';
-import ArrowRightIcon from '@assets/image/arrow_right.png';
+import ArrowRightIcon from '@assets/image/arrow_right_new.png';
 import ArrowUpGrayIcon from '@assets/image/arrow_up_gray.png';
 import ArrowDownGrayIcon from '@assets/image/arrow_down_gray.png';
 import BangBlackIcon from '@assets/image/bang_black.png';
@@ -49,8 +49,10 @@ import {TextInput} from 'react-native-gesture-handler';
 import QuetionIcon from '@assets/image/quetion.png';
 import AnswerIcon from '@assets/image/answer.png';
 import {FAQItemProps} from '@/Types/Components/SettingTypes';
-import SuccessIcon from '@assets/image/success.png';
+import LocationMarkerIcon from '@assets/image/location_marker.png';
 import MapView, {Callout, Marker} from 'react-native-maps';
+import LocationIcon from '@assets/image/location.png';
+
 const Map: React.FC<{
     region: {
         latitude: number;
@@ -69,12 +71,15 @@ const Map: React.FC<{
     };
     onPressMarker?: () => void;
 }> = ({region, setRegion, isMarker = true, markerInfo = {}, onPressMarker}) => {
+    const {t} = useTranslation();
+    const fontSize = useAppSelector(state => state.fontSize.value);
     const navigation = useAppNavigation();
+    const [lineLength, setLineLength] = useState(3);
     const ref = useRef<Marker | null>(null);
     const debounceRef = useRef<any>(null);
     useEffect(() => {
         ref.current?.showCallout();
-    }, [markerInfo]);
+    }, [markerInfo, lineLength]);
 
     const timerCount = 5;
 
@@ -92,8 +97,75 @@ const Map: React.FC<{
         }
     }, []);
     return (
-        <MapView style={{flex: 1}} initialRegion={{...region, latitudeDelta: 0.003, longitudeDelta: 0.003}} onRegionChange={onRegionChange} onPress={e => console.log(e.nativeEvent.coordinate)} zoomControlEnabled mapType="standard" showsUserLocation>
-            {isMarker && <Marker ref={ref} coordinate={{...region, latitudeDelta: 0.003, longitudeDelta: 0.003}} title={markerInfo?.title} description={markerInfo?.description} onCalloutPress={onPressMarker} onPress={onPressMarker} />}
+        <MapView
+            style={{flex: 1}}
+            initialRegion={{...region, latitudeDelta: 0.003, longitudeDelta: 0.003}}
+            onRegionChange={onRegionChange}
+            onPress={e => console.log(e.nativeEvent.coordinate)}
+            zoomControlEnabled
+            mapType="standard"
+            showsUserLocation>
+            {isMarker && (
+                <>
+                    <Marker icon={LocationMarkerIcon} ref={ref} coordinate={{...region, latitudeDelta: 0.003, longitudeDelta: 0.003}} onCalloutPress={onPressMarker} onPress={onPressMarker}>
+                        <Callout tooltip={true}>
+                            <View
+                                style={{
+                                    width: getPixel(250),
+                                    minHeight: getHeightPixel(70),
+                                    height: getHeightPixel(50 + 20 * lineLength),
+                                    backgroundColor: Theme.color.white,
+                                    borderRadius: 16,
+                                    paddingHorizontal: getPixel(14),
+                                    paddingVertical: getHeightPixel(14),
+                                }}>
+                                <View
+                                    style={{
+                                        flexDirection: 'row',
+                                    }}>
+                                    <RNText
+                                        style={{
+                                            marginRight: getPixel(5),
+                                        }}>
+                                        <Image
+                                            source={LocationIcon}
+                                            style={{
+                                                width: getPixel(11),
+                                                height: getPixel(13),
+                                            }}
+                                        />
+                                    </RNText>
+                                    <View>
+                                        <View
+                                            style={{
+                                                flexDirection: 'row',
+                                                width: getPixel(200),
+                                                justifyContent: 'space-between',
+                                                alignItems: 'center',
+                                            }}>
+                                            <Text fontSize={`${12 * fontSize}`} bold>
+                                                위치 정보
+                                            </Text>
+                                            <RNText>
+                                                <Image
+                                                    source={ArrowRightIcon}
+                                                    style={{
+                                                        width: getPixel(20),
+                                                        height: getPixel(20),
+                                                    }}
+                                                />
+                                            </RNText>
+                                        </View>
+                                        <Text fontSize={`${12 * fontSize}`} onTextLayout={e => setLineLength(e.nativeEvent.lines.length)} style={{width: getPixel(162)}}>
+                                            {markerInfo?.description}
+                                        </Text>
+                                    </View>
+                                </View>
+                            </View>
+                        </Callout>
+                    </Marker>
+                </>
+            )}
         </MapView>
     );
 };

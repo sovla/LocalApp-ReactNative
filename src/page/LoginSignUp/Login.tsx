@@ -67,6 +67,9 @@ export default function Login({navigation}: LoginProps) {
 
         return () => {};
     }, [user]);
+    if (user?.mt_idx) {
+        return null;
+    }
 
     return (
         <View style={styles.container}>
@@ -112,7 +115,15 @@ export default function Login({navigation}: LoginProps) {
                             marginBottom: getHeightPixel(5),
                         }}
                     />
-                    <Input keyboardType="numeric" width={getPixel(270)} height={getHeightPixel(45)} value={tel} onChange={setTel} inputFontSize={14} PlaceHolderComponent={() => <GrayText fontSize={`${14 * fontSize}`}>{t('telPh')}</GrayText>} />
+                    <Input
+                        keyboardType="numeric"
+                        width={getPixel(270)}
+                        height={getHeightPixel(45)}
+                        value={tel}
+                        onChange={setTel}
+                        inputFontSize={14}
+                        PlaceHolderComponent={() => <GrayText fontSize={`${14 * fontSize}`}>{t('telPh')}</GrayText>}
+                    />
                     <View style={styles.w270}>
                         <GrayText fontSize={`${10 * fontSize}`}>{t('loginGuide5')}</GrayText>
                     </View>

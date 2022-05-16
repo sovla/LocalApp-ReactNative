@@ -38,9 +38,7 @@ function useGeocoding(region: {latitude: number; longitude: number} | null) {
     useEffect(() => {
         refDebounce(refTimer, 100, onSearchLocation);
     }, [region]);
-    useEffect(() => {
-        console.log(location);
-    }, [location]);
+    useEffect(() => {}, [location]);
 
     let city = '';
     let locationName = '';
