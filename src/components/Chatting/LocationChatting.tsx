@@ -1,5 +1,5 @@
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {Text, WhiteText} from '@Components/Global/text';
@@ -13,6 +13,7 @@ import ArrowRightIcon from '@assets/image/arrow_right.png';
 import MapView, {Marker} from 'react-native-maps';
 import {LocationChattingProps} from '@/Types/Components/ChattingTypes';
 import AutoHeightImage from 'react-native-auto-height-image';
+import axios, {Axios} from 'axios';
 
 const LocationChatting: React.FC<LocationChattingProps> = ({date, content, isCheck, isMy, region}) => {
     const {t} = useTranslation();
@@ -23,6 +24,8 @@ const LocationChatting: React.FC<LocationChattingProps> = ({date, content, isChe
     const onPressLocation = useCallback(() => {
         navigation.navigate('ChattingLocation');
     }, []);
+    const [image, setImage] = useState(null);
+    console.log('location', location);
 
     return (
         <View
@@ -55,7 +58,16 @@ const LocationChatting: React.FC<LocationChattingProps> = ({date, content, isChe
                         backgroundColor: isMy ? Theme.color.blue_3D : Theme.color.white,
                     },
                 ]}>
-                <MapView
+                <Image
+                    source={{
+                        uri: `https://maps.googleapis.com/maps/api/staticmap?center=${location.latitude},${location.longitude}&zoom=17&size=600x300&markers=${location.latitude},${location.longitude}&maptype=roadmap&key=AIzaSyAbfTo68JkJSdEi9emDHyMfGl7vxjYD704`,
+                    }}
+                    style={{
+                        width: getPixel(245),
+                        height: getHeightPixel(110),
+                    }}
+                />
+                {/* <MapView
                     liteMode={true}
                     initialRegion={{
                         ...location,
@@ -80,7 +92,7 @@ const LocationChatting: React.FC<LocationChattingProps> = ({date, content, isChe
                             ...location,
                         }}
                     />
-                </MapView>
+                </MapView> */}
                 <TouchableOpacity onPress={onPressLocation} style={styles.mapContentTouch}>
                     <Text color={isMy ? Theme.color.white : Theme.color.black} style={styles.mapContentView} fontSize={`${12 * fontSize}`} medium>
                         {content}

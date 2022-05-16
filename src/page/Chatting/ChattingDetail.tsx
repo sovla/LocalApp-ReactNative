@@ -2,7 +2,7 @@ import {Image, ImageBackground, Keyboard, StyleSheet, TouchableOpacity, View, Te
 import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import {Text, WhiteText} from '@Components/Global/text';
+import {DarkBlueText, Text, WhiteText} from '@Components/Global/text';
 import {useAppSelector} from '@/Hooks/CustomHook';
 import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
@@ -18,7 +18,7 @@ import ChattingBgImage from '@assets/image/chatting_bg.png';
 import SearchWhiteIcon from '@assets/image/search_white.png';
 import MoreWhiteIcon from '@assets/image/more_white.png';
 import StoreWhiteIcon from '@assets/image/store_white.png';
-import {getHitSlop} from '@/Util/Util';
+import {brPrice, getHitSlop} from '@/Util/Util';
 import OtherChatting from '@/Components/Chatting/OtherChatting';
 import ChatDate from '@/Components/Chatting/ChatDate';
 import MyChatting from '@/Components/Chatting/MyChatting';
@@ -218,7 +218,7 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
             listQuery.includeEmpty = true; // 빈곳도 찾기
 
             // listQuery.userIdsIncludeFilter = [user.mt_idx as string];
-            listQuery.channelUrlsFilter = ['sendbird_group_channel_72905088_31d25895a7e551fe62b50faa2af6c29bcc194717'];
+            listQuery.channelUrlsFilter = ['sendbird_group_channel_72907156_f98b58c9242c20470421909a8710c3cf2f69ec32'];
             if (listQuery.hasNext) {
                 await listQuery.next((err, groupChannels) => {
                     if (err) {
@@ -236,19 +236,19 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                         });
                 });
             }
-            if (!find) {
-                const params = new sb.GroupChannelParams();
-                params.isDistinct = false; // 재생성
-                params.isPublic = false; // 프라이빗한 공간 생성
-                params.isSuper = false; //  슈퍼 그룹방 X
-                params.addUserIds([user.mt_uid as string, '7LorEVehbz']); // 560  수정필요
-                params.name = channelName; // 수정필요
+            // if (!find) {
+            //     const params = new sb.GroupChannelParams();
+            //     params.isDistinct = false; // 재생성
+            //     params.isPublic = false; // 프라이빗한 공간 생성
+            //     params.isSuper = false; //  슈퍼 그룹방 X
+            //     params.addUserIds([user.mt_uid as string, '7LorEVehbz']); // 560  수정필요
+            //     params.name = channelName; // 수정필요
 
-                const channel = await sb.GroupChannel.createChannel(params, (openChannel, error) => {
-                    console.log('openChannel :::', openChannel, error);
-                });
-                setChannel(channel);
-            }
+            //     const channel = await sb.GroupChannel.createChannel(params, (openChannel, error) => {
+            //         console.log('openChannel :::', openChannel, error);
+            //     });
+            //     setChannel(channel);
+            // }
         })();
 
         return () => {
@@ -267,7 +267,8 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
     useEffect(() => {
         if (!isFirst) {
             scrollToEnd();
-            setIsFirst(false);
+
+            setIsOn(false);
         }
     }, [chatList]);
 
@@ -296,6 +297,9 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
     useLayoutEffect(() => {
         if (isFocused && params?.region) {
             messageSend('location', params.region);
+        }
+        if (!isFocused) {
+            offIsSetting();
         }
     }, [isFocused]);
 
@@ -328,6 +332,20 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                     </View>
                 </ImageBackground>
             </View>
+            <View style={styles.productHeaderView}>
+                <View style={styles.productHeaderRow}>
+                    <View style={styles.productHeaderImageView}>
+                        <Image source={require('@assets/image/dummy.png')} style={styles.productHeaderImage} />
+                    </View>
+                    <View>
+                        <Text bold style={{width: getPixel(250)}} medium numberOfLines={2}>
+                            Smart Insulation Cup Water Bottle Led Temperature Dis asfasdkfjsdkfjsldkjfsdaklfska
+                        </Text>
+                        <DarkBlueText>{brPrice('120', {isPadding: true})}</DarkBlueText>
+                    </View>
+                </View>
+            </View>
+            <View style={styles.productHeaderRelative} />
             <View
                 style={{
                     flex: 1,
@@ -469,6 +487,36 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
 }
 
 const styles = StyleSheet.create({
+    productHeaderRelative: {
+        height: getHeightPixel(95),
+    },
+    productHeaderImage: {
+        width: getPixel(62),
+        height: getPixel(62),
+    },
+    productHeaderImageView: {
+        width: getPixel(62),
+        height: getPixel(62),
+        marginRight: getPixel(16),
+        borderRadius: 8,
+        overflow: 'hidden',
+    },
+    productHeaderRow: {
+        width: getPixel(328),
+        height: getHeightPixel(95),
+        flexDirection: 'row',
+        marginHorizontal: getPixel(16),
+        alignItems: 'center',
+    },
+    productHeaderView: {
+        width: getPixel(360),
+        height: getHeightPixel(95),
+        backgroundColor: Theme.color.white,
+        position: 'absolute',
+        top: getHeightPixel(50),
+        left: 0,
+        zIndex: 100,
+    },
     mainView: {
         maxHeight: getHeightPixel(50),
         height: getHeightPixel(50),
