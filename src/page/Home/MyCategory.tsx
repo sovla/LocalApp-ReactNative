@@ -1,14 +1,4 @@
-import {
-  Dimensions,
-  FlatList,
-  Image,
-  ImageBackground,
-  Modal,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from 'react-native';
+import {Dimensions, FlatList, Image, ImageBackground, Modal, StyleSheet, TouchableOpacity, View, ViewStyle} from 'react-native';
 import React, {Fragment, useCallback, useEffect, useState} from 'react';
 
 import BackGroundImage from '@assets/image/BG.png';
@@ -22,11 +12,7 @@ import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
 import TrianglePinkIcon from '@assets/image/triangle_pink.png';
-import {
-  HeaderProps,
-  ModalMyPageProps,
-  ModalUploadModalProps,
-} from '@/Types/Components/HomeTypes';
+import {HeaderProps, ModalMyPageProps, ModalUploadModalProps} from '@/Types/Components/HomeTypes';
 import useBoolean from '@/Hooks/useBoolean';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import BackBlackBoxIcon from '@assets/image/back_black_box.png';
@@ -43,12 +29,7 @@ import NoticeOn from '@assets/image/notice_on.png';
 import SettingsIcon from '@assets/image/settings.png';
 import ServiceCenterIcon from '@assets/image/service_center.png';
 import Header from '@/Components/LoginSignUp/Header';
-import {
-  Button,
-  CheckBox,
-  CheckBoxImage,
-  Toggle,
-} from '@/Components/Global/button';
+import {Button, CheckBox, CheckBoxImage, Toggle} from '@/Components/Global/button';
 import Line from '@/Components/Global/Line';
 import {Shadow} from 'react-native-shadow-2';
 import {useDispatch} from 'react-redux';
@@ -70,92 +51,88 @@ import AnswerIcon from '@assets/image/answer.png';
 import {FAQItemProps} from '@/Types/Components/SettingTypes';
 import SuccessIcon from '@assets/image/success.png';
 export default function MyCategory() {
-  const {t} = useTranslation();
-  const fontSize = useAppSelector(state => state.fontSize.value);
+    const {t} = useTranslation();
+    const fontSize = useAppSelector(state => state.fontSize.value);
 
-  const [menuList, setMenuList] = useState(
-    categoryMenu.map(v => {
-      return {
-        ...v,
-        isOn: false,
-      };
-    }),
-  );
-  const onPressMenu = useCallback(key => {
-    setMenuList(prev =>
-      prev.map(v => {
-        if (v.name === key) {
-          return {
-            ...v,
-            isOn: !v.isOn,
-          };
-        } else {
-          return v;
-        }
-      }),
+    const [menuList, setMenuList] = useState(
+        categoryMenu.map(v => {
+            return {
+                ...v,
+                isOn: false,
+            };
+        }),
     );
-  }, []);
+    const onPressMenu = useCallback(key => {
+        setMenuList(prev =>
+            prev.map(v => {
+                if (v.name === key) {
+                    return {
+                        ...v,
+                        isOn: !v.isOn,
+                    };
+                } else {
+                    return v;
+                }
+            }),
+        );
+    }, []);
 
-  return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: Theme.color.whiteGray_F7,
-      }}>
-      <Header title={t('modalMyPageCategory')} />
-      <View
-        style={{
-          marginHorizontal: getPixel(16),
-        }}>
+    return (
         <View
-          style={{
-            marginTop: getHeightPixel(50),
-            marginBottom: getHeightPixel(30),
-          }}>
-          <Text fontSize={`${24 * fontSize}`} bold>
-            {t('myCategoryGuide1')}
-          </Text>
-          <GrayText fontSize={`${14 * fontSize}`}>
-            {t('myCategoryGuide2')}
-          </GrayText>
-        </View>
-
-        <View style={styles.selectCategoryView}>
-          {menuList.map(item => {
-            return (
-              <TouchableOpacity
-                onPress={() => {
-                  onPressMenu(item.name);
-                }}
+            style={{
+                flex: 1,
+                backgroundColor: Theme.color.whiteGray_F7,
+            }}>
+            <Header title={t('modalMyPageCategory')} />
+            <View
                 style={{
-                  ...styles.mapTouch,
-                  backgroundColor: item.isOn
-                    ? Theme.color.blue_3D
-                    : Theme.color.white,
+                    marginHorizontal: getPixel(16),
                 }}>
-                <Text color={item.isOn ? Theme.color.white : Theme.color.gray}>
-                  {t(item.name)}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
+                <View
+                    style={{
+                        marginTop: getHeightPixel(50),
+                        marginBottom: getHeightPixel(30),
+                    }}>
+                    <Text fontSize={`${24 * fontSize}`} bold>
+                        {t('myCategoryGuide1')}
+                    </Text>
+                    <GrayText fontSize={`${14 * fontSize}`}>{t('myCategoryGuide2')}</GrayText>
+                </View>
+
+                <View style={styles.selectCategoryView}>
+                    {menuList.map(item => {
+                        return (
+                            <TouchableOpacity
+                                onPress={() => {
+                                    onPressMenu(item.name);
+                                }}
+                                style={{
+                                    ...styles.mapTouch,
+                                    backgroundColor: item.isOn ? Theme.color.blue_3D : Theme.color.white,
+                                }}>
+                                <Text fontSize={`${16 * fontSize}`} color={item.isOn ? Theme.color.white : Theme.color.gray}>
+                                    {t(item.name)}
+                                </Text>
+                            </TouchableOpacity>
+                        );
+                    })}
+                </View>
+            </View>
         </View>
-      </View>
-    </View>
-  );
+    );
 }
 
 const styles = StyleSheet.create({
-  mapTouch: {
-    paddingHorizontal: getPixel(10),
-    paddingVertical: getHeightPixel(8),
-    marginRight: getPixel(10),
-    borderRadius: 50,
-    marginBottom: getHeightPixel(14),
-  },
-  selectCategoryView: {
-    width: getPixel(328),
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
+    mapTouch: {
+        paddingHorizontal: getPixel(10),
+        paddingVertical: getHeightPixel(8),
+        marginRight: getPixel(10),
+        borderRadius: 50,
+        marginBottom: getHeightPixel(14),
+    },
+    selectCategoryView: {
+        width: getPixel(328),
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+    },
 });
