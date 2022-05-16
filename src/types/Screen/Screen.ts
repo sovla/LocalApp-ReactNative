@@ -124,13 +124,16 @@ type Screen = {
         | undefined;
     BusinessProfileBanner: StackScreenProps<Screen> | undefined;
     BusinessSignUp: StackScreenProps<Screen> | undefined;
+    BusinessSignUpForm: StackScreenProps<Screen> | undefined;
     BusinessForm: StackScreenProps<Screen> | undefined;
     BusinessAddress: StackScreenProps<Screen> | undefined;
     BusinessLocation: StackScreenProps<Screen> | undefined;
-    BusinessOpeningHours: {
-        openingHoursTypes?: openingHoursTypes;
-        isFull?: boolean;
-    };
+    BusinessOpeningHours:
+        | {
+              openingHoursTypes?: openingHoursTypes;
+              isFull?: boolean;
+          }
+        | undefined;
     Notice: StackScreenProps<Screen> | undefined;
     NoticeDetail: {
         nt_idx: string;
@@ -280,6 +283,7 @@ export type BusinessProfileMenuProps = StackScreenProps<Screen, 'BusinessProfile
 export type BusinessProfileSettingProps = StackScreenProps<Screen, 'BusinessProfileSetting'>;
 export type BusinessProfileBannerProps = StackScreenProps<Screen, 'BusinessProfileBanner'>;
 export type BusinessSignUpProps = StackScreenProps<Screen, 'BusinessSignUp'>;
+export type BusinessSignUpFormProps = StackScreenProps<Screen, 'BusinessSignUpForm'>;
 export type BusinessFormProps = StackScreenProps<Screen, 'BusinessForm'>;
 export type BusinessAddressProps = StackScreenProps<Screen, 'BusinessAddress'>;
 export type BusinessLocationProps = StackScreenProps<Screen, 'BusinessLocation'>;

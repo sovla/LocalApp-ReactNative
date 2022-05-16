@@ -97,6 +97,7 @@ import messaging from '@react-native-firebase/messaging';
 import {changeToken} from '@/Store/globalState';
 import {Button} from '@/Components/Global/button';
 import {changeUser} from '@/Store/userState';
+import BusinessSignUpForm from './Business/BusinessSignUpForm';
 
 const resources = {
     en,
@@ -212,7 +213,7 @@ export default function Router() {
 
     return (
         <NavigationContainer ref={ref}>
-            <Stack.Navigator initialRouteName={initRoute}>
+            <Stack.Navigator initialRouteName={'BusinessSignUpForm'}>
                 {RouterSetting.map((item, index) => (
                     <Stack.Screen
                         name={item.name}
@@ -426,6 +427,10 @@ export const RouterSetting: RouterTypes[] = [
     {
         name: 'BusinessSignUp',
         component: BusinessSignUp,
+    },
+    {
+        name: 'BusinessSignUpForm',
+        component: BusinessSignUpForm,
     },
     {
         name: 'AlarmDetail',

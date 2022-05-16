@@ -205,7 +205,13 @@ export default function BusinessProfileSetting({navigation, route: {params}}: St
 
                     <View>
                         <RedDotText content={t('businessProfileSettingShopIntroduction')} />
-                        <Input width={getPixel(328)} height={getHeightPixel(45)} PlaceHolderComponent={() => <GrayText>{t('businessProfileSettingShopIntroductionPh')}</GrayText>} value={data?.busi_info} onChange={text => onChangeData('busi_info', text)} />
+                        <Input
+                            width={getPixel(328)}
+                            height={getHeightPixel(45)}
+                            PlaceHolderComponent={() => <GrayText>{t('businessProfileSettingShopIntroductionPh')}</GrayText>}
+                            value={data?.busi_info}
+                            onChange={text => onChangeData('busi_info', text)}
+                        />
                     </View>
                     <BetweenText
                         leftText={t('businessProfileSettingShopTel')}
@@ -239,16 +245,32 @@ export default function BusinessProfileSetting({navigation, route: {params}}: St
                                 <AutoHeightImage source={HomeIcon} width={getPixel(20)} />
                             </View>
 
-                            <RedDotText content={t('businessProfileSettingShopAddress')} color={Theme.color.gray} isView={true} value={data?.busi_location ? t('businessProfileSettingShopAddress') : ''} />
+                            <RedDotText
+                                content={t('businessProfileSettingShopAddress')}
+                                color={Theme.color.gray}
+                                isView={true}
+                                value={data?.busi_location ? t('businessProfileSettingShopAddress') : ''}
+                            />
                         </View>
                         <AutoHeightImage source={ArrowRightNewIcon} width={getPixel(20)} />
                     </TouchableOpacity>
 
                     {/* 전화번호 */}
-                    <ImageInput image={PhoneBlueIcon} value={data?.busi_tel_number ?? ''} onChange={() => {}} PlaceHolder={() => <RedDotText content={t('businessProfileSettingShopHp')} color={Theme.color.gray} isView={false} />} />
+                    <ImageInput
+                        image={PhoneBlueIcon}
+                        value={data?.busi_tel_number ?? ''}
+                        onChange={() => {}}
+                        PlaceHolder={() => <RedDotText content={t('businessProfileSettingShopHp')} color={Theme.color.gray} isView={false} />}
+                    />
 
                     {/* 핸드폰 */}
-                    <ImageInput image={MobileBlueIcon} imageWidth={getPixel(13.31)} value="" onChange={() => {}} PlaceHolder={() => <RedDotText content={t('businessProfileSettingShopTelPh')} color={Theme.color.gray} isView={false} />} />
+                    <ImageInput
+                        image={MobileBlueIcon}
+                        imageWidth={getPixel(13.31)}
+                        value=""
+                        onChange={() => {}}
+                        PlaceHolder={() => <RedDotText content={t('businessProfileSettingShopTelPh')} color={Theme.color.gray} isView={false} />}
+                    />
 
                     {/* 영업시간 */}
                     <TouchableOpacity onPress={onPressShopTime} style={{...styles.imageInputView, justifyContent: 'space-between'}}>
@@ -257,16 +279,41 @@ export default function BusinessProfileSetting({navigation, route: {params}}: St
                                 <AutoHeightImage source={ClockIcon} width={getPixel(20)} />
                             </View>
 
-                            <RedDotText content={t('businessProfileSettingShopOpeningTime')} color={Theme.color.gray} isView={true} value={isSetTime ? t('businessProfileSettingShopOpeningTime') : ''} />
+                            <RedDotText
+                                content={t('businessProfileSettingShopOpeningTime')}
+                                color={Theme.color.gray}
+                                isView={true}
+                                value={isSetTime ? t('businessProfileSettingShopOpeningTime') : ''}
+                            />
                         </View>
                         <AutoHeightImage source={ArrowRightNewIcon} width={getPixel(20)} />
                     </TouchableOpacity>
 
-                    <ImageInput image={WebIcon} value={data?.busi_website ?? ''} onChange={(text: string) => onChangeData('busi_website', text)} PlaceHolder={() => <GrayText fontSize={`${14 * fontSize}`}>{t('businessProfileSettingShopWebSite')}</GrayText>} />
-                    <ImageInput image={FacebookBlueIcon} value={data?.busi_facebook ?? ''} onChange={(text: string) => onChangeData('busi_facebook', text)} PlaceHolder={() => <GrayText fontSize={`${14 * fontSize}`}>{t('businessProfileSettingShopFacebook')}</GrayText>} />
+                    <ImageInput
+                        image={WebIcon}
+                        value={data?.busi_website ?? ''}
+                        onChange={(text: string) => onChangeData('busi_website', text)}
+                        PlaceHolder={() => <GrayText fontSize={`${14 * fontSize}`}>{t('businessProfileSettingShopWebSite')}</GrayText>}
+                    />
+                    <ImageInput
+                        image={FacebookBlueIcon}
+                        value={data?.busi_facebook ?? ''}
+                        onChange={(text: string) => onChangeData('busi_facebook', text)}
+                        PlaceHolder={() => <GrayText fontSize={`${14 * fontSize}`}>{t('businessProfileSettingShopFacebook')}</GrayText>}
+                    />
 
-                    <ImageInput image={InstagramBlueIcon} value={data?.busi_insta ?? ''} onChange={(text: string) => onChangeData('busi_insta', text)} PlaceHolder={() => <GrayText fontSize={`${14 * fontSize}`}>{t('businessProfileSettingShopInstagram')}</GrayText>} />
-                    <ImageInput image={WhatsappBlueIcon} value={data?.busi_whats ?? ''} onChange={(text: string) => onChangeData('busi_whats', text)} PlaceHolder={() => <GrayText fontSize={`${14 * fontSize}`}>{t('businessProfileSettingShopWhatsApp')}</GrayText>} />
+                    <ImageInput
+                        image={InstagramBlueIcon}
+                        value={data?.busi_insta ?? ''}
+                        onChange={(text: string) => onChangeData('busi_insta', text)}
+                        PlaceHolder={() => <GrayText fontSize={`${14 * fontSize}`}>{t('businessProfileSettingShopInstagram')}</GrayText>}
+                    />
+                    <ImageInput
+                        image={WhatsappBlueIcon}
+                        value={data?.busi_whats ?? ''}
+                        onChange={(text: string) => onChangeData('busi_whats', text)}
+                        PlaceHolder={() => <GrayText fontSize={`${14 * fontSize}`}>{t('businessProfileSettingShopWhatsApp')}</GrayText>}
+                    />
                 </View>
                 <View
                     style={{
@@ -281,7 +328,7 @@ export default function BusinessProfileSetting({navigation, route: {params}}: St
     );
 }
 
-const RedDotText: React.FC<{
+export const RedDotText: React.FC<{
     fontSize?: number;
     content: string;
     color?: string;
@@ -318,7 +365,7 @@ const RedDotText: React.FC<{
     );
 };
 
-const ImageInput: React.FC<{
+export const ImageInput: React.FC<{
     value: string;
     onChange: any;
     PlaceHolder?: React.FC;

@@ -38,7 +38,18 @@ export const CheckBox: React.FC<CheckBoxProps> = ({setIsOn, isOn, text, isBox, d
     const fontSize = useAppSelector(state => state.fontSize.value);
     return (
         <TouchableOpacity disabled={disabled} onPress={setIsOn} style={styles.checkBoxView}>
-            <Image source={isOn ? (isBox ? require('@assets/image/checkbox_on.png') : require('@assets/image/radio_on.png')) : isBox ? require('@assets/image/checkbox_off.png') : require('@assets/image/radio_off.png')} style={styles.checkBoxImage} />
+            <Image
+                source={
+                    isOn
+                        ? isBox
+                            ? require('@assets/image/checkbox_on.png')
+                            : require('@assets/image/radio_on.png')
+                        : isBox
+                        ? require('@assets/image/checkbox_off.png')
+                        : require('@assets/image/radio_off.png')
+                }
+                style={styles.checkBoxImage}
+            />
             <Text fontSize={`${14 * fontSize}`}>{text}</Text>
         </TouchableOpacity>
     );
@@ -70,7 +81,6 @@ export const Toggle: React.FC<ToggleProps> = ({isOn, setIsOn, width = getPixel(4
     const onToggle = () => {
         if (setIsOn) setIsOn(prev => !prev);
     };
-    console.log(setIsOn == null);
     return (
         <TouchableOpacity disabled={setIsOn == null} onPress={onToggle} hitSlop={getHitSlop(5)}>
             <Image

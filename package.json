@@ -32,6 +32,7 @@
         "axios": "0.26.1",
         "babel-plugin-module-resolver": "4.1.0",
         "fbjs": "3.0.4",
+        "formik": "2.2.9",
         "i18next": "21.6.14",
         "jwt-decode": "3.1.2",
         "jwt-encode": "1.0.1",
@@ -61,7 +62,8 @@
         "redux-devtools-extension": "2.13.9",
         "rn-range-slider": "2.1.1",
         "sendbird": "3.1.10",
-        "styled-components": "5.3.5"
+        "styled-components": "5.3.5",
+        "yup": "0.32.11"
     },
     "devDependencies": {
         "@babel/core": "^7.12.9",

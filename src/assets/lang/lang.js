@@ -467,6 +467,8 @@ export const ko = {
         reserved: '예약중',
         soldOut: '판매완료',
         imageAlert: '이미지는 총 3장까지 등록 가능합니다.',
+        cnpj: 'CNPJ',
+        cnpjPh: 'CNPJ 입력',
     },
 };
 export const es = {
