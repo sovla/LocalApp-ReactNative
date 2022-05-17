@@ -476,6 +476,8 @@ export const ko = {
         businessTermsandConditions: '비즈니스 이용약관',
         chatMenu1: '거래중',
         chatMenu2: '거래완료',
+        profileYear: '년',
+        profileMonth: '월',
     },
 };
 export const es = {

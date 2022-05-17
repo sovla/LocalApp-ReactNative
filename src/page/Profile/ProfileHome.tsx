@@ -39,8 +39,8 @@ export default function ProfileHome({route: {params}, navigation}: ProfileHomePr
     const star = data?.mt_rate;
     const reviewCount = data?.mt_review;
     const likeCount = viewCountCheck(data?.mt_like);
-    const hp = `(${data?.mt_country}) ${data?.mt_hp}`;
-    const date = `${data?.mt_regdate_year}년 ${data?.mt_regdate_month}월`;
+    const hp = `(${data?.mt_hp.substring(0, 2)}) ${data?.mt_hp.substring(2)}`;
+    const date = `${data?.mt_regdate_year}${t('profileYear')} ${data?.mt_regdate_month}${t('profileMonth')}`;
 
     const onPressProductSale = useCallback(() => {
         navigation.navigate('ProfileSellProduct', {
@@ -91,18 +91,14 @@ export default function ProfileHome({route: {params}, navigation}: ProfileHomePr
                                     </Text>
                                 </View>
                             </View>
-                            <View style={styles.sellerView}>
-                                <View style={styles.row}>
-                                    <Text fontSize={`${16 * fontSize}`}>{t('profileHomeSellerReviews')}</Text>
-                                    <MediumText style={styles.reviewCountText} fontSize={`${16 * fontSize}`}>
-                                        {reviewCount + ' ' + t('profileHomeCount')}
-                                    </MediumText>
-                                </View>
-                                <View style={styles.likeView}>
-                                    <Image source={LikeIcon} style={styles.likeImage} />
-                                    <GrayText fontSize={`${14 * fontSize}`}>{likeCount.toString()}</GrayText>
-                                </View>
-                            </View>
+                            <Line
+                                isGray
+                                height={0.5}
+                                style={{
+                                    marginTop: getHeightPixel(15),
+                                    marginBottom: getHeightPixel(20),
+                                }}
+                            />
                             <View style={styles.betweenRow}>
                                 <View style={styles.telView}>
                                     <Image source={TelIcon} style={styles.telImage} />
@@ -116,6 +112,12 @@ export default function ProfileHome({route: {params}, navigation}: ProfileHomePr
                                     <Text fontSize={`${14 * fontSize}`}>{t('profileHomeJoinDate')}</Text>
                                 </View>
                                 <Text fontSize={`${14 * fontSize}`}>{date}</Text>
+                            </View>
+                            <View style={styles.sellerView}>
+                                <View style={styles.likeView}>
+                                    <Image source={LikeIcon} style={styles.likeImage} />
+                                    <GrayText fontSize={`${14 * fontSize}`}>{likeCount.toString()}</GrayText>
+                                </View>
                             </View>
                         </View>
                         <Line backgroundColor={Theme.color.gray_E9} height={1} width={getPixel(328)} />
@@ -185,7 +187,7 @@ const styles = StyleSheet.create({
         height: getPixel(32),
         marginBottom: getHeightPixel(10),
     },
-    betweenRow: {flexDirection: 'row', justifyContent: 'space-between'},
+    betweenRow: {flexDirection: 'row', justifyContent: 'space-between', marginBottom: getHeightPixel(8)},
     telView: {flexDirection: 'row', alignItems: 'center'},
     telImage: {
         width: getPixel(24),
@@ -194,8 +196,9 @@ const styles = StyleSheet.create({
     },
     sellerView: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginVertical: getHeightPixel(30),
+        justifyContent: 'flex-end',
+        marginVertical: getHeightPixel(16),
+        marginTop: getHeightPixel(8),
     },
     reviewCountText: {
         marginLeft: getPixel(10),
@@ -210,6 +213,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
+        alignSelf: 'flex-end',
     },
     likeImage: {
         width: getPixel(20),
@@ -235,7 +239,7 @@ const styles = StyleSheet.create({
     },
     whiteBoxTopView: {
         paddingHorizontal: getPixel(20),
-        paddingVertical: getHeightPixel(20),
+        paddingTop: getHeightPixel(20),
     },
     whiteBoxView: {
         width: getPixel(328),
