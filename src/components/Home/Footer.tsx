@@ -1,5 +1,5 @@
 import {Image, Modal, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useEffect, useLayoutEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import Theme from '@/assets/global/Theme';
 import {Text} from '../Global/text';
@@ -16,7 +16,6 @@ import {useTranslation} from 'react-i18next';
 import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import {Shadow} from 'react-native-shadow-2';
 import ModalMyPage from './ModalMyPage';
-import AutoHeightImage from 'react-native-auto-height-image';
 
 const Footer: React.FC<FooterProps> = ({menu}) => {
     const [isMenu, setisMenu] = useState(false);
@@ -76,11 +75,7 @@ const MenuBox: React.FC<MenuBoxProps> = ({onImage, OffImage, selectMenu, name, o
     };
     return (
         <TouchableOpacity onPress={onPress} style={styles.viewCenter}>
-            <AutoHeightImage
-                source={selectMenu === name ? onImage : OffImage}
-                // style={styles.image}
-                width={getPixel(20)}
-            />
+            <Image source={selectMenu === name ? onImage : OffImage} style={styles.image} resizeMode="contain" />
             <Text bold={selectMenu === name} color={selectMenu === name ? Theme.color.blue_3D : Theme.color.black} fontSize={`${12 * fontSize}`}>
                 {t(name)}
             </Text>

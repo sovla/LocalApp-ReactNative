@@ -4,8 +4,7 @@ import jwtDecode from 'jwt-decode';
 import {Platform} from 'react-native';
 import i18next from 'i18next';
 
-const SECRETKEY =
-  'AAAAUV9vLXY:APA91bHklBUTeYmzfdYLVhpYEa8irZKGWSq8PXQkD6nMXSkreECmUr_-iFhy7ZJauagMU7w8GgkdjbF5i2IPrEx-W6JGeHYBBp1NNvd73H34IqUBUNvCdS0wj1ZXs__CRjh_j1NikOPP';
+const SECRETKEY = 'AAAAUV9vLXY:APA91bHklBUTeYmzfdYLVhpYEa8irZKGWSq8PXQkD6nMXSkreECmUr_-iFhy7ZJauagMU7w8GgkdjbF5i2IPrEx-W6JGeHYBBp1NNvd73H34IqUBUNvCdS0wj1ZXs__CRjh_j1NikOPP';
 
 const JWT_TOKEN = 'L0FONYcvjajULdjnaKpBP';
 
@@ -14,152 +13,139 @@ const baseURL = 'https://dmonster1786.cafe24.com/api/';
 const LOGON = true;
 
 const formFormatter = (data: any, isIndex = false) => {
-  const formData = new FormData();
+    const formData = new FormData();
 
-  for (const key of Object.keys(data)) {
-    if (Array.isArray(data[key])) {
-      let index = 0;
-      for (const item of data[key]) {
-        if (isIndex) {
-          formData.append(`${key}[${index}]`, item);
+    Object.entries(data).forEach(([key, value]) => {
+        if (Array.isArray(value)) {
+            value.forEach((v, i) => {
+                formData.append(`${key}[${isIndex ? i : ''}]`, v);
+            });
         } else {
-          formData.append(`${key}[]`, item);
+            formData.append(key, value);
         }
-
-        index++;
-      }
-    } else {
-      formData.append(key, data[key]);
-    }
-  }
-  return formData;
+    });
+    return formData;
 };
 
 export const API = axios.create({
-  baseURL: baseURL,
-  timeout: 3000,
-  timeoutErrorMessage: '시간초과',
-  headers: {
-    Accept: '*/*',
-    'Content-Type': 'multipart/form-data',
-    'Cache-Control': 'no-cache',
-    'Accept-Encoding': 'gzip, deflate',
-    'cache-control': 'no-cache',
-    'Access-Control-Allow-Origin': '*', // Required for CORS support to work
-    'Access-Control-Allow-Credentials': true, // Required for cookies, authorization headers with HTTPS
-  },
+    baseURL: baseURL,
+    timeout: 3000,
+    timeoutErrorMessage: '시간초과',
+    headers: {
+        Accept: '*/*',
+        'Content-Type': 'multipart/form-data',
+        'Cache-Control': 'no-cache',
+        'Accept-Encoding': 'gzip, deflate',
+        'cache-control': 'no-cache',
+        'Access-Control-Allow-Origin': '*', // Required for CORS support to work
+        'Access-Control-Allow-Credentials': true, // Required for cookies, authorization headers with HTTPS
+    },
 
-  transformRequest: (data?: any) => {
-    // 보내기전 데이터 가공
-    let cloneData = data; // 데이터 복사
-    let imageData; // 이미지 데이터 넣을 변수
-    if (!cloneData?.lang?.length) {
-      cloneData = {
-        ...cloneData,
-        lang: i18next.language,
-      };
-    }
-    console.log('formData :::', cloneData);
-    if (typeof data?.imageField === 'string') {
-      // 이미지 필드에 문자열 하나만 있는 경우
-      const field = data.imageField; // 해당 필드명
-      console.log('field:::', field);
-
-      let cloneData = Object.assign({}, data);
-      //  객체복사
-      delete cloneData[field];
-      //  이미지 제외
-
-      if (Array.isArray(data[field])) {
-        // 배열인 경우
-        imageData = [];
-        for (const item of data[field]) {
-          if (!item?.mime) {
-            continue;
-          }
-          imageData.push({
-            //  하나의 배열에 푸쉬
-            key: 'image' + new Date().getTime(),
-            uri:
-              Platform.OS === 'android'
-                ? item.path
-                : item.path.replace('file://', ''),
-            type: item?.mime,
-            name: 'auto.jpg',
-          });
+    transformRequest: (data?: any) => {
+        // 보내기전 데이터 가공
+        let cloneData = data; // 데이터 복사
+        let imageData; // 이미지 데이터 넣을 변수
+        if (!cloneData?.lang?.length) {
+            cloneData = {
+                ...cloneData,
+                lang: i18next.language,
+            };
         }
-      } else {
-        const item = data[field];
-        if (item?.mime) {
-          imageData = {
-            key: 'image' + new Date().getTime(),
-            uri:
-              Platform.OS === 'android'
-                ? item.path
-                : item.path.replace('file://', ''),
-            type: item?.mime,
-            name: 'auto.jpg',
-          };
+        console.log('formData :::', cloneData);
+        if (typeof data?.imageField === 'string') {
+            // 이미지 필드에 문자열 하나만 있는 경우
+            const field = data.imageField; // 해당 필드명
+            console.log('field:::', field);
+
+            let cloneData = Object.assign({}, data);
+            //  객체복사
+            delete cloneData[field];
+            //  이미지 제외
+
+            if (Array.isArray(data[field])) {
+                // 배열인 경우
+                imageData = [];
+                for (const item of data[field]) {
+                    if (!item?.mime) {
+                        continue;
+                    }
+                    imageData.push({
+                        //  하나의 배열에 푸쉬
+                        key: 'image' + new Date().getTime(),
+                        uri: Platform.OS === 'android' ? item.path : item.path.replace('file://', ''),
+                        type: item?.mime,
+                        name: 'auto.jpg',
+                    });
+                }
+            } else {
+                const item = data[field];
+                if (item?.mime) {
+                    imageData = {
+                        key: 'image' + new Date().getTime(),
+                        uri: Platform.OS === 'android' ? item.path : item.path.replace('file://', ''),
+                        type: item?.mime,
+                        name: 'auto.jpg',
+                    };
+                }
+            }
         }
-      }
-    }
-    const jwt_data = jwt_encode(cloneData, SECRETKEY);
-    const result = formFormatter(
-      data
-        ? imageData
-          ? Object.assign(
-              // 이미지 데이터+ 데이터가 있는경우
-              {
-                jwt_data,
-                [data.imageField]: imageData, // 기본
-              },
-              {
-                debug_jwt: JWT_TOKEN,
-              },
-            )
-          : Object.assign(
-              // 데이터가 있는경우
-              {
-                jwt_data,
-              },
-              {
-                debug_jwt: JWT_TOKEN,
-              },
-            )
-        : {
-            // 데이터가 없는경우
-            debug_jwt: JWT_TOKEN,
-          },
-    );
-    if (LOGON) console.log('formData result :::\n', result);
-    return result;
-  },
-  transformResponse: (data?: string) => {
-    // 받을때 데이터 가공
-    if (!data) {
-      return null;
-    }
-    try {
-      const jsonParseData = JSON.parse(data);
+        const jwt_data = jwt_encode(cloneData, SECRETKEY);
+        const result = formFormatter(
+            data
+                ? imageData
+                    ? Object.assign(
+                          // 이미지 데이터+ 데이터가 있는경우
+                          {
+                              jwt_data,
+                              [data.imageField]: imageData, // 기본
+                          },
+                          {
+                              debug_jwt: JWT_TOKEN,
+                          },
+                      )
+                    : Object.assign(
+                          // 데이터가 있는경우
+                          {
+                              jwt_data,
+                          },
+                          {
+                              debug_jwt: JWT_TOKEN,
+                          },
+                      )
+                : {
+                      // 데이터가 없는경우
+                      debug_jwt: JWT_TOKEN,
+                  },
+        );
+        if (LOGON) console.log('formData result :::\n', result);
+        return result;
+    },
+    transformResponse: (data?: string) => {
+        // 받을때 데이터 가공
+        if (!data) {
+            return null;
+        }
+        try {
+            const jsonParseData = JSON.parse(data);
 
-      if (jsonParseData.result === 'true') {
-        // const jwtDecodeData: any = jwtDecode(jsonParseData?.data);
+            if (jsonParseData.result === 'true') {
+                // const jwtDecodeData: any = jwtDecode(jsonParseData?.data);
 
-        if (LOGON) console.log('API Result Success :::\n', jsonParseData);
-        return jsonParseData;
-      } else {
-        if (LOGON) console.log('API Result Failed :::', jsonParseData);
-        return jsonParseData;
-      }
-    } catch (error) {
-      if (LOGON) {
-        console.log('API Error :::', error);
-        console.log('API ErrorData :::', data);
-      }
+                if (LOGON) console.log('API Result Success :::\n', jsonParseData);
+                return jsonParseData;
+            } else {
+                if (LOGON) console.log('API Result Failed :::', jsonParseData);
+                return jsonParseData;
+            }
+        } catch (error) {
+            if (LOGON) {
+                console.log('API Error :::', error);
+                console.log('API ErrorData :::', data);
+            }
 
-      return error;
-    }
-  },
+            return error;
+        }
+    },
 });
 
 // export const ImageAPI = async (

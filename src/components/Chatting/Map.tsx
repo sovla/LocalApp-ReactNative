@@ -82,11 +82,11 @@ const Map: React.FC<{
         ref.current?.showCallout();
     }, [markerInfo, lineLength]);
 
-    const timerCount = 5;
+    const timerCount = 10;
 
     const onRegionChange = useCallback(region => {
-        setRegion(region);
-        return;
+        // setRegion(region);
+        // return;
         if (debounceRef?.current) {
             clearTimeout(debounceRef.current);
             debounceRef.current = null;

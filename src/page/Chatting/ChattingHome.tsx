@@ -17,7 +17,7 @@ export default function ChattingHome() {
     const navigation = useAppNavigation();
     const {t} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
-    const [chattingList, setChattingList] = useState<Array<ChattingProps | any>>();
+    const [chattingList, setChattingList] = useState<Array<ChattingProps | any>>([1, 2, 3, 4]);
     const [selectMenu, setSelectMenu] = useState('chatMenu1');
 
     return (
