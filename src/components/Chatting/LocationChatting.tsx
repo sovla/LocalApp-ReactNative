@@ -14,6 +14,7 @@ import MapView, {Marker} from 'react-native-maps';
 import {LocationChattingProps} from '@/Types/Components/ChattingTypes';
 import AutoHeightImage from 'react-native-auto-height-image';
 import axios, {Axios} from 'axios';
+import FastImage from 'react-native-fast-image';
 
 const LocationChatting: React.FC<LocationChattingProps> = ({date, content, isCheck, isMy, region}) => {
     const {t} = useTranslation();
@@ -58,9 +59,9 @@ const LocationChatting: React.FC<LocationChattingProps> = ({date, content, isChe
                         backgroundColor: isMy ? Theme.color.blue_3D : Theme.color.white,
                     },
                 ]}>
-                <Image
+                <FastImage
                     source={{
-                        uri: `https://maps.googleapis.com/maps/api/staticmap?center=${location.latitude},${location.longitude}&zoom=17&size=600x300&markers=${location.latitude},${location.longitude}&maptype=roadmap&key=AIzaSyAbfTo68JkJSdEi9emDHyMfGl7vxjYD704`,
+                        uri: `https://maps.googleapis.com/maps/api/staticmap?center=${location.latitude},${location.longitude}&zoom=18&size=700x400&markers=${location.latitude},${location.longitude}&maptype=roadmap&key=AIzaSyAbfTo68JkJSdEi9emDHyMfGl7vxjYD704`,
                     }}
                     style={{
                         width: getPixel(245),
