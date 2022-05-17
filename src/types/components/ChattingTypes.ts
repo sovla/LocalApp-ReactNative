@@ -5,6 +5,9 @@ export interface ChattingProps {
     title: string;
     content: string;
     date: string;
+    userName: string;
+    isBuy: boolean;
+    isBusiness: boolean;
 }
 
 export interface LocationChattingProps {

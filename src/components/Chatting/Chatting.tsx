@@ -5,22 +5,37 @@ import {GrayText, Text} from '@/Components/Global/text';
 import {useTranslation} from 'react-i18next';
 import {useAppSelector} from '@/Hooks/CustomHook';
 import {ChattingProps} from '@/Types/Components/ChattingTypes';
+import AutoHeightImage from 'react-native-auto-height-image';
 
-const Chatting: React.FC<ChattingProps> = ({image, title, content, date}) => {
+const Chatting: React.FC<ChattingProps> = ({image, title, content, date, isBuy, userName, isBusiness}) => {
     const {t} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
     return (
         <View style={styles.container}>
-            <View style={styles.imageView}>
-                <Image source={image} style={styles.image} />
+            <View>
+                <View style={styles.imageView}>
+                    <Image source={image} style={styles.image} />
+                </View>
+                {isBusiness && (
+                    <View style={styles.businessIconView}>
+                        <AutoHeightImage source={require('@assets/image/business.png')} width={getPixel(18)} />
+                    </View>
+                )}
             </View>
             <View style={styles.contentView}>
                 <Text fontSize={`${16 * fontSize}`}>{title}</Text>
-                <GrayText fontSize={`${12 * fontSize}`}>{content}</GrayText>
+                <Text fontSize={`${13 * fontSize}`}>{userName}</Text>
+
+                <GrayText fontSize={`${12 * fontSize}`} numberOfLines={1}>
+                    {content}
+                </GrayText>
             </View>
-            <GrayText fontSize={`${10 * fontSize}`} style={{marginTop: getHeightPixel(3)}}>
-                {date}
-            </GrayText>
+            <View style={styles.height100}>
+                <GrayText fontSize={`${10 * fontSize}`} style={{marginTop: getHeightPixel(3)}}>
+                    {date}
+                </GrayText>
+                <Image source={isBuy ? require('@assets/image/buy_arrow.png') : require('@assets/image/sale_arrow.png')} style={styles.icon} />
+            </View>
         </View>
     );
 };
@@ -28,6 +43,21 @@ const Chatting: React.FC<ChattingProps> = ({image, title, content, date}) => {
 export default Chatting;
 
 const styles = StyleSheet.create({
+    businessIconView: {
+        position: 'absolute',
+        right: -getPixel(4),
+        bottom: -getPixel(8),
+    },
+    height100: {
+        height: '100%',
+    },
+    icon: {
+        width: getPixel(16),
+        height: getPixel(16),
+        position: 'absolute',
+        right: 0,
+        bottom: 0,
+    },
     contentView: {
         width: getPixel(205),
         marginLeft: getPixel(12),

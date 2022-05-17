@@ -474,6 +474,8 @@ export const ko = {
         cnpjPh: 'CNPJ 입력',
         register: '등록하기',
         businessTermsandConditions: '비즈니스 이용약관',
+        chatMenu1: '거래중',
+        chatMenu2: '거래완료',
     },
 };
 export const es = {
