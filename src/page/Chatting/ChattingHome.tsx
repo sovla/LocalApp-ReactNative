@@ -1,4 +1,4 @@
-import {View, FlatList, Touchable, TouchableOpacity} from 'react-native';
+import {View, FlatList, Touchable, TouchableOpacity, StyleSheet} from 'react-native';
 import React, {useState} from 'react';
 import Header from '@/Components/Chatting/Header';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
@@ -11,12 +11,13 @@ import Footer from '@/Components/Home/Footer';
 import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import {useTranslation} from 'react-i18next';
 import Menu from '@/Components/Profile/Menu';
+import {GrayText} from '@/Components/Global/text';
 
 export default function ChattingHome() {
     const navigation = useAppNavigation();
     const {t} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
-    const [chattingList, setChattingList] = useState<Array<ChattingProps | any>>([1, 2, 3, 4, 5]);
+    const [chattingList, setChattingList] = useState<Array<ChattingProps | any>>();
     const [selectMenu, setSelectMenu] = useState('chatMenu1');
 
     return (
@@ -52,12 +53,26 @@ export default function ChattingHome() {
                         </>
                     );
                 }}
+                ListEmptyComponent={
+                    <View style={styles.emptyView}>
+                        <GrayText medium fontSize={`${14 * fontSize}`}>
+                            {t('noneChatHistory')}
+                        </GrayText>
+                    </View>
+                }
                 style={{
                     marginTop: getHeightPixel(5),
                     marginHorizontal: getPixel(16),
+                }}
+                contentContainerStyle={{
+                    flex: 1,
                 }}
             />
             <Footer menu="chat" />
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    emptyView: {flex: 1, paddingTop: getHeightPixel(220), alignItems: 'center'},
+});

@@ -16,124 +16,96 @@ import {useTranslation} from 'react-i18next';
 import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import {Shadow} from 'react-native-shadow-2';
 import ModalMyPage from './ModalMyPage';
+import AutoHeightImage from 'react-native-auto-height-image';
 
 const Footer: React.FC<FooterProps> = ({menu}) => {
-  const [isMenu, setisMenu] = useState(false);
-  return (
-    <>
-      <Shadow distance={5} finalColor={'#0000'} startColor={'#0001'}>
-        <View style={styles.footerContainer}>
-          <MenuBox
-            OffImage={HomeOffIcon}
-            onImage={HomeOnIcon}
-            name="home"
-            selectMenu={menu}
-          />
-          <MenuBox
-            OffImage={FavoriteOffIcon}
-            onImage={FavoriteOnIcon}
-            name="favorite"
-            selectMenu={menu}
-          />
-          <MenuBox
-            OffImage={ChatOffIcon}
-            onImage={ChatOnIcon}
-            name="chat"
-            selectMenu={menu}
-          />
-          <MenuBox
-            OffImage={ProfileOffIcon}
-            onImage={ProfileOnIcon}
-            name="profile"
-            selectMenu={menu}
-            onPressMenu={() => setisMenu(true)}
-          />
-        </View>
-      </Shadow>
-      {isMenu && (
-        <Modal
-          visible={isMenu}
-          transparent
-          onRequestClose={() => {
-            setisMenu(false);
-          }}>
-          {isMenu && (
-            <ModalMyPage
-              onClose={() => {
-                setisMenu(false);
-              }}
-            />
-          )}
-        </Modal>
-      )}
-    </>
-  );
+    const [isMenu, setisMenu] = useState(false);
+    return (
+        <>
+            <Shadow distance={5} finalColor={'#0000'} startColor={'#0001'}>
+                <View style={styles.footerContainer}>
+                    <MenuBox OffImage={HomeOffIcon} onImage={HomeOnIcon} name="home" selectMenu={menu} />
+                    <MenuBox OffImage={FavoriteOffIcon} onImage={FavoriteOnIcon} name="favorite" selectMenu={menu} />
+                    <MenuBox OffImage={ChatOffIcon} onImage={ChatOnIcon} name="chat" selectMenu={menu} />
+                    <MenuBox OffImage={ProfileOffIcon} onImage={ProfileOnIcon} name="profile" selectMenu={menu} onPressMenu={() => setisMenu(true)} />
+                </View>
+            </Shadow>
+            {isMenu && (
+                <Modal
+                    visible={isMenu}
+                    transparent
+                    onRequestClose={() => {
+                        setisMenu(false);
+                    }}>
+                    {isMenu && (
+                        <ModalMyPage
+                            onClose={() => {
+                                setisMenu(false);
+                            }}
+                        />
+                    )}
+                </Modal>
+            )}
+        </>
+    );
 };
 
-const MenuBox: React.FC<MenuBoxProps> = ({
-  onImage,
-  OffImage,
-  selectMenu,
-  name,
-  onPressMenu,
-}) => {
-  const {t} = useTranslation();
-  const fontSize = useAppSelector(state => state.fontSize.value);
-  const navigation = useAppNavigation();
+const MenuBox: React.FC<MenuBoxProps> = ({onImage, OffImage, selectMenu, name, onPressMenu}) => {
+    const {t} = useTranslation();
+    const fontSize = useAppSelector(state => state.fontSize.value);
+    const navigation = useAppNavigation();
 
-  const onPress = () => {
-    switch (name) {
-      case 'chat':
-        navigation.navigate('ChattingHome');
-        break;
-      case 'favorite':
-        navigation.navigate('LikeList');
-        break;
-      case 'home':
-        navigation.navigate('Home');
-        break;
-      case 'profile':
-        if (onPressMenu) onPressMenu();
-        break;
+    const onPress = () => {
+        switch (name) {
+            case 'chat':
+                navigation.navigate('ChattingHome');
+                break;
+            case 'favorite':
+                navigation.navigate('LikeList');
+                break;
+            case 'home':
+                navigation.navigate('Home');
+                break;
+            case 'profile':
+                if (onPressMenu) onPressMenu();
+                break;
 
-      default:
-        break;
-    }
-  };
-  return (
-    <TouchableOpacity onPress={onPress} style={styles.viewCenter}>
-      <Image
-        source={selectMenu === name ? onImage : OffImage}
-        style={styles.image}
-      />
-      <Text
-        bold={selectMenu === name}
-        color={selectMenu === name ? Theme.color.blue_3D : Theme.color.gray}
-        fontSize={`${12 * fontSize}`}>
-        {t(name)}
-      </Text>
-    </TouchableOpacity>
-  );
+            default:
+                break;
+        }
+    };
+    return (
+        <TouchableOpacity onPress={onPress} style={styles.viewCenter}>
+            <AutoHeightImage
+                source={selectMenu === name ? onImage : OffImage}
+                // style={styles.image}
+                width={getPixel(20)}
+            />
+            <Text bold={selectMenu === name} color={selectMenu === name ? Theme.color.blue_3D : Theme.color.black} fontSize={`${12 * fontSize}`}>
+                {t(name)}
+            </Text>
+        </TouchableOpacity>
+    );
 };
 
 export default Footer;
 
 const styles = StyleSheet.create({
-  image: {
-    width: getPixel(20),
-    height: getPixel(20),
-  },
-  viewCenter: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  footerContainer: {
-    width: getPixel(360),
-    height: getHeightPixel(54),
-    paddingHorizontal: getPixel(16),
-    backgroundColor: Theme.color.white,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-  },
+    image: {
+        width: getPixel(20),
+        height: getPixel(20),
+    },
+    viewCenter: {
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    footerContainer: {
+        width: getPixel(360),
+        height: getHeightPixel(54),
+        paddingHorizontal: getPixel(16),
+        backgroundColor: Theme.color.white,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+    },
 });

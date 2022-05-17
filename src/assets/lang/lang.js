@@ -481,6 +481,7 @@ export const ko = {
         noneReview: '판매자 후기가 없습니다.',
         noneSoldOut: '판매 완료된 상품이 없습니다.',
         noneSale: '판매중인 상품이 없습니다.',
+        noneChatHistory: '채팅기록이 없습니다.',
     },
 };
 export const es = {
