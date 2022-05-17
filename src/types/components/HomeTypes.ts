@@ -105,6 +105,7 @@ export interface LikeProductProps {
     onPress?: any;
     idx: string;
     categoryNum: string;
+    isBusiness: boolean;
 }
 
 export interface FooterProps {
@@ -158,14 +159,14 @@ export type LikeListType = {
     };
 };
 
-interface LikeApiTypes {
-    like_idx?: string;
-    pt_file?: string;
-    pt_price?: string;
-    pt_title?: string;
+export interface LikeApiTypes {
+    like_idx: string;
+    pt_file: string;
+    pt_price: string;
+    pt_title: string;
     pt_idx: string;
-    busi_check?: 'Y' | 'N';
-    pt_cate?: string;
+    busi_check: 'Y' | 'N';
+    pt_cate: string;
 }
 
 export interface ProduetDetailApiType {
