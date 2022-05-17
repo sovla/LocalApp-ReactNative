@@ -60,6 +60,7 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
 
     const [isFirst, setIsFirst] = useState(false); // 처음 푸터 아래로
     const [isFileLoading, setIsFileLoading] = useState(false);
+    const [isBlock, setIsBlock] = useState(true); // 차단 여부
 
     // const [chatIdSet, setChatIdSet] = useState(new Set()); 필요 없을듯
 
@@ -346,6 +347,18 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                 </View>
             </View>
             <View style={styles.productHeaderRelative} />
+            {/* 차단 당할경우  */}
+            {isBlock && (
+                <TouchableOpacity style={styles.blockView} onPress={() => setIsBlock(false)}>
+                    <WhiteText
+                        style={{
+                            width: getPixel(328),
+                        }}
+                        fontSize={`${14 * fontSize}`}>
+                        대화 상대에게 수신이 거부되어 메시지를 보낼수 없습니다.
+                    </WhiteText>
+                </TouchableOpacity>
+            )}
             <View
                 style={{
                     flex: 1,
@@ -487,6 +500,17 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
 }
 
 const styles = StyleSheet.create({
+    blockView: {
+        width: getPixel(360),
+        height: getHeightPixel(75),
+        position: 'absolute',
+        top: getHeightPixel(145),
+        left: 0,
+        backgroundColor: '#000',
+        zIndex: 100,
+        paddingTop: getHeightPixel(18),
+        paddingLeft: getPixel(16),
+    },
     productHeaderRelative: {
         height: getHeightPixel(95),
     },
