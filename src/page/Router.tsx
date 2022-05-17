@@ -98,6 +98,7 @@ import {changeToken} from '@/Store/globalState';
 import {Button} from '@/Components/Global/button';
 import {changeUser} from '@/Store/userState';
 import BusinessSignUpForm from './Business/BusinessSignUpForm';
+import PurchaseList from './Profile/PurchaseList';
 
 const resources = {
     en,
@@ -213,7 +214,7 @@ export default function Router() {
 
     return (
         <NavigationContainer ref={ref}>
-            <Stack.Navigator initialRouteName={initRoute}>
+            <Stack.Navigator initialRouteName={'PurchaseList'}>
                 {RouterSetting.map((item, index) => (
                     <Stack.Screen
                         name={item.name}
@@ -583,6 +584,10 @@ export const RouterSetting: RouterTypes[] = [
     {
         name: 'BlockList',
         component: BlockList,
+    },
+    {
+        name: 'PurchaseList',
+        component: PurchaseList,
     },
 ];
 

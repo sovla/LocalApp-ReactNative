@@ -239,6 +239,7 @@ type Screen = {
     ProductTierGuide: StackScreenProps<Screen> | undefined;
     BlockList: StackScreenProps<Screen> | undefined;
     CarDisplacement: StackScreenProps<Screen> | undefined;
+    PurchaseList: StackScreenProps<Screen> | undefined;
 };
 
 export default Screen;
@@ -325,3 +326,4 @@ export type MenuProps = StackScreenProps<Screen, 'Menu'>;
 export type ProductTierGuideProps = StackScreenProps<Screen, 'ProductTierGuide'>;
 export type BlockListProps = StackScreenProps<Screen, 'BlockList'>;
 export type CarDisplacementProps = StackScreenProps<Screen, 'CarDisplacement'>;
+export type PurchaseListProps = StackScreenProps<Screen, 'PurchaseList'>;
