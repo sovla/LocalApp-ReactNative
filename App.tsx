@@ -15,14 +15,14 @@ import store from '@/Store/store';
 import SplashScreen from 'react-native-splash-screen';
 import Geolocation from '@react-native-community/geolocation';
 import {Dimensions, LogBox, Platform} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import SendBird from 'sendbird';
-import messaging from '@react-native-firebase/messaging';
 import PushNotification, {Importance} from 'react-native-push-notification';
 import useChannelManagement from '@/Hooks/useChannelManagement';
 
 const App = () => {
-    LogBox.ignoreLogs(["[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!", 'react-i18next:: You will need to pass in an i18next instance by using initReactI18next']);
+    LogBox.ignoreLogs([
+        "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
+        'react-i18next:: You will need to pass in an i18next instance by using initReactI18next',
+    ]);
     useChannelManagement();
     useEffect(() => {
         setTimeout(() => {

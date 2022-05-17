@@ -21,12 +21,10 @@ const LocationChatting: React.FC<LocationChattingProps> = ({date, content, isChe
     const fontSize = useAppSelector(state => state.fontSize.value);
     const navigation = useAppNavigation();
 
-    const location = JSON.parse(region);
     const onPressLocation = useCallback(() => {
         navigation.navigate('ChattingLocation');
     }, []);
     const [image, setImage] = useState(null);
-    console.log('location', location);
 
     return (
         <View
@@ -61,7 +59,7 @@ const LocationChatting: React.FC<LocationChattingProps> = ({date, content, isChe
                 ]}>
                 <FastImage
                     source={{
-                        uri: `https://maps.googleapis.com/maps/api/staticmap?center=${location.latitude},${location.longitude}&zoom=18&size=700x400&markers=${location.latitude},${location.longitude}&maptype=roadmap&key=AIzaSyAbfTo68JkJSdEi9emDHyMfGl7vxjYD704`,
+                        uri: `https://maps.googleapis.com/maps/api/staticmap?center=${region.latitude},${region.longitude}&zoom=18&size=700x400&markers=${region.latitude},${region.longitude}&maptype=roadmap&key=AIzaSyAbfTo68JkJSdEi9emDHyMfGl7vxjYD704`,
                     }}
                     style={{
                         width: getPixel(245),

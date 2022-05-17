@@ -4,7 +4,7 @@ import type {RootState} from './store';
 
 // Define a type for the slice state
 
-const sb = new SendBird({appId: 'AA15B76B-F3DD-4FF8-9FCB-F53751AC169A'});
+const sb = new SendBird({appId: '16F61FD1-25B5-44D4-A175-7E4563E76F33'});
 sb.setErrorFirstCallback(true);
 interface globalState {
     data: {

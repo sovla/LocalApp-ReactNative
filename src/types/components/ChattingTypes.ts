@@ -15,7 +15,10 @@ export interface LocationChattingProps {
     content: string;
     isCheck?: number;
     isMy?: boolean;
-    region: string;
+    region: {
+        longitude: string;
+        latitude: string;
+    };
 }
 
 export interface OtherChattingProps {
@@ -32,7 +35,12 @@ export interface OtherChattingProps {
     isMyProduct?: boolean;
 }
 
-export interface ModalChattingSettingProps extends ModalProps {}
+export interface ModalChattingSettingProps extends ModalProps {
+    chatInfo: {
+        chat_idx: string;
+        pt_idx: string;
+    };
+}
 export interface ModalAlertViewProps extends ModalProps {
     title: string;
     content: string;

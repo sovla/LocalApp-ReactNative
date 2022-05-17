@@ -18,7 +18,7 @@ import ChattingBgImage from '@assets/image/chatting_bg.png';
 import SearchWhiteIcon from '@assets/image/search_white.png';
 import MoreWhiteIcon from '@assets/image/more_white.png';
 import StoreWhiteIcon from '@assets/image/store_white.png';
-import {brPrice, getHitSlop} from '@/Util/Util';
+import {apiResult, brPrice, getHitSlop} from '@/Util/Util';
 import OtherChatting from '@/Components/Chatting/OtherChatting';
 import ChatDate from '@/Components/Chatting/ChatDate';
 import MyChatting from '@/Components/Chatting/MyChatting';
@@ -35,6 +35,11 @@ import messaging from '@react-native-firebase/messaging';
 import ModalPhoto from '@/Components/Business/ModalPhoto';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import {useIsFocused} from '@react-navigation/native';
+import useApi, {usePostSend} from '@/Hooks/useApi';
+import {ChattingDetailListApi, ChattingRoomInformationApi, dateChat, userChat} from '@/Types/API/ChattingTypes';
+import {Axios} from 'axios';
+import {API} from '@/API/API';
+import RNFetchBlob from 'rn-fetch-blob';
 
 export default function ChattingDetail({navigation, route: {params}}: ChattingDetailProps) {
     const {t} = useTranslation();
@@ -43,8 +48,11 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
         global: {
             data: {token, sb},
         },
-        user,
     } = useAppSelector(state => state);
+    const user = {
+        mt_idx: '20',
+        mt_uid: 'j1UxzrfptW',
+    };
 
     const isFocused = useIsFocused();
 
@@ -62,6 +70,8 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
     const [isFileLoading, setIsFileLoading] = useState(false);
     const [isBlock, setIsBlock] = useState(true); // 차단 여부
 
+    const [roomInfo, setRoomInfo] = useState<ChattingRoomInformationApi['T']>(null); // 룸 정보 불러오기
+
     // const [chatIdSet, setChatIdSet] = useState(new Set()); 필요 없을듯
 
     const flatListRef = useRef<FlatList>(null);
@@ -70,6 +80,13 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
         keyboardHeight: 0,
     });
 
+    // 채팅 내용 불러오기 API
+    const {data: chattingList} = useApi<ChattingDetailListApi['T'], ChattingDetailListApi['D']>(null, 'chat_room_chatting_detail.php', {
+        mt_idx: user.mt_idx, // 수정필요
+        chat_idx: '6', // 수정필요
+    });
+
+    const {PostAPI: chattingRoomInApi} = usePostSend<ChattingRoomInformationApi['D'], ChattingRoomInformationApi['T']>('chat_room_info.php', {mt_idx: user.mt_idx, chat_idx: '6'}); // 수정필요
     const channelHandler = new sb.ChannelHandler();
     channelHandler.onMessageReceived = async (targetChannel, message) => {
         setChatList(prev => [...prev, message]);
@@ -87,17 +104,18 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
         }
     };
 
-    const channelName = 'chat_chat_uid';
-
     const onPressLocation = useCallback(() => {
         navigation.navigate('ChattingLocation');
     }, []);
-
-    const onPressShopIcon = useCallback(() => {
-        navigation.navigate('ProfileHome', {
-            sell_idx: '1', // 수정필요 고정값
-        });
+    const onPressSearch = useCallback(() => {
+        navigation.navigate('Search');
     }, []);
+    const onPressShopIcon = useCallback(() => {
+        if (roomInfo)
+            navigation.navigate('ProfileHome', {
+                sell_idx: roomInfo.sell_idx, // 수정필요 고정값
+            });
+    }, [roomInfo]);
 
     const scrollToEnd = (animated: boolean | undefined = false) => {
         if (flatListRef?.current)
@@ -137,7 +155,7 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
 
         if (Channel) {
             Channel.sendUserMessage(params, (error, message) => {
-                setChatList(prev => [...prev, message]);
+                // setChatList(prev => [...prev, message]);
 
                 console.log('보낸 메시지', message);
                 if (error) {
@@ -177,7 +195,7 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                 console.log('Error Send File', error);
             }
             console.log('message File Send', message);
-            setChatList(prev => [...prev, message]);
+            // setChatList(prev => [...prev, message]);
             setIsOn(false);
         });
         setIsFileLoading(false);
@@ -194,8 +212,12 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
         setIsOn(false);
     }, []);
 
-    useEffect(() => {
-        (async () => {
+    const findRoom = useCallback(
+        async (data: ChattingRoomInformationApi['T']) => {
+            if (!data) {
+                throw 'not Data';
+            }
+            const {my_uid, sendbird_chat_url} = data;
             if (user?.mt_idx) {
                 // 토큰 셋팅
                 const authorizationStatus = await messaging().requestPermission();
@@ -211,15 +233,12 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                 }
             }
 
-            await sb.connect(user.mt_uid as string, '9cc146a50f722a97c5984f7f65107092d7a07a14', (err, user) => {
-                console.log('connect ::: ', err, user);
-            });
+            await sb.connect(my_uid, 'c9b9d16dac03ca5a4c85df8a5599fca785d35091', (err, user) => {});
             const listQuery = sb.GroupChannel.createMyGroupChannelListQuery(); // 그룹 채널 찾기
             let find = false; // 그룹 채널 있을경우 true
             listQuery.includeEmpty = true; // 빈곳도 찾기
+            listQuery.channelUrlsFilter = [sendbird_chat_url];
 
-            // listQuery.userIdsIncludeFilter = [user.mt_idx as string];
-            listQuery.channelUrlsFilter = ['sendbird_group_channel_72907156_f98b58c9242c20470421909a8710c3cf2f69ec32'];
             if (listQuery.hasNext) {
                 await listQuery.next((err, groupChannels) => {
                     if (err) {
@@ -230,31 +249,43 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                     if (groupChannels && Array.isArray(groupChannels))
                         groupChannels.forEach(channel => {
                             console.log('channelFind', channel);
-                            if (channel.name === channelName) {
+                            if (channel.url === sendbird_chat_url) {
                                 setChannel(channel);
                                 find = true;
                             }
                         });
                 });
             }
-            // if (!find) {
-            //     const params = new sb.GroupChannelParams();
-            //     params.isDistinct = false; // 재생성
-            //     params.isPublic = false; // 프라이빗한 공간 생성
-            //     params.isSuper = false; //  슈퍼 그룹방 X
-            //     params.addUserIds([user.mt_uid as string, '7LorEVehbz']); // 560  수정필요
-            //     params.name = channelName; // 수정필요
+            if (find) {
+                setRoomInfo(data);
+            } else {
+                throw 'not Find Room';
+            }
+        },
+        [user],
+    );
 
-            //     const channel = await sb.GroupChannel.createChannel(params, (openChannel, error) => {
-            //         console.log('openChannel :::', openChannel, error);
-            //     });
-            //     setChannel(channel);
-            // }
-        })();
-
-        return () => {
-            sb.disconnect();
-        };
+    const downloadFile = useCallback((filePath: string) => {
+        const fileArray = filePath.split('/');
+        const name = fileArray[fileArray.length - 1];
+        RNFetchBlob.config({
+            // add this option that makes response data to be stored as a file,
+            // this is much more performant.
+            addAndroidDownloads: {
+                useDownloadManager: true,
+                notification: true,
+                mime: 'text/plain',
+                path: `${RNFetchBlob.fs.dirs.DownloadDir}/${name}`,
+                mediaScannable: true,
+            },
+        })
+            .fetch('GET', filePath, {
+                //some headers ..
+            })
+            .then(res => {
+                // the temp file path
+                console.log('The file saved to ', res.path());
+            });
     }, []);
     useEffect(() => {
         if (Channel) {
@@ -263,7 +294,8 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
     }, [Channel]);
 
     useEffect(() => {
-        if (query) getSendBirdMessage();
+        if (query) {
+        }
     }, [query]);
     useEffect(() => {
         if (!isFirst) {
@@ -303,6 +335,17 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
             offIsSetting();
         }
     }, [isFocused]);
+    useLayoutEffect(() => {
+        chattingRoomInApi()
+            .then(apiResult)
+            .then(res => {
+                findRoom(res.data);
+            });
+        return () => {
+            API.post('chat_room_leave.php', {mt_idx: user.mt_idx, chat_idx: '6'}); // 방나가기
+            sb.disconnect();
+        };
+    }, []);
 
     return (
         <View
@@ -324,7 +367,7 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                         <TouchableOpacity onPress={onPressShopIcon} hitSlop={getHitSlop(5)} style={styles.marginRight}>
                             <AutoHeightImage width={getPixel(18)} source={StoreWhiteIcon} />
                         </TouchableOpacity>
-                        <TouchableOpacity hitSlop={getHitSlop(5)} style={styles.marginRight}>
+                        <TouchableOpacity onPress={onPressSearch} hitSlop={getHitSlop(5)} style={styles.marginRight}>
                             <AutoHeightImage width={getPixel(20)} source={SearchWhiteIcon} />
                         </TouchableOpacity>
                         <TouchableOpacity onPress={onIsSetting} hitSlop={getHitSlop(5)}>
@@ -336,13 +379,14 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
             <View style={styles.productHeaderView}>
                 <View style={styles.productHeaderRow}>
                     <View style={styles.productHeaderImageView}>
-                        <Image source={require('@assets/image/dummy.png')} style={styles.productHeaderImage} />
+                        <Image source={roomInfo ? {uri: roomInfo.product_file} : require('@assets/image/dummy.png')} style={styles.productHeaderImage} />
                     </View>
                     <View>
                         <Text bold style={{width: getPixel(250)}} medium numberOfLines={2}>
-                            Smart Insulation Cup Water Bottle Led Temperature Dis asfasdkfjsdkfjsldkjfsdaklfska
+                            {roomInfo?.product_name}
                         </Text>
                         <DarkBlueText>{brPrice('120', {isPadding: true})}</DarkBlueText>
+                        {/* 고정값 수정필요 */}
                     </View>
                 </View>
             </View>
@@ -365,7 +409,7 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                 }}>
                 <FlatList
                     ref={flatListRef}
-                    data={chatList}
+                    data={chattingList?.list}
                     keyExtractor={(item, index) => index.toString()}
                     // onEndReached={() => {
                     //     getSendBirdMessage();
@@ -374,34 +418,28 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                         scrollPosition.current.position = e.nativeEvent.contentOffset.y;
                     }}
                     renderItem={({item, index}) => {
-                        if (item.messageType === 'user' && item?.sender) {
+                        if (item?.msg_type) {
                             // 유저타입 분별용
+                            const _item = item as userChat;
+                            const isMy = _item.userIdx === user.mt_idx;
 
-                            const _item = item as SendBird.UserMessage;
-                            if (_item.customType === 'location' && _item?.data) {
-                                return <LocationChatting region={_item.data} date={''} content={''} />;
-                            }
-                            if (_item == null || _item.sender == null || _item.message == null) {
-                                return null; // 타입 가드
-                            }
-                            const isMy = _item.sender.userId === user.mt_uid;
-                            return (
-                                <>
-                                    {isMy === false && <OtherChatting date="11:20" content={_item.message} />}
-                                    {isMy === true && <MyChatting date="11:20" isCheck={2} content={_item.message} />}
-                                </>
-                            );
-                        } else if (item.messageType === 'file' && item?.url) {
-                            const _fileItem = item as SendBird.FileMessage;
-
-                            const isMy = _fileItem?.sender?.userId === user?.mt_uid;
-                            if (_fileItem) {
-                                // 수정 필요 이미지 디자인
+                            if (_item.msg_type === 'location') {
+                                return (
+                                    <LocationChatting
+                                        region={{
+                                            latitude: _item.lat,
+                                            longitude: _item.lng,
+                                        }}
+                                        date={_item.msg_date}
+                                        content={_item.location}
+                                    />
+                                );
+                            } else if (_item.msg_type === 'file') {
                                 return (
                                     <View style={{alignSelf: isMy ? 'flex-end' : 'flex-start', marginVertical: getHeightPixel(20)}}>
                                         <Image
                                             source={{
-                                                uri: _fileItem.url,
+                                                uri: _item.img,
                                             }}
                                             resizeMode="contain"
                                             style={{
@@ -412,6 +450,16 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                                     </View>
                                 );
                             }
+
+                            return (
+                                <>
+                                    {isMy === false && <OtherChatting date={_item.msg_date} content={_item.content} />}
+                                    {isMy === true && <MyChatting date={_item.msg_date} isCheck={2} content={_item.content} />}
+                                </>
+                            );
+                        } else {
+                            const _item = item as dateChat;
+                            return <ChatDate content={_item.content} />;
                         }
 
                         return (
@@ -440,7 +488,12 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                         );
                     }}
                     initialNumToRender={100}
-                    ListFooterComponent={<View style={{height: getHeightPixel(10)}}></View>}
+                    ListHeaderComponent={<View style={{height: getHeightPixel(20)}}></View>}
+                    inverted
+                    onEndReached={() => {
+                        console.log('이전내역');
+                    }}
+                    onEndReachedThreshold={1}
                 />
             </View>
             <View style={{height: getHeightPixel(50)}}></View>
@@ -493,7 +546,15 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                     </View>
                 )}
             </View>
-            {isSetting && <ModalChattingSetting onClose={offIsSetting} />}
+            {isSetting && (
+                <ModalChattingSetting
+                    onClose={offIsSetting}
+                    chatInfo={{
+                        chat_idx: roomInfo?.chat_idx ?? '',
+                        pt_idx: roomInfo?.pt_idx ?? '',
+                    }}
+                />
+            )}
             {isAlbum && <ModalPhoto onClose={() => setIsAlbum(false)} returnFn={fileSend} />}
         </View>
     );

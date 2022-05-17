@@ -36,7 +36,7 @@ function useGeocoding(region: {latitude: number; longitude: number} | null) {
         }
     }, [region]);
     useEffect(() => {
-        refDebounce(refTimer, 100, onSearchLocation);
+        refDebounce(refTimer, 50, onSearchLocation);
     }, [region]);
     useEffect(() => {}, [location]);
 

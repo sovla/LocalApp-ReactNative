@@ -127,7 +127,7 @@ function useApi<T, D>(defaultValue: T, apiPath: string, axiosData?: D, option?: 
 
 export default useApi;
 
-export const usePostSend = <D>(apiPath: string, apiData: NonNullable<D>) => {
+export const usePostSend = <D, T extends any>(apiPath: string, apiData: NonNullable<D>) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
@@ -137,7 +137,7 @@ export const usePostSend = <D>(apiPath: string, apiData: NonNullable<D>) => {
             data?: Partial<D>,
         ): Promise<{
             result: 'true' | 'false' | null;
-            data: any;
+            data: T;
             msg: null | string;
         }> => {
             setIsLoading(true);
@@ -155,7 +155,7 @@ export const usePostSend = <D>(apiPath: string, apiData: NonNullable<D>) => {
             >(apiPath, {...apiData, ...data});
             if (res.data?.result === 'true') {
                 setIsLoading(false);
-                return res.data.data as any;
+                return res.data.data;
             } else if (res.data?.result === 'false') {
                 setIsLoading(false);
                 setIsError(true);

@@ -49,7 +49,13 @@ export const AlertButton = (alertContent: string, leftButtonText: string = 'í™•ì
     ]);
 };
 
-export const AlertButtons = (alertContent: string, leftButtonText: string | undefined = t('confirm'), RightButtonText: string | undefined = t('cancle'), leftButtonPress: () => void, RightButtonPress: () => void | undefined = () => {}) => {
+export const AlertButtons = (
+    alertContent: string,
+    leftButtonText: string | undefined = t('confirm'),
+    RightButtonText: string | undefined = t('cancle'),
+    leftButtonPress: () => void,
+    RightButtonPress: () => void | undefined = () => {},
+) => {
     if (leftButtonText && RightButtonText)
         Alert.alert('', alertContent, [
             {
@@ -103,7 +109,11 @@ export const brPrice = (
     if (price.includes('R$')) {
         return price.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     } else {
-        return option.isMoney ? (option.isPadding ? 'R$ ' + price.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : 'R$' + price.replace(/\B(?=(\d{3})+(?!\d))/g, '.')) : price.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        return option.isMoney
+            ? option.isPadding
+                ? 'R$ ' + price.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+                : 'R$' + price.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+            : price.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     }
 };
 
@@ -206,9 +216,10 @@ export const changeBirthDate = (str?: string | undefined, isBack?: boolean | und
     }
 };
 
-export const apiResult = (res: {result: 'true' | 'false' | null; data: any; msg: string | null}) => {
+export const apiResult = <T extends any>(res: {result: 'true' | 'false' | null; data: T; msg: string | null}) => {
     if (res?.result === 'false' && res?.msg) {
         AlertButton(res.msg);
+        throw 'Error';
     } else {
         return res;
     }

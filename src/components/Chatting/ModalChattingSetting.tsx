@@ -61,7 +61,7 @@ import NoticeEmptyBlackIcon from '@assets/image/notice_empty_black.png';
 import {ModalAlertViewProps, ModalChattingSettingProps} from '@/Types/Components/ChattingTypes';
 import Notice from '@/Page/Notice/Notice';
 
-const ModalChattingSetting: React.FC<ModalChattingSettingProps> = ({onClose}) => {
+const ModalChattingSetting: React.FC<ModalChattingSettingProps> = ({onClose, chatInfo}) => {
     const {t} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
     const navigation = useAppNavigation();
@@ -123,7 +123,9 @@ const ModalChattingSetting: React.FC<ModalChattingSettingProps> = ({onClose}) =>
     };
     const onPressReport = () => {
         onClose();
-        navigation.navigate('ReportCategory');
+        navigation.navigate('ReportCategory', {
+            pt_idx,
+        });
     };
 
     return (
@@ -131,7 +133,14 @@ const ModalChattingSetting: React.FC<ModalChattingSettingProps> = ({onClose}) =>
             <View style={[styles.dim]}>
                 {isAlert && (
                     <View style={styles.alertAbsoluteView}>
-                        <ModalAlertView isBang title={alertModal.title} content={alertModal.content} onClose={onClose} onPressConfirm={alertModal.onPressConfirm} onPressCancle={alertModal.onPressCancle} />
+                        <ModalAlertView
+                            isBang
+                            title={alertModal.title}
+                            content={alertModal.content}
+                            onClose={onClose}
+                            onPressConfirm={alertModal.onPressConfirm}
+                            onPressCancle={alertModal.onPressCancle}
+                        />
                     </View>
                 )}
 

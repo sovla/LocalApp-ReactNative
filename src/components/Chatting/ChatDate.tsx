@@ -50,7 +50,9 @@ import QuetionIcon from '@assets/image/quetion.png';
 import AnswerIcon from '@assets/image/answer.png';
 import {FAQItemProps} from '@/Types/Components/SettingTypes';
 import SuccessIcon from '@assets/image/success.png';
-const ChatDate = () => {
+const ChatDate: React.FC<{
+    content: string;
+}> = ({content}) => {
     const {t} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
     return (
@@ -67,7 +69,7 @@ const ChatDate = () => {
                 style={{
                     letterSpacing: getPixel(1),
                 }}>
-                Today at 03:50 PM
+                {content}
             </Text>
         </View>
     );

@@ -53,6 +53,7 @@ import LocationMarkerIcon from '@assets/image/location_marker.png';
 import MapView, {Callout, Marker} from 'react-native-maps';
 import LocationIcon from '@assets/image/location.png';
 import WhiteBoxDownIcon from '@assets/image/white_box_down.png';
+import {refDebounce} from '@/Util/Util';
 
 const Map: React.FC<{
     region: {
@@ -82,20 +83,21 @@ const Map: React.FC<{
         ref.current?.showCallout();
     }, [markerInfo, lineLength]);
 
-    const timerCount = 10;
+    const timerCount = 1;
 
     const onRegionChange = useCallback(region => {
-        // setRegion(region);
+        setRegion(region);
         // return;
-        if (debounceRef?.current) {
-            clearTimeout(debounceRef.current);
-            debounceRef.current = null;
-            debounceRef.current = setTimeout(() => {
-                setRegion(region);
-            }, timerCount);
-        } else {
-            debounceRef.current = setTimeout(() => {}, timerCount);
-        }
+
+        // if (debounceRef?.current) {
+        //     clearTimeout(debounceRef.current);
+        //     debounceRef.current = null;
+        //     debounceRef.current = setTimeout(() => {
+        //         setRegion(region);
+        //     }, timerCount);
+        // } else {
+        //     debounceRef.current = setTimeout(() => {}, timerCount);
+        // }
     }, []);
     return (
         <MapView

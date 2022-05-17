@@ -214,7 +214,7 @@ export default function Router() {
 
     return (
         <NavigationContainer ref={ref}>
-            <Stack.Navigator initialRouteName={'PurchaseList'}>
+            <Stack.Navigator initialRouteName={initRoute}>
                 {RouterSetting.map((item, index) => (
                     <Stack.Screen
                         name={item.name}
