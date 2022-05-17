@@ -478,6 +478,9 @@ export const ko = {
         chatMenu2: '거래완료',
         profileYear: '년',
         profileMonth: '월',
+        noneReview: '판매자 후기가 없습니다.',
+        noneSoldOut: '판매 완료된 상품이 없습니다.',
+        noneSale: '판매중인 상품이 없습니다.',
     },
 };
 export const es = {

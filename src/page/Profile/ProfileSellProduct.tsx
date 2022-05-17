@@ -1,5 +1,5 @@
 import {View, Text, FlatList} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
 import Header from '@/Components/LoginSignUp/Header';
 import {useTranslation} from 'react-i18next';
 import {useAppSelector} from '@/Hooks/CustomHook';
@@ -15,13 +15,14 @@ import useUpdateEffect from '@/Hooks/useUpdateEffect';
 import {ProfileSellerProductApi} from '@/Types/API/ProfileTypes';
 import {brPrice, productTimeSetting, viewCountCheck} from '@/Util/Util';
 import Loading from '@/Components/Global/Loading';
+import {GrayText} from '@/Components/Global/text';
 
 export default function ProfileSellProduct({route: {params}}: ProfileSellProductProps) {
     const {t} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
     const {user} = useAppSelector(state => state);
     const isFocused = useIsFocused();
-    const [selectMenu, setSelectMenu] = useState<any>(t('ProfileSellProduct'));
+    const [selectMenu, setSelectMenu] = useState<any>('ProfileSellProduct');
     const {data, isLoading, isError, errorMessage, getData, setData} = useApi<ProfileSellerProductApi['T'], ProfileSellerProductApi['D']>(
         null,
         'sell_profile_product_list.php',
@@ -29,7 +30,7 @@ export default function ProfileSellProduct({route: {params}}: ProfileSellProduct
             mt_idx: user.mt_idx as string,
             sell_idx: params.sell_idx, // 수정필요 params.sell_idx
             sell_type: params.sell_type, // 수정필요 params.sell_type
-            sell_status: selectMenu === t('ProfileSellProductComplete') ? 'Y' : 'N',
+            sell_status: selectMenu === 'ProfileSellProductComplete' ? 'Y' : 'N',
         },
         {isFirst: false},
     );
@@ -39,7 +40,7 @@ export default function ProfileSellProduct({route: {params}}: ProfileSellProduct
             getData();
         }
     }, [isFocused]);
-    useUpdateEffect(() => {
+    useLayoutEffect(() => {
         setData(null);
         getData();
     }, [selectMenu]);
@@ -47,13 +48,14 @@ export default function ProfileSellProduct({route: {params}}: ProfileSellProduct
         <View style={{flex: 1}}>
             <Header title={t('profileHomeSaleProduct')} />
             <View style={{height: getHeightPixel(20)}}></View>
-            <Menu menuList={[t('ProfileSellProduct'), t('ProfileSellProductComplete')]} selectMenu={selectMenu} setSelectMenu={setSelectMenu} />
+            <Menu menuList={['ProfileSellProduct', 'ProfileSellProductComplete']} selectMenu={selectMenu} setSelectMenu={setSelectMenu} />
             {isLoading ? (
                 <View style={{flex: 1}}>
                     <Loading />
                 </View>
             ) : (
                 <FlatList
+                    style={{flex: 1}}
                     contentContainerStyle={{
                         paddingBottom: getHeightPixel(150),
                     }}
@@ -68,7 +70,7 @@ export default function ProfileSellProduct({route: {params}}: ProfileSellProduct
                                           }
                                         : require('@assets/image/none_image_m.png')
                                 }
-                                status={selectMenu === t('ProfileSellProductComplete') ? '판매완료' : ''}
+                                status={selectMenu === 'ProfileSellProductComplete' ? '판매완료' : ''}
                                 viewCount={viewCountCheck(item.view_count)}
                                 likeCount={viewCountCheck(item.like_count)}
                                 price={brPrice(item.pt_price)}
@@ -82,6 +84,18 @@ export default function ProfileSellProduct({route: {params}}: ProfileSellProduct
                             />
                         );
                     }}
+                    ListEmptyComponent={
+                        <View
+                            style={{
+                                height: getHeightPixel(450),
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}>
+                            <GrayText medium fontSize={`${14 * fontSize}`}>
+                                {t(selectMenu === 'ProfileSellProductComplete' ? 'noneSoldOut' : 'noneSale')}
+                            </GrayText>
+                        </View>
+                    }
                 />
             )}
         </View>
