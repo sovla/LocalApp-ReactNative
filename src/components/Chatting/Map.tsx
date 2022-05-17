@@ -52,6 +52,7 @@ import {FAQItemProps} from '@/Types/Components/SettingTypes';
 import LocationMarkerIcon from '@assets/image/location_marker.png';
 import MapView, {Callout, Marker} from 'react-native-maps';
 import LocationIcon from '@assets/image/location.png';
+import WhiteBoxDownIcon from '@assets/image/white_box_down.png';
 
 const Map: React.FC<{
     region: {
@@ -108,61 +109,51 @@ const Map: React.FC<{
             {isMarker && (
                 <>
                     <Marker icon={LocationMarkerIcon} ref={ref} coordinate={{...region, latitudeDelta: 0.003, longitudeDelta: 0.003}} onCalloutPress={onPressMarker} onPress={onPressMarker}>
-                        <Callout tooltip={true}>
-                            <View
-                                style={{
-                                    width: getPixel(250),
-                                    minHeight: getHeightPixel(70),
-                                    height: getHeightPixel(50 + 20 * lineLength),
-                                    backgroundColor: Theme.color.white,
-                                    borderRadius: 16,
-                                    paddingHorizontal: getPixel(14),
-                                    paddingVertical: getHeightPixel(14),
-                                }}>
+                        {onPressMarker != null && (
+                            <Callout tooltip={true}>
                                 <View
                                     style={{
-                                        flexDirection: 'row',
+                                        width: getPixel(250),
+                                        height: getHeightPixel(60 + 15 * lineLength),
                                     }}>
-                                    <RNText
+                                    <View
                                         style={{
-                                            marginRight: getPixel(5),
+                                            ...styles.callOutView,
+                                            height: getHeightPixel(50 + 15 * lineLength),
                                         }}>
-                                        <Image
-                                            source={LocationIcon}
-                                            style={{
-                                                width: getPixel(11),
-                                                height: getPixel(13),
-                                            }}
-                                        />
-                                    </RNText>
-                                    <View>
-                                        <View
-                                            style={{
-                                                flexDirection: 'row',
-                                                width: getPixel(200),
-                                                justifyContent: 'space-between',
-                                                alignItems: 'center',
-                                            }}>
-                                            <Text fontSize={`${12 * fontSize}`} bold>
-                                                위치 정보
-                                            </Text>
+                                        <View style={styles.row}>
+                                            <RNText style={styles.locationImageText}>
+                                                <Image source={LocationIcon} style={styles.locationImage} />
+                                            </RNText>
+                                            <View>
+                                                <View style={styles.whiteInnerView}>
+                                                    <Text fontSize={`${12 * fontSize}`} bold>
+                                                        위치 정보
+                                                    </Text>
+                                                    <RNText>
+                                                        <Image source={ArrowRightIcon} style={styles.arrowRightImage} />
+                                                    </RNText>
+                                                </View>
+                                                <Text fontSize={`${12 * fontSize}`} onTextLayout={e => setLineLength(e.nativeEvent.lines.length)} style={{width: getPixel(162)}}>
+                                                    {markerInfo?.description}
+                                                </Text>
+                                            </View>
+                                        </View>
+                                        <View style={styles.tooltipView}>
                                             <RNText>
-                                                <Image
-                                                    source={ArrowRightIcon}
+                                                <AutoHeightImage
                                                     style={{
-                                                        width: getPixel(20),
-                                                        height: getPixel(20),
+                                                        zIndex: 200,
                                                     }}
+                                                    width={getPixel(20)}
+                                                    source={WhiteBoxDownIcon}
                                                 />
                                             </RNText>
                                         </View>
-                                        <Text fontSize={`${12 * fontSize}`} onTextLayout={e => setLineLength(e.nativeEvent.lines.length)} style={{width: getPixel(162)}}>
-                                            {markerInfo?.description}
-                                        </Text>
                                     </View>
                                 </View>
-                            </View>
-                        </Callout>
+                            </Callout>
+                        )}
                     </Marker>
                 </>
             )}
@@ -172,4 +163,40 @@ const Map: React.FC<{
 
 export default Map;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    tooltipView: {
+        position: 'absolute',
+        bottom: -getHeightPixel(10),
+        left: getPixel(250 / 2 - 10),
+        zIndex: 150,
+    },
+    arrowRightImage: {
+        width: getPixel(20),
+        height: getPixel(20),
+    },
+    whiteInnerView: {
+        flexDirection: 'row',
+        width: getPixel(200),
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    locationImage: {
+        width: getPixel(11),
+        height: getPixel(13),
+    },
+    locationImageText: {
+        marginRight: getPixel(5),
+        marginTop: getHeightPixel(3),
+    },
+    row: {
+        flexDirection: 'row',
+    },
+    callOutView: {
+        width: getPixel(250),
+        minHeight: getHeightPixel(70),
+        backgroundColor: Theme.color.white,
+        borderRadius: 16,
+        paddingHorizontal: getPixel(14),
+        paddingVertical: getHeightPixel(14),
+    },
+});

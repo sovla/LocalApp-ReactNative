@@ -67,6 +67,8 @@ import InstagramBlueIcon from '@assets/image/instagram_blue.png';
 import ArrowRightNewIcon from '@assets/image/arrow_right_new.png';
 import WhatsappBlueIcon from '@assets/image/whatsapp_blue.png';
 import * as Yup from 'yup';
+import {usePostSend} from '@/Hooks/useApi';
+import {apiResult} from '@/Util/Util';
 
 interface BusinessSignUpData {
     busi_title: string;
@@ -95,6 +97,7 @@ interface BusinessSignUpData {
 const BusinessSignUpForm = ({navigation}: BusinessSignUpFormProps) => {
     const {t} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
+    const {user} = useAppSelector(state => state);
     const {
         handleChange,
         handleBlur,
@@ -127,12 +130,12 @@ const BusinessSignUpForm = ({navigation}: BusinessSignUpFormProps) => {
     } = useFormik<BusinessSignUpData>({
         initialValues: {
             busi_title: '',
-            busi_cnpj: '',
+            busi_cnpj: '90.604.214/4187-28',
             busi_info: '',
-            hp_open_check: 'Y',
+            hp_open_check: user?.mt_hp_open ?? 'Y',
             busi_location: '',
             busi_location_detail: '',
-            busi_email: '',
+            busi_email: user?.mt_email ?? 'dummy@naver.com',
             busi_lat: -23.15123124,
             busi_lng: -32.12341,
             busi_tel_country: '',
@@ -159,13 +162,19 @@ const BusinessSignUpForm = ({navigation}: BusinessSignUpFormProps) => {
             busi_tel_number: Yup.string().required('Required'),
         }),
 
-        validateOnMount: true,
+        validateOnChange: false,
     });
-    console.log('error:::', errors);
+
+    const {PostAPI: checkCNPJ} = usePostSend('busi_cnpj_check.php', {
+        busi_cnpj: busi_cnpj,
+    });
     const _handleChange = useCallback(
-        (field: keyof BusinessSignUpData) => (e: string | React.ChangeEvent<any>) => {
-            handleChange(field)(e);
-        },
+        <T extends keyof BusinessSignUpData>(field: T) =>
+            (e: BusinessSignUpData[T] | React.ChangeEvent<any>) => {
+                if (typeof e === 'string') {
+                    handleChange(field)(e);
+                }
+            },
         [],
     );
 
@@ -175,6 +184,16 @@ const BusinessSignUpForm = ({navigation}: BusinessSignUpFormProps) => {
     const onPressShopTime = useCallback(() => {
         navigation.navigate('BusinessOpeningHours');
     }, []);
+
+    const onPressCheckCNPJ = () => {
+        checkCNPJ()
+            .then(apiResult)
+            .then(res => {
+                if (res) {
+                    console.log(res, 'result');
+                }
+            });
+    };
 
     return (
         <View style={{flex: 1}}>
@@ -221,7 +240,7 @@ const BusinessSignUpForm = ({navigation}: BusinessSignUpFormProps) => {
                                 placeholderTextColor={Theme.color.gray}
                                 placeholder={t('cnpjPh')}
                             />
-                            <TouchableOpacity style={styles.button}>
+                            <TouchableOpacity onPress={onPressCheckCNPJ} style={styles.button}>
                                 <WhiteText fontSize={`${12 * fontSize}`}>CHECK</WhiteText>
                             </TouchableOpacity>
                         </View>
@@ -252,11 +271,18 @@ const BusinessSignUpForm = ({navigation}: BusinessSignUpFormProps) => {
                     <Line height={0.4} isGray width={getPixel(328)} style={styles.marginLeft16} />
                     <View style={styles.rowBetween}>
                         <Text fontSize={`${16 * fontSize}`}>{t('businessProfileSettingShopTel')}</Text>
-                        <GrayText fontSize={`${14 * fontSize}`}>+55 11 964845016</GrayText>
+                        <GrayText fontSize={`${14 * fontSize}`}>
+                            +{user.mt_country} {user.mt_hp?.substring(0, 2)} {user.mt_hp?.substring(2)}
+                        </GrayText>
                     </View>
                     <View style={styles.rowBetween}>
                         <Text fontSize={`${16 * fontSize}`}>{t('businessProfileSettingShopTelOpen')}</Text>
-                        <Toggle isOn={true} />
+                        <Toggle
+                            isOn={hp_open_check === 'Y'}
+                            setIsOn={() => {
+                                _handleChange('hp_open_check')(hp_open_check === 'Y' ? 'N' : 'Y');
+                            }}
+                        />
                     </View>
                     <Line height={0.4} isGray width={getPixel(328)} style={{...styles.marginLeft16, marginTop: getHeightPixel(16)}} />
                     <View style={{...styles.rowBetween, marginTop: 0}}>
@@ -272,6 +298,7 @@ const BusinessSignUpForm = ({navigation}: BusinessSignUpFormProps) => {
                             value={busi_email}
                             placeholderTextColor={Theme.color.black}
                             placeholder={t('email')}
+                            editable={false}
                         />
                     </View>
                     <Line height={0.4} isGray width={getPixel(328)} style={styles.marginLeft16} />

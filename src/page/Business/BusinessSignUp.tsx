@@ -1,9 +1,9 @@
-import {Image, ImageBackground, StyleSheet, View} from 'react-native';
-import React, {useState} from 'react';
+import {Image, ImageBackground, StyleSheet, TouchableOpacity, View} from 'react-native';
+import React, {useCallback, useState} from 'react';
 
 import ProfileBackGroundImage from '@assets/image/profile_bg.png';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import {GrayText, WhiteText} from '@Components/Global/text';
+import {GrayText, Text, WhiteText} from '@Components/Global/text';
 import {useAppSelector} from '@/Hooks/CustomHook';
 import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
@@ -20,6 +20,9 @@ import {AlertButton} from '@/Util/Util';
 import CountryPicker from '@/Components/Profile/CountryPicker';
 import {usePostSend} from '@/Hooks/useApi';
 import ModalAuth from '@/Components/LoginSignUp/ModalAuth';
+import BackWhiteIcon from '@assets/image/back_white.png';
+import AutoHeightImage from 'react-native-auto-height-image';
+import {API} from '@/API/API';
 
 export default function BusinessSignUp({navigation}: BusinessSignUpProps) {
     const {t} = useTranslation();
@@ -44,9 +47,13 @@ export default function BusinessSignUp({navigation}: BusinessSignUpProps) {
         });
     };
 
+    const onPressRegister = useCallback(() => {
+        navigation.navigate('BusinessSignUpForm');
+    }, []);
+
     return (
         <View style={styles.container}>
-            <KeyboardAwareScrollView>
+            {/* <KeyboardAwareScrollView>
                 <ImageBackground source={ProfileBackGroundImage} style={styles.backGroundImage} />
                 <Image source={CommunicationImage} style={styles.communicationImage} />
                 <Header isBack />
@@ -75,12 +82,94 @@ export default function BusinessSignUp({navigation}: BusinessSignUpProps) {
                     />
                 </View>
             </KeyboardAwareScrollView>
-            {isAuthModal && <ModalAuth onPressRetry={onPressLogin} tel={tel} selectNum={selectNum} onClose={() => setIsAuthModal(false)} isBusiness />}
+            {isAuthModal && <ModalAuth onPressRetry={onPressLogin} tel={tel} selectNum={selectNum} onClose={() => setIsAuthModal(false)} isBusiness />} */}
+            <Image source={require('@assets/image/business_header.png')} style={styles.headerImage} />
+            <View style={styles.headerSpaceView}>
+                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.headerBackImageView}>
+                    <AutoHeightImage source={BackWhiteIcon} width={getPixel(30)} />
+                </TouchableOpacity>
+            </View>
+            <View style={styles.whiteBox}>
+                <Text fontSize={`${24 * fontSize}`} bold style={{marginTop: getHeightPixel(53), marginBottom: getHeightPixel(8)}}>
+                    {t('modalMyPageBusiness')}
+                </Text>
+                <Text fontSize={`${14 * fontSize}`} medium>
+                    {t('businessSignUpGuide1')}
+                </Text>
+                <Text fontSize={`${16 * fontSize}`} bold style={{marginTop: getHeightPixel(55)}}>
+                    {t('businessSignUpGuide2')}
+                </Text>
+                <View style={styles.imageWithTextView}>
+                    <AutoHeightImage source={require('@assets/image/rocket.png')} width={getPixel(24)} />
+                    <Text style={styles.innerText} fontSize={`${14 * fontSize}`}>
+                        {t('businessSignUpGuide3')}
+                    </Text>
+                </View>
+                <Line isGray height={0.5} width={getPixel(288)} />
+                <View style={styles.imageWithTextView}>
+                    <AutoHeightImage source={require('@assets/image/cash.png')} width={getPixel(24)} />
+                    <Text style={styles.innerText} fontSize={`${14 * fontSize}`}>
+                        {t('businessSignUpGuide4')}
+                    </Text>
+                </View>
+                <Line isGray height={0.5} width={getPixel(288)} />
+                <View style={styles.imageWithTextView}>
+                    <AutoHeightImage source={require('@assets/image/diamond.png')} width={getPixel(24)} />
+                    <Text style={styles.innerText} fontSize={`${14 * fontSize}`}>
+                        {t('businessSignUpGuide5')}
+                    </Text>
+                </View>
+                <Line isGray height={0.5} width={getPixel(288)} />
+                <Button onPress={() => onPressRegister()} content={t('register')} style={{marginTop: getHeightPixel(75), marginBottom: getHeightPixel(25)}} />
+                <TouchableOpacity style={styles.footerTouch}>
+                    <Text
+                        medium
+                        fontSize={`${12 * fontSize}`}
+                        style={{
+                            textDecorationLine: 'underline',
+                        }}>
+                        {t('businessTermsandConditions')}
+                    </Text>
+                </TouchableOpacity>
+            </View>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
+    whiteBox: {
+        flex: 1,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        backgroundColor: Theme.color.white,
+        paddingHorizontal: getPixel(32),
+    },
+    footerTouch: {
+        width: getPixel(288),
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    innerText: {
+        width: getPixel(250),
+        marginLeft: getPixel(14),
+    },
+    imageWithTextView: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginVertical: getHeightPixel(16),
+    },
+    headerImage: {
+        width: getPixel(360),
+        height: getPixel(150),
+        position: 'absolute',
+        left: 0,
+        top: 0,
+    },
+    headerSpaceView: {height: getHeightPixel(132)},
+    headerBackImageView: {
+        marginTop: getHeightPixel(10),
+        marginLeft: getPixel(16),
+    },
     w270: {
         width: getPixel(270),
     },
@@ -102,7 +191,7 @@ const styles = StyleSheet.create({
         marginVertical: getHeightPixel(19),
     },
     container: {
-        backgroundColor: Theme.color.blue_3D,
+        // backgroundColor: Theme.color.blue_3D,
         flex: 1,
     },
     backGroundImage: {

@@ -356,11 +356,14 @@ export const ko = {
         reportGuide1: '신고 내용을 입력해 주세요.',
         reportGuide2: '님을 신고하는 이유를 간략하게 알려주세요.',
         reportGuide3: '어떤 상황에서든 상대방을 비하/조롱/모욕 등의 언행을 하면 이용 제재를 받을 수 있습니다.',
-        reportGuide4: '불법상품 또는 상품 정보 오류, 부정한 거래를 요구하는 판매자를 발견하셨을 경우 상품 상세화면 하단에 있는 신고하기를 통해 신고하실수 있으며, 신고하실 때는 상품 또는 판매자명과 함께 위반한 내용을 상세하게 기재하여 주시기 바랍니다.',
+        reportGuide4:
+            '불법상품 또는 상품 정보 오류, 부정한 거래를 요구하는 판매자를 발견하셨을 경우 상품 상세화면 하단에 있는 신고하기를 통해 신고하실수 있으며, 신고하실 때는 상품 또는 판매자명과 함께 위반한 내용을 상세하게 기재하여 주시기 바랍니다.',
         submit: '제출하기',
-        businessSignUpGuide1: '비즈니스 계정으로 다양한 혜택과 고객과의 소통을 편리하게 이용하세요.',
-        businessSignUpGuide2: '서비스 전환은 로그인만으로 프로필 전환이 됩니다.',
-        businessSignUpGuide3: '아직 LocalApp 회원이 아니신가요?',
+        businessSignUpGuide1: '비즈니스 계정으로 전환하여 다양한\n혜택과 고객과의 소통을 더욱 편리하게 이용하세요',
+        businessSignUpGuide2: '비즈니스 계정 전환시 혜택',
+        businessSignUpGuide3: '판매 촉진이 될수 있도록 일반 등록자 보다\n더 다양한 정보 노출',
+        businessSignUpGuide4: '일반 가입자 보다 더 많은 상품 등록 가능',
+        businessSignUpGuide5: '비즈니스 유저는 추후에 더 많은 혜택을 받을\n수도 있도록 늘려갈 준비중에 있습니다!!',
         signUp: '회원가입',
         autoLogin: '자동 로그인',
         login: '로그인',
@@ -469,6 +472,8 @@ export const ko = {
         imageAlert: '이미지는 총 3장까지 등록 가능합니다.',
         cnpj: 'CNPJ',
         cnpjPh: 'CNPJ 입력',
+        register: '등록하기',
+        businessTermsandConditions: '비즈니스 이용약관',
     },
 };
 export const es = {
