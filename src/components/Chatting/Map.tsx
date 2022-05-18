@@ -124,12 +124,12 @@ const Map: React.FC<{
                                 <View
                                     style={{
                                         width: getPixel(250),
-                                        height: getHeightPixel(60 + 15 * lineLength),
+                                        height: getHeightPixel(60) + 18 * lineLength,
                                     }}>
                                     <View
                                         style={{
                                             ...styles.callOutView,
-                                            height: getHeightPixel(50 + 15 * lineLength),
+                                            height: getHeightPixel(50) + 18 * lineLength,
                                         }}>
                                         <View style={styles.row}>
                                             <RNText style={styles.locationImageText}>

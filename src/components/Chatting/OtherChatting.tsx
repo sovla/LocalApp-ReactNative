@@ -29,7 +29,7 @@ const OtherChatting: React.FC<OtherChattingProps> = ({content, date, profileImag
     );
 };
 
-export default OtherChatting;
+export default React.memo(OtherChatting);
 
 const styles = StyleSheet.create({
     container: {

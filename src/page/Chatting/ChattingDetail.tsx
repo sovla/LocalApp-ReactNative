@@ -41,6 +41,7 @@ import {Axios, AxiosResponse} from 'axios';
 import {API} from '@/API/API';
 import RNFetchBlob from 'rn-fetch-blob';
 import useUpdateEffect from '@/Hooks/useUpdateEffect';
+import {CALLBACK_TYPE} from 'react-native-gesture-handler/lib/typescript/handlers/gestures/gesture';
 
 export default function ChattingDetail({navigation, route: {params}}: ChattingDetailProps) {
     const {t} = useTranslation();
@@ -138,72 +139,7 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
             });
 
             if (res.data?.result === 'true') {
-                // setChattingList(prev => {
-                //     if (res.data.data.data?.list && prev?.list) {
-                //         return {
-                //             list: [...prev.list, ...res.data.data.data.list],
-                //             total: res.data.data.data.total,
-                //         };
-                //     } else if (res.data.data.data?.list && prev?.list == null) {
-                //         return {
-                //             list: [...res.data.data.data.list],
-                //             total: res.data.data.data.total,
-                //         };
-                //     } else if (res.data?.data?.data?.list == null && prev?.list) {
-                //         return {
-                //             list: [...prev.list],
-                //             total: prev?.total as number,
-                //         };
-                //     } else {
-                //         return prev;
-                //     }
-                // });
-                setChattingList(prev => {
-                    const map = new Map();
-                    if (prev?.list && res.data?.data?.data?.list && Array.isArray(prev?.list) && Array.isArray(res.data?.data?.data?.list)) {
-                        let count = 0;
-                        for (const v of res.data.data.data.list) {
-                            if (v?.msg_idx) {
-                                map.set(v.msg_idx, v);
-                                count = +v.msg_idx;
-                            } else {
-                                map.set(`${count + 0.5}`, v);
-                            }
-                        }
-                        count = 0;
-                        for (const v of prev.list) {
-                            if (v?.msg_idx && !map.has(v.msg_idx)) {
-                                map.set(v.msg_idx, v);
-                                count = +v.msg_idx;
-                            } else if (v.msg_idx == null) {
-                                map.set(`${count + 0.5}`, v);
-                            }
-                        }
-                        let resultArray = [];
-                        for (const [key, value] of map) {
-                            resultArray.push(
-                                value?.msg_idx
-                                    ? value
-                                    : {
-                                          ...value,
-                                          msg_idx: key,
-                                      },
-                            );
-                        }
-                        resultArray.sort((a, b) => a?.msg_idx - b?.msg_idx);
-                        resultArray.reverse();
-
-                        return {
-                            total: map.size,
-                            list: resultArray,
-                        };
-                    } else if (Array.isArray(res.data?.data?.data?.list)) {
-                        return res.data.data.data;
-                    } else {
-                        setIsChatLast(true);
-                        return prev;
-                    }
-                });
+                setChattingList(prev => getChattingListState(prev, res, setIsChatLast));
                 if (page === 1) {
                     setChattingPage(2);
                 } else {
@@ -214,9 +150,6 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
         },
         [user.mt_idx, roomInfo?.chat_idx, chattingPage],
     );
-    useEffect(() => {
-        console.log(chattingList?.list);
-    }, [chattingList]);
     const onPressLocation = useCallback(() => {
         navigation.navigate('ChattingLocation');
     }, []);
@@ -264,6 +197,7 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
             params.customType = 'text';
             // 채팅인경우
             setChatting(''); // text 인경우
+            setChattingList(dummyMessageAdd(params, user));
 
             await sendChatApi({
                 chat_type: 'text',
@@ -271,6 +205,7 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
             })
                 .then(apiResult)
                 .then(res => {
+                    setChattingList(dummyMessageChange(res));
                     getChattingListApi(1);
                 })
                 .catch(err => {
@@ -495,7 +430,6 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
     // }, []);
     useLayoutEffect(() => {
         if (isFocused && params?.region) {
-            console.log(params, 'params');
             const {
                 region: {latitude, longitude},
                 location,
@@ -590,7 +524,7 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                 <FlatList
                     ref={flatListRef}
                     data={chattingList?.list}
-                    keyExtractor={(item, index) => index.toString()}
+                    keyExtractor={(item, index) => item?.msg_idx ?? index.toString()}
                     // onEndReached={() => {
                     //     getSendBirdMessage();
                     // }}
@@ -644,7 +578,9 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                             return <ChatDate content={_item.content} />;
                         }
                     }}
-                    initialNumToRender={100}
+                    initialNumToRender={15}
+                    maxToRenderPerBatch={10}
+                    windowSize={21}
                     ListHeaderComponent={<View style={{height: getHeightPixel(isOn ? 170 : 20)}}></View>}
                     inverted // 뒤집기
                     onEndReached={() => {
@@ -837,3 +773,111 @@ const styles = StyleSheet.create({
         paddingHorizontal: getPixel(16),
     },
 });
+
+function dummyMessageAdd(params: {message: any}, user: {mt_idx: any}) {
+    return (prev: any) => {
+        if (prev?.list) {
+            return {
+                list: [
+                    ...prev.list,
+                    {
+                        msg_idx: '임시',
+                        content: params.message,
+                        msg_show: 'N',
+                        userIdx: user.mt_idx,
+                        msg_type: 'text',
+                        userProfile: '',
+                        msg_date: '',
+                    },
+                ],
+                total: prev.total,
+            };
+        } else {
+            return {
+                list: [
+                    {
+                        msg_idx: '임시',
+                        content: params.message,
+                        msg_show: 'N',
+                        userIdx: user.mt_idx,
+                        msg_type: 'text',
+                        userProfile: '',
+                        msg_date: '',
+                    },
+                ],
+                total: 1,
+            };
+        }
+    };
+    // 기믹을 부려보자
+}
+
+function dummyMessageChange(res: {data: {msg_idx: any}}) {
+    return (prev: any) => {
+        if (prev) {
+            const result = {
+                list: prev.list.map((v: {msg_idx: string}) => {
+                    if (v.msg_idx === '임시') {
+                        return {
+                            ...v,
+                            msg_idx: `${res.data.msg_idx}`,
+                        };
+                    } else {
+                        return v;
+                    }
+                }),
+                total: prev.list.length,
+            };
+
+            return result;
+        } else {
+            return null;
+        }
+    };
+}
+
+function getChattingListState(prev: any, res: any, setIsChatLast: any) {
+    const map = new Map();
+    if (prev?.list && res.data?.data?.data?.list && Array.isArray(prev?.list) && Array.isArray(res.data?.data?.data?.list)) {
+        let count = 0;
+        for (const v of res.data.data.data.list) {
+            if (v?.msg_idx) {
+                map.set(v.msg_idx, v);
+                count = +v.msg_idx;
+            } else {
+                map.set(`${count + 0.5}`, v);
+            }
+        }
+        count = 0;
+        for (const v of prev.list) {
+            if (v?.msg_idx && !map.has(v.msg_idx)) {
+                map.set(v.msg_idx, v);
+                count = +v.msg_idx;
+            } else if (v.msg_idx == null) {
+                map.set(`${count + 0.5}`, v);
+            }
+        }
+        let resultArray = [];
+        for (const [key, value] of map) {
+            resultArray.push(
+                value?.msg_idx
+                    ? value
+                    : {
+                          ...value,
+                          msg_idx: key,
+                      },
+            );
+        }
+        resultArray.sort((a, b) => a?.msg_idx - b?.msg_idx);
+        resultArray.reverse();
+        return {
+            total: map.size,
+            list: resultArray,
+        };
+    } else if (Array.isArray(res.data?.data?.data?.list)) {
+        return res.data.data.data;
+    } else {
+        setIsChatLast(true);
+        return prev;
+    }
+}

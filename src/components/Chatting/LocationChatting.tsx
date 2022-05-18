@@ -1,20 +1,13 @@
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import {Text, WhiteText} from '@Components/Global/text';
+import {Text} from '@Components/Global/text';
 import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
 
-import ArrowRightWhiteIcon from '@assets/image/arrow_right_white.png';
-import ArrowRightIcon from '@assets/image/arrow_right.png';
-
-import MapView, {Marker} from 'react-native-maps';
 import {LocationChattingProps} from '@/Types/Components/ChattingTypes';
-import AutoHeightImage from 'react-native-auto-height-image';
-import axios, {Axios} from 'axios';
-import FastImage from 'react-native-fast-image';
 
 const LocationChatting: React.FC<LocationChattingProps> = ({date, content, isCheck, isMy, region, profileImage}) => {
     const {t} = useTranslation();
@@ -63,7 +56,7 @@ const LocationChatting: React.FC<LocationChattingProps> = ({date, content, isChe
                         backgroundColor: isMy ? Theme.color.blue_3D : Theme.color.white,
                     },
                 ]}>
-                <FastImage
+                <Image
                     source={{
                         uri: `https://maps.googleapis.com/maps/api/staticmap?center=${region.latitude},${region.longitude}&zoom=18&size=700x400&markers=${region.latitude},${region.longitude}&maptype=roadmap&key=AIzaSyAbfTo68JkJSdEi9emDHyMfGl7vxjYD704`,
                     }}
@@ -84,7 +77,7 @@ const LocationChatting: React.FC<LocationChattingProps> = ({date, content, isChe
     );
 };
 
-export default LocationChatting;
+export default React.memo(LocationChatting);
 
 const styles = StyleSheet.create({
     mapContentArrowImage: {width: getPixel(30), height: getPixel(30)},

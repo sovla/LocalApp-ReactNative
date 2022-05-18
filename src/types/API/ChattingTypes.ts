@@ -12,7 +12,37 @@ interface chatDetail {
     userProfile: string;
     idx: string;
 }
-export type userChat = Omit<chatDetail, 'idx'>;
+export type userChat =
+    | {
+          msg_type: 'text';
+          content: string;
+          msg_idx: string;
+          msg_date: string;
+          msg_show: 'Y' | 'N';
+          userIdx: string;
+          userProfile: string;
+      }
+    | {
+          msg_type: 'location';
+          lat: string;
+          lng: string;
+          location: string;
+          msg_date: string;
+          msg_idx: string;
+          msg_show: 'N' | 'Y';
+          userIdx: string;
+          userProfile: string;
+      }
+    | {
+          msg_type: 'file';
+          img: string;
+          msg_date: string;
+          msg_idx: string;
+          msg_show: 'N' | 'Y';
+
+          userIdx: string;
+          userProfile: string;
+      };
 export type dateChat = {
     userIdx: string;
     msg_idx: undefined;
