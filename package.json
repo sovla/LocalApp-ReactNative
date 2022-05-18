@@ -10,7 +10,7 @@
         "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
         "postinstall": "rndebugger-open",
         "connect": "adb connect 192.168.0.27 & adb reverse tcp:8081 tcp:8081 & yarn start",
-        "connect1": "adb connect 192.168.0.82 & adb connect 192.168.0.71:40015 & yarn android"
+        "connect1": "adb connect 192.168.0.82 & adb connect 192.168.0.76 & yarn android"
     },
     "dependencies": {
         "@miblanchard/react-native-slider": "2.1.0",

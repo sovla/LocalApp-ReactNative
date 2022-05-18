@@ -60,7 +60,7 @@ const Map: React.FC<{
         latitude: number;
         longitude: number;
     };
-    setRegion: React.Dispatch<
+    setRegion?: React.Dispatch<
         React.SetStateAction<{
             latitude: number;
             longitude: number;
@@ -72,7 +72,8 @@ const Map: React.FC<{
         description: string;
     };
     onPressMarker?: () => void;
-}> = ({region, setRegion, isMarker = true, markerInfo = {}, onPressMarker}) => {
+    isShow?: boolean;
+}> = ({region, setRegion, isMarker = true, markerInfo = {}, onPressMarker, isShow}) => {
     const {t} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
     const navigation = useAppNavigation();
@@ -82,11 +83,10 @@ const Map: React.FC<{
     useEffect(() => {
         ref.current?.showCallout();
     }, [markerInfo, lineLength]);
-
     const timerCount = 1;
 
     const onRegionChange = useCallback(region => {
-        setRegion(region);
+        if (setRegion) setRegion(region);
         // return;
 
         // if (debounceRef?.current) {
@@ -99,6 +99,14 @@ const Map: React.FC<{
         //     debounceRef.current = setTimeout(() => {}, timerCount);
         // }
     }, []);
+
+    const _onPressMarker = () => {
+        if (isShow) {
+            return null;
+        } else if (onPressMarker && !isShow) {
+            onPressMarker();
+        }
+    };
     return (
         <MapView
             style={{flex: 1}}
@@ -110,7 +118,7 @@ const Map: React.FC<{
             showsUserLocation>
             {isMarker && (
                 <>
-                    <Marker icon={LocationMarkerIcon} ref={ref} coordinate={{...region, latitudeDelta: 0.003, longitudeDelta: 0.003}} onCalloutPress={onPressMarker} onPress={onPressMarker}>
+                    <Marker icon={LocationMarkerIcon} ref={ref} coordinate={{...region, latitudeDelta: 0.003, longitudeDelta: 0.003}} onCalloutPress={_onPressMarker} onPress={_onPressMarker}>
                         {onPressMarker != null && (
                             <Callout tooltip={true}>
                                 <View

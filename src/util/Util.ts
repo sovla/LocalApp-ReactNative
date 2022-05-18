@@ -219,7 +219,7 @@ export const changeBirthDate = (str?: string | undefined, isBack?: boolean | und
 export const apiResult = <T extends any>(res: {result: 'true' | 'false' | null; data: T; msg: string | null}) => {
     if (res?.result === 'false' && res?.msg) {
         AlertButton(res.msg);
-        throw 'Error';
+        throw res.msg;
     } else {
         return res;
     }

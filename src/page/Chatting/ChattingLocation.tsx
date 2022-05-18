@@ -1,5 +1,5 @@
 import {ActivityIndicator, Dimensions, FlatList, Image, ImageBackground, Modal, StyleSheet, TouchableOpacity, View, ViewStyle} from 'react-native';
-import React, {Fragment, useCallback, useEffect, useRef, useState} from 'react';
+import React, {Fragment, useCallback, useEffect, useLayoutEffect, useRef, useState} from 'react';
 
 import BackGroundImage from '@assets/image/BG.png';
 import {fontSizeChange, getHeightPixel, getPixel} from '@/Util/pixelChange';
@@ -56,18 +56,27 @@ import useGeoLocation from '@/Hooks/useGeoLocation';
 import Loading from '@/Components/Global/Loading';
 import useGeocoding from '@/Hooks/useGeocoding';
 
-export default function ChattingLocation({navigation}: ChattingLocationProps) {
+export default function ChattingLocation({navigation, route: {params}}: ChattingLocationProps) {
     const {t} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
-    const {isLoading, region, setRegion} = useGeoLocation();
+    const {isLoading, region, setRegion} = useGeoLocation(
+        params?.isShow
+            ? {
+                  latitude: +params.region.lat,
+                  longitude: +params.region.lon,
+              }
+            : undefined,
+    );
 
     const {locationName, detail, isLoading: isGeoLoading} = useGeocoding(isLoading ? null : region);
 
     const onPressMarker = useCallback(() => {
         navigation.navigate('ChattingDetail', {
             region,
+            location: locationName,
+            locationDetail: detail,
         });
-    }, [region]);
+    }, [region, locationName, detail]);
 
     if (isLoading) {
         return <Loading />;
@@ -91,7 +100,14 @@ export default function ChattingLocation({navigation}: ChattingLocationProps) {
             )}
             <Header title={t('locationInformation')} />
             <View style={{flex: 1}}>
-                <Map region={region} setRegion={setRegion} isMarker={true} markerInfo={{title: locationName, description: detail}} onPressMarker={onPressMarker} />
+                <Map
+                    region={region}
+                    setRegion={params?.isShow ? undefined : setRegion}
+                    isMarker={true}
+                    markerInfo={{title: locationName, description: detail}}
+                    onPressMarker={onPressMarker}
+                    isShow={params?.isShow}
+                />
                 <View style={styles.absoluteLocation}>
                     <WhiteText fontSize={`${12 * fontSize}`}>{t('mapPh')}</WhiteText>
                 </View>

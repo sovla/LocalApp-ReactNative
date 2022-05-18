@@ -47,7 +47,7 @@ function useApi<T, D>(defaultValue: T, apiPath: string, axiosData?: D, option?: 
                 } | null,
                 any
             >
-        >(apiPath, {...axiosData, ..._data, page})
+        >(apiPath, {page, ...axiosData, ..._data})
             .then(result => {
                 console.log(apiPath + '::::', result);
                 // console.log(
@@ -76,8 +76,11 @@ function useApi<T, D>(defaultValue: T, apiPath: string, axiosData?: D, option?: 
                             setData(result.data.data);
                         }
                     }
-                    if (defaultOption.isList) {
+                    if (defaultOption.isList && !_data?.page) {
                         setPage(prev => prev + 1);
+                        setTotalPage(result?.data?.data?.data?.total_page);
+                    } else {
+                        setPage(_data.page + 1);
                         setTotalPage(result?.data?.data?.data?.total_page);
                     }
                 } else {

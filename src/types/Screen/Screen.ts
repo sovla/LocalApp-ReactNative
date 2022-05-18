@@ -51,9 +51,19 @@ type Screen = {
                   latitude: number;
                   longitude: number;
               };
+              location: string;
+              locationDetail: string;
           }
         | undefined;
-    ChattingLocation: StackScreenProps<Screen> | undefined;
+    ChattingLocation:
+        | {
+              isShow: boolean;
+              region: {
+                  lat: string | number;
+                  lon: string | number;
+              };
+          }
+        | undefined;
     ReportCategory: {
         pt_idx: string;
     };

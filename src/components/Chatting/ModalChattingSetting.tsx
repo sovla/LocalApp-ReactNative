@@ -63,6 +63,7 @@ import Notice from '@/Page/Notice/Notice';
 import {usePostSend} from '@/Hooks/useApi';
 import {apiResult} from '@/Util/Util';
 import {ChatAlarmSettingApi, ChatBlindSettingApi, ChatHistoryDeleteApi, ChatHistoryExportApi} from '@/Types/API/ChattingTypes';
+import {API} from '@/API/API';
 
 const ModalChattingSetting: React.FC<ModalChattingSettingProps> = ({onClose, chatInfo}) => {
     const {t} = useTranslation();
@@ -164,6 +165,12 @@ const ModalChattingSetting: React.FC<ModalChattingSettingProps> = ({onClose, cha
         });
     };
 
+    const onPressExit = useCallback(() => {
+        onClose();
+        navigation.goBack();
+        API.post('chat_room_leave.php', {mt_idx: user.mt_idx, chat_idx: chatInfo.chat_idx}); // 방나가기
+    }, []);
+
     useEffect(() => {
         alarmSettingApi().then(apiResult);
     }, [isAlarm]);
@@ -251,7 +258,7 @@ const ModalChattingSetting: React.FC<ModalChattingSettingProps> = ({onClose, cha
                             <Text fontSize={`${16 * fontSize}`}>{t('report')}</Text>
                         </TouchableOpacity>
                         <Line isGray width={getPixel(274)} />
-                        <TouchableOpacity onPress={onClose} style={[styles.rowBox]}>
+                        <TouchableOpacity onPress={onPressExit} style={[styles.rowBox]}>
                             <View style={styles.imageView}>
                                 <AutoHeightImage source={ExitIcon} width={getPixel(20)} />
                             </View>

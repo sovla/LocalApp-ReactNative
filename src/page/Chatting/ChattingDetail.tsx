@@ -1,4 +1,4 @@
-import {Image, ImageBackground, Keyboard, StyleSheet, TouchableOpacity, View, TextInput, Platform, FlatList, KeyboardAvoidingView} from 'react-native';
+import {Image, ImageBackground, Keyboard, StyleSheet, TouchableOpacity, View, TextInput, Platform, FlatList, KeyboardAvoidingView, Dimensions} from 'react-native';
 import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
@@ -34,12 +34,13 @@ import SendBird from 'sendbird';
 import messaging from '@react-native-firebase/messaging';
 import ModalPhoto from '@/Components/Business/ModalPhoto';
 import ImageCropPicker from 'react-native-image-crop-picker';
-import {useIsFocused} from '@react-navigation/native';
+import {useIsFocused, useRoute} from '@react-navigation/native';
 import useApi, {usePostSend} from '@/Hooks/useApi';
-import {ChattingDetailListApi, ChattingRoomInformationApi, dateChat, userChat} from '@/Types/API/ChattingTypes';
-import {Axios} from 'axios';
+import {ChattingDetailListApi, ChattingRoomInformationApi, ChattingSendApi, dateChat, userChat} from '@/Types/API/ChattingTypes';
+import {Axios, AxiosResponse} from 'axios';
 import {API} from '@/API/API';
 import RNFetchBlob from 'rn-fetch-blob';
+import useUpdateEffect from '@/Hooks/useUpdateEffect';
 
 export default function ChattingDetail({navigation, route: {params}}: ChattingDetailProps) {
     const {t} = useTranslation();
@@ -50,11 +51,12 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
         },
     } = useAppSelector(state => state);
     const user = {
-        mt_idx: '20',
+        mt_idx: Dimensions.get('window').height > 750 ? '20' : '21',
         mt_uid: 'j1UxzrfptW',
     };
 
     const isFocused = useIsFocused();
+    const _route = useRoute();
 
     const {value: isSetting, on: onIsSetting, off: offIsSetting} = useBoolean(false);
     const [isOn, setIsOn] = useState<boolean>(false);
@@ -72,7 +74,15 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
 
     const [roomInfo, setRoomInfo] = useState<ChattingRoomInformationApi['T']>(null); // 룸 정보 불러오기
 
-    // const [chatIdSet, setChatIdSet] = useState(new Set()); 필요 없을듯
+    const [loading, setLoading] = useState({
+        messageSend: false,
+        fileSend: false,
+    });
+
+    // 채팅 내용 불러오기 API
+    const [chattingList, setChattingList] = useState<ChattingDetailListApi['T']>(null);
+    const [chattingPage, setChattingPage] = useState(1);
+    const [isChatLast, setIsChatLast] = useState(false);
 
     const flatListRef = useRef<FlatList>(null);
     const scrollPosition = useRef({
@@ -80,30 +90,133 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
         keyboardHeight: 0,
     });
 
-    // 채팅 내용 불러오기 API
-    const {data: chattingList} = useApi<ChattingDetailListApi['T'], ChattingDetailListApi['D']>(null, 'chat_room_chatting_detail.php', {
-        mt_idx: user.mt_idx, // 수정필요
-        chat_idx: '6', // 수정필요
+    const {PostAPI: sendChatApi, isLoading: IsSendChat} = usePostSend<ChattingSendApi['D'], ChattingSendApi['T']>('chat_room_chatting_send.php', {
+        mt_idx: user.mt_idx,
+        chat_idx: roomInfo?.chat_idx as string,
+        imageField: 'chat_file',
     });
 
     const {PostAPI: chattingRoomInApi} = usePostSend<ChattingRoomInformationApi['D'], ChattingRoomInformationApi['T']>('chat_room_info.php', {mt_idx: user.mt_idx, chat_idx: '6'}); // 수정필요
+
     const channelHandler = new sb.ChannelHandler();
     channelHandler.onMessageReceived = async (targetChannel, message) => {
-        setChatList(prev => [...prev, message]);
+        getChattingListApi(1);
     };
 
     sb.addChannelHandler('chat', channelHandler);
 
-    const getSendBirdMessage = async () => {
-        if (Channel) {
-            if (query?.hasMore) {
-                const messages = await query.load(100, false);
-                console.log('getMessages ::: ', messages);
-                setChatList(messages);
+    // const getSendBirdMessage = async () => {
+    //     if (Channel) {
+    //         if (query?.hasMore) {
+    //             const messages = await query.load(100, false);
+    //             console.log('getMessages ::: ', messages);
+    //             setChatList(messages);
+    //         }
+    //     }
+    // };
+    const getChattingListApi = useCallback(
+        async (page?: undefined | number) => {
+            const _page = page ? page : chattingPage;
+            if (isChatLast && !page) {
+                return null;
             }
-        }
-    };
+            setIsChatLast(false);
+            const res = await API.post<
+                ChattingDetailListApi['T'],
+                AxiosResponse<{
+                    result: 'true' | 'false';
+                    data: {
+                        data: ChattingDetailListApi['T'];
+                    };
+                    msg: string;
+                }>,
+                ChattingDetailListApi['D']
+            >('chat_room_chatting_detail.php', {
+                mt_idx: user.mt_idx,
+                chat_idx: roomInfo?.chat_idx as string,
+                page: _page,
+            });
 
+            if (res.data?.result === 'true') {
+                // setChattingList(prev => {
+                //     if (res.data.data.data?.list && prev?.list) {
+                //         return {
+                //             list: [...prev.list, ...res.data.data.data.list],
+                //             total: res.data.data.data.total,
+                //         };
+                //     } else if (res.data.data.data?.list && prev?.list == null) {
+                //         return {
+                //             list: [...res.data.data.data.list],
+                //             total: res.data.data.data.total,
+                //         };
+                //     } else if (res.data?.data?.data?.list == null && prev?.list) {
+                //         return {
+                //             list: [...prev.list],
+                //             total: prev?.total as number,
+                //         };
+                //     } else {
+                //         return prev;
+                //     }
+                // });
+                setChattingList(prev => {
+                    const map = new Map();
+                    if (prev?.list && res.data?.data?.data?.list && Array.isArray(prev?.list) && Array.isArray(res.data?.data?.data?.list)) {
+                        let count = 0;
+                        for (const v of res.data.data.data.list) {
+                            if (v?.msg_idx) {
+                                map.set(v.msg_idx, v);
+                                count = +v.msg_idx;
+                            } else {
+                                map.set(`${count + 0.5}`, v);
+                            }
+                        }
+                        count = 0;
+                        for (const v of prev.list) {
+                            if (v?.msg_idx && !map.has(v.msg_idx)) {
+                                map.set(v.msg_idx, v);
+                                count = +v.msg_idx;
+                            } else if (v.msg_idx == null) {
+                                map.set(`${count + 0.5}`, v);
+                            }
+                        }
+                        let resultArray = [];
+                        for (const [key, value] of map) {
+                            resultArray.push(
+                                value?.msg_idx
+                                    ? value
+                                    : {
+                                          ...value,
+                                          msg_idx: key,
+                                      },
+                            );
+                        }
+                        resultArray.sort((a, b) => a?.msg_idx - b?.msg_idx);
+                        resultArray.reverse();
+
+                        return {
+                            total: map.size,
+                            list: resultArray,
+                        };
+                    } else if (Array.isArray(res.data?.data?.data?.list)) {
+                        return res.data.data.data;
+                    } else {
+                        setIsChatLast(true);
+                        return prev;
+                    }
+                });
+                if (page === 1) {
+                    setChattingPage(2);
+                } else {
+                    setChattingPage(prev => prev + 1);
+                }
+            } else {
+            }
+        },
+        [user.mt_idx, roomInfo?.chat_idx, chattingPage],
+    );
+    useEffect(() => {
+        console.log(chattingList?.list);
+    }, [chattingList]);
     const onPressLocation = useCallback(() => {
         navigation.navigate('ChattingLocation');
     }, []);
@@ -119,38 +232,75 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
 
     const scrollToEnd = (animated: boolean | undefined = false) => {
         if (flatListRef?.current)
-            if (animated) {
-                flatListRef.current.scrollToEnd();
-            } else {
+            if (chattingList)
                 flatListRef.current?.scrollToOffset({
-                    offset: chatList.length > 0 ? 500 * chatList.length : 20000,
+                    offset: chattingList?.list?.length > 0 ? -500 * chattingList?.list?.length : -20000,
                     animated,
                 });
-            }
     };
 
     const messageSend = async (
-        type?: 'location' | undefined,
+        type?: 'location' | 'text' | undefined,
         message?:
             | string
             | {
                   latitude: number;
                   longitude: number;
+                  location: string;
+                  locationDetail: string;
               }
             | undefined,
     ) => {
-        if (!chatting?.length && !type) {
+        if ((chatting.length === 0 && type === 'text') || IsSendChat || loading.messageSend) {
             return;
         }
+        setLoading(prev => ({...prev, messageSend: true}));
+
         const params = new sb.UserMessageParams();
-        if (!type && !message) {
-            setChatting(''); // text 인경우
+
+        if (type === 'text') {
+            // 샌드버드 셋팅
             params.message = chatting;
             params.customType = 'text';
+            // 채팅인경우
+            setChatting(''); // text 인경우
+
+            await sendChatApi({
+                chat_type: 'text',
+                content: params.message,
+            })
+                .then(apiResult)
+                .then(res => {
+                    getChattingListApi(1);
+                })
+                .catch(err => {
+                    if (err == '거래완료된 채팅방입니다') {
+                        // 거래 완료된경우
+                    }
+                });
         } else if (type === 'location' && message && typeof message !== 'string') {
+            // 샌드버드 셋팅
             params.data = JSON.stringify(message);
-            params.message = 'location';
+            params.message = message.locationDetail;
             params.customType = type;
+
+            // 지역인경우
+
+            await sendChatApi({
+                chat_type: 'location',
+                lat: message.latitude,
+                lng: message.longitude,
+                location_detail: message.locationDetail,
+            })
+                .then(apiResult)
+                .then(res => {
+                    getChattingListApi(1);
+                })
+                .catch(err => {
+                    if (err == '거래완료된 채팅방입니다') {
+                        // 거래 완료된경우
+                    }
+                });
         }
 
         if (Channel) {
@@ -161,10 +311,11 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                 if (error) {
                     console.log('보낸 메시지 에러', error);
                 }
-                scrollToEnd(true);
+                scrollToEnd(false);
                 // setChatList(prev => [...prev, message]);
             });
         }
+        setLoading(prev => ({...prev, messageSend: false}));
     };
 
     const fileSend = async (images: {path: string; mime: string}[]) => {
@@ -189,8 +340,24 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
             name: 'auto.jpg',
         };
         setIsFileLoading(true);
+        await sendChatApi({
+            chat_type: 'file',
+            chat_file: {
+                path: cropImage.path,
+                mime: cropImage.mime,
+            },
+        })
+            .then(apiResult)
+            .then(res => {
+                getChattingListApi(1);
+            })
+            .catch(err => {
+                if (err == '거래완료된 채팅방입니다') {
+                    // 거래 완료된경우
+                }
+            });
 
-        await Channel?.sendFileMessage(params, (error, message) => {
+        Channel?.sendFileMessage(params, (error, message) => {
             if (error) {
                 console.log('Error Send File', error);
             }
@@ -250,7 +417,7 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                         groupChannels.forEach(channel => {
                             console.log('channelFind', channel);
                             if (channel.url === sendbird_chat_url) {
-                                setChannel(channel);
+                                setChannel(channel); //  (3) 채팅방 정보 기반으로 채널 찾은뒤 state에 넣어주기
                                 find = true;
                             }
                         });
@@ -289,12 +456,13 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
     }, []);
     useEffect(() => {
         if (Channel) {
-            setQuery(Channel.createPreviousMessageListQuery());
+            setQuery(Channel.createPreviousMessageListQuery()); // (4) 해당 채널에서 query 적용 해주기
         }
     }, [Channel]);
 
     useEffect(() => {
         if (query) {
+            console.log(query, 'query 셋팅완료'); // (5) 쿼리 셋팅 완료
         }
     }, [query]);
     useEffect(() => {
@@ -305,47 +473,59 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
         }
     }, [chatList]);
 
-    useEffect(() => {
-        // 키보드 높이 에 따라 화면 이동 되도록
-        Keyboard.addListener('keyboardDidShow', e => {
-            scrollPosition.current.keyboardHeight = e.endCoordinates.height;
-            flatListRef.current?.scrollToOffset({
-                offset: e.endCoordinates.height + scrollPosition.current.position,
-                animated: false,
-            });
-        });
-        Keyboard.addListener('keyboardDidHide', e => {
-            console.log(scrollPosition.current.position - e.endCoordinates.height, e.endCoordinates);
-            flatListRef.current?.scrollToOffset({
-                offset: scrollPosition.current.position - scrollPosition.current.keyboardHeight,
-                animated: false,
-            });
-        });
-        return () => {
-            Keyboard.removeAllListeners('keyboardDidShow');
-            Keyboard.removeAllListeners('keyboardDidHide');
-        };
-    }, []);
-
+    // useEffect(() => {
+    //     // 키보드 높이 에 따라 화면 이동 되도록
+    //     // Keyboard.addListener('keyboardDidShow', e => {
+    //     //     scrollPosition.current.keyboardHeight = e.endCoordinates.height;
+    //     //     flatListRef.current?.scrollToOffset({
+    //     //         offset: scrollPosition.current.position,
+    //     //         animated: false,
+    //     //     });
+    //     // });
+    //     // Keyboard.addListener('keyboardDidHide', e => {
+    //     //     flatListRef.current?.scrollToOffset({
+    //     //         offset: scrollPosition.current.position,
+    //     //         animated: false,
+    //     //     });
+    //     // });
+    //     return () => {
+    //         Keyboard.removeAllListeners('keyboardDidShow');
+    //         Keyboard.removeAllListeners('keyboardDidHide');
+    //     };
+    // }, []);
     useLayoutEffect(() => {
         if (isFocused && params?.region) {
-            messageSend('location', params.region);
+            console.log(params, 'params');
+            const {
+                region: {latitude, longitude},
+                location,
+                locationDetail,
+            } = params;
+
+            messageSend('location', {latitude, location, locationDetail, longitude});
         }
+    }, [params?.region]);
+
+    useLayoutEffect(() => {
         if (!isFocused) {
             offIsSetting();
         }
     }, [isFocused]);
     useLayoutEffect(() => {
-        chattingRoomInApi()
+        chattingRoomInApi() // (1) 채팅방 접속 정보 받아오기
             .then(apiResult)
             .then(res => {
-                findRoom(res.data);
+                findRoom(res.data); // (2) 채팅방 접속 정보를 기반으로 샌드버드 채널 찾아오기
             });
         return () => {
-            API.post('chat_room_leave.php', {mt_idx: user.mt_idx, chat_idx: '6'}); // 방나가기
             sb.disconnect();
         };
     }, []);
+    useLayoutEffect(() => {
+        if (roomInfo) {
+            getChattingListApi(1); // (2-1) 채팅방 접속 정보를 기반으로 채팅리스트 받아오기
+        }
+    }, [roomInfo]);
 
     return (
         <View
@@ -422,16 +602,18 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                             // 유저타입 분별용
                             const _item = item as userChat;
                             const isMy = _item.userIdx === user.mt_idx;
-
                             if (_item.msg_type === 'location') {
                                 return (
                                     <LocationChatting
+                                        profileImage={_item.userProfile}
                                         region={{
                                             latitude: _item.lat,
                                             longitude: _item.lng,
                                         }}
                                         date={_item.msg_date}
                                         content={_item.location}
+                                        isMy={isMy}
+                                        isCheck={_item.msg_show === 'Y' ? 2 : 1}
                                     />
                                 );
                             } else if (_item.msg_type === 'file') {
@@ -453,45 +635,20 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
 
                             return (
                                 <>
-                                    {isMy === false && <OtherChatting date={_item.msg_date} content={_item.content} />}
-                                    {isMy === true && <MyChatting date={_item.msg_date} isCheck={2} content={_item.content} />}
+                                    {isMy === false && <OtherChatting profileImage={_item.userProfile} date={_item.msg_date} content={_item.content} />}
+                                    {isMy === true && <MyChatting date={_item.msg_date} isCheck={_item.msg_show === 'Y' ? 2 : 1} content={_item.content} />}
                                 </>
                             );
                         } else {
                             const _item = item as dateChat;
                             return <ChatDate content={_item.content} />;
                         }
-
-                        return (
-                            <>
-                                {index === 0 && <ChatDate />}
-                                {index === 5 && (
-                                    <LocationChatting
-                                        date="11:20"
-                                        isCheck={2}
-                                        content="R. Guarani, 266 - Bom Retiro
-                    São Paulo - SP, 01123-040"
-                                        isMy={index % 2 === 1}
-                                    />
-                                )}
-                                {index === 6 && (
-                                    <LocationChatting
-                                        date="11:20"
-                                        isCheck={2}
-                                        content="R. Guarani, 266 - Bom Retiro
-                    São Paulo - SP, 01123-040"
-                                        isMy={index % 2 === 1}
-                                    />
-                                )}
-                                {index > 8 && <ProductChatting isMyProduct={index % 2 === 1} content={''} date={''} />}
-                            </>
-                        );
                     }}
                     initialNumToRender={100}
-                    ListHeaderComponent={<View style={{height: getHeightPixel(20)}}></View>}
-                    inverted
+                    ListHeaderComponent={<View style={{height: getHeightPixel(isOn ? 170 : 20)}}></View>}
+                    inverted // 뒤집기
                     onEndReached={() => {
-                        console.log('이전내역');
+                        getChattingListApi();
                     }}
                     onEndReachedThreshold={1}
                 />
@@ -525,7 +682,7 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                             value={chatting}
                         />
                     </View>
-                    <TouchableOpacity onPress={() => messageSend()}>
+                    <TouchableOpacity onPress={() => messageSend('text')}>
                         <Image source={SendGrayIcon} style={styles.footerSendGray} resizeMode="contain" />
                     </TouchableOpacity>
                 </View>
@@ -613,7 +770,8 @@ const styles = StyleSheet.create({
     },
     footerTextInput: {
         width: getPixel(254),
-        height: getHeightPixel(40),
+        paddingVertical: getHeightPixel(5),
+        minHeight: getHeightPixel(40),
 
         borderRadius: 10,
         backgroundColor: Theme.color.whiteGray_FA,

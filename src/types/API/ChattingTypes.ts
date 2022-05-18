@@ -13,7 +13,11 @@ interface chatDetail {
     idx: string;
 }
 export type userChat = Omit<chatDetail, 'idx'>;
-export type dateChat = Pick<chatDetail, 'content' | 'userIdx'>;
+export type dateChat = {
+    userIdx: string;
+    msg_idx: undefined;
+    content: string;
+};
 
 export interface ChattingDetailListApi {
     // 채팅방 내역 리스트
@@ -24,7 +28,42 @@ export interface ChattingDetailListApi {
     D: {
         mt_idx: string;
         chat_idx: string;
+        page: number;
     };
+}
+export interface ChattingSendApi {
+    // 채팅 메시지 전송 API
+    T: {
+        total: number;
+        list: (userChat | dateChat)[];
+    } | null;
+    D:
+        | {
+              mt_idx: string;
+              chat_idx: string;
+              chat_type?: 'text';
+              content?: string;
+              imageField?: 'chat_file';
+          }
+        | {
+              mt_idx: string;
+              chat_idx: string;
+              chat_type?: 'file';
+              chat_file?: {
+                  path: string;
+                  mime: string;
+              };
+              imageField?: 'chat_file';
+          }
+        | {
+              mt_idx: string;
+              chat_idx: string;
+              chat_type?: 'location';
+              lat?: number | string;
+              lng?: number | string;
+              location_detail?: string;
+              imageField?: 'chat_file';
+          };
 }
 
 export interface ChattingRoomInformationApi {

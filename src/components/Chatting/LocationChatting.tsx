@@ -16,13 +16,19 @@ import AutoHeightImage from 'react-native-auto-height-image';
 import axios, {Axios} from 'axios';
 import FastImage from 'react-native-fast-image';
 
-const LocationChatting: React.FC<LocationChattingProps> = ({date, content, isCheck, isMy, region}) => {
+const LocationChatting: React.FC<LocationChattingProps> = ({date, content, isCheck, isMy, region, profileImage}) => {
     const {t} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
     const navigation = useAppNavigation();
 
     const onPressLocation = useCallback(() => {
-        navigation.navigate('ChattingLocation');
+        navigation.navigate('ChattingLocation', {
+            isShow: true,
+            region: {
+                lat: region.latitude,
+                lon: region.longitude,
+            },
+        });
     }, []);
     const [image, setImage] = useState(null);
 
@@ -46,7 +52,7 @@ const LocationChatting: React.FC<LocationChattingProps> = ({date, content, isChe
                 </View>
             ) : (
                 <View style={styles.profileView}>
-                    <Image source={require('@assets/image/dummy.png')} style={styles.profileImage} />
+                    <Image source={profileImage ? {uri: profileImage} : require('@assets/image/dummy.png')} style={styles.profileImage} />
                 </View>
             )}
 
@@ -66,32 +72,7 @@ const LocationChatting: React.FC<LocationChattingProps> = ({date, content, isChe
                         height: getHeightPixel(110),
                     }}
                 />
-                {/* <MapView
-                    liteMode={true}
-                    initialRegion={{
-                        ...location,
-                    }}
-                    zoomEnabled={false}
-                    zoomTapEnabled={false}
-                    zoomControlEnabled={false}
-                    rotateEnabled={false}
-                    scrollEnabled={false}
-                    toolbarEnabled={false}
-                    loadingEnabled={true}
-                    cacheEnabled={true}
-                    region={{
-                        ...location,
-                    }}
-                    style={{
-                        width: getPixel(245),
-                        height: getHeightPixel(110),
-                    }}>
-                    <Marker
-                        coordinate={{
-                            ...location,
-                        }}
-                    />
-                </MapView> */}
+
                 <TouchableOpacity onPress={onPressLocation} style={styles.mapContentTouch}>
                     <Text color={isMy ? Theme.color.white : Theme.color.black} style={styles.mapContentView} fontSize={`${12 * fontSize}`} medium>
                         {content}

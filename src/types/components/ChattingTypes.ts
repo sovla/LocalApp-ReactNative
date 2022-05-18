@@ -15,6 +15,7 @@ export interface LocationChattingProps {
     content: string;
     isCheck?: number;
     isMy?: boolean;
+    profileImage: string;
     region: {
         longitude: string;
         latitude: string;
@@ -24,6 +25,7 @@ export interface LocationChattingProps {
 export interface OtherChattingProps {
     content: string;
     date: string;
+    profileImage: string;
 }
 export interface MyChattingProps {
     date: string;
