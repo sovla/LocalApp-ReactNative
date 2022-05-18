@@ -273,7 +273,7 @@ const ModalChattingSetting: React.FC<ModalChattingSettingProps> = ({onClose, cha
 
 export default ModalChattingSetting;
 
-const ModalAlertView: React.FC<ModalAlertViewProps> = ({onClose, title, content, onPressConfirm, isBang, onPressCancle}) => {
+export const ModalAlertView: React.FC<ModalAlertViewProps> = ({onClose, title, content, onPressConfirm, isBang, onPressCancle}) => {
     const {t} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
     return (
@@ -285,6 +285,32 @@ const ModalAlertView: React.FC<ModalAlertViewProps> = ({onClose, title, content,
                 </View>
                 <Line isGray width={getPixel(240)} style={styles.alertModalLine} />
                 <View style={styles.alertModalContentText}>
+                    <Text fontSize={`${14 * fontSize}`}>{content}</Text>
+                </View>
+                <View style={styles.rowCenter}>
+                    <TouchableOpacity onPress={onPressCancle} style={styles.alertModalCancleView}>
+                        <Text color={Theme.color.blue_3D} fontSize={`${16 * fontSize}`}>
+                            {t('cancle')}
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={onPressConfirm} style={styles.alertModalConfirmView}>
+                        <Text color={Theme.color.white} fontSize={`${16 * fontSize}`}>
+                            {t('confirm')}
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </View>
+    );
+};
+
+export const ModalAlertViewNoneTitle: React.FC<Pick<ModalAlertViewProps, 'onClose' | 'content' | 'onPressConfirm' | 'onPressCancle'>> = ({onClose, content, onPressConfirm, onPressCancle}) => {
+    const {t} = useTranslation();
+    const fontSize = useAppSelector(state => state.fontSize.value);
+    return (
+        <View style={{...styles.alertModalWhitebox, height: getHeightPixel(146)}}>
+            <View style={styles.alertModalView}>
+                <View style={{...styles.alertModalContentText, height: getHeightPixel(55)}}>
                     <Text fontSize={`${14 * fontSize}`}>{content}</Text>
                 </View>
                 <View style={styles.rowCenter}>

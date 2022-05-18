@@ -153,7 +153,9 @@ type Screen = {
               menu?: 'keywordAlarm' | 'alarm';
           }
         | undefined;
-    AlarmDetail: StackScreenProps<Screen> | undefined;
+    AlarmDetail: {
+        al_idx: string;
+    };
     MyProduct: StackScreenProps<Screen> | undefined;
     ProductUpdate:
         | {

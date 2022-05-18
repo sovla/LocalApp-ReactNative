@@ -130,7 +130,9 @@ export const productTimeSetting = (time: number | string | null, timeType: 'now'
     } else if (timeType === 'day') {
         return time + i18next.t('dayTime');
     } else if (timeType === 'year') {
-        return time;
+        return time + '';
+    } else {
+        return '';
     }
 };
 
