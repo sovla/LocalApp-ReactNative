@@ -28,7 +28,7 @@ export interface ChattingDetailListApi {
 }
 
 export interface ChattingRoomInformationApi {
-    // 채팅방 내역 리스트
+    // 채팅방 정보 받아오는 api
     T: {
         chat_idx: string;
         my_uid: string;
@@ -41,6 +41,59 @@ export interface ChattingRoomInformationApi {
         sell_type: '0' | '1';
         sendbird_chat_url: string;
     } | null;
+    D: {
+        mt_idx: string;
+        chat_idx: string;
+    };
+}
+
+export interface ChatAlarmSettingApi {
+    // 알람셋팅
+    T: {
+        data: {
+            mci_push: 'Y' | 'N';
+        };
+    };
+    D: {
+        mt_idx: string;
+        chat_idx: string;
+        push_set: 'Y' | 'N';
+    };
+}
+export interface ChatBlindSettingApi {
+    // 차단셋팅
+    T: {
+        data: {
+            mci_push: 'Y' | 'N';
+        };
+    };
+    D: {
+        mt_idx: string;
+        chat_idx: string;
+        blind_check: 'Y' | 'N';
+    };
+}
+
+export interface ChatHistoryDeleteApi {
+    // 채팅 대화 내용 지우기
+    T: {
+        data: {
+            mci_push: 'Y' | 'N';
+        };
+    };
+    D: {
+        mt_idx: string;
+        chat_idx: string;
+    };
+}
+
+export interface ChatHistoryExportApi {
+    // 채팅 대화 내용 지우기
+    T: {
+        data: {
+            mci_push: 'Y' | 'N';
+        };
+    };
     D: {
         mt_idx: string;
         chat_idx: string;

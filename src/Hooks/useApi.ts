@@ -137,7 +137,7 @@ export const usePostSend = <D, T extends any>(apiPath: string, apiData: NonNulla
             data?: Partial<D>,
         ): Promise<{
             result: 'true' | 'false' | null;
-            data: T;
+            data: T | any;
             msg: null | string;
         }> => {
             setIsLoading(true);

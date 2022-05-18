@@ -1,5 +1,5 @@
 import {Dimensions, FlatList, Image, ImageBackground, Modal, StyleSheet, TouchableOpacity, View, ViewStyle} from 'react-native';
-import React, {Fragment, useEffect, useState} from 'react';
+import React, {Fragment, useCallback, useEffect, useState} from 'react';
 
 import BackGroundImage from '@assets/image/BG.png';
 import {fontSizeChange, getHeightPixel, getPixel} from '@/Util/pixelChange';
@@ -60,10 +60,18 @@ import CloseBlueIcon from '@assets/image/close_blue.png';
 import NoticeEmptyBlackIcon from '@assets/image/notice_empty_black.png';
 import {ModalAlertViewProps, ModalChattingSettingProps} from '@/Types/Components/ChattingTypes';
 import Notice from '@/Page/Notice/Notice';
+import {usePostSend} from '@/Hooks/useApi';
+import {apiResult} from '@/Util/Util';
+import {ChatAlarmSettingApi, ChatBlindSettingApi, ChatHistoryDeleteApi, ChatHistoryExportApi} from '@/Types/API/ChattingTypes';
 
 const ModalChattingSetting: React.FC<ModalChattingSettingProps> = ({onClose, chatInfo}) => {
     const {t} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
+    // const {user} = useAppSelector(state => state);
+    const user = {
+        mt_idx: '20',
+        mt_uid: 'j1UxzrfptW',
+    };
     const navigation = useAppNavigation();
     const [isAlarm, setIsAlarm] = useState(false); //  알람 온오프
     const [isBlock, setIsBlock] = useState(false); //  차단 온오프
@@ -81,6 +89,26 @@ const ModalChattingSetting: React.FC<ModalChattingSettingProps> = ({onClose, cha
         onPressCancle: offIsAlert,
     });
 
+    const {PostAPI: alarmSettingApi} = usePostSend<ChatAlarmSettingApi['D'], ChatAlarmSettingApi['T']>('chat_room_push_set.php', {
+        mt_idx: user.mt_idx as string,
+        chat_idx: chatInfo.chat_idx,
+        push_set: isAlarm ? 'Y' : 'N',
+    });
+    const {PostAPI: blindSettingApi} = usePostSend<ChatBlindSettingApi['D'], ChatBlindSettingApi['T']>('chat_room_check_blind.php', {
+        mt_idx: user.mt_idx as string,
+        chat_idx: chatInfo.chat_idx,
+        blind_check: isBlock ? 'Y' : 'N',
+    });
+    const {PostAPI: deleteChatHistoryApi} = usePostSend<ChatHistoryDeleteApi['D'], ChatHistoryDeleteApi['T']>('chat_room_chatting_delete.php', {
+        mt_idx: user.mt_idx as string,
+        chat_idx: chatInfo.chat_idx,
+    });
+
+    const {PostAPI: exportChatHistoryApi} = usePostSend<ChatHistoryExportApi['D'], ChatHistoryExportApi['T']>('chat_room_chatting_text_down.php', {
+        mt_idx: user.mt_idx as string,
+        chat_idx: chatInfo.chat_idx,
+    });
+
     const onPressDeleteChattingContent = () => {
         //   대화내용 지우기
         onIsAlert();
@@ -88,6 +116,10 @@ const ModalChattingSetting: React.FC<ModalChattingSettingProps> = ({onClose, cha
             ...prev,
             title: t('deleteChattingContent'),
             content: t('deleteChattingContentGuide'),
+            onPressConfirm: () => {
+                deleteChatHistoryApi().then(apiResult);
+                offIsAlert();
+            },
         }));
     };
     const onPressChattingDownload = () => {
@@ -97,6 +129,10 @@ const ModalChattingSetting: React.FC<ModalChattingSettingProps> = ({onClose, cha
             ...prev,
             title: t('chattingDownloadAlert'),
             content: t('chattingDownloadGuideAlert'),
+            onPressConfirm: () => {
+                exportChatHistoryApi().then(apiResult);
+                offIsAlert();
+            },
         }));
     };
     const onPressUserBlock = () => {
@@ -124,9 +160,16 @@ const ModalChattingSetting: React.FC<ModalChattingSettingProps> = ({onClose, cha
     const onPressReport = () => {
         onClose();
         navigation.navigate('ReportCategory', {
-            pt_idx,
+            pt_idx: chatInfo.pt_idx,
         });
     };
+
+    useEffect(() => {
+        alarmSettingApi().then(apiResult);
+    }, [isAlarm]);
+    useEffect(() => {
+        blindSettingApi().then(apiResult);
+    }, [isBlock]);
 
     return (
         <Modal visible transparent onRequestClose={onClose}>

@@ -74,7 +74,7 @@ export interface CheckBoxImageProps {
 }
 
 export interface ToggleProps {
-    setIsOn?: React.Dispatch<React.SetStateAction<boolean>>;
+    setIsOn?: (value: boolean) => void;
     isOn: boolean;
     width?: number;
     height?: number;
@@ -123,7 +123,29 @@ export interface ProductTypes {
     };
 }
 export interface categoryMenuTypes {
-    menu: 'digital' | 'homeAppliances' | 'furniture' | 'baby' | 'householdGoods' | 'sports' | 'bag' | 'shoes' | 'watch' | 'accessory' | 'womanClothes' | 'manClothes' | 'game' | 'beauty' | 'pet' | 'book' | 'plant' | 'car' | 'motorcycle' | 'other' | 'donation' | 'buy';
+    menu:
+        | 'digital'
+        | 'homeAppliances'
+        | 'furniture'
+        | 'baby'
+        | 'householdGoods'
+        | 'sports'
+        | 'bag'
+        | 'shoes'
+        | 'watch'
+        | 'accessory'
+        | 'womanClothes'
+        | 'manClothes'
+        | 'game'
+        | 'beauty'
+        | 'pet'
+        | 'book'
+        | 'plant'
+        | 'car'
+        | 'motorcycle'
+        | 'other'
+        | 'donation'
+        | 'buy';
 }
 export interface tierTypes {
     name: 'Ntier' | 'Rtier' | 'Stier' | 'Atier' | 'Btier' | 'Ctier' | 'Ftier';
