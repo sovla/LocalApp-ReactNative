@@ -12,7 +12,7 @@ export interface ReviewProps {
 export interface MenuProps {
     menuList: Array<string>;
     selectMenu: string;
-    setSelectMenu: React.Dispatch<React.SetStateAction<string>>;
+    setSelectMenu: React.Dispatch<React.SetStateAction<any>>;
 }
 
 export interface ProfileSellProductAPi {

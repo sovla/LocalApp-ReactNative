@@ -47,7 +47,7 @@ function useApi<T, D>(defaultValue: T, apiPath: string, axiosData?: D, option?: 
                 } | null,
                 any
             >
-        >(apiPath, {page, ...axiosData, ..._data})
+        >(apiPath, {page: page, ...axiosData, ..._data})
             .then(result => {
                 console.log(apiPath + '::::', result);
                 // console.log(
@@ -57,6 +57,7 @@ function useApi<T, D>(defaultValue: T, apiPath: string, axiosData?: D, option?: 
                 if (result.data?.result === 'true') {
                     if (data !== defaultValue && defaultOption.isList && page !== 1) {
                         // 리스트 인경우
+
                         const {listField} = defaultOption;
                         if (result?.data?.data?.data && typeof defaultOption?.listField === 'string' && listField && listField in data && listField in result.data.data.data) {
                             setData((prev: any) => {
@@ -79,15 +80,16 @@ function useApi<T, D>(defaultValue: T, apiPath: string, axiosData?: D, option?: 
                     if (defaultOption.isList && !_data?.page) {
                         setPage(prev => prev + 1);
                         setTotalPage(result?.data?.data?.data?.total_page);
-                    } else {
+                    } else if (defaultOption.isList && _data?.page) {
                         setPage(_data.page + 1);
                         setTotalPage(result?.data?.data?.data?.total_page);
                     }
                 } else {
                     if (result.data?.msg) {
+                        console.log('여기서 에러', result.data.msg);
+                        setIsError(true);
                         setErrorMessage(result.data.msg);
                     }
-                    setIsError(true);
                 }
             })
             .catch(err => {

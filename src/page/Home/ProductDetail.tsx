@@ -74,10 +74,13 @@ export default function ProductDetail({navigation, route: {params}}: ProductDeta
         {isFirst: false},
     );
 
-    const {PostAPI: likeApi} = usePostSend<{
-        mt_idx: string;
-        pt_idx: string;
-    }>('product_like.php', {
+    const {PostAPI: likeApi} = usePostSend<
+        {
+            mt_idx: string;
+            pt_idx: string;
+        },
+        any
+    >('product_like.php', {
         mt_idx: user?.mt_idx ?? '0',
         pt_idx: params.pt_idx,
     });

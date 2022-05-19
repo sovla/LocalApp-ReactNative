@@ -29,7 +29,7 @@ export default function AlarmList({route: {params}}: AlarmListProps) {
     const navigation = useAppNavigation();
     const isFocused = useIsFocused();
 
-    const [selectMenu, setSelectMenu] = useState<any>('keywordAlarm');
+    const [selectMenu, setSelectMenu] = useState<'keywordAlarm' | 'alarm'>('keywordAlarm');
     const [isDelete, setIsDelete] = useState(false);
     const [deleteList, setDeleteList] = useState<string[]>([]);
     const [isAlert, setIsAlert] = useState(false);
@@ -37,14 +37,18 @@ export default function AlarmList({route: {params}}: AlarmListProps) {
     const {
         data: keywordList,
         setData: setKeywordList,
-        isLoading: isKeywordLoading,
+
+        isComplete: isKeywordLoading,
+        getData: getKeywordList,
     } = useApi<KeywordAlarmListApi['T'], KeywordAlarmListApi['D']>(null, 'keyword_alarm_list.php', {
         mt_idx: user.mt_idx as string,
     });
     const {
         data: alarmList,
         setData: setAlarmList,
-        isLoading: isAlarmLoading,
+
+        isComplete: isAlarmLoading,
+        getData: getAlarmList,
     } = useApi<AlarmListApi['T'], AlarmListApi['D']>(null, 'member_alarm_list.php', {
         mt_idx: user.mt_idx as string,
     });
@@ -78,7 +82,7 @@ export default function AlarmList({route: {params}}: AlarmListProps) {
                         if (prev) {
                             return {
                                 list: prev?.list.filter(v => {
-                                    if (deleteList.find(fv => fv === v.pt_idx)) {
+                                    if (deleteList.find(fv => fv === v.keyword_idx)) {
                                         return null;
                                     } else {
                                         return v;
@@ -93,6 +97,7 @@ export default function AlarmList({route: {params}}: AlarmListProps) {
                     });
                 });
             setDeleteList([]);
+            getKeywordList();
         } else {
             await alarmDeleteApi()
                 .then(apiResult)
@@ -115,6 +120,7 @@ export default function AlarmList({route: {params}}: AlarmListProps) {
                         }
                     });
                     setDeleteList([]);
+                    getAlarmList();
                 });
         }
     }, [user.mt_idx, deleteList, selectMenu]);
@@ -147,12 +153,12 @@ export default function AlarmList({route: {params}}: AlarmListProps) {
     }, []);
 
     useEffect(() => {
-        if (params?.menu) setSelectMenu(t(params.menu));
+        if (params?.menu) setSelectMenu(params.menu);
     }, [isFocused]);
 
     const list = selectMenu === 'keywordAlarm' ? keywordList?.list : alarmList?.list;
 
-    if (isAlarmLoading || isKeywordLoading) {
+    if (!isAlarmLoading || !isKeywordLoading) {
         return <Loading />;
     }
 
@@ -209,8 +215,8 @@ export default function AlarmList({route: {params}}: AlarmListProps) {
                                 idx={_item?.pt_idx}
                                 cate={_item?.pt_cate}
                                 isDelete={isDelete}
-                                isDeleteOn={deleteList.find(v => v === _item.pt_idx) ? true : false}
-                                onPress={isDelete ? () => onPressDeleteItem(_item.pt_idx) : onPressItem}
+                                isDeleteOn={deleteList.find(v => v === _item.keyword_idx) ? true : false}
+                                onPress={isDelete ? () => onPressDeleteItem(_item.keyword_idx) : onPressItem}
                             />
                         );
                     } else {
