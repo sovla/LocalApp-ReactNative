@@ -23,15 +23,18 @@ import SettingsIcon from '@assets/image/settings.png';
 import ServiceCenterIcon from '@assets/image/service_center.png';
 import {usePostSend} from '@/Hooks/useApi';
 import {LogoutAPi} from '@/Types/API/HomeTypes';
-import {AlertButton} from '@/Util/Util';
+import {AlertButton, apiResult} from '@/Util/Util';
+import {useDispatch} from 'react-redux';
+import {clearUser} from '@/Store/userState';
 
 const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
     const {t} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
     const {user} = useAppSelector(state => state);
     const navigation = useAppNavigation();
+    const dispatch = useDispatch();
 
-    const {PostAPI} = usePostSend<LogoutAPi>('member_logout.php', {
+    const {PostAPI} = usePostSend<LogoutAPi, any>('member_logout.php', {
         mt_idx: user.mt_idx as string,
     });
 
@@ -94,16 +97,13 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
         onClose();
     }, []);
     const onPressLogout = useCallback(() => {
-        navigation.navigate('Login');
-        return; // 로그아웃 작업전
-        PostAPI().then(res => {
-            if (res?.result === 'false' && res?.msg) {
-                AlertButton(res.msg);
-            } else {
-                navigation.navigate('Login');
+        PostAPI()
+            .then(apiResult)
+            .then(res => {
+                dispatch(clearUser());
                 onClose();
-            }
-        });
+                navigation.navigate('Login');
+            });
     }, []);
 
     return (
