@@ -2,27 +2,25 @@ import {FlatList, Image, Modal, StyleSheet, TouchableOpacity, View} from 'react-
 import React, {useCallback, useEffect, useState} from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import {useAppNavigation, useAppSelector, useCallbackNavigation} from '@/Hooks/CustomHook';
-import {setDefaults, useTranslation} from 'react-i18next';
-import useBoolean from '@/Hooks/useBoolean';
+import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
+import {useTranslation} from 'react-i18next';
 import AutoHeightImage from 'react-native-auto-height-image';
 
 import Header from '@/Components/Profile/Header';
 import EditBlackIcon from '@assets/image/edit_black.png';
 import TrashBlackIcon from '@assets/image/trash_black.png';
 import Menu from '@/Components/Profile/Menu';
-import Product from '@/Components/Home/Product';
 import AlarmContent from '@/Components/Notice/AlarmContent';
 import {AlarmListProps} from '@/Types/Screen/Screen';
 import {useIsFocused} from '@react-navigation/native';
 import useApi, {usePostSend} from '@/Hooks/useApi';
 import {AlarmListApi, AlarmType, KeywordAlarmListApi, KeywordAlarmType} from '@/Types/API/NoticeTypes';
 import {apiResult, brPrice, productTimeSetting, viewCountCheck} from '@/Util/Util';
-import AlertModal from '@/Components/Home/AlertModal';
-import {ModalAlertView, ModalAlertViewNoneTitle} from '@/Components/Chatting/ModalChattingSetting';
-import {API} from '@/API/API';
+import {ModalAlertViewNoneTitle} from '@/Components/Chatting/ModalChattingSetting';
+import EditIcon from '@assets/image/edit.png';
 import {GrayText} from '@/Components/Global/text';
 import AlarmProduct from './AlarmProduct';
+import Loading from '@/Components/Global/Loading';
 
 export default function AlarmList({route: {params}}: AlarmListProps) {
     const {t} = useTranslation();
@@ -36,10 +34,18 @@ export default function AlarmList({route: {params}}: AlarmListProps) {
     const [deleteList, setDeleteList] = useState<string[]>([]);
     const [isAlert, setIsAlert] = useState(false);
 
-    const {data: keywordList, setData: setKeywordList} = useApi<KeywordAlarmListApi['T'], KeywordAlarmListApi['D']>(null, 'keyword_alarm_list.php', {
+    const {
+        data: keywordList,
+        setData: setKeywordList,
+        isLoading: isKeywordLoading,
+    } = useApi<KeywordAlarmListApi['T'], KeywordAlarmListApi['D']>(null, 'keyword_alarm_list.php', {
         mt_idx: user.mt_idx as string,
     });
-    const {data: alarmList, setData: setAlarmList} = useApi<AlarmListApi['T'], AlarmListApi['D']>(null, 'member_alarm_list.php', {
+    const {
+        data: alarmList,
+        setData: setAlarmList,
+        isLoading: isAlarmLoading,
+    } = useApi<AlarmListApi['T'], AlarmListApi['D']>(null, 'member_alarm_list.php', {
         mt_idx: user.mt_idx as string,
     });
 
@@ -136,14 +142,25 @@ export default function AlarmList({route: {params}}: AlarmListProps) {
         });
     }, []);
 
+    const onPressEdit = useCallback(() => {
+        navigation.navigate('KeywordAlarm');
+    }, []);
+
     useEffect(() => {
         if (params?.menu) setSelectMenu(t(params.menu));
     }, [isFocused]);
 
     const list = selectMenu === 'keywordAlarm' ? keywordList?.list : alarmList?.list;
 
+    if (isAlarmLoading || isKeywordLoading) {
+        return <Loading />;
+    }
+
     return (
         <View style={{flex: 1}}>
+            <TouchableOpacity onPress={onPressEdit} style={styles.editTouch}>
+                <Image source={EditIcon} style={styles.editImage} resizeMode="contain" />
+            </TouchableOpacity>
             <Header isBlack title={t('AlarmListTitle')} isBack>
                 <View
                     style={{

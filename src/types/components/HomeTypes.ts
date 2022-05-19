@@ -289,7 +289,7 @@ export interface KeywordAlarmAPi {
             | [];
     };
     D: {
-        mt_idx: string | null;
+        mt_idx: string;
     };
 }
 
@@ -299,7 +299,7 @@ export interface KeywordAlarmCheckAPi {
         mt_keyword?: 'Y' | 'N';
     } | null;
     D: {
-        mt_idx: string | null;
+        mt_idx: string;
     };
 }
 
@@ -307,7 +307,7 @@ export interface SearchLogApi {
     // 검색 로그 남기기
     T: {} | null;
     D: {
-        mt_idx: string | null;
+        mt_idx: string;
         search_txt: string;
     };
 }
@@ -320,7 +320,7 @@ export interface SearchApi {
         list: ProductApiTypes[] | [];
     };
     D: {
-        mt_idx: string | null;
+        mt_idx: string;
         search_txt: string;
         page?: number;
         category?: number;
