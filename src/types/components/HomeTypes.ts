@@ -81,6 +81,8 @@ export interface SearchKeywordProps {
 export interface ModalFilterProps extends ModalProps {
     setFilter: any;
     filter: FilterState;
+    isVehicle?: boolean;
+    isCar?: boolean;
 }
 export interface ProductState {
     newProduct: boolean;

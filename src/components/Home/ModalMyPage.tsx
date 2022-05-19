@@ -208,7 +208,8 @@ export const ImageWithView: React.FC<{
     const applyFontSize = fontSize ?? 16 * fontSizeState;
     return (
         <>
-            <View
+            <TouchableOpacity
+                onPress={onPress}
                 style={{
                     width,
                     flexDirection: 'row',
@@ -224,10 +225,10 @@ export const ImageWithView: React.FC<{
                         resizeMode="contain"
                     />
                 </View>
-                <TouchableOpacity onPress={onPress} style={[styles.imageWithViewTouch]}>
+                <View style={[styles.imageWithViewTouch]}>
                     <Text fontSize={`${applyFontSize}`}>{content}</Text>
-                </TouchableOpacity>
-            </View>
+                </View>
+            </TouchableOpacity>
             <Line isGray height={0.4} />
         </>
     );

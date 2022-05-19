@@ -485,6 +485,8 @@ export const ko = {
         noneKeywordAlarm: '키워드 알림이 없습니다.',
         noneAlarm: '알림이 없습니다.',
         modalMyPagePurchaseList: '구매목록',
+        apply: '적용하기',
+        reset: '초기화',
     },
 };
 export const es = {

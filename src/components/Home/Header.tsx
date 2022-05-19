@@ -115,15 +115,9 @@ export const AlarmButton: React.FC<{
         {
             mt_idx: string;
         }
-    >(
-        {
-            al_check: 'Y',
-        },
-        'new_alarm_check.php',
-        {
-            mt_idx: user.mt_idx as string,
-        },
-    );
+    >(null, 'new_alarm_check.php', {
+        mt_idx: user.mt_idx as string,
+    });
 
     return (
         <TouchableOpacity
