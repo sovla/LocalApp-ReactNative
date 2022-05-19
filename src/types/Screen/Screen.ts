@@ -1,6 +1,31 @@
 import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
 import {categoryMenuTypes, openingHoursTypes, ProductTypes, tierTypes} from '../Components/global';
 
+type BusinessTime = {
+    busi_all_open?: 'Y' | 'N';
+    busi_mon_check?: 'Y' | 'N';
+    busi_mon_end?: string;
+    busi_mon_start?: string;
+    busi_pri_check?: 'Y' | 'N';
+    busi_pri_end?: string;
+    busi_pri_start?: string;
+    busi_sat_check?: 'Y' | 'N';
+    busi_sat_end?: string;
+    busi_sat_start?: string;
+    busi_sun_check?: 'Y' | 'N';
+    busi_sun_end?: string;
+    busi_sun_start?: string;
+    busi_thur_check?: 'Y' | 'N';
+    busi_thur_end?: string;
+    busi_thur_start?: string;
+    busi_tue_check?: 'Y' | 'N';
+    busi_tue_end?: string;
+    busi_tue_start?: string;
+    busi_wed_check?: 'Y' | 'N';
+    busi_wed_end?: string;
+    busi_wed_start?: string;
+};
+
 type Screen = {
     OnBoarding: StackScreenProps<Screen> | undefined;
     AppPermission: StackScreenProps<Screen> | undefined;
@@ -106,35 +131,18 @@ type Screen = {
         sell_type: '0' | '1';
     };
     BusinessProfileMenu: StackScreenProps<Screen> | undefined;
-    BusinessProfileSetting:
-        | {
-              busi_all_open?: 'Y' | 'N';
-              busi_mon_check?: 'Y' | 'N';
-              busi_mon_end?: string;
-              busi_mon_start?: string;
-              busi_pri_check?: 'Y' | 'N';
-              busi_pri_end?: string;
-              busi_pri_start?: string;
-              busi_sat_check?: 'Y' | 'N';
-              busi_sat_end?: string;
-              busi_sat_start?: string;
-              busi_sun_check?: 'Y' | 'N';
-              busi_sun_end?: string;
-              busi_sun_start?: string;
-              busi_thur_check?: 'Y' | 'N';
-              busi_thur_end?: string;
-              busi_thur_start?: string;
-              busi_tue_check?: 'Y' | 'N';
-              busi_tue_end?: string;
-              busi_tue_start?: string;
-              busi_wed_check?: 'Y' | 'N';
-              busi_wed_end?: string;
-              busi_wed_start?: string;
-          }
-        | undefined;
+    BusinessProfileSetting: BusinessTime | undefined;
     BusinessProfileBanner: StackScreenProps<Screen> | undefined;
     BusinessSignUp: StackScreenProps<Screen> | undefined;
-    BusinessSignUpForm: StackScreenProps<Screen> | undefined;
+    BusinessSignUpForm:
+        | {
+              location?: string;
+              pt_location_detail?: string;
+              pt_lat?: number;
+              pt_lng?: number;
+          }
+        | BusinessTime
+        | undefined;
     BusinessForm: StackScreenProps<Screen> | undefined;
     BusinessAddress: StackScreenProps<Screen> | undefined;
     BusinessLocation: StackScreenProps<Screen> | undefined;
@@ -142,6 +150,7 @@ type Screen = {
         | {
               openingHoursTypes?: openingHoursTypes;
               isFull?: boolean;
+              navigate?: 'BusinessSignUpForm';
           }
         | undefined;
     Notice: StackScreenProps<Screen> | undefined;
@@ -205,7 +214,11 @@ type Screen = {
         tag?: string | null;
     };
     ProductTier: StackScreenProps<Screen> | undefined;
-    ProductLocation: StackScreenProps<Screen> | undefined;
+    ProductLocation:
+        | {
+              navigate: 'BusinessSignUpForm';
+          }
+        | undefined;
     Setting: StackScreenProps<Screen> | undefined;
     SettingPrivacy: StackScreenProps<Screen> | undefined;
     SettingPrivacyTel: StackScreenProps<Screen> | undefined;

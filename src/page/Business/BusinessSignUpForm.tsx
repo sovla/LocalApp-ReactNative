@@ -94,7 +94,7 @@ interface BusinessSignUpData {
     busi_whats: string;
 }
 
-const BusinessSignUpForm = ({navigation}: BusinessSignUpFormProps) => {
+const BusinessSignUpForm = ({navigation, route: {params}}: BusinessSignUpFormProps) => {
     const {t} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
     const {user} = useAppSelector(state => state);
@@ -179,10 +179,12 @@ const BusinessSignUpForm = ({navigation}: BusinessSignUpFormProps) => {
     );
 
     const onPressShopAddress = useCallback(() => {
-        navigation.navigate('ProductLocation');
+        navigation.navigate('ProductLocation', {
+            navigate: 'BusinessSignUpForm',
+        });
     }, []);
     const onPressShopTime = useCallback(() => {
-        navigation.navigate('BusinessOpeningHours');
+        navigation.navigate('BusinessOpeningHours', {navigate: 'BusinessSignUpForm'});
     }, []);
 
     const onPressCheckCNPJ = () => {

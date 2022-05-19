@@ -16,210 +16,219 @@ import {useCallback} from 'react';
 import axios from 'axios';
 import {useState} from 'react';
 import useGeocoding from '@/Hooks/useGeocoding';
+import {ProductLocationProps} from '@/Types/Screen/Screen';
 
-const ProductLocation = () => {
-  const {t} = useTranslation();
-  const fontSize = useAppSelector(state => state.fontSize.value);
-  const {
-    global: {
-      data: {token},
-    },
-  } = useAppSelector(state => state);
-  const navigation = useAppNavigation();
-  // const {} = useGeocoding()
+const ProductLocation = ({navigation, route: {params}}: ProductLocationProps) => {
+    const {t} = useTranslation();
+    const fontSize = useAppSelector(state => state.fontSize.value);
+    const {
+        global: {
+            data: {token},
+        },
+    } = useAppSelector(state => state);
+    // const {} = useGeocoding()
 
-  const [locationList, setLocationList] = useState<any>([]);
-  const [text, setText] = useState('Bom retiro');
+    const [locationList, setLocationList] = useState<any>([]);
+    const [text, setText] = useState('Bom retiro');
 
-  const onSubmit = useCallback(() => {
-    const config: any = {
-      method: 'get',
-      url: `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${text}&types=establishment&location=37.76999%2C-122.44696&radius=500&key=AIzaSyAbfTo68JkJSdEi9emDHyMfGl7vxjYD704&sessionToken=${token}`,
-      headers: {},
-    };
-    axios(config)
-      .then(function (response) {
-        console.log(response.data);
+    const onSubmit = useCallback(() => {
+        const config: any = {
+            method: 'get',
+            url: `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${text}&types=establishment&location=37.76999%2C-122.44696&radius=500&key=AIzaSyAbfTo68JkJSdEi9emDHyMfGl7vxjYD704&sessionToken=${token}`,
+            headers: {},
+        };
+        axios(config)
+            .then(function (response) {
+                console.log(response.data);
 
-        if (response.data.status === 'OK') {
-          setLocationList(response.data.predictions);
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }, [text]);
-  useEffect(() => {
-    onSubmit();
-  }, [text]);
-  const onPress = useCallback(main_text => {
-    const config: any = {
-      method: 'get',
-      url: `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${main_text}&inputtype=textquery&locationbias=circle%3A2000%4047.6918452%2C-122.2226413&fields=formatted_address%2Cname%2Crating%2Copening_hours%2Cgeometry&key=AIzaSyAbfTo68JkJSdEi9emDHyMfGl7vxjYD704&sessionToken=${token}`,
-      headers: {},
-    };
-    axios(config)
-      .then(function (response) {
-        console.log(response);
-        if (response.data.status === 'OK') {
-          const item = response.data.candidates[0];
+                if (response.data.status === 'OK') {
+                    setLocationList(response.data.predictions);
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }, [text]);
+    useEffect(() => {
+        onSubmit();
+    }, [text]);
+    const onPress = useCallback(main_text => {
+        const config: any = {
+            method: 'get',
+            url: `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${main_text}&inputtype=textquery&locationbias=circle%3A2000%4047.6918452%2C-122.2226413&fields=formatted_address%2Cname%2Crating%2Copening_hours%2Cgeometry&key=AIzaSyAbfTo68JkJSdEi9emDHyMfGl7vxjYD704&sessionToken=${token}`,
+            headers: {},
+        };
+        axios(config)
+            .then(function (response) {
+                console.log(response);
+                if (response.data.status === 'OK') {
+                    const item = response.data.candidates[0];
 
-          navigation.navigate('ProductUpdate', {
-            location: item?.name as string,
-            pt_location_detail: item?.formatted_address as string,
-            pt_lat: item?.geometry?.location?.lat as number,
-            pt_lng: item?.geometry?.location?.lng as number,
-          });
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }, []);
+                    if (params?.navigate === 'BusinessSignUpForm') {
+                        navigation.navigate(params.navigate, {
+                            location: item?.name as string,
+                            pt_location_detail: item?.formatted_address as string,
+                            pt_lat: item?.geometry?.location?.lat as number,
+                            pt_lng: item?.geometry?.location?.lng as number,
+                        });
+                    } else {
+                        navigation.navigate('ProductUpdate', {
+                            location: item?.name as string,
+                            pt_location_detail: item?.formatted_address as string,
+                            pt_lat: item?.geometry?.location?.lat as number,
+                            pt_lng: item?.geometry?.location?.lng as number,
+                        });
+                    }
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }, []);
 
-  return (
-    <View>
-      <Header title={t('tradingLocationUpdate')} />
-      <FlatList
-        data={locationList}
-        ListHeaderComponent={
-          <>
-            <View style={styles.headerView}>
-              <Text medium fontSize={`${20 * fontSize}`} style={styles.headerText}>
-                {t('locationUpdateGuide1')}
-              </Text>
-              <View>
-                <TextInput
-                  onSubmitEditing={onSubmit}
-                  style={[
-                    styles.textInput,
-                    {
-                      fontSize: fontSize * 16,
-                    },
-                  ]}
-                  value={text}
-                  onChangeText={setText}
-                  placeholder="Run Tres Rios"
-                  placeholderTextColor={Theme.color.gray_BB}
-                />
-              </View>
-              <TouchableOpacity style={styles.headerLocationTouch}>
-                <AutoHeightImage source={MyLocationIcon} width={getPixel(20)} />
-                <Text fontSize={`${14 * fontSize}`}>{t('myLocation')}</Text>
-              </TouchableOpacity>
-            </View>
-            <Line height={getHeightPixel(10)} />
-          </>
-        }
-        renderItem={({item, index}) => {
-          return (
-            <LocationSelect
-              onPress={() => onPress(item.structured_formatting.main_text)}
-              locationTitle={item.structured_formatting.main_text}
-              locationSubTitle={item.structured_formatting.secondary_text}
+    return (
+        <View>
+            <Header title={t('tradingLocationUpdate')} />
+            <FlatList
+                data={locationList}
+                ListHeaderComponent={
+                    <>
+                        <View style={styles.headerView}>
+                            <Text medium fontSize={`${20 * fontSize}`} style={styles.headerText}>
+                                {t('locationUpdateGuide1')}
+                            </Text>
+                            <View>
+                                <TextInput
+                                    onSubmitEditing={onSubmit}
+                                    style={[
+                                        styles.textInput,
+                                        {
+                                            fontSize: fontSize * 16,
+                                        },
+                                    ]}
+                                    value={text}
+                                    onChangeText={setText}
+                                    placeholder="Run Tres Rios"
+                                    placeholderTextColor={Theme.color.gray_BB}
+                                />
+                            </View>
+                            <TouchableOpacity style={styles.headerLocationTouch}>
+                                <AutoHeightImage source={MyLocationIcon} width={getPixel(20)} />
+                                <Text fontSize={`${14 * fontSize}`}>{t('myLocation')}</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <Line height={getHeightPixel(10)} />
+                    </>
+                }
+                renderItem={({item, index}) => {
+                    return (
+                        <LocationSelect
+                            onPress={() => onPress(item.structured_formatting.main_text)}
+                            locationTitle={item.structured_formatting.main_text}
+                            locationSubTitle={item.structured_formatting.secondary_text}
+                        />
+                    );
+                }}
+                ListFooterComponent={
+                    <View
+                        style={{
+                            height: getHeightPixel(110),
+                        }}
+                    />
+                }
             />
-          );
-        }}
-        ListFooterComponent={
-          <View
-            style={{
-              height: getHeightPixel(110),
-            }}
-          />
-        }
-      />
-    </View>
-  );
+        </View>
+    );
 };
 
 export default ProductLocation;
 
 const LocationSelect: React.FC<{
-  onPress?: () => void;
-  locationTitle: string;
-  locationSubTitle: string;
+    onPress?: () => void;
+    locationTitle: string;
+    locationSubTitle: string;
 }> = ({locationTitle, locationSubTitle, onPress}) => {
-  const fontSize = useAppSelector(state => state.fontSize.value);
-  return (
-    <>
-      <TouchableOpacity onPress={onPress} style={styles.locationTouch}>
-        <AutoHeightImage
-          source={LocationGrayIcon}
-          width={getPixel(14)}
-          style={{
-            marginTop: getHeightPixel(5),
-          }}
-        />
-        <View
-          style={{
-            marginLeft: getPixel(16),
-          }}>
-          <Text fontSize={`${16 * fontSize}`}>{locationTitle}</Text>
-          <GrayText fontSize={`${12 * fontSize}`}>{locationSubTitle}</GrayText>
-        </View>
-      </TouchableOpacity>
-      <Line isGray />
-    </>
-  );
+    const fontSize = useAppSelector(state => state.fontSize.value);
+    return (
+        <>
+            <TouchableOpacity onPress={onPress} style={styles.locationTouch}>
+                <AutoHeightImage
+                    source={LocationGrayIcon}
+                    width={getPixel(14)}
+                    style={{
+                        marginTop: getHeightPixel(5),
+                    }}
+                />
+                <View
+                    style={{
+                        marginLeft: getPixel(16),
+                    }}>
+                    <Text fontSize={`${16 * fontSize}`}>{locationTitle}</Text>
+                    <GrayText fontSize={`${12 * fontSize}`}>{locationSubTitle}</GrayText>
+                </View>
+            </TouchableOpacity>
+            <Line isGray />
+        </>
+    );
 };
 
 const styles = StyleSheet.create({
-  headerText: {
-    marginTop: getHeightPixel(30),
-    marginBottom: getHeightPixel(20),
-  },
-  locationTouch: {
-    width: getPixel(328),
-    marginHorizontal: getPixel(16),
-    paddingVertical: getHeightPixel(20),
-    flexDirection: 'row',
-    paddingTop: getHeightPixel(14),
-    alignItems: 'flex-start',
-  },
-  headerView: {
-    marginHorizontal: getPixel(16),
-    width: getPixel(328),
-  },
-  textInput: {
-    width: getPixel(328),
-    minHeight: getHeightPixel(40),
+    headerText: {
+        marginTop: getHeightPixel(30),
+        marginBottom: getHeightPixel(20),
+    },
+    locationTouch: {
+        width: getPixel(328),
+        marginHorizontal: getPixel(16),
+        paddingVertical: getHeightPixel(20),
+        flexDirection: 'row',
+        paddingTop: getHeightPixel(14),
+        alignItems: 'flex-start',
+    },
+    headerView: {
+        marginHorizontal: getPixel(16),
+        width: getPixel(328),
+    },
+    textInput: {
+        width: getPixel(328),
+        minHeight: getHeightPixel(40),
 
-    backgroundColor: Theme.color.gray_F1,
-    borderRadius: getPixel(4),
-    color: Theme.color.black,
-  },
-  headerLocationTouch: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginVertical: getHeightPixel(20),
-  },
-  tierImageView: {
-    position: 'absolute',
-    bottom: getHeightPixel(0),
-    right: getPixel(5),
-    width: getPixel(60),
-    height: getHeightPixel(60),
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    overflow: 'hidden',
-  },
-  tierImage: {
-    width: getPixel(60),
-    height: getHeightPixel(67.8),
-  },
-  boxContainer: {
-    marginHorizontal: getPixel(16),
-    marginBottom: getHeightPixel(16),
-  },
-  contentText: {
-    width: getPixel(221),
-  },
-  boxView: {
-    width: getPixel(328),
-    height: getHeightPixel(100),
-    borderRadius: getPixel(10),
-    paddingTop: getHeightPixel(16),
-    paddingLeft: getPixel(18),
-  },
+        backgroundColor: Theme.color.gray_F1,
+        borderRadius: getPixel(4),
+        color: Theme.color.black,
+    },
+    headerLocationTouch: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginVertical: getHeightPixel(20),
+    },
+    tierImageView: {
+        position: 'absolute',
+        bottom: getHeightPixel(0),
+        right: getPixel(5),
+        width: getPixel(60),
+        height: getHeightPixel(60),
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
+        overflow: 'hidden',
+    },
+    tierImage: {
+        width: getPixel(60),
+        height: getHeightPixel(67.8),
+    },
+    boxContainer: {
+        marginHorizontal: getPixel(16),
+        marginBottom: getHeightPixel(16),
+    },
+    contentText: {
+        width: getPixel(221),
+    },
+    boxView: {
+        width: getPixel(328),
+        height: getHeightPixel(100),
+        borderRadius: getPixel(10),
+        paddingTop: getHeightPixel(16),
+        paddingLeft: getPixel(18),
+    },
 });
