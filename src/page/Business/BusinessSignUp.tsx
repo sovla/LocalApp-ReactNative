@@ -120,17 +120,23 @@ export default function BusinessSignUp({navigation}: BusinessSignUpProps) {
                     </Text>
                 </View>
                 <Line isGray height={0.5} width={getPixel(288)} />
-                <Button onPress={() => onPressRegister()} content={t('register')} style={{marginTop: getHeightPixel(75), marginBottom: getHeightPixel(25)}} />
-                <TouchableOpacity style={styles.footerTouch}>
-                    <Text
-                        medium
-                        fontSize={`${12 * fontSize}`}
-                        style={{
-                            textDecorationLine: 'underline',
-                        }}>
-                        {t('businessTermsandConditions')}
-                    </Text>
-                </TouchableOpacity>
+                <View
+                    style={{
+                        flex: 1,
+                        justifyContent: 'flex-end',
+                    }}>
+                    <Button onPress={() => onPressRegister()} content={t('register')} style={{marginBottom: getHeightPixel(25)}} />
+                    <TouchableOpacity style={styles.footerTouch}>
+                        <Text
+                            medium
+                            fontSize={`${12 * fontSize}`}
+                            style={{
+                                textDecorationLine: 'underline',
+                            }}>
+                            {t('businessTermsandConditions')}
+                        </Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
     );
@@ -148,6 +154,7 @@ const styles = StyleSheet.create({
         width: getPixel(288),
         justifyContent: 'center',
         alignItems: 'center',
+        marginBottom: getHeightPixel(20),
     },
     innerText: {
         width: getPixel(250),

@@ -130,7 +130,7 @@ const BusinessSignUpForm = ({navigation}: BusinessSignUpFormProps) => {
     } = useFormik<BusinessSignUpData>({
         initialValues: {
             busi_title: '',
-            busi_cnpj: '90.604.214/4187-28',
+            busi_cnpj: '15.664.649/0001-84',
             busi_info: '',
             hp_open_check: user?.mt_hp_open ?? 'Y',
             busi_location: '',
