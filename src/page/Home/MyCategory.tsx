@@ -1,5 +1,5 @@
 import {Dimensions, FlatList, Image, ImageBackground, Modal, StyleSheet, TouchableOpacity, View, ViewStyle} from 'react-native';
-import React, {Fragment, useCallback, useEffect, useState} from 'react';
+import React, {Fragment, useCallback, useEffect, useLayoutEffect, useState} from 'react';
 
 import BackGroundImage from '@assets/image/BG.png';
 import {fontSizeChange, getHeightPixel, getPixel} from '@/Util/pixelChange';
@@ -50,6 +50,8 @@ import QuetionIcon from '@assets/image/quetion.png';
 import AnswerIcon from '@assets/image/answer.png';
 import {FAQItemProps} from '@/Types/Components/SettingTypes';
 import SuccessIcon from '@assets/image/success.png';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 export default function MyCategory() {
     const {t} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
@@ -58,7 +60,7 @@ export default function MyCategory() {
         categoryMenu.map(v => {
             return {
                 ...v,
-                isOn: false,
+                isOn: true,
             };
         }),
     );
@@ -76,6 +78,39 @@ export default function MyCategory() {
             }),
         );
     }, []);
+
+    useLayoutEffect(() => {
+        (async () => {
+            const result = await AsyncStorage.getItem('category');
+
+            if (result && typeof result === 'string') {
+                const category = result.split(',');
+                // 있을경우
+                setMenuList(prev =>
+                    prev.map(v => {
+                        if (category.find(fv => fv === v.name)) {
+                            return {
+                                ...v,
+                                isOn: false,
+                            };
+                        } else {
+                            return v;
+                        }
+                    }),
+                );
+            }
+        })();
+    }, []);
+
+    useEffect(() => {
+        AsyncStorage.setItem(
+            'category',
+            menuList
+                .filter(v => v.isOn === false)
+                .map(v => v.name)
+                .join(','),
+        );
+    }, [menuList]);
 
     return (
         <View

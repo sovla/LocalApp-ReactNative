@@ -1,5 +1,5 @@
 import {FlatList, Image, NativeScrollEvent, NativeSyntheticEvent, ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useCallback, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from 'react';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {categoryMenu} from '@/assets/global/dummy';
 import {CategoryCardProps} from '@/Types/Components/HomeTypes';
@@ -8,18 +8,62 @@ import {useTranslation} from 'react-i18next';
 import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import Theme from '@/assets/global/Theme';
 import {onScrollSlide} from '@/Util/Util';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useIsFocused} from '@react-navigation/native';
 
 const CategoryScroll = () => {
-    const [dotList, setDotList] = useState<Array<number>>(new Array(Math.floor(categoryMenu.length / 5 + 1)).fill(0));
+    const isFocused = useIsFocused();
+
+    const ref = useRef<FlatList>(null);
+    const [dotList, setDotList] = useState<Array<number>>(new Array(Math.ceil(categoryMenu.length / 5)).fill(0));
     const [dotNumber, setDotNumber] = useState<number>(0);
+    const [categoryList, setCategoryList] = useState(categoryMenu);
+
+    useLayoutEffect(() => {
+        (async () => {
+            const result = await AsyncStorage.getItem('category');
+            console.log(result, 'result :::');
+            if (result && typeof result === 'string') {
+                const category = result.split(',');
+
+                const filterCateogoryMenu = categoryMenu.filter(v => {
+                    if (category.find(fv => fv === v.name)) {
+                        return undefined;
+                    } else {
+                        return 1;
+                    }
+                });
+                setCategoryList(filterCateogoryMenu);
+                setDotList(new Array(Math.ceil(filterCateogoryMenu.length / 5)).fill(0));
+            } else {
+                setCategoryList(categoryMenu);
+                setDotList(new Array(Math.ceil(categoryMenu.length / 5)).fill(0));
+            }
+        })();
+    }, [isFocused]);
+    useEffect(() => {
+        if (ref.current) {
+            ref.current.scrollToIndex({
+                index: 0,
+            });
+            setDotNumber(0);
+        }
+
+        return () => {};
+    }, [categoryList]);
+
+    if (categoryList.length === 0) {
+        return null;
+    }
 
     return (
         <View style={styles.scrollContainer}>
             <FlatList
+                ref={ref}
                 horizontal
                 pagingEnabled
                 onMomentumScrollEnd={e => onScrollSlide(e, setDotNumber)}
-                data={categoryMenu}
+                data={categoryList}
                 renderItem={({item, index}) => {
                     return (
                         <>
@@ -35,7 +79,7 @@ const CategoryScroll = () => {
                 ListFooterComponent={
                     <View
                         style={{
-                            width: getPixel((5 - (categoryMenu.length % 5)) * 66),
+                            width: categoryList.length % 5 !== 0 ? getPixel((5 - (categoryList.length % 5)) * 66) : 0,
                         }}
                     />
                 }
