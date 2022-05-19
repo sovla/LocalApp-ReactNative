@@ -9,6 +9,7 @@ import {useAppSelector, useAppNavigation} from '@/Hooks/CustomHook';
 import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
 import AutoHeightImage from 'react-native-auto-height-image';
+import {AlarmButton} from '../Home/Header';
 
 const Header: React.FC = () => {
     const {t} = useTranslation();
@@ -28,21 +29,7 @@ const Header: React.FC = () => {
                     }}>
                     <AutoHeightImage style={styles.icon} width={getPixel(24)} source={require('@assets/image/bar_white.png')} />
                 </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => {
-                        navigation.navigate('AlarmList');
-                    }}>
-                    <AutoHeightImage
-                        style={[
-                            styles.icon,
-                            {
-                                marginRight: getPixel(16),
-                            },
-                        ]}
-                        width={getPixel(20)}
-                        source={require('@assets/image/notice_white.png')}
-                    />
-                </TouchableOpacity>
+                <AlarmButton />
             </RowBox>
         </ImageBackground>
     );

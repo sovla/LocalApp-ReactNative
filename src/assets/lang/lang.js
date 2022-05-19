@@ -482,6 +482,8 @@ export const ko = {
         noneSoldOut: '판매 완료된 상품이 없습니다.',
         noneSale: '판매중인 상품이 없습니다.',
         noneChatHistory: '채팅기록이 없습니다.',
+        noneKeywordAlarm: '키워드 알림이 없습니다.',
+        noneAlarm: '알림이 없습니다.',
         modalMyPagePurchaseList: '구매목록',
     },
 };

@@ -3,7 +3,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {ProductLike, ProductProps} from '@/Types/Components/HomeTypes';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import Theme from '@/assets/global/Theme';
-import {DarkBlueText, GrayText, MediumText, Text, WhiteText} from '../Global/text';
+import {DarkBlueText, GrayText, MediumText, Text, WhiteText} from '@/Components/Global/text';
 import {useAppSelector} from '@/Hooks/CustomHook';
 import LocationIcon from '@assets/image/map-marker.png';
 import ViewIcon from '@assets/image/view.png';
@@ -13,8 +13,14 @@ import LikeFillIcon from '@assets/image/love_pink.png';
 import dummy from '@assets/image/dummy.png';
 import {getHitSlop, strEmptyCheck} from '@/Util/Util';
 import {usePostSend} from '@/Hooks/useApi';
+import {CheckBoxImage} from '@/Components/Global/button';
 
-const Product: React.FC<ProductProps> = ({title, location, time, viewCount, likeCount, price, image, isLike, status, isList, isBorder, onPress, idx, cate, isLikeShow = true}) => {
+type AlarmProduct = ProductProps & {
+    isDelete: boolean;
+    isDeleteOn: boolean;
+};
+
+const AlarmProduct: React.FC<AlarmProduct> = ({title, location, time, viewCount, likeCount, price, image, isLike, status, onPress, idx, cate, isLikeShow = true, isDelete, isDeleteOn}) => {
     const fontSize = useAppSelector(state => state.fontSize.value);
     const {user} = useAppSelector(state => state);
     const {PostAPI} = usePostSend<ProductLike['D'], any>('product_like.php', {
@@ -41,14 +47,19 @@ const Product: React.FC<ProductProps> = ({title, location, time, viewCount, like
         setLike(isLike);
     }, [isLike]);
 
-    return isList ? (
+    return (
         <TouchableOpacity
             onPress={() => {
                 if (onPress) onPress(idx, cate);
             }}
             disabled={!onPress}
             style={stylesNoneList.productContainer}>
-            <View style={stylesNoneList.centerView}>
+            {isDelete && (
+                <View style={{marginRight: getPixel(10)}}>
+                    <CheckBoxImage isBox isOn={isDeleteOn} />
+                </View>
+            )}
+            <View style={[stylesNoneList.centerView, stylesNoneList.productImage]}>
                 <Image source={image} style={[stylesNoneList.productImage]} resizeMethod="resize" />
 
                 {/* 하트 아이콘 */}
@@ -115,82 +126,10 @@ const Product: React.FC<ProductProps> = ({title, location, time, viewCount, like
                 </View>
             </View>
         </TouchableOpacity>
-    ) : (
-        <TouchableOpacity
-            onPress={() => {
-                if (onPress) onPress(idx, cate);
-            }}
-            disabled={!onPress}
-            style={[
-                styles.isListMainContainer,
-                isBorder && {
-                    borderWidth: 1,
-                    borderColor: Theme.color.whiteGray_EE,
-                },
-            ]}>
-            <View style={[stylesNoneList.centerView, {borderRadius: 0}]}>
-                <Image resizeMethod="resize" source={image} style={styles.isListMainImage} />
-                <TouchableOpacity onPress={onPressLike} hitSlop={getHitSlop(5)} style={styles.likeTouch}>
-                    <Image source={!like ? LikeEmptyIcon : LikeFillIcon} style={stylesNoneList.isLikeImage} />
-                </TouchableOpacity>
-                {typeof status === 'string' && status?.length > 0 && (
-                    <View
-                        style={[
-                            styles.statusTextView,
-                            {
-                                left: status === '예약중' ? getPixel(57.4) : getPixel(47.4),
-                                width: status === '예약중' ? getPixel(45.2) : getPixel(64.2),
-                                backgroundColor: status === '예약중' ? Theme.color.aqua_04 : Theme.color.whiteGray_B7,
-                            },
-                        ]}>
-                        <WhiteText medium fontSize={`${12 * fontSize}`}>
-                            {status}
-                        </WhiteText>
-                    </View>
-                )}
-                {strEmptyCheck(status) && <View style={styles.backgroundView} />}
-            </View>
-            <View style={styles.contentView}>
-                <MediumText fontSize={`${14 * fontSize}`}>{title}</MediumText>
-                <View style={stylesNoneList.locationContentView}>
-                    <Image source={LocationIcon} style={stylesNoneList.locationImage} />
-                    <Text
-                        style={{
-                            width: getPixel(127),
-                        }}
-                        fontSize={`${10 * fontSize}`}
-                        color={Theme.color.darkGray_78}>
-                        {location}
-                        {time}
-                    </Text>
-                </View>
-                <View
-                    style={[
-                        stylesNoneList.priceView,
-                        {
-                            marginTop: getPixel(10),
-                        },
-                    ]}>
-                    <DarkBlueText fontSize={`${16 * fontSize}`} medium>
-                        {price}
-                    </DarkBlueText>
-                    <View style={stylesNoneList.rowView}>
-                        <Image source={ViewIcon} style={stylesNoneList.viewImage} />
-                        <GrayText fontSize={`${10 * fontSize}`}>{viewCount}</GrayText>
-                        {typeof likeCount === 'string' && (
-                            <>
-                                <Image source={LikeIcon} style={stylesNoneList.likeImage} />
-                                <GrayText fontSize={`${10 * fontSize}`}>{likeCount}</GrayText>
-                            </>
-                        )}
-                    </View>
-                </View>
-            </View>
-        </TouchableOpacity>
     );
 };
 
-Product.defaultProps = {
+AlarmProduct.defaultProps = {
     isLike: false,
     image: dummy,
     status: '',
@@ -202,7 +141,7 @@ Product.defaultProps = {
     isList: false,
 };
 
-export default React.memo(Product);
+export default React.memo(AlarmProduct);
 
 const styles = StyleSheet.create({
     contentView: {
@@ -254,6 +193,7 @@ const stylesNoneList = StyleSheet.create({
         alignItems: 'center',
         borderRadius: getPixel(10),
         overflow: 'hidden',
+        marginRight: getPixel(10),
     },
     statusView: {
         position: 'absolute',
@@ -308,7 +248,7 @@ const stylesNoneList = StyleSheet.create({
         marginRight: getPixel(5),
     },
     productContentView: {
-        width: getPixel(200),
+        flex: 1,
     },
     productImage: {
         width: getPixel(96),

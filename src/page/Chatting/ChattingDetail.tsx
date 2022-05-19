@@ -840,6 +840,7 @@ function getChattingListState(prev: any, res: any, setIsChatLast: any) {
     const map = new Map();
     if (prev?.list && res.data?.data?.data?.list && Array.isArray(prev?.list) && Array.isArray(res.data?.data?.data?.list)) {
         let count = 0;
+        console.log(new Date.now(), 'start');
         for (const v of res.data.data.data.list) {
             if (v?.msg_idx) {
                 map.set(v.msg_idx, v);
@@ -868,6 +869,7 @@ function getChattingListState(prev: any, res: any, setIsChatLast: any) {
                       },
             );
         }
+        console.log(new Date.now(), 'end');
         resultArray.sort((a, b) => a?.msg_idx - b?.msg_idx);
         resultArray.reverse();
         return {
