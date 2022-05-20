@@ -78,8 +78,11 @@ type Screen = {
               };
               location: string;
               locationDetail: string;
+              chat_idx: undefined;
           }
-        | undefined;
+        | {
+              chat_idx: string;
+          };
     ChattingLocation:
         | {
               isShow: boolean;

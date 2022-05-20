@@ -1,3 +1,27 @@
+export interface BusinessOpenListApiData {
+    busi_mon_check: 'N' | 'Y';
+    busi_mon_end: string;
+    busi_mon_start: string;
+    busi_pri_check: 'N' | 'Y';
+    busi_pri_end: string;
+    busi_pri_start: string;
+    busi_sat_check: 'N' | 'Y';
+    busi_sat_end: string;
+    busi_sat_start: string;
+    busi_sun_check: 'N' | 'Y';
+    busi_sun_end: string;
+    busi_sun_start: string;
+    busi_thur_check: 'N' | 'Y';
+    busi_thur_end: string;
+    busi_thur_start: string;
+    busi_tue_check: 'N' | 'Y';
+    busi_tue_end: string;
+    busi_tue_start: string;
+    busi_wed_check: 'N' | 'Y';
+    busi_wed_end: string;
+    busi_wed_start: string;
+}
+
 export interface BusinessProfileAPi {
     // 비즈니스 프로필 불러오기
     T: {
@@ -12,29 +36,7 @@ export interface BusinessProfileAPi {
         busi_location_detail: string;
         busi_memo: string;
         busi_name: string;
-        busi_open_list: {
-            busi_mon_check: 'N' | 'Y';
-            busi_mon_end: string;
-            busi_mon_start: string;
-            busi_pri_check: 'N' | 'Y';
-            busi_pri_end: string;
-            busi_pri_start: string;
-            busi_sat_check: 'N' | 'Y';
-            busi_sat_end: string;
-            busi_sat_start: string;
-            busi_sun_check: 'N' | 'Y';
-            busi_sun_end: string;
-            busi_sun_start: string;
-            busi_thur_check: 'N' | 'Y';
-            busi_thur_end: string;
-            busi_thur_start: string;
-            busi_tue_check: 'N' | 'Y';
-            busi_tue_end: string;
-            busi_tue_start: string;
-            busi_wed_check: 'N' | 'Y';
-            busi_wed_end: string;
-            busi_wed_start: string;
-        };
+        busi_open_list: BusinessOpenListApiData;
         busi_profile: string;
         busi_rate: number;
         busi_tel_country: string;
@@ -129,13 +131,13 @@ export interface BusinessSignUpApi {
     hp_open_check: 'Y' | 'N' | null;
     busi_location: string;
     busi_location_detail: string;
-    busi_lat: string;
-    busi_lng: string;
+    busi_lat: string | number;
+    busi_lng: string | number;
     busi_tel_country: string;
     busi_tel_number: string;
     busi_cell_country: string;
     busi_cell_number: string;
-    busi_all_open: 'Y' | 'N';
+    busi_all_open: 'Y' | 'N' | null;
     busi_mon_check: 'N' | 'Y' | null;
     busi_mon_end: string;
     busi_mon_start: string;

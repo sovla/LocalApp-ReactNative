@@ -18,6 +18,7 @@ import {openingHoursTypes} from '@/Types/Components/global';
 import {Picker} from '@react-native-picker/picker';
 import {BusinessOpeningHoursProps} from '@/Types/Screen/Screen';
 import {useIsFocused} from '@react-navigation/native';
+import {BusinessOpenListApiData} from '@/Types/API/BusinessTypes';
 
 export default function BusinessOpeningHours({navigation, route: {params}}: BusinessOpeningHoursProps) {
     const {t} = useTranslation();
@@ -81,58 +82,7 @@ export default function BusinessOpeningHours({navigation, route: {params}}: Busi
     );
 
     const onPressSave = useCallback(() => {
-        navigation.navigate(
-            params?.navigate ?? 'BusinessProfileSetting',
-            isFull
-                ? {
-                      busi_all_open: 'Y',
-                      busi_mon_check: 'N',
-                      busi_mon_end: '00:00',
-                      busi_mon_start: '00:00',
-                      busi_pri_check: 'N',
-                      busi_pri_end: '00:00',
-                      busi_pri_start: '00:00',
-                      busi_sat_check: 'N',
-                      busi_sat_end: '00:00',
-                      busi_sat_start: '00:00',
-                      busi_sun_check: 'N',
-                      busi_sun_end: '00:00',
-                      busi_sun_start: '00:00',
-                      busi_thur_check: 'N',
-                      busi_thur_end: '00:00',
-                      busi_thur_start: '00:00',
-                      busi_tue_check: 'N',
-                      busi_tue_end: '00:00',
-                      busi_tue_start: '00:00',
-                      busi_wed_check: 'N',
-                      busi_wed_end: '00:00',
-                      busi_wed_start: '00:00',
-                  }
-                : {
-                      busi_all_open: 'N',
-                      busi_mon_check: openingHours.mon.isOn ? 'Y' : 'N',
-                      busi_mon_end: openingHours.mon.endTime,
-                      busi_mon_start: openingHours.mon.startTime,
-                      busi_pri_check: openingHours.fri.isOn ? 'Y' : 'N',
-                      busi_pri_end: openingHours.fri.endTime,
-                      busi_pri_start: openingHours.fri.startTime,
-                      busi_sat_check: openingHours.sat.isOn ? 'Y' : 'N',
-                      busi_sat_end: openingHours.sat.endTime,
-                      busi_sat_start: openingHours.sat.startTime,
-                      busi_sun_check: openingHours.sun.isOn ? 'Y' : 'N',
-                      busi_sun_end: openingHours.sun.endTime,
-                      busi_sun_start: openingHours.sun.startTime,
-                      busi_thur_check: openingHours.thu.isOn ? 'Y' : 'N',
-                      busi_thur_end: openingHours.thu.endTime,
-                      busi_thur_start: openingHours.thu.startTime,
-                      busi_tue_check: openingHours.tue.isOn ? 'Y' : 'N',
-                      busi_tue_end: openingHours.tue.endTime,
-                      busi_tue_start: openingHours.tue.startTime,
-                      busi_wed_check: openingHours.wed.isOn ? 'Y' : 'N',
-                      busi_wed_end: openingHours.wed.endTime,
-                      busi_wed_start: openingHours.wed.startTime,
-                  },
-        );
+        navigation.navigate(params?.navigate ?? 'BusinessProfileSetting', OpenParamReturnSetting(isFull, openingHours));
     }, [isFull, openingHours, params?.navigate]);
 
     useEffect(() => {
@@ -233,6 +183,63 @@ export default function BusinessOpeningHours({navigation, route: {params}}: Busi
             </Picker>
         </View>
     );
+}
+
+function OpenParamReturnSetting(
+    isFull: boolean,
+    obj: openingHoursTypes,
+): BusinessOpenListApiData & {
+    busi_all_open: 'Y' | 'N';
+} {
+    return isFull
+        ? {
+              busi_all_open: 'Y',
+              busi_mon_check: 'N',
+              busi_mon_end: '00:00',
+              busi_mon_start: '00:00',
+              busi_pri_check: 'N',
+              busi_pri_end: '00:00',
+              busi_pri_start: '00:00',
+              busi_sat_check: 'N',
+              busi_sat_end: '00:00',
+              busi_sat_start: '00:00',
+              busi_sun_check: 'N',
+              busi_sun_end: '00:00',
+              busi_sun_start: '00:00',
+              busi_thur_check: 'N',
+              busi_thur_end: '00:00',
+              busi_thur_start: '00:00',
+              busi_tue_check: 'N',
+              busi_tue_end: '00:00',
+              busi_tue_start: '00:00',
+              busi_wed_check: 'N',
+              busi_wed_end: '00:00',
+              busi_wed_start: '00:00',
+          }
+        : {
+              busi_all_open: 'N',
+              busi_mon_check: obj.mon.isOn ? 'Y' : 'N',
+              busi_mon_end: obj.mon.endTime,
+              busi_mon_start: obj.mon.startTime,
+              busi_pri_check: obj.fri.isOn ? 'Y' : 'N',
+              busi_pri_end: obj.fri.endTime,
+              busi_pri_start: obj.fri.startTime,
+              busi_sat_check: obj.sat.isOn ? 'Y' : 'N',
+              busi_sat_end: obj.sat.endTime,
+              busi_sat_start: obj.sat.startTime,
+              busi_sun_check: obj.sun.isOn ? 'Y' : 'N',
+              busi_sun_end: obj.sun.endTime,
+              busi_sun_start: obj.sun.startTime,
+              busi_thur_check: obj.thu.isOn ? 'Y' : 'N',
+              busi_thur_end: obj.thu.endTime,
+              busi_thur_start: obj.thu.startTime,
+              busi_tue_check: obj.tue.isOn ? 'Y' : 'N',
+              busi_tue_end: obj.tue.endTime,
+              busi_tue_start: obj.tue.startTime,
+              busi_wed_check: obj.wed.isOn ? 'Y' : 'N',
+              busi_wed_end: obj.wed.endTime,
+              busi_wed_start: obj.wed.startTime,
+          };
 }
 
 const styles = StyleSheet.create({

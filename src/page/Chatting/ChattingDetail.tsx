@@ -42,6 +42,7 @@ import {API} from '@/API/API';
 import RNFetchBlob from 'rn-fetch-blob';
 import useUpdateEffect from '@/Hooks/useUpdateEffect';
 import {CALLBACK_TYPE} from 'react-native-gesture-handler/lib/typescript/handlers/gestures/gesture';
+import Loading from '@/Components/Global/Loading';
 
 export default function ChattingDetail({navigation, route: {params}}: ChattingDetailProps) {
     const {t} = useTranslation();
@@ -50,11 +51,8 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
         global: {
             data: {token, sb},
         },
+        user,
     } = useAppSelector(state => state);
-    const user = {
-        mt_idx: Dimensions.get('window').height > 750 ? '20' : '21',
-        mt_uid: 'j1UxzrfptW',
-    };
 
     const isFocused = useIsFocused();
     const _route = useRoute();
@@ -64,8 +62,8 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
 
     const [chatting, setChatting] = useState<string>('');
     const [Channel, setChannel] = useState<SendBird.GroupChannel | undefined>();
-    const [chatList, setChatList] = useState<(SendBird.UserMessage | SendBird.FileMessage | SendBird.AdminMessage)[]>([]);
     const [query, setQuery] = useState<SendBird.PreviousMessageListQuery>();
+    const [chat_idx, setChat_idx] = useState('');
 
     const [isAlbum, setIsAlbum] = useState(false);
 
@@ -84,6 +82,7 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
     const [chattingList, setChattingList] = useState<ChattingDetailListApi['T']>(null);
     const [chattingPage, setChattingPage] = useState(1);
     const [isChatLast, setIsChatLast] = useState(false);
+    const [isChatListFirst, setIsChatListFirst] = useState(true);
 
     const flatListRef = useRef<FlatList>(null);
     const scrollPosition = useRef({
@@ -92,12 +91,15 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
     });
 
     const {PostAPI: sendChatApi, isLoading: IsSendChat} = usePostSend<ChattingSendApi['D'], ChattingSendApi['T']>('chat_room_chatting_send.php', {
-        mt_idx: user.mt_idx,
+        mt_idx: user.mt_idx as string,
         chat_idx: roomInfo?.chat_idx as string,
         imageField: 'chat_file',
     });
 
-    const {PostAPI: chattingRoomInApi} = usePostSend<ChattingRoomInformationApi['D'], ChattingRoomInformationApi['T']>('chat_room_info.php', {mt_idx: user.mt_idx, chat_idx: '6'}); // 수정필요
+    const {PostAPI: chattingRoomInApi} = usePostSend<ChattingRoomInformationApi['D'], ChattingRoomInformationApi['T']>('chat_room_info.php', {
+        mt_idx: user.mt_idx as string,
+        chat_idx: params?.chat_idx ?? chat_idx,
+    }); // 수정필요
 
     const channelHandler = new sb.ChannelHandler();
     channelHandler.onMessageReceived = async (targetChannel, message) => {
@@ -133,12 +135,13 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                 }>,
                 ChattingDetailListApi['D']
             >('chat_room_chatting_detail.php', {
-                mt_idx: user.mt_idx,
+                mt_idx: user.mt_idx as string,
                 chat_idx: roomInfo?.chat_idx as string,
                 page: _page,
             });
 
             if (res.data?.result === 'true') {
+                setIsChatListFirst(false);
                 setChattingList(prev => getChattingListState(prev, res, setIsChatLast));
                 if (page === 1) {
                     setChattingPage(2);
@@ -151,6 +154,7 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
         [user.mt_idx, roomInfo?.chat_idx, chattingPage],
     );
     const onPressLocation = useCallback(() => {
+        setIsOn(false);
         navigation.navigate('ChattingLocation');
     }, []);
     const onPressSearch = useCallback(() => {
@@ -255,6 +259,7 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
 
     const fileSend = async (images: {path: string; mime: string}[]) => {
         setIsAlbum(false);
+        setIsOn(false);
 
         const params = new sb.FileMessageParams();
         const image = images[0];
@@ -298,7 +303,6 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
             }
             console.log('message File Send', message);
             // setChatList(prev => [...prev, message]);
-            setIsOn(false);
         });
         setIsFileLoading(false);
     };
@@ -335,7 +339,7 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                 }
             }
 
-            await sb.connect(my_uid, 'c9b9d16dac03ca5a4c85df8a5599fca785d35091', (err, user) => {});
+            await sb.connect(my_uid, '6af5d40414448211109d06cac3ab71e6040f87ff', (err, user) => {});
             const listQuery = sb.GroupChannel.createMyGroupChannelListQuery(); // 그룹 채널 찾기
             let find = false; // 그룹 채널 있을경우 true
             listQuery.includeEmpty = true; // 빈곳도 찾기
@@ -359,7 +363,6 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                 });
             }
             if (find) {
-                setRoomInfo(data);
             } else {
                 throw 'not Find Room';
             }
@@ -400,13 +403,6 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
             console.log(query, 'query 셋팅완료'); // (5) 쿼리 셋팅 완료
         }
     }, [query]);
-    useEffect(() => {
-        if (!isFirst) {
-            scrollToEnd();
-
-            setIsOn(false);
-        }
-    }, [chatList]);
 
     // useEffect(() => {
     //     // 키보드 높이 에 따라 화면 이동 되도록
@@ -429,7 +425,7 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
     //     };
     // }, []);
     useLayoutEffect(() => {
-        if (isFocused && params?.region) {
+        if (isFocused && params && 'region' in params) {
             const {
                 region: {latitude, longitude},
                 location,
@@ -438,9 +434,12 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
 
             messageSend('location', {latitude, location, locationDetail, longitude});
         }
-    }, [params?.region]);
+    }, [params]);
 
     useLayoutEffect(() => {
+        if (isFocused && params?.chat_idx != null) {
+            setChat_idx(params.chat_idx); // params 으로 지역 정보 또는 chat_idx 가 들어옴
+        }
         if (!isFocused) {
             offIsSetting();
         }
@@ -450,6 +449,7 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
             .then(apiResult)
             .then(res => {
                 findRoom(res.data); // (2) 채팅방 접속 정보를 기반으로 샌드버드 채널 찾아오기
+                setRoomInfo(res.data); // (2-2) 해당 데이터 룸 정보에 넣기
             });
         return () => {
             sb.disconnect();
@@ -461,6 +461,19 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
         }
     }, [roomInfo]);
 
+    const isChatDisable = !Channel || !roomInfo;
+
+    const ref = useRef<null | boolean>(null);
+
+    if (((params && params?.chat_idx == null) || roomInfo?.chat_idx == null || chat_idx === '') && !ref.current) {
+        ref.current = true;
+        navigation.goBack();
+        return null;
+    }
+
+    if (!roomInfo) {
+        return <Loading />;
+    }
     return (
         <View
             style={{
@@ -615,10 +628,11 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                                 ...styles.footerTextInput,
                                 fontSize: fontSize * 16,
                             }}
+                            onFocus={() => setIsOn(false)}
                             value={chatting}
                         />
                     </View>
-                    <TouchableOpacity onPress={() => messageSend('text')}>
+                    <TouchableOpacity disabled={isChatDisable} onPress={() => messageSend('text')}>
                         <Image source={SendGrayIcon} style={styles.footerSendGray} resizeMode="contain" />
                     </TouchableOpacity>
                 </View>
@@ -779,7 +793,6 @@ function dummyMessageAdd(params: {message: any}, user: {mt_idx: any}) {
         if (prev?.list) {
             return {
                 list: [
-                    ...prev.list,
                     {
                         msg_idx: '임시',
                         content: params.message,
@@ -789,6 +802,7 @@ function dummyMessageAdd(params: {message: any}, user: {mt_idx: any}) {
                         userProfile: '',
                         msg_date: '',
                     },
+                    ...prev.list,
                 ],
                 total: prev.total,
             };
@@ -840,13 +854,10 @@ function getChattingListState(prev: any, res: any, setIsChatLast: any) {
     const map = new Map();
     if (prev?.list && res.data?.data?.data?.list && Array.isArray(prev?.list) && Array.isArray(res.data?.data?.data?.list)) {
         let count = 0;
-        console.log(new Date.now(), 'start');
         for (const v of res.data.data.data.list) {
             if (v?.msg_idx) {
                 map.set(v.msg_idx, v);
                 count = +v.msg_idx;
-            } else {
-                map.set(`${count + 0.5}`, v);
             }
         }
         count = 0;
@@ -869,7 +880,6 @@ function getChattingListState(prev: any, res: any, setIsChatLast: any) {
                       },
             );
         }
-        console.log(new Date.now(), 'end');
         resultArray.sort((a, b) => a?.msg_idx - b?.msg_idx);
         resultArray.reverse();
         return {

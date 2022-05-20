@@ -13,6 +13,8 @@ import Line from '@/Components/Global/Line';
 import {Shadow} from 'react-native-shadow-2';
 import {useDispatch} from 'react-redux';
 import {fontChange, fontSizeState} from '@/Store/fontSizeState';
+import useUpdateEffect from '@/Hooks/useUpdateEffect';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function SettingChatting() {
     const {t} = useTranslation();
@@ -21,6 +23,7 @@ export default function SettingChatting() {
     const [isOn, setIsOn] = useState(false);
 
     const onPressCheckBox = (selectSize: fontSizeState['size']) => {
+        AsyncStorage.setItem('fontSize', selectSize);
         dispatch(
             fontChange({
                 size: selectSize,
@@ -29,7 +32,6 @@ export default function SettingChatting() {
         );
         return;
     };
-    console.log(size);
 
     return (
         <View>
@@ -141,7 +143,7 @@ const styles = StyleSheet.create({
     },
 });
 
-const fontNameToValue = (str: string) => {
+export const fontNameToValue = (str: string) => {
     if (str === 'Medium') {
         return 1;
     } else if (str === 'Large') {

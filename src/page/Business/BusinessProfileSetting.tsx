@@ -48,7 +48,7 @@ export default function BusinessProfileSetting({navigation, route: {params}}: St
         mt_idx: user.mt_idx as string,
     });
 
-    const {PostAPI: sendBusinessInformation} = usePostSend<BusinessSignUpApi>('member_busi_reg.php', {
+    const {PostAPI: sendBusinessInformation} = usePostSend<BusinessSignUpApi, any>('member_busi_reg.php', {
         mt_idx: user.mt_idx as string,
         busi_title: '',
         busi_cnpj: '',
@@ -101,43 +101,7 @@ export default function BusinessProfileSetting({navigation, route: {params}}: St
         if (data) {
             navigation.navigate('BusinessOpeningHours', {
                 isFull: data.busi_all_open === 'Y',
-                openingHoursTypes: {
-                    mon: {
-                        isOn: data.busi_mon_check === 'Y',
-                        endTime: data.busi_mon_end,
-                        startTime: data.busi_mon_start,
-                    },
-                    tue: {
-                        isOn: data.busi_tue_check === 'Y',
-                        endTime: data.busi_tue_end,
-                        startTime: data.busi_tue_start,
-                    },
-                    wed: {
-                        isOn: data.busi_wed_check === 'Y',
-                        endTime: data.busi_wed_end,
-                        startTime: data.busi_wed_start,
-                    },
-                    thu: {
-                        isOn: data.busi_thur_check === 'Y',
-                        endTime: data.busi_thur_end,
-                        startTime: data.busi_thur_start,
-                    },
-                    fri: {
-                        isOn: data.busi_pri_check === 'Y',
-                        endTime: data.busi_pri_end,
-                        startTime: data.busi_pri_start,
-                    },
-                    sat: {
-                        isOn: data.busi_sat_check === 'Y',
-                        endTime: data.busi_sat_end,
-                        startTime: data.busi_sat_start,
-                    },
-                    sun: {
-                        isOn: data.busi_sun_check === 'Y',
-                        endTime: data.busi_sun_end,
-                        startTime: data.busi_sun_start,
-                    },
-                },
+                openingHoursTypes: getOpeningHoursTypesParam(data),
             });
         }
     }, [data]);
@@ -367,7 +331,7 @@ export const RedDotText: React.FC<{
 
 export const ImageInput: React.FC<{
     value: string;
-    onChange: any;
+    onChange: (text: string) => void;
     PlaceHolder?: React.FC;
     image: any;
     imageWidth?: number;
@@ -382,6 +346,7 @@ export const ImageInput: React.FC<{
             <TextInput
                 onFocus={() => setIsFocus(true)}
                 onBlur={() => setIsFocus(false)}
+                onChangeText={onChange}
                 style={[
                     styles.imageInput,
                     {
@@ -394,6 +359,69 @@ export const ImageInput: React.FC<{
         </View>
     );
 };
+
+export function getOpeningHoursTypesParam(obj: {
+    busi_mon_check: string;
+    busi_mon_end: any;
+    busi_mon_start: any;
+    busi_tue_check: string;
+    busi_tue_end: any;
+    busi_tue_start: any;
+    busi_wed_check: string;
+    busi_wed_end: any;
+    busi_wed_start: any;
+    busi_thur_check: string;
+    busi_thur_end: any;
+    busi_thur_start: any;
+    busi_pri_check: string;
+    busi_pri_end: any;
+    busi_pri_start: any;
+    busi_sat_check: string;
+    busi_sat_end: any;
+    busi_sat_start: any;
+    busi_sun_check: string;
+    busi_sun_end: any;
+    busi_sun_start: any;
+}) {
+    return {
+        mon: {
+            isOn: obj.busi_mon_check === 'Y',
+            endTime: obj.busi_mon_end,
+            startTime: obj.busi_mon_start,
+        },
+        tue: {
+            isOn: obj.busi_tue_check === 'Y',
+            endTime: obj.busi_tue_end,
+            startTime: obj.busi_tue_start,
+        },
+        wed: {
+            isOn: obj.busi_wed_check === 'Y',
+            endTime: obj.busi_wed_end,
+            startTime: obj.busi_wed_start,
+        },
+        thu: {
+            isOn: obj.busi_thur_check === 'Y',
+            endTime: obj.busi_thur_end,
+            startTime: obj.busi_thur_start,
+        },
+        fri: {
+            isOn: obj.busi_pri_check === 'Y',
+            endTime: obj.busi_pri_end,
+            startTime: obj.busi_pri_start,
+        },
+        sat: {
+            isOn: obj.busi_sat_check === 'Y',
+            endTime: obj.busi_sat_end,
+            startTime: obj.busi_sat_start,
+        },
+        sun: {
+            isOn: obj.busi_sun_check === 'Y',
+            endTime: obj.busi_sun_end,
+            startTime: obj.busi_sun_start,
+        },
+    };
+}
+
 const styles = StyleSheet.create({
     rowCenter: {
         flexDirection: 'row',

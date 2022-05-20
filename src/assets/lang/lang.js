@@ -487,6 +487,8 @@ export const ko = {
         modalMyPagePurchaseList: '구매목록',
         apply: '적용하기',
         reset: '초기화',
+        notValidCNPJ: '* 유효하지 않은 CNPJ 입니다.',
+        availableCNPJ: '사용 가능합니다.',
     },
 };
 export const es = {

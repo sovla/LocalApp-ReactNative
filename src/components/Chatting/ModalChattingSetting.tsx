@@ -64,15 +64,13 @@ import {usePostSend} from '@/Hooks/useApi';
 import {apiResult} from '@/Util/Util';
 import {ChatAlarmSettingApi, ChatBlindSettingApi, ChatHistoryDeleteApi, ChatHistoryExportApi} from '@/Types/API/ChattingTypes';
 import {API} from '@/API/API';
+import useUpdateEffect from '@/Hooks/useUpdateEffect';
 
 const ModalChattingSetting: React.FC<ModalChattingSettingProps> = ({onClose, chatInfo}) => {
     const {t} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
-    // const {user} = useAppSelector(state => state);
-    const user = {
-        mt_idx: '20',
-        mt_uid: 'j1UxzrfptW',
-    };
+    const {user} = useAppSelector(state => state);
+
     const navigation = useAppNavigation();
     const [isAlarm, setIsAlarm] = useState(false); //  알람 온오프
     const [isBlock, setIsBlock] = useState(false); //  차단 온오프
@@ -171,10 +169,10 @@ const ModalChattingSetting: React.FC<ModalChattingSettingProps> = ({onClose, cha
         API.post('chat_room_leave.php', {mt_idx: user.mt_idx, chat_idx: chatInfo.chat_idx}); // 방나가기
     }, []);
 
-    useEffect(() => {
+    useUpdateEffect(() => {
         alarmSettingApi().then(apiResult);
     }, [isAlarm]);
-    useEffect(() => {
+    useUpdateEffect(() => {
         blindSettingApi().then(apiResult);
     }, [isBlock]);
 

@@ -26,8 +26,6 @@ const App = () => {
         }, 1500);
     }, []);
 
-    console.log(Dimensions.get('window').height);
-
     return (
         <Provider store={store}>
             <Router />

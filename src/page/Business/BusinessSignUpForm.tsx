@@ -1,5 +1,5 @@
 import {Dimensions, FlatList, Image, ImageBackground, Modal, StyleSheet, TouchableOpacity, View, ViewStyle} from 'react-native';
-import React, {Fragment, useCallback, useEffect, useState} from 'react';
+import React, {Fragment, useCallback, useEffect, useLayoutEffect, useState} from 'react';
 
 import BackGroundImage from '@assets/image/BG.png';
 import {fontSizeChange, getHeightPixel, getPixel} from '@/Util/pixelChange';
@@ -55,7 +55,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Formik, FormikHelpers, useFormik} from 'formik';
 import {string} from 'yup';
 import {RowBox} from '@/Components/Global/container';
-import {ImageInput, RedDotText} from './BusinessProfileSetting';
+import {getOpeningHoursTypesParam, ImageInput, RedDotText} from './BusinessProfileSetting';
 
 import HomeIcon from '@assets/image/home.png';
 import PhoneBlueIcon from '@assets/image/phone_blue.png';
@@ -68,7 +68,11 @@ import ArrowRightNewIcon from '@assets/image/arrow_right_new.png';
 import WhatsappBlueIcon from '@assets/image/whatsapp_blue.png';
 import * as Yup from 'yup';
 import {usePostSend} from '@/Hooks/useApi';
-import {apiResult} from '@/Util/Util';
+import {AlertButton, apiResult} from '@/Util/Util';
+import {useIsFocused} from '@react-navigation/native';
+import {BusinessOpenListApiData, BusinessSignUpApi} from '@/Types/API/BusinessTypes';
+import useUpdateEffect from '@/Hooks/useUpdateEffect';
+import {changeOptionalUser} from '@/Store/userState';
 
 interface BusinessSignUpData {
     busi_title: string;
@@ -85,19 +89,23 @@ interface BusinessSignUpData {
     busi_cell_country: string;
     busi_cell_number: string;
     busi_all_open: 'Y' | 'N';
-    busi_mon_check: 'Y' | 'N';
-    busi_mon_start: string;
-    busi_mon_end: string;
     busi_website: string;
     busi_facebook: string;
     busi_insta: string;
     busi_whats: string;
 }
 
+type FormikData = BusinessSignUpData & BusinessOpenListApiData;
+
 const BusinessSignUpForm = ({navigation, route: {params}}: BusinessSignUpFormProps) => {
     const {t} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
     const {user} = useAppSelector(state => state);
+    const isFocused = useIsFocused();
+    const dispatch = useDispatch();
+
+    const [isError, setIsError] = useState(false);
+    const [isCheck, setIsCheck] = useState(false);
     const {
         handleChange,
         handleBlur,
@@ -127,10 +135,12 @@ const BusinessSignUpForm = ({navigation, route: {params}}: BusinessSignUpFormPro
             busi_whats,
         },
         errors,
-    } = useFormik<BusinessSignUpData>({
+        setValues,
+        values,
+    } = useFormik<FormikData>({
         initialValues: {
             busi_title: '',
-            busi_cnpj: '15.664.649/0001-84',
+            busi_cnpj: '42.156.596/0001-63',
             busi_info: '',
             hp_open_check: user?.mt_hp_open ?? 'Y',
             busi_location: '',
@@ -142,17 +152,37 @@ const BusinessSignUpForm = ({navigation, route: {params}}: BusinessSignUpFormPro
             busi_tel_number: '',
             busi_cell_country: '',
             busi_cell_number: '',
-            busi_all_open: 'Y',
-            busi_mon_check: 'N',
-            busi_mon_start: '09:00',
-            busi_mon_end: '18:00',
+            busi_all_open: 'N',
             busi_website: '',
             busi_facebook: '',
             busi_insta: '',
             busi_whats: '',
+            busi_mon_check: 'N',
+            busi_pri_check: 'N',
+            busi_sat_check: 'N',
+            busi_sun_check: 'N',
+            busi_tue_check: 'N',
+            busi_wed_check: 'N',
+            busi_thur_check: 'N',
+            busi_mon_end: '00:00',
+            busi_mon_start: '00:00',
+            busi_pri_end: '00:00',
+            busi_pri_start: '00:00',
+            busi_sat_end: '00:00',
+            busi_sat_start: '00:00',
+            busi_sun_end: '00:00',
+            busi_sun_start: '00:00',
+            busi_tue_end: '00:00',
+            busi_tue_start: '00:00',
+            busi_wed_end: '00:00',
+            busi_wed_start: '00:00',
+            busi_thur_end: '00:00',
+            busi_thur_start: '00:00',
         },
-        onSubmit: (values: BusinessSignUpData, formikHelpers: FormikHelpers<BusinessSignUpData>) => {
-            console.log('전송된 데이터', values);
+        onSubmit: (values: FormikData, formikHelpers: FormikHelpers<FormikData>) => {
+            console.log(values);
+            formikHelpers.validateField('asd');
+            signUpApi().then(apiResult);
         },
         validationSchema: Yup.object({
             busi_title: Yup.string().required('Required'),
@@ -168,9 +198,14 @@ const BusinessSignUpForm = ({navigation, route: {params}}: BusinessSignUpFormPro
     const {PostAPI: checkCNPJ} = usePostSend('busi_cnpj_check.php', {
         busi_cnpj: busi_cnpj,
     });
+
+    const {PostAPI: signUpApi} = usePostSend<BusinessSignUpApi, any>('member_busi_reg.php', {
+        ...values,
+        mt_idx: user.mt_idx as string,
+    });
     const _handleChange = useCallback(
-        <T extends keyof BusinessSignUpData>(field: T) =>
-            (e: BusinessSignUpData[T] | React.ChangeEvent<any>) => {
+        <T extends keyof FormikData>(field: T) =>
+            (e: FormikData[T] | React.ChangeEvent<any>) => {
                 if (typeof e === 'string') {
                     handleChange(field)(e);
                 }
@@ -184,18 +219,58 @@ const BusinessSignUpForm = ({navigation, route: {params}}: BusinessSignUpFormPro
         });
     }, []);
     const onPressShopTime = useCallback(() => {
-        navigation.navigate('BusinessOpeningHours', {navigate: 'BusinessSignUpForm'});
-    }, []);
+        navigation.navigate('BusinessOpeningHours', {navigate: 'BusinessSignUpForm', openingHoursTypes: getOpeningHoursTypesParam(values), isFull: busi_all_open === 'Y'});
+    }, [values]);
 
     const onPressCheckCNPJ = () => {
-        checkCNPJ()
+        checkCNPJ().then(res => {
+            if (res?.result === 'false') {
+                setIsError(true);
+            } else {
+                setIsError(false);
+                setIsCheck(true);
+                AlertButton(t('availableCNPJ'));
+            }
+        });
+    };
+    const onPressComplete = () => {
+        signUpApi()
             .then(apiResult)
             .then(res => {
-                if (res) {
-                    console.log(res, 'result');
-                }
+                dispatch(
+                    changeOptionalUser({
+                        mt_busi: 'Y',
+                    }),
+                );
+                navigation.navigate('Home');
+                AlertButton(t('confirmComplete'));
             });
     };
+
+    useLayoutEffect(() => {
+        if (params && 'location' in params && params?.location && params?.pt_location_detail) {
+            setValues(prev => ({...prev, busi_location: params.location as string, busi_location_detail: params.pt_location_detail as string}));
+        }
+        if (params && 'busi_all_open' in params) {
+            setValues(prev => ({...prev, ...params}));
+        }
+
+        return () => {};
+    }, [isFocused]);
+
+    useUpdateEffect(() => {
+        setIsCheck(false);
+    }, [values.busi_cnpj]);
+
+    const isSetTime =
+        values?.busi_all_open === 'Y' || // 전체 시간 체크 혹은
+        (values &&
+            Object.entries(values).filter(([key, value]) => {
+                // 7 일 중 하나라도 Y 라면
+                if (key.includes('check') && !key.includes('hp_open_check') && value === 'Y') {
+                    return true;
+                }
+            }).length > 0); // 영업시간 체크용
 
     return (
         <View style={{flex: 1}}>
@@ -242,13 +317,15 @@ const BusinessSignUpForm = ({navigation, route: {params}}: BusinessSignUpFormPro
                                 placeholderTextColor={Theme.color.gray}
                                 placeholder={t('cnpjPh')}
                             />
-                            <TouchableOpacity onPress={onPressCheckCNPJ} style={styles.button}>
+                            <TouchableOpacity disabled={isCheck} onPress={onPressCheckCNPJ} style={styles.button}>
                                 <WhiteText fontSize={`${12 * fontSize}`}>CHECK</WhiteText>
                             </TouchableOpacity>
                         </View>
-                        <View style={styles.errorCNPJ}>
-                            <RedText fontSize={`${10 * fontSize}`}>* CNPJ não é válido!</RedText>
-                        </View>
+                        {isError && (
+                            <View style={styles.errorCNPJ}>
+                                <RedText fontSize={`${10 * fontSize}`}>{t('notValidCNPJ')}</RedText>
+                            </View>
+                        )}
                     </View>
                     <Line height={0.4} isGray width={getPixel(328)} style={styles.marginLeft16} />
                     <View style={styles.introView}>
@@ -270,6 +347,7 @@ const BusinessSignUpForm = ({navigation, route: {params}}: BusinessSignUpFormPro
                             placeholder={t('businessProfileSettingShopIntroductionPh')}
                         />
                     </View>
+                    {/* 전화번호 */}
                     <Line height={0.4} isGray width={getPixel(328)} style={styles.marginLeft16} />
                     <View style={styles.rowBetween}>
                         <Text fontSize={`${16 * fontSize}`}>{t('businessProfileSettingShopTel')}</Text>
@@ -277,6 +355,7 @@ const BusinessSignUpForm = ({navigation, route: {params}}: BusinessSignUpFormPro
                             +{user.mt_country} {user.mt_hp?.substring(0, 2)} {user.mt_hp?.substring(2)}
                         </GrayText>
                     </View>
+                    {/* 핸드폰 정보 공개 여부 */}
                     <View style={styles.rowBetween}>
                         <Text fontSize={`${16 * fontSize}`}>{t('businessProfileSettingShopTelOpen')}</Text>
                         <Toggle
@@ -287,6 +366,7 @@ const BusinessSignUpForm = ({navigation, route: {params}}: BusinessSignUpFormPro
                         />
                     </View>
                     <Line height={0.4} isGray width={getPixel(328)} style={{...styles.marginLeft16, marginTop: getHeightPixel(16)}} />
+                    {/* 이메일 */}
                     <View style={{...styles.rowBetween, marginTop: 0}}>
                         <Text fontSize={`${16 * fontSize}`}>{t('businessProfileSettingShopEmail')}</Text>
                         <TextInput
@@ -330,7 +410,7 @@ const BusinessSignUpForm = ({navigation, route: {params}}: BusinessSignUpFormPro
                         <ImageInput
                             image={PhoneBlueIcon}
                             value={busi_tel_number}
-                            onChange={() => {}}
+                            onChange={_handleChange('busi_tel_number')}
                             PlaceHolder={() => <RedDotText content={t('businessProfileSettingShopHp')} color={Theme.color.gray} isView={false} />}
                         />
 
@@ -349,7 +429,7 @@ const BusinessSignUpForm = ({navigation, route: {params}}: BusinessSignUpFormPro
                                     content={t('businessProfileSettingShopOpeningTime')}
                                     color={Theme.color.gray}
                                     isView={true}
-                                    value={busi_location ? t('businessProfileSettingShopAddress') : ''}
+                                    value={isSetTime ? t('businessProfileSettingShopAddress') : ''}
                                 />
                             </View>
                             <AutoHeightImage source={ArrowRightNewIcon} width={getPixel(20)} />
@@ -387,7 +467,7 @@ const BusinessSignUpForm = ({navigation, route: {params}}: BusinessSignUpFormPro
                             marginTop: getHeightPixel(100),
                             marginBottom: getHeightPixel(34),
                         }}>
-                        <Button onPress={handleSubmit} content={t('save')} width="328px" />
+                        <Button onPress={onPressComplete} content={t('save')} width="328px" />
                     </View>
                 </KeyboardAwareScrollView>
             </View>

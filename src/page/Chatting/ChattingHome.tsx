@@ -32,7 +32,9 @@ export default function ChattingHome() {
                         <>
                             <TouchableOpacity
                                 onPress={() => {
-                                    navigation.navigate('ChattingDetail');
+                                    navigation.navigate('ChattingDetail', {
+                                        chat_idx: '24', // 수정필요
+                                    });
                                 }}>
                                 <Chatting
                                     userName="Giovanna010522"

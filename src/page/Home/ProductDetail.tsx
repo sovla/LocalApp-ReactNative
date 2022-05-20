@@ -20,7 +20,7 @@ import ShareWhiteIcon from '@assets/image/share_white.png';
 import ShareIcon from '@assets/image/share.png';
 import DocumentGrayIcon from '@assets/image/document_gray.png';
 import ArrowRightNewIcon from '@assets/image/arrow_right_new.png';
-import {AlertButton, brPrice, getHitSlop, productTimeSetting, viewCountCheck} from '@/Util/Util';
+import {AlertButton, apiResult, brPrice, getHitSlop, productTimeSetting, viewCountCheck} from '@/Util/Util';
 import Screen, {ProductDetailProps} from '@/Types/Screen/Screen';
 import useBoolean from '@/Hooks/useBoolean';
 import useApi, {usePostSend} from '@/Hooks/useApi';
@@ -81,7 +81,21 @@ export default function ProductDetail({navigation, route: {params}}: ProductDeta
         },
         any
     >('product_like.php', {
-        mt_idx: user?.mt_idx ?? '0',
+        mt_idx: user?.mt_idx as string,
+        pt_idx: params.pt_idx,
+    });
+
+    const {PostAPI: chattingStartApi, isLoading: isChattingStartLoading} = usePostSend<
+        {
+            mt_idx: string;
+            pt_idx: string;
+        },
+        {
+            chat_idx: string;
+            channel_url: string;
+        }
+    >('product_chatting_room.php', {
+        mt_idx: user?.mt_idx as string,
         pt_idx: params.pt_idx,
     });
 
@@ -104,7 +118,15 @@ export default function ProductDetail({navigation, route: {params}}: ProductDeta
             });
         }
     }, [data?.sell_type]);
-    const onPressChattingTrade = useCallbackNavigation('ChattingDetail');
+    const onPressChattingTrade = useCallback(() => {
+        chattingStartApi()
+            .then(apiResult)
+            .then(res => {
+                navigation.navigate('ChattingDetail', {
+                    chat_idx: res.data.chat_idx,
+                });
+            });
+    }, []);
     const onPressSearch = useCallbackNavigation('Search');
     const onPressUserReport = useCallbackNavigation('ReportCategory', {
         pt_idx: params.pt_idx,
@@ -238,7 +260,7 @@ export default function ProductDetail({navigation, route: {params}}: ProductDeta
             AlertButton(t('detailPageNoneParams'));
             navigation.goBack();
         }
-    }, []);
+    }, [isFocused]);
 
     useEffect(() => {
         if (data?.my_like) {
@@ -253,7 +275,7 @@ export default function ProductDetail({navigation, route: {params}}: ProductDeta
         return null;
     }
 
-    if (isLoading || data === null || otherIsLoading || otherData === null) {
+    if ((isLoading && data === null) || data === null || (otherIsLoading && otherData === null)) {
         return <Loading />;
     } else {
         const title = data.pt_title;

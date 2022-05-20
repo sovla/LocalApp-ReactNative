@@ -72,7 +72,7 @@ import SettingPrivacyTel from './Setting/SettingPrivacyTel';
 import SettingPrivacyTelAuth from './Setting/SettingPrivacyTelAuth';
 import SettingDeleteAccount from './Setting/SettingDeleteAccount';
 import SettingAlarm from './Setting/SettingAlarm';
-import SettingChatting from './Setting/SettingChatting';
+import SettingChatting, {fontNameToValue} from './Setting/SettingChatting';
 import SettingLanguage from './Setting/SettingLanguage';
 import ServiceCenter from './Setting/ServiceCenter';
 import FAQ from './Setting/FAQ';
@@ -99,6 +99,7 @@ import {Button} from '@/Components/Global/button';
 import {changeUser} from '@/Store/userState';
 import BusinessSignUpForm from './Business/BusinessSignUpForm';
 import PurchaseList from './Profile/PurchaseList';
+import {fontChange} from '@/Store/fontSizeState';
 
 const resources = {
     en,
@@ -206,6 +207,17 @@ export default function Router() {
             .finally(() => {
                 setIsAsync(false);
             });
+
+        AsyncStorage.getItem('fontSize').then(res => {
+            if (res === 'Small' || res === 'Medium' || res === 'Large') {
+                dispatch(
+                    fontChange({
+                        value: fontNameToValue(res),
+                        size: res,
+                    }),
+                );
+            }
+        });
     }, []);
 
     if (isLanguageChange || isAsync) {
