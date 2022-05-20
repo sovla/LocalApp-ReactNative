@@ -20,6 +20,7 @@ export interface userState {
     mt_pushcon: 'Y' | 'N' | null;
     mt_uid: string | null;
     mt_vibrate: 'Y' | 'N' | null;
+    mt_email: string | null;
 }
 
 // Define the initial state using that type
@@ -40,6 +41,7 @@ const initialState: userState = {
     mt_pushcon: null,
     mt_uid: null,
     mt_vibrate: null,
+    mt_email: null,
 };
 
 export const userSlice = createSlice({

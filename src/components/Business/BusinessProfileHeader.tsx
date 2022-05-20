@@ -35,7 +35,7 @@ const BusinessProfileHeader: React.FC<{
     const [isModalPhoto, setIsModalPhoto] = useState(false);
     const [image, setImage] = useState<null | {path: string; mime: string}>(null);
 
-    const {PostAPI} = usePostSend<BusinessPhotoChangeApi>('member_busi_img_update.php', {
+    const {PostAPI} = usePostSend<BusinessPhotoChangeApi, any>('member_busi_img_update.php', {
         mt_idx: user.mt_idx as string,
         busi_file: image,
         imageField: 'busi_file',

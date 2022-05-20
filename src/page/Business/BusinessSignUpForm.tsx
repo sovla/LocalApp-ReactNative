@@ -145,7 +145,7 @@ const BusinessSignUpForm = ({navigation, route: {params}}: BusinessSignUpFormPro
             hp_open_check: user?.mt_hp_open ?? 'Y',
             busi_location: '',
             busi_location_detail: '',
-            busi_email: user?.mt_email ?? 'dummy@naver.com',
+            busi_email: user?.mt_email as string,
             busi_lat: -23.15123124,
             busi_lng: -32.12341,
             busi_tel_country: '',

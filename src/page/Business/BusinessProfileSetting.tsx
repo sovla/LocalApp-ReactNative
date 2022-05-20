@@ -122,9 +122,6 @@ export default function BusinessProfileSetting({navigation, route: {params}}: St
             setData((prev: any) => ({...prev, ...params}));
         }
     }, [isFocused]);
-    if (isLoading || !data) {
-        return <Loading />;
-    }
 
     const isSetTime =
         data?.busi_all_open === 'Y' || // 전체 시간 체크 혹은
@@ -140,6 +137,7 @@ export default function BusinessProfileSetting({navigation, route: {params}}: St
             style={{
                 flex: 1,
             }}>
+            {(isLoading || !data) && <Loading isAbsolute backgroundColor="#0003" />}
             <KeyboardAwareScrollView>
                 <ProfileBackground height={getHeightPixel(200)} style={styles.imageBackground} />
 

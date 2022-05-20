@@ -18,7 +18,6 @@ import {AlertButton, getHitSlop} from '@/Util/Util';
 import CountryPicker from '@/Components/Profile/CountryPicker';
 import {API} from '@/API/API';
 import ModalAuth from '@/Components/LoginSignUp/ModalAuth';
-import {changeUser} from '@/Store/userState';
 
 export default function Login({navigation}: LoginProps) {
     const {t, i18n} = useTranslation();
