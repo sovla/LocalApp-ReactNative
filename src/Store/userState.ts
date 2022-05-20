@@ -21,6 +21,10 @@ export interface userState {
     mt_uid: string | null;
     mt_vibrate: 'Y' | 'N' | null;
     mt_email: string | null;
+
+    mt_lat: string | null;
+    mt_lng: string | null;
+    mt_location: string | null;
 }
 
 // Define the initial state using that type
@@ -42,6 +46,9 @@ const initialState: userState = {
     mt_uid: null,
     mt_vibrate: null,
     mt_email: null,
+    mt_lat: null,
+    mt_lng: null,
+    mt_location: null,
 };
 
 export const userSlice = createSlice({

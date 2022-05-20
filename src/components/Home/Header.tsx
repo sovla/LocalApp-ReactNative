@@ -30,6 +30,7 @@ import FastImage from 'react-native-fast-image';
 const Header: React.FC<HeaderProps> = ({isChange}) => {
     const {t} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
+    const {user} = useAppSelector(state => state);
     const navigation = useAppNavigation();
     const {value: isModal, on: onIsModal, off: offIsModal, toggle: toggleIsModal} = useBoolean(false);
     const {value: isMenu, on: onIsMenu, off: offIsMenu, toggle: toggleIsMenu} = useBoolean(false);
@@ -64,7 +65,7 @@ const Header: React.FC<HeaderProps> = ({isChange}) => {
                 </Box>
                 <TouchableOpacity onPress={toggleIsModal} style={styles.locationTouch}>
                     <Text color={textColor} fontSize={`${18 * fontSize}`}>
-                        Bom Retiro
+                        {user.mt_location}
                     </Text>
                     <AutoHeightImage source={isChange ? require('@assets/image/arrow_down.png') : require('@assets/image/arrow_down_white.png')} width={getPixel(8)} style={styles.marginLeft5} />
                 </TouchableOpacity>

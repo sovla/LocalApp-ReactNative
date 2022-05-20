@@ -137,6 +137,13 @@ export default function Router() {
                         dispatch(changeToken(token));
                         API.post('member_auto_login.php', {mt_app_token: token}).then(res => {
                             if (res.data.result === 'true') {
+                                ref.reset({
+                                    routes: [
+                                        {
+                                            name: 'Home',
+                                        },
+                                    ],
+                                });
                                 dispatch(changeUser(res.data.data.data));
                             }
                         });
@@ -148,6 +155,13 @@ export default function Router() {
                         dispatch(changeToken(token));
                         API.post('member_auto_login.php', {mt_app_token: token}).then(res => {
                             if (res.data.result === 'true') {
+                                ref.reset({
+                                    routes: [
+                                        {
+                                            name: 'Home',
+                                        },
+                                    ],
+                                });
                                 dispatch(changeUser(res.data.data.data));
                             }
                         });
