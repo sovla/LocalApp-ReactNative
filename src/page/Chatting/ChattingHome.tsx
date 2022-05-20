@@ -12,13 +12,40 @@ import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import {useTranslation} from 'react-i18next';
 import Menu from '@/Components/Profile/Menu';
 import {GrayText} from '@/Components/Global/text';
+import useApi from '@/Hooks/useApi';
+import {ChattingRoomListApi} from '@/Types/API/ChattingTypes';
 
 export default function ChattingHome() {
     const navigation = useAppNavigation();
     const {t} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
-    const [chattingList, setChattingList] = useState<Array<ChattingProps | any>>([1, 2, 3, 4]);
-    const [selectMenu, setSelectMenu] = useState('chatMenu1');
+    const {user} = useAppSelector(state => state);
+    const [selectMenu, setSelectMenu] = useState<'chatMenu1' | 'chatMenu2'>('chatMenu1');
+
+    const {data: tradingRoomData} = useApi<ChattingRoomListApi['T'], ChattingRoomListApi['D']>(
+        null,
+        'chat_room_list.php',
+        {
+            mt_idx: user.mt_idx as string,
+            type: 0,
+        },
+        {
+            focusRetry: true,
+        },
+    );
+    const {data: transactionCompletedRoomData} = useApi<ChattingRoomListApi['T'], ChattingRoomListApi['D']>(
+        null,
+        'chat_room_list.php',
+        {
+            mt_idx: user.mt_idx as string,
+            type: 1,
+        },
+        {
+            focusRetry: true,
+        },
+    );
+
+    const list = selectMenu === 'chatMenu1' ? tradingRoomData?.list : transactionCompletedRoomData?.list;
 
     return (
         <View style={{flex: 1}}>
@@ -26,24 +53,26 @@ export default function ChattingHome() {
             <View style={{height: getHeightPixel(20)}} />
             <Menu menuList={['chatMenu1', 'chatMenu2']} selectMenu={selectMenu} setSelectMenu={setSelectMenu} />
             <FlatList
-                data={chattingList}
+                data={list}
                 renderItem={({item, index}) => {
                     return (
                         <>
                             <TouchableOpacity
                                 onPress={() => {
                                     navigation.navigate('ChattingDetail', {
-                                        chat_idx: '24', // 수정필요
+                                        chat_idx: item.chat_idx,
                                     });
                                 }}>
                                 <Chatting
-                                    userName="Giovanna010522"
-                                    isBuy={index % 2 == 1}
-                                    image={dummy}
-                                    title="초강력 흡입 차량용 무선 청소기"
-                                    content="I like rainbow colors, the meds i take make me see things most..."
-                                    date="오후 11:20"
-                                    isBusiness={index % 2 == 1}
+                                    userName={item.mt_name}
+                                    isBuy={item.chat_sign === 'buy'}
+                                    image={{
+                                        uri: item.product_file,
+                                    }}
+                                    title={item.product_title}
+                                    content={item.last_msg}
+                                    date={item.chat_time}
+                                    isBusiness={item.busi_check === 'Y'}
                                 />
                             </TouchableOpacity>
                             <Line

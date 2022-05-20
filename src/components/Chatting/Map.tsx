@@ -73,7 +73,7 @@ const Map: React.FC<{
     };
     onPressMarker?: () => void;
     isShow?: boolean;
-}> = ({region, setRegion, isMarker = true, markerInfo = {}, onPressMarker, isShow}) => {
+}> = ({region, setRegion, isMarker = true, markerInfo, onPressMarker, isShow}) => {
     const {t} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
     const navigation = useAppNavigation();
@@ -119,7 +119,7 @@ const Map: React.FC<{
             {isMarker && (
                 <>
                     <Marker icon={LocationMarkerIcon} ref={ref} coordinate={{...region, latitudeDelta: 0.003, longitudeDelta: 0.003}} onCalloutPress={_onPressMarker} onPress={_onPressMarker}>
-                        {onPressMarker != null && (
+                        {onPressMarker != null && markerInfo && markerInfo?.description?.length > 0 && (
                             <Callout tooltip={true}>
                                 <View
                                     style={{

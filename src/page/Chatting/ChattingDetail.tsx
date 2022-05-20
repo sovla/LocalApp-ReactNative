@@ -465,8 +465,9 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
 
     const ref = useRef<null | boolean>(null);
 
-    if (((params && params?.chat_idx == null) || roomInfo?.chat_idx == null || chat_idx === '') && !ref.current) {
+    if (params?.chat_idx == null && roomInfo?.chat_idx == null && chat_idx === '' && !ref.current) {
         ref.current = true;
+        console.log(params.chat_idx == null, 'back');
         navigation.goBack();
         return null;
     }
@@ -512,8 +513,7 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                         <Text bold style={{width: getPixel(250)}} medium numberOfLines={2}>
                             {roomInfo?.product_name}
                         </Text>
-                        <DarkBlueText>{brPrice('120', {isPadding: true})}</DarkBlueText>
-                        {/* 고정값 수정필요 */}
+                        <DarkBlueText>{roomInfo.product_price}</DarkBlueText>
                     </View>
                 </View>
             </View>
@@ -633,7 +633,7 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                         />
                     </View>
                     <TouchableOpacity disabled={isChatDisable} onPress={() => messageSend('text')}>
-                        <Image source={SendGrayIcon} style={styles.footerSendGray} resizeMode="contain" />
+                        <Image source={isChatDisable ? require('@assets/image/send_gray.png') : require('@assets/image/send_color.png')} style={styles.footerSendGray} resizeMode="contain" />
                     </TouchableOpacity>
                 </View>
                 {isOn && (
@@ -800,7 +800,7 @@ function dummyMessageAdd(params: {message: any}, user: {mt_idx: any}) {
                         userIdx: user.mt_idx,
                         msg_type: 'text',
                         userProfile: '',
-                        msg_date: '',
+                        msg_date: `${new Date().getHours()}:${new Date().getMinutes()}`,
                     },
                     ...prev.list,
                 ],

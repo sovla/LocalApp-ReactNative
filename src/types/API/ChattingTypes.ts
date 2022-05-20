@@ -109,6 +109,8 @@ export interface ChattingRoomInformationApi {
         sell_name: string;
         sell_type: '0' | '1';
         sendbird_chat_url: string;
+        chat_status: 'Y' | 'N';
+        product_price: string;
     } | null;
     D: {
         mt_idx: string;
@@ -166,5 +168,27 @@ export interface ChatHistoryExportApi {
     D: {
         mt_idx: string;
         chat_idx: string;
+    };
+}
+
+export interface ChattingRoomListApi {
+    // 채팅방 정보 불러오기
+    T: {
+        list: {
+            busi_check: 'Y' | 'N';
+            chat_idx: string;
+            chat_sign: 'buy';
+            chat_time: string;
+            last_msg: string;
+            mt_name: string;
+            product_file: string;
+            product_title: string;
+        }[];
+        total_page: number;
+        tptal_page: number;
+    } | null;
+    D: {
+        mt_idx: string;
+        type: 0 | 1;
     };
 }

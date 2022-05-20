@@ -31,7 +31,7 @@ const Chatting: React.FC<ChattingProps> = ({image, title, content, date, isBuy, 
                 </GrayText>
             </View>
             <View style={styles.height100}>
-                <GrayText fontSize={`${10 * fontSize}`} style={{marginTop: getHeightPixel(3)}}>
+                <GrayText fontSize={`${10 * fontSize}`} style={{marginTop: getHeightPixel(3), alignSelf: 'flex-end'}}>
                     {date}
                 </GrayText>
                 <Image source={isBuy ? require('@assets/image/buy_arrow.png') : require('@assets/image/sale_arrow.png')} style={styles.icon} />
@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
     },
     height100: {
         height: '100%',
+        flex: 1,
     },
     icon: {
         width: getPixel(16),

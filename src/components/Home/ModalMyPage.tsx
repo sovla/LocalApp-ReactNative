@@ -63,7 +63,7 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
     }, []);
     const onPressAlarmList = useCallback(() => {
         navigation.navigate('AlarmList', {
-            menu: 'alarm',
+            menu: 'keywordAlarm',
         });
         onClose();
     }, []);
