@@ -122,7 +122,7 @@ export default function BusinessProfileSetting({navigation, route: {params}}: St
             setData((prev: any) => ({...prev, ...params}));
         }
     }, [isFocused]);
-    if (isLoading && !data) {
+    if (isLoading || !data) {
         return <Loading />;
     }
 
