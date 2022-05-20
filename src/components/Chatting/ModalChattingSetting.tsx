@@ -66,14 +66,14 @@ import {ChatAlarmSettingApi, ChatBlindSettingApi, ChatHistoryDeleteApi, ChatHist
 import {API} from '@/API/API';
 import useUpdateEffect from '@/Hooks/useUpdateEffect';
 
-const ModalChattingSetting: React.FC<ModalChattingSettingProps> = ({onClose, chatInfo}) => {
+const ModalChattingSetting: React.FC<ModalChattingSettingProps> = ({onClose, chatInfo, initData}) => {
     const {t} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
     const {user} = useAppSelector(state => state);
 
     const navigation = useAppNavigation();
-    const [isAlarm, setIsAlarm] = useState(false); //  알람 온오프
-    const [isBlock, setIsBlock] = useState(false); //  차단 온오프
+    const [isAlarm, setIsAlarm] = useState(initData.isAlarm); //  알람 온오프
+    const [isBlock, setIsBlock] = useState(initData.isBlock); //  차단 온오프
 
     const {value: isAlert, on: onIsAlert, off: offIsAlert} = useBoolean(false);
     const [alertModal, setAlertModal] = useState<{

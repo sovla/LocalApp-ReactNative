@@ -95,9 +95,13 @@ export default function ChattingHome() {
                     marginTop: getHeightPixel(5),
                     marginHorizontal: getPixel(16),
                 }}
-                contentContainerStyle={{
-                    flex: 1,
-                }}
+                ListFooterComponent={
+                    <View
+                        style={{
+                            height: getHeightPixel(100),
+                        }}></View>
+                }
+                showsVerticalScrollIndicator={false}
             />
             <Footer menu="chat" />
         </View>

@@ -111,6 +111,9 @@ export interface ChattingRoomInformationApi {
         sendbird_chat_url: string;
         chat_status: 'Y' | 'N';
         product_price: string;
+        my_blind_check: 'N' | 'Y';
+        my_push_check: 'Y' | 'N';
+        other_blind_check: 'N' | 'Y';
     } | null;
     D: {
         mt_idx: string;

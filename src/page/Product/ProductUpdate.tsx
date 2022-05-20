@@ -27,6 +27,9 @@ import {ProductInfoApi} from '@/Types/API/ProductTypes';
 import Product from '@/Components/Home/Product';
 import Loading from '@/Components/Global/Loading';
 
+// 삽니다 수량 없이
+// 기부 수량,등급,가격 없이 등록
+
 export default function ProductUpdate({route: {params}}: ProductUpdateProps) {
     const {t} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
@@ -87,6 +90,7 @@ export default function ProductUpdate({route: {params}}: ProductUpdateProps) {
 
     const isNotCar = product.categoryMenu !== 'car';
     const isNotMotor = product.categoryMenu !== 'motorcycle';
+    const isDonation = product.categoryMenu === 'donation';
 
     const onChangeProduct = <K extends keyof ProductTypes>(key: K, value: ProductTypes[K]) => {
         if (typeof product[key] === typeof value || !product[key]) {
@@ -305,7 +309,8 @@ export default function ProductUpdate({route: {params}}: ProductUpdateProps) {
                         <Line isGray />
 
                         {/* 등급 */}
-                        {isNotCar && isNotMotor && (
+
+                        {!isDonation && isNotCar && isNotMotor && (
                             <>
                                 <TouchableOpacity
                                     onPress={() => {
@@ -324,48 +329,52 @@ export default function ProductUpdate({route: {params}}: ProductUpdateProps) {
                         )}
 
                         {/* 가격 */}
-                        <View style={{...styles.boxTouch}}>
-                            <View
-                                style={{
-                                    ...styles.row,
-                                    width: !(isNotCar && isNotMotor) ? getPixel(328) : getPixel(170),
-                                }}>
-                                {product.price?.length > 0 && (
-                                    <Text style={{marginBottom: getHeightPixel(3)}} fontSize={`${14 * fontSize}`}>
-                                        R$
-                                    </Text>
-                                )}
-                                <TextInput
-                                    style={{
-                                        fontFamily: Theme.fontWeight.medium,
-                                        fontSize: 14 * fontSize,
-                                        color: Theme.color.black,
-                                        minHeight: getHeightPixel(50),
-                                        flex: 1,
-                                    }}
-                                    placeholder={t('pricePh')}
-                                    placeholderTextColor={Theme.color.gray}
-                                    keyboardType="numbers-and-punctuation"
-                                    onChangeText={text => {
-                                        onChangeProduct('price', text);
-                                    }}
-                                    value={product.price}
-                                />
-                            </View>
-                            {isNotCar && isNotMotor && (
-                                <TouchableOpacity
-                                    style={styles.negoView}
-                                    onPress={() => {
-                                        onChangeProduct('isNego', !product.isNego);
-                                    }}>
-                                    <AutoHeightImage source={product.isNego ? require('@assets/image/check_on.png') : require('@assets/image/check_off.png')} width={getPixel(22)} />
-                                    <Text fontSize={`${14 * fontSize}`} medium>
-                                        {t('noPriceOffer')}
-                                    </Text>
-                                </TouchableOpacity>
-                            )}
-                        </View>
-                        <Line isGray />
+                        {!isDonation && (
+                            <>
+                                <View style={{...styles.boxTouch}}>
+                                    <View
+                                        style={{
+                                            ...styles.row,
+                                            width: !(isNotCar && isNotMotor) ? getPixel(328) : getPixel(170),
+                                        }}>
+                                        {product.price?.length > 0 && (
+                                            <Text style={{marginBottom: getHeightPixel(3)}} fontSize={`${14 * fontSize}`}>
+                                                R$
+                                            </Text>
+                                        )}
+                                        <TextInput
+                                            style={{
+                                                fontFamily: Theme.fontWeight.medium,
+                                                fontSize: 14 * fontSize,
+                                                color: Theme.color.black,
+                                                minHeight: getHeightPixel(50),
+                                                flex: 1,
+                                            }}
+                                            placeholder={t('pricePh')}
+                                            placeholderTextColor={Theme.color.gray}
+                                            keyboardType="numbers-and-punctuation"
+                                            onChangeText={text => {
+                                                onChangeProduct('price', text);
+                                            }}
+                                            value={product.price}
+                                        />
+                                    </View>
+                                    {isNotCar && isNotMotor && (
+                                        <TouchableOpacity
+                                            style={styles.negoView}
+                                            onPress={() => {
+                                                onChangeProduct('isNego', !product.isNego);
+                                            }}>
+                                            <AutoHeightImage source={product.isNego ? require('@assets/image/check_on.png') : require('@assets/image/check_off.png')} width={getPixel(22)} />
+                                            <Text fontSize={`${14 * fontSize}`} medium>
+                                                {t('noPriceOffer')}
+                                            </Text>
+                                        </TouchableOpacity>
+                                    )}
+                                </View>
+                                <Line isGray />
+                            </>
+                        )}
 
                         {/* 거래지역 */}
                         {isNotCar && isNotMotor && (
@@ -450,7 +459,14 @@ export default function ProductUpdate({route: {params}}: ProductUpdateProps) {
                                     }
                                 />
                                 {/* 상세모델 */}
-                                {!isNotCar && <TitleInput title={t('detailModel')} placeHolder={t('noInput')} value={product.pt_model_datail} onChangeText={(text: string) => onChangeProduct('pt_model_datail', text)} />}
+                                {!isNotCar && (
+                                    <TitleInput
+                                        title={t('detailModel')}
+                                        placeHolder={t('noInput')}
+                                        value={product.pt_model_datail}
+                                        onChangeText={(text: string) => onChangeProduct('pt_model_datail', text)}
+                                    />
+                                )}
 
                                 {/* 색상 */}
                                 <TitleInput title={t('color')} placeHolder={t('noInput')} value={product.pt_color} onChangeText={(text: string) => onChangeProduct('pt_color', text)} />
@@ -496,7 +512,9 @@ export default function ProductUpdate({route: {params}}: ProductUpdateProps) {
                                 </View>
 
                                 {/* 배기량 차량에서만 나옴 */}
-                                {!isNotCar && <TitleInput title={t('displacement')} placeHolder={t('unSelected')} isSelect value={product.pt_disp} onPress={() => navigation.navigate('CarDisplacement')} />}
+                                {!isNotCar && (
+                                    <TitleInput title={t('displacement')} placeHolder={t('unSelected')} isSelect value={product.pt_disp} onPress={() => navigation.navigate('CarDisplacement')} />
+                                )}
                                 {/* 연료 */}
                                 <TitleInput
                                     title={t('fuel')}

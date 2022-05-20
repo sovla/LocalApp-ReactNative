@@ -41,7 +41,7 @@ export const API = axios.create({
         'Access-Control-Allow-Credentials': true, // Required for cookies, authorization headers with HTTPS
     },
 
-    transformRequest: (data?: any) => {
+    transformRequest: (data?: any | {imageField?: string}) => {
         // 보내기전 데이터 가공
         let cloneData = data; // 데이터 복사
         let imageData; // 이미지 데이터 넣을 변수

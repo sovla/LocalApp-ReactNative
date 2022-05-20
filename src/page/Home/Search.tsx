@@ -1,5 +1,5 @@
-import {View, Image, ScrollView, TouchableOpacity, StyleSheet, Modal} from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
+import {View, Image, ScrollView, TouchableOpacity, StyleSheet, Modal, FlatList} from 'react-native';
+import React, {Fragment, useCallback, useEffect, useState} from 'react';
 import SearchHeader from '@/Components/Home/SearchHeader';
 import {GrayText, MediumText, Text} from '@/Components/Global/text';
 import {useTranslation} from 'react-i18next';
@@ -24,8 +24,9 @@ import useApi from '@/Hooks/useApi';
 import useUpdateEffect from '@/Hooks/useUpdateEffect';
 import useStateCallback from '@/Hooks/useStateCallback';
 import Loading from '@/Components/Global/Loading';
-import {AlertButton, findCategory} from '@/Util/Util';
+import {AlertButton, brPrice, findCategory, productTimeSetting, viewCountCheck} from '@/Util/Util';
 import {CheckBoxImage} from '@/Components/Global/button';
+import Product from '@/Components/Home/Product';
 
 export interface FilterState {
     order: undefined | 0 | 1 | 2 | 3;
@@ -40,7 +41,7 @@ export default function Search({route: {params}, navigation}: SearchProps): JSX.
     const {user} = useAppSelector(state => state);
 
     const isFocused = useIsFocused();
-    const [isList, setIsList] = useState<boolean>(false);
+    const [isList, setIsList] = useState<boolean>(true);
     const [isMore, setIsMore] = useState<boolean>(false);
     const {value: isFilter, on: onIsFilter, off: offIsFilter} = useBoolean(false);
     const {value: isKeyword, on: onIsKeyword, off: offIsKeyword} = useBoolean(false);
@@ -100,7 +101,7 @@ export default function Search({route: {params}, navigation}: SearchProps): JSX.
             category: findCategory(selectKeyword),
             pt_fin: isSale ? 'N' : 'Y',
         },
-        {isFirst: false},
+        {isFirst: false, isList, listField: 'list'},
     );
 
     const {getData: sendAllDelete} = useApi<RecentAllDeleteApi['T'], RecentAllDeleteApi['D']>( // 모두 삭제
@@ -140,6 +141,7 @@ export default function Search({route: {params}, navigation}: SearchProps): JSX.
             sendSearchLog();
         }
         sendSearch(_data);
+        console.log('sendSearch');
     };
 
     const onPressKeyword = () => {
@@ -159,7 +161,9 @@ export default function Search({route: {params}, navigation}: SearchProps): JSX.
 
     useUpdateEffect(() => {
         if (isFocused) {
-            onSubmitEditing();
+            onSubmitEditing({
+                page: 1,
+            });
         }
     }, [filter, isSale]);
     useEffect(() => {
@@ -203,114 +207,169 @@ export default function Search({route: {params}, navigation}: SearchProps): JSX.
         <View style={styles.mainContainer}>
             <SearchHeader keyword={selectKeyword ?? undefined} text={searchText} setText={setSearchText} onPressCloseKeyword={onPressCloseKeyword} onSubmitEditing={onSubmitEditing} />
 
-            <ScrollView>
-                {isSearch ? (
-                    <>
-                        <SearchKeyword onPressFilter={onIsFilter} onPressKeyword={onPressKeyword} />
-                        <View style={styles.isSearchView}>
-                            <TouchableOpacity onPress={toggleIsSale} style={styles.checkboxView}>
-                                <CheckBoxImage isBlue isOn={isSale} />
-                                <Text style={{marginLeft: getPixel(5)}} fontSize={`${14 * fontSize}`}>
-                                    {t('searchSale')}
-                                </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                onPress={() => {
-                                    setIsList(prev => !prev);
-                                }}>
-                                <Image
-                                    source={!isList ? MenuOnIcon : MenuOffIcon}
+            <FlatList
+                data={searchData.list}
+                contentContainerStyle={
+                    isList
+                        ? {}
+                        : {
+                              flexDirection: 'row',
+                              flexWrap: 'wrap',
+                          }
+                }
+                onEndReached={() => {
+                    console.log('onEndReached');
+                    sendSearch();
+                }}
+                renderItem={({item, index}) => {
+                    return (
+                        <Fragment key={index + 'Product'}>
+                            {!isList && (
+                                <View
                                     style={{
-                                        width: getPixel(20),
-                                        height: getPixel(20),
+                                        marginLeft: index % 2 === 0 ? getPixel(16) : getPixel(10),
                                     }}
                                 />
-                            </TouchableOpacity>
-                        </View>
-                        <ProductList list={searchData.list} isList={isList} onPressItem={onPressItem} />
-                        <Modal visible={isFilter} transparent onRequestClose={offIsFilter}>
-                            {isFilter && (
-                                <ModalFilter
-                                    onClose={offIsFilter}
-                                    setFilter={setFilter}
-                                    filter={filter}
-                                    isVehicle={selectKeyword === 'car' || selectKeyword === 'motorcycle'}
-                                    isCar={selectKeyword === 'car'}
-                                />
                             )}
-                        </Modal>
-                        <Modal visible={isKeyword} transparent animationType="slide" onRequestClose={offIsKeyword}>
-                            {isKeyword && <ModalKeyword onClose={offIsKeyword} keyword={searchText} />}
-                        </Modal>
-                    </>
-                ) : (
+
+                            <Product
+                                isLike={item.my_like === 'Y'}
+                                image={
+                                    item?.pt_file
+                                        ? {
+                                              uri: item.pt_file,
+                                          }
+                                        : require('@assets/image/none_image_m.png')
+                                }
+                                status={item.fin_status === 'Y' ? '판매완료' : item.fin_status === 'R' ? '예약중' : ''}
+                                viewCount={viewCountCheck(item?.view_count ?? 0)}
+                                likeCount={viewCountCheck(item?.like_count)}
+                                price={brPrice(item?.pt_price ?? '0')}
+                                time={` .  ${productTimeSetting(item?.pt_time ?? 0, item?.pt_time_type ?? 'now')}`}
+                                location={`${item?.pt_location} ${item?.pt_location_detail}  .  ${item.dist?.toFixed(0)}${t('withinDistance')}`}
+                                title={item?.pt_title ?? ''}
+                                isList={isList}
+                                onPress={onPressItem}
+                                idx={item?.pt_idx ?? '0'}
+                                cate={item?.pt_cate ?? '0'}
+                            />
+                        </Fragment>
+                    );
+                }}
+                ListHeaderComponent={
                     <>
-                        <View style={styles.popularContainer}>
-                            <Text fontSize={`${18 * fontSize}`} medium>
-                                {t('searchTitleText')}
-                            </Text>
-                            <View style={styles.popularListContainer}>
-                                {Array.isArray(popularList) &&
-                                    popularList.map((item, index) => (
-                                        <TouchableOpacity
-                                            key={item.title + index}
-                                            onPress={() => {
-                                                setSearchText(item.title, (state: any) => {
-                                                    onSubmitEditing({
-                                                        search_txt: state,
-                                                    });
-                                                });
+                        {isSearch ? (
+                            <>
+                                <SearchKeyword onPressFilter={onIsFilter} onPressKeyword={onPressKeyword} />
+                                <View style={styles.isSearchView}>
+                                    <TouchableOpacity onPress={toggleIsSale} style={styles.checkboxView}>
+                                        <CheckBoxImage isBlue isOn={isSale} />
+                                        <Text style={{marginLeft: getPixel(5)}} fontSize={`${14 * fontSize}`}>
+                                            {t('searchSale')}
+                                        </Text>
+                                    </TouchableOpacity>
+                                    {/* <TouchableOpacity
+                                        onPress={() => {
+                                            setIsList(prev => !prev);
+                                        }}>
+                                        <Image
+                                            source={!isList ? MenuOnIcon : MenuOffIcon}
+                                            style={{
+                                                width: getPixel(20),
+                                                height: getPixel(20),
                                             }}
-                                            style={styles.popularListView}>
-                                            <MediumText fontSize={`${12 * fontSize}`} letterSpacing="0px">
-                                                {item.title}
-                                            </MediumText>
+                                        />
+                                    </TouchableOpacity> */}
+                                </View>
+                            </>
+                        ) : (
+                            <>
+                                <View style={styles.popularContainer}>
+                                    <Text fontSize={`${18 * fontSize}`} medium>
+                                        {t('searchTitleText')}
+                                    </Text>
+                                    <View style={styles.popularListContainer}>
+                                        {Array.isArray(popularList) &&
+                                            popularList.map((item, index) => (
+                                                <TouchableOpacity
+                                                    key={item.title + index}
+                                                    onPress={() => {
+                                                        setSearchText(item.title, (state: any) => {
+                                                            onSubmitEditing({
+                                                                search_txt: state,
+                                                            });
+                                                        });
+                                                    }}
+                                                    style={styles.popularListView}>
+                                                    <MediumText fontSize={`${12 * fontSize}`} letterSpacing="0px">
+                                                        {item.title}
+                                                    </MediumText>
+                                                </TouchableOpacity>
+                                            ))}
+                                    </View>
+                                    <View style={styles.searchListTitleView}>
+                                        <Text fontSize={`${18 * fontSize}`} medium>
+                                            {t('searchRecentSearches')}
+                                        </Text>
+                                        <TouchableOpacity onPress={onPressAllDelete}>
+                                            <GrayText fontSize={`${14 * fontSize}`}>{t('allDelete')}</GrayText>
                                         </TouchableOpacity>
-                                    ))}
-                            </View>
-                            <View style={styles.searchListTitleView}>
-                                <Text fontSize={`${18 * fontSize}`} medium>
-                                    {t('searchRecentSearches')}
-                                </Text>
-                                <TouchableOpacity onPress={onPressAllDelete}>
-                                    <GrayText fontSize={`${14 * fontSize}`}>{t('allDelete')}</GrayText>
-                                </TouchableOpacity>
-                            </View>
-                            <View style={styles.searchListRowView}>
-                                {recentList.map((item, index) => {
-                                    return (
-                                        <TouchableOpacity
-                                            onPress={() => {
-                                                setSearchText(item.title, (state: any) => {
-                                                    onSubmitEditing({
-                                                        search_txt: state,
-                                                    });
-                                                });
-                                            }}
-                                            style={styles.searchListView}>
-                                            <View>
-                                                <Text fontSize={`${14 * fontSize}`} medium>
-                                                    {item.title}
-                                                </Text>
-                                            </View>
-                                            <TouchableOpacity
-                                                onPress={() => {
-                                                    sendDelete({
-                                                        sl_idx: item.sl_idx,
-                                                    }).then(res => {
-                                                        recentGetData();
-                                                    });
-                                                }}>
-                                                <Image source={CloseBlackIcon} style={styles.closeBlack} />
-                                            </TouchableOpacity>
-                                        </TouchableOpacity>
-                                    );
-                                })}
-                            </View>
-                        </View>
+                                    </View>
+                                    <View style={styles.searchListRowView}>
+                                        {recentList.map((item, index) => {
+                                            return (
+                                                <TouchableOpacity
+                                                    onPress={() => {
+                                                        setSearchText(item.title, (state: any) => {
+                                                            onSubmitEditing({
+                                                                search_txt: state,
+                                                            });
+                                                        });
+                                                    }}
+                                                    style={styles.searchListView}>
+                                                    <View>
+                                                        <Text fontSize={`${14 * fontSize}`} medium>
+                                                            {item.title}
+                                                        </Text>
+                                                    </View>
+                                                    <TouchableOpacity
+                                                        onPress={() => {
+                                                            sendDelete({
+                                                                sl_idx: item.sl_idx,
+                                                            }).then(res => {
+                                                                recentGetData();
+                                                            });
+                                                        }}>
+                                                        <Image source={CloseBlackIcon} style={styles.closeBlack} />
+                                                    </TouchableOpacity>
+                                                </TouchableOpacity>
+                                            );
+                                        })}
+                                    </View>
+                                </View>
+                            </>
+                        )}
                     </>
-                )}
-            </ScrollView>
+                }
+            />
+            {isFilter && (
+                <Modal visible={isFilter} transparent onRequestClose={offIsFilter}>
+                    {isFilter && (
+                        <ModalFilter
+                            onClose={offIsFilter}
+                            setFilter={setFilter}
+                            filter={filter}
+                            isVehicle={selectKeyword === 'car' || selectKeyword === 'motorcycle'}
+                            isCar={selectKeyword === 'car'}
+                        />
+                    )}
+                </Modal>
+            )}
+            {isKeyword && (
+                <Modal visible={isKeyword} transparent animationType="slide" onRequestClose={offIsKeyword}>
+                    {isKeyword && <ModalKeyword onClose={offIsKeyword} keyword={searchText} />}
+                </Modal>
+            )}
         </View>
     );
 }

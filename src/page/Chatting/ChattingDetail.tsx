@@ -69,7 +69,7 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
 
     const [isFirst, setIsFirst] = useState(false); // 처음 푸터 아래로
     const [isFileLoading, setIsFileLoading] = useState(false);
-    const [isBlock, setIsBlock] = useState(true); // 차단 여부
+    const [isBlock, setIsBlock] = useState(false); // 차단 여부
 
     const [roomInfo, setRoomInfo] = useState<ChattingRoomInformationApi['T']>(null); // 룸 정보 불러오기
 
@@ -458,10 +458,11 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
     useLayoutEffect(() => {
         if (roomInfo) {
             getChattingListApi(1); // (2-1) 채팅방 접속 정보를 기반으로 채팅리스트 받아오기
+            setIsBlock(roomInfo.other_blind_check === 'Y'); // 상대방이 날 차단 한 경우 메세지 전송 안됌
         }
     }, [roomInfo]);
 
-    const isChatDisable = !Channel || !roomInfo;
+    const isChatDisable = !Channel || !roomInfo || roomInfo?.other_blind_check === 'Y';
 
     const ref = useRef<null | boolean>(null);
 
@@ -659,6 +660,10 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                     chatInfo={{
                         chat_idx: roomInfo?.chat_idx ?? '',
                         pt_idx: roomInfo?.pt_idx ?? '',
+                    }}
+                    initData={{
+                        isAlarm: roomInfo.my_push_check === 'Y',
+                        isBlock: roomInfo.my_blind_check === 'Y',
                     }}
                 />
             )}

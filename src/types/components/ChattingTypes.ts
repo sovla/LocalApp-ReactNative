@@ -42,6 +42,10 @@ export interface ModalChattingSettingProps extends ModalProps {
         chat_idx: string;
         pt_idx: string;
     };
+    initData: {
+        isAlarm: boolean;
+        isBlock: boolean;
+    };
 }
 export interface ModalAlertViewProps extends ModalProps {
     title: string;

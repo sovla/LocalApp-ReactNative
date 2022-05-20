@@ -70,7 +70,7 @@ export interface SearchHeaderProps {
     setText: React.Dispatch<React.SetStateAction<string>>;
     keyword?: categoryMenuTypes['menu'];
     onPressCloseKeyword?: () => void;
-    onSubmitEditing: () => void;
+    onSubmitEditing: ({page}: {page: number | string}) => void;
 }
 
 export interface SearchKeywordProps {
