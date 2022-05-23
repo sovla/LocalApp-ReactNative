@@ -1,4 +1,5 @@
 import {channerId} from '@/Page/Setting/SettingAlarm';
+import {ModalProps} from './global';
 
 export interface FAQItemProps {
     title: string;
@@ -13,4 +14,10 @@ export interface setAlramPushApi {
     mt_message_id: channerId['type'];
     mt_vibrate: 'Y' | 'N';
     mt_pushcon: 'Y' | 'N';
+}
+
+export type ContactType = 'user' | 'ad' | 'report' | 'error' | 'other';
+
+export interface ModalContactProps extends ModalProps {
+    onPressItem: (type: ContactType) => void;
 }

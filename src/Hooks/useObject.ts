@@ -1,13 +1,13 @@
 import {Dispatch, SetStateAction, useCallback, useState} from 'react';
 
-function useObject<T>(defaultValue: T) {
-  const [value, setValue] = useState<T>(defaultValue);
+function useObject<T>(defaultValue: T): [T, Dispatch<SetStateAction<T>>, <K extends keyof T>(key: K, value: T[K]) => void] {
+    const [value, setValue] = useState<T>(defaultValue);
 
-  const onChangeObject = (key: keyof T, value: any) => {
-    setValue(prev => ({...prev, [key]: value}));
-  };
+    const onChangeObject = <K extends keyof T>(key: K, value: T[K]) => {
+        setValue(prev => ({...prev, [key]: value}));
+    };
 
-  return [value, setValue, onChangeObject] as const;
+    return [value, setValue, onChangeObject];
 }
 
 export default useObject;

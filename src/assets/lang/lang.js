@@ -492,6 +492,16 @@ export const ko = {
         noneLikeList: '관심목록이 비어있습니다.',
         noneSearchList: '해당 검색어와 일치하는 상품이 없습니다.',
         ContactUs: '문의하기',
+        contactUsTitle: '문의 하기',
+        contactUsGuide1: '문의 유형을 선택해 주세요.',
+        contactUsGuide2: '답변 받을 이메일 주소를 입력해 주세요',
+        contactUsGuide3: '문의 내용을 작석해 주세요.\n(1,000자 이내)',
+        contactUsGuide4: '5MG이내의 직접 촬영하신\n이미지를 등록해 주세요.',
+        contactuser: '회원정보 / 이용 문의',
+        contactad: '광고 문의',
+        contactreport: '신고 / 이용제재',
+        contacterror: '오류 문의',
+        contactother: '기타 문의',
     },
 };
 export const es = {
