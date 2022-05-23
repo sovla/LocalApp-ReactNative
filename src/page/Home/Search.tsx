@@ -218,7 +218,6 @@ export default function Search({route: {params}, navigation}: SearchProps): JSX.
                           }
                 }
                 onEndReached={() => {
-                    console.log('onEndReached');
                     sendSearch();
                 }}
                 renderItem={({item, index}) => {
@@ -350,6 +349,17 @@ export default function Search({route: {params}, navigation}: SearchProps): JSX.
                             </>
                         )}
                     </>
+                }
+                ListEmptyComponent={
+                    isSearch ? (
+                        <View style={{flex: 1, paddingTop: getHeightPixel(220), alignItems: 'center'}}>
+                            <GrayText medium fontSize={`${14 * fontSize}`}>
+                                {t('noneSearchList')}
+                            </GrayText>
+                        </View>
+                    ) : (
+                        <></>
+                    )
                 }
             />
             {isFilter && (

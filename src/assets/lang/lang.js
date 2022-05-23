@@ -490,6 +490,7 @@ export const ko = {
         notValidCNPJ: '* 유효하지 않은 CNPJ 입니다.',
         availableCNPJ: '사용 가능합니다.',
         noneLikeList: '관심목록이 비어있습니다.',
+        noneSearchList: '해당 검색어와 일치하는 상품이 없습니다.',
     },
 };
 export const es = {
