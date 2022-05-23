@@ -71,7 +71,7 @@ export default function BusinessProfile({navigation, route: {params}}: BusinessP
     }, []);
 
     const onPressChatting = useCallback(() => {
-        navigation.navigate('ChattingDetail');
+        // navigation.navigate('ChattingDetail');
     }, []);
 
     const onPressReviews = useCallback(() => {

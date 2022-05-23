@@ -22,6 +22,7 @@ import {selectUser} from '@/Store/userState';
 import Loading from '@/Components/Global/Loading';
 import {LocationChangeApi} from '@/Types/API/HomeTypes';
 import useGeoLocation from '@/Hooks/useGeoLocation';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 export default function LocationChange({navigation}: LocationChangeProps): JSX.Element | null {
     const {t, i18n} = useTranslation();
@@ -32,7 +33,7 @@ export default function LocationChange({navigation}: LocationChangeProps): JSX.E
     const {isLoading: isLocationLoading, region, setRegion} = useGeoLocation();
     const {location, detail, city, locationName, isLoading} = useGeocoding(region);
 
-    const {PostAPI} = usePostSend<LocationChangeApi>('mt_location_modify.php', {
+    const {PostAPI} = usePostSend<LocationChangeApi, any>('mt_location_modify.php', {
         mt_idx: user.mt_idx as string,
         mt_location: city,
         mt_lat: region.latitude,
@@ -65,92 +66,94 @@ export default function LocationChange({navigation}: LocationChangeProps): JSX.E
                 </View>
             )}
             <Header title={t('locationChangeTitle')} />
-            <View
-                style={{
-                    width: getPixel(360),
-                    height: getHeightPixel(338),
-                    backgroundColor: '#0008',
-                }}>
-                <Map region={region} setRegion={setRegion} isMarker={true} />
-                <View style={styles.absoluteLocation}>
-                    <WhiteText fontSize={`${12 * fontSize}`}>{t('mapPh')}</WhiteText>
-                </View>
-            </View>
-            <View style={styles.markerView}>
-                <Image source={MapMarkerIcon} style={styles.markerImage} />
+            <KeyboardAwareScrollView style={{flex: 1}} contentContainerStyle={{paddingBottom: getHeightPixel(100)}}>
                 <View
                     style={{
-                        marginLeft: getPixel(5),
+                        width: getPixel(360),
+                        height: getHeightPixel(338),
+                        backgroundColor: '#0008',
                     }}>
-                    <Text fontSize={`${16 * fontSize}`}>{detail}</Text>
-                    <GrayText fontSize={`${12 * fontSize}`}>{locationName}</GrayText>
+                    <Map region={region} setRegion={setRegion} isMarker={true} />
+                    <View style={styles.absoluteLocation}>
+                        <WhiteText fontSize={`${12 * fontSize}`}>{t('mapPh')}</WhiteText>
+                    </View>
                 </View>
-            </View>
-            <View style={styles.locationAreaView}>
-                <BoldText fontSize={`${14 * fontSize}`}>{t('locationAreaSelect')}</BoldText>
-                <View style={styles.locationTextView}>
-                    <Text fontSize={`${14 * fontSize}`}>
-                        {city}
-                        {t('at')}
-                    </Text>
-                    <BoldText fontSize={`${14 * fontSize}`}>{rangeList[selectRange - 1] + t('range')}</BoldText>
+                <View style={styles.markerView}>
+                    <Image source={MapMarkerIcon} style={styles.markerImage} />
+                    <View
+                        style={{
+                            marginLeft: getPixel(5),
+                        }}>
+                        <Text fontSize={`${16 * fontSize}`}>{detail}</Text>
+                        <GrayText fontSize={`${12 * fontSize}`}>{locationName}</GrayText>
+                    </View>
+                </View>
+                <View style={styles.locationAreaView}>
+                    <BoldText fontSize={`${14 * fontSize}`}>{t('locationAreaSelect')}</BoldText>
+                    <View style={styles.locationTextView}>
+                        <Text fontSize={`${14 * fontSize}`}>
+                            {city}
+                            {t('at')}
+                        </Text>
+                        <BoldText fontSize={`${14 * fontSize}`}>{rangeList[selectRange - 1] + t('range')}</BoldText>
 
-                    <Text fontSize={`${14 * fontSize}`}>{t('by')}</Text>
-                </View>
+                        <Text fontSize={`${14 * fontSize}`}>{t('by')}</Text>
+                    </View>
 
-                <Slider
-                    value={selectRange}
-                    onValueChange={value => {
-                        if (typeof value === 'object' && value[0] && value[0] !== 1) {
-                            setSelectRange(value[0]);
-                        }
-                    }}
-                    maximumValue={5}
-                    minimumValue={1}
-                    step={1}
-                    trackStyle={{
-                        backgroundColor: Theme.color.whiteGray_EE,
-                        height: getHeightPixel(8),
-                        borderRadius: 8,
-                    }}
-                    minimumTrackTintColor={Theme.color.blue_3D}
-                    thumbStyle={{
-                        backgroundColor: Theme.color.white,
-                        borderWidth: 3,
-                        borderColor: Theme.color.blue_3D,
-                    }}
-                />
-                <View
-                    style={{
-                        width: getPixel(328),
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                    }}>
-                    <View>
-                        <AutoHeightImage source={MapPersonIcon} width={getPixel(15)} />
-                    </View>
-                    <View style={styles.locationView1}>
-                        <Text fontSize={`${14 * fontSize}`} medium>
-                            {t('5km')}
-                        </Text>
-                    </View>
-                    <View>
-                        <Text fontSize={`${14 * fontSize}`} medium>
-                            {t('10km')}
-                        </Text>
-                    </View>
-                    <View>
-                        <Text fontSize={`${14 * fontSize}`} medium>
-                            {t('20km')}
-                        </Text>
-                    </View>
-                    <View>
-                        <Text fontSize={`${14 * fontSize}`} medium>
-                            {t('40km')}
-                        </Text>
+                    <Slider
+                        value={selectRange}
+                        onValueChange={value => {
+                            if (typeof value === 'object' && value[0] && value[0] !== 1) {
+                                setSelectRange(value[0]);
+                            }
+                        }}
+                        maximumValue={5}
+                        minimumValue={1}
+                        step={1}
+                        trackStyle={{
+                            backgroundColor: Theme.color.whiteGray_EE,
+                            height: getHeightPixel(8),
+                            borderRadius: 8,
+                        }}
+                        minimumTrackTintColor={Theme.color.blue_3D}
+                        thumbStyle={{
+                            backgroundColor: Theme.color.white,
+                            borderWidth: 3,
+                            borderColor: Theme.color.blue_3D,
+                        }}
+                    />
+                    <View
+                        style={{
+                            width: getPixel(328),
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                        }}>
+                        <View>
+                            <AutoHeightImage source={MapPersonIcon} width={getPixel(15)} />
+                        </View>
+                        <View style={styles.locationView1}>
+                            <Text fontSize={`${14 * fontSize}`} medium>
+                                {t('5km')}
+                            </Text>
+                        </View>
+                        <View>
+                            <Text fontSize={`${14 * fontSize}`} medium>
+                                {t('10km')}
+                            </Text>
+                        </View>
+                        <View>
+                            <Text fontSize={`${14 * fontSize}`} medium>
+                                {t('20km')}
+                            </Text>
+                        </View>
+                        <View>
+                            <Text fontSize={`${14 * fontSize}`} medium>
+                                {t('40km')}
+                            </Text>
+                        </View>
                     </View>
                 </View>
-            </View>
+            </KeyboardAwareScrollView>
             <TouchableOpacity onPress={onPressSubmit} style={styles.button}>
                 <WhiteText medium fontSize={`${18 * fontSize}`}>
                     선택한 위치로 설정

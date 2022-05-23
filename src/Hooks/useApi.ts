@@ -143,21 +143,33 @@ export const usePostSend = <D, T extends any>(apiPath: string, apiData: NonNulla
     const PostAPI = useCallback(
         async (
             data?: Partial<D>,
-        ): Promise<{
-            result: 'true' | 'false' | null;
-            data: T | any;
-            msg: null | string;
-        }> => {
+        ): Promise<
+            | {
+                  result: 'true' | null;
+                  data: T | any;
+                  msg: null | string;
+              }
+            | {
+                  result: 'false';
+                  data: any | T;
+                  msg: string;
+              }
+        > => {
             setIsLoading(true);
             console.log(apiPath + ':::', apiData);
             const res = await API.post<
                 any,
                 AxiosResponse<
-                    {
-                        result: 'true' | 'false' | null;
-                        data: any;
-                        msg: null | string;
-                    },
+                    | {
+                          result: 'true' | null;
+                          data: any;
+                          msg: null | string;
+                      }
+                    | {
+                          result: 'false';
+                          data: any;
+                          msg: string;
+                      },
                     any
                 >
             >(apiPath, {...apiData, ...data});
@@ -170,6 +182,7 @@ export const usePostSend = <D, T extends any>(apiPath: string, apiData: NonNulla
                 if (res.data.msg) {
                     setErrorMessage(res.data.msg);
                 }
+
                 return res.data;
             } else {
                 setIsLoading(false);
