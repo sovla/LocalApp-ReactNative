@@ -176,6 +176,13 @@ export default function LikeList({navigation}: LikeListProps) {
                 onScrollBeginDrag={() => {
                     setIsScroll(true);
                 }}
+                ListEmptyComponent={
+                    <View style={{flex: 1, paddingTop: getHeightPixel(250), alignItems: 'center'}}>
+                        <GrayText medium fontSize={`${14 * fontSize}`}>
+                            {t('noneLikeList')}
+                        </GrayText>
+                    </View>
+                }
             />
             <Footer menu="favorite" />
         </View>
