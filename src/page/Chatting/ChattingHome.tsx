@@ -48,15 +48,12 @@ export default function ChattingHome() {
 
     const list = selectMenu === 'chatMenu1' ? tradingRoomData?.list : transactionCompletedRoomData?.list;
 
-    if (isLoadingRoomList || isLoadingRoomList1) {
-        return <Loading />;
-    }
-
     return (
         <View style={{flex: 1}}>
             <Header />
             <View style={{height: getHeightPixel(20)}} />
             <Menu menuList={['chatMenu1', 'chatMenu2']} selectMenu={selectMenu} setSelectMenu={setSelectMenu} />
+            {((isLoadingRoomList && !tradingRoomData) || (isLoadingRoomList1 && !transactionCompletedRoomData)) && <Loading isAbsolute backgroundColor="#0003" />}
             <FlatList
                 data={list}
                 renderItem={({item, index}) => {
