@@ -376,9 +376,6 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                 // 유저타입 분별용
                 const _item = item as userChat;
                 const isMy = _item.userIdx === user.mt_idx;
-                if (_item.msg_show === 'N') {
-                    return null;
-                }
                 if (_item.msg_type === 'location') {
                     return (
                         <LocationChatting
@@ -418,8 +415,10 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                 );
             } else if (item.idx === '0' && item.userIdx === '0') {
                 const _item = item as dateChat;
-                console.log('date 출력', _item.content, item.msg_idx);
+
                 return <ChatDate content={_item.content} />;
+            } else {
+                return null;
             }
         },
         [user],

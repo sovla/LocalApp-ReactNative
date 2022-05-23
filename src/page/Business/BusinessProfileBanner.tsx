@@ -77,15 +77,13 @@ export default function BusinessProfileBanner({navigation}: BusinessProfileBanne
         }
     }, [data]);
 
-    if (isLoading || !imageArray) {
-        return <Loading />;
-    }
     return (
         <View
             style={{
                 flex: 1,
             }}>
             <Header title={t('businessProfileBannerTitle')} />
+            {(isLoading || !imageArray) && <Loading isAbsolute />}
             <View style={styles.bannerView}>
                 <Text
                     fontSize={`${20 * fontSize}`}

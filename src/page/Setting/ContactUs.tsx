@@ -57,6 +57,8 @@ import useObject from '@/Hooks/useObject';
 import CameraGrayIcon from '@assets/image/camera_gray.png';
 import ModalContact from '@/Components/Setting/ModalContact';
 import ModalPhoto from '@/Components/Business/ModalPhoto';
+import {usePostSend} from '@/Hooks/useApi';
+import {apiResult, showToastMessage} from '@/Util/Util';
 
 const ContactUs = ({navigation}: ContactUsProps) => {
     const {t} = useTranslation();
@@ -66,7 +68,7 @@ const ContactUs = ({navigation}: ContactUsProps) => {
     const [isSelectModal, setIsSelectModal] = useState(false);
     const [isPhotoModal, setIsPhotoModal] = useState(false);
     const [contact, setContact, onChangeContact] = useObject<{
-        type: ContactType | '';
+        type: number | null;
         email: string;
         content: string;
         image: {
@@ -74,18 +76,26 @@ const ContactUs = ({navigation}: ContactUsProps) => {
             mime: string;
         }[];
     }>({
-        type: '',
+        type: null,
         email: '',
         content: '',
         image: [],
+    });
+
+    const {PostAPI} = usePostSend('mng_qna_reg.php', {
+        mqr_type: contact.type,
+        mqr_email: contact.email,
+        mqr_content: contact.content,
+        imageField: 'mqr_file',
+        mqr_file: contact.image,
     });
 
     const onPressCamera = useCallback(() => {
         setIsPhotoModal(true);
     }, []);
 
-    const onPressItem = useCallback((type: ContactType) => {
-        onChangeContact('type', type);
+    const onPressItem = useCallback((typeNumber: number) => {
+        onChangeContact('type', typeNumber);
         setIsSelectModal(false);
     }, []);
 
@@ -103,9 +113,16 @@ const ContactUs = ({navigation}: ContactUsProps) => {
     );
 
     const onPressComplete = useCallback(() => {
+        PostAPI()
+            .then(apiResult)
+            .then(res => {
+                navigation.goBack();
+                showToastMessage(t('toastContact'));
+            });
         // api 처리
-        navigation.goBack();
+        // ;
     }, [contact]);
+    const menuList: ContactType[] = ['user', 'ad', 'report', 'error', 'other'];
 
     return (
         <View style={{flex: 1, backgroundColor: isSelectModal ? '#0001' : '#fff'}}>
@@ -113,8 +130,8 @@ const ContactUs = ({navigation}: ContactUsProps) => {
             <View style={styles.conatiner}>
                 <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
                     <TouchableOpacity onPress={() => setIsSelectModal(true)} style={styles.typeView}>
-                        <Text color={contact.type.length > 0 ? Theme.color.black : Theme.color.gray} fontSize={`${14 * fontSize}`}>
-                            {t(contact.type.length > 0 ? 'contact' + contact.type : 'contactUsGuide1')}
+                        <Text color={contact.type != null ? Theme.color.black : Theme.color.gray} fontSize={`${14 * fontSize}`}>
+                            {t(contact.type != null ? 'contact' + menuList[contact.type] : 'contactUsGuide1')}
                         </Text>
                         <Image
                             source={ArrowDownIcon}

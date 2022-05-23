@@ -503,6 +503,7 @@ export const ko = {
         contacterror: '오류 문의',
         contactother: '기타 문의',
         copyUid: '복사 되었습니다.',
+        toastContact: '문의가 등록 되었습니다.',
     },
 };
 export const es = {

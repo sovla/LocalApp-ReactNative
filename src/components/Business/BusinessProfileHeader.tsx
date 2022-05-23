@@ -5,7 +5,7 @@ import {useAppDispatch, useAppSelector} from '@/Hooks/CustomHook';
 import Header from '@/Components/Profile/Header';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import EditIcon from '@assets/image/edit_ver.png';
-import {AlertButton, getHitSlop} from '@/Util/Util';
+import {AlertButton, getHitSlop, showToastMessage} from '@/Util/Util';
 import {GrayText, Text, WhiteText} from '@/Components/Global/text';
 import CameraWhiteIcon from '@assets/image/camera_white.png';
 
@@ -22,6 +22,7 @@ import {usePostSend} from '@/Hooks/useApi';
 import {BusinessPhotoChangeApi} from '@/Types/API/BusinessTypes';
 import ModalPhoto from './ModalPhoto';
 import {changeProfileImage, changeUser} from '@/Store/userState';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 const BusinessProfileHeader: React.FC<{
     title?: string;
@@ -60,18 +61,23 @@ const BusinessProfileHeader: React.FC<{
         setIsModalPhoto(false);
     };
 
+    const onPressUID = useCallback(() => {
+        Clipboard.setString(user.mt_uid as string);
+        showToastMessage(t('copyUid'));
+    }, []);
+
     return (
         <View style={styles.headerView}>
             <Header isBack title={title ?? t('BusinessProfileMenuTitle')} />
             <View style={styles.profileContainer}>
-                <View>
+                <TouchableOpacity disabled={!isUpdate} onPress={onPressCamera}>
                     <View style={styles.profileView}>
                         <Image source={image ? {uri: image.path} : {uri: user.mt_profile as string}} style={styles.profileImage} />
                     </View>
-                    <TouchableOpacity disabled={!isUpdate} onPress={onPressCamera}>
+                    <View>
                         <Image source={CameraWhiteIcon} style={styles.cameraWhiteImage} />
-                    </TouchableOpacity>
-                </View>
+                    </View>
+                </TouchableOpacity>
                 <View>
                     <WhiteText fontSize={`${16 * fontSize}`} medium>
                         {user.mt_name}
@@ -79,7 +85,7 @@ const BusinessProfileHeader: React.FC<{
                     <GrayText fontSize={`${12 * fontSize}`}>{user.mt_memo}</GrayText>
                     <View style={styles.uidView}>
                         <WhiteText fontSize={`${14 * fontSize}`}>NC : {user.mt_uid}</WhiteText>
-                        <TouchableOpacity style={styles.marginLeft10} hitSlop={getHitSlop(5)}>
+                        <TouchableOpacity onPress={onPressUID} style={styles.marginLeft10} hitSlop={getHitSlop(5)}>
                             <AutoHeightImage source={CopyIcon} width={getPixel(16)} />
                         </TouchableOpacity>
                     </View>

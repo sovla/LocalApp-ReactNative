@@ -76,10 +76,10 @@ const ModalContact: React.FC<ModalContactProps> = ({onClose, onPressItem}) => {
                             <View style={styles.header}>
                                 <View style={styles.headerButton}></View>
                             </View>
-                            {menuList.map(v => {
+                            {menuList.map((v, i) => {
                                 return (
                                     <>
-                                        <TouchableOpacity onPress={() => onPressItem(v)} style={styles.menuView}>
+                                        <TouchableOpacity onPress={() => onPressItem(i)} style={styles.menuView}>
                                             <Text fontSize={`${16 * fontSize}`}>{t('contact' + v)}</Text>
                                         </TouchableOpacity>
                                         <Line isGray />

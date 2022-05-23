@@ -19,5 +19,5 @@ export interface setAlramPushApi {
 export type ContactType = 'user' | 'ad' | 'report' | 'error' | 'other';
 
 export interface ModalContactProps extends ModalProps {
-    onPressItem: (type: ContactType) => void;
+    onPressItem: (typeNumber: number) => void;
 }
