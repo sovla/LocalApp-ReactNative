@@ -14,92 +14,121 @@ import {ProductTagProps} from '@/Types/Screen/Screen';
 import {AlertButton} from '@/Util/Util';
 
 const ProductTag: React.FC<ProductTagProps> = ({navigation, route: {params}}) => {
-  const {t} = useTranslation();
-  const fontSize = useAppSelector(state => state.fontSize.value);
-  const [tag, setTag] = useState('');
-  const onPressConfirm = useCallback(() => {
-    navigation.navigate('ProductUpdate', {
-      tag,
-    });
-  }, [tag]);
-
-  const onChangeTag = useCallback((text: string) => {
-    let isReg = true;
-    if (text) {
-      text.split(' ').forEach(v => {
-        if (v.length > 10) {
-          AlertButton(t('tagAlert'));
-          isReg = false;
-          return;
+    const {t} = useTranslation();
+    const fontSize = useAppSelector(state => state.fontSize.value);
+    const [tag, setTag] = useState('');
+    const [isOverlap, setIsOverlap] = useState(false);
+    const onPressConfirm = useCallback(() => {
+        if (!isOverlap) {
+            navigation.navigate('ProductUpdate', {
+                tag,
+            });
+        } else {
+            AlertButton(t('tagOverlap'));
+            return;
         }
-      });
-      if (isReg) {
-        setTag(text);
-      }
-    } else {
-      setTag('');
-    }
-  }, []);
+    }, [tag, isOverlap]);
 
-  useEffect(() => {
-    if (params?.tag) {
-      setTag(params.tag);
-    }
-  }, []);
+    const onChangeTag = useCallback((text: string) => {
+        let isReg = true;
 
-  return (
-    <View>
-      <Header title={t('tagUpdate')} />
-      <View
-        style={{
-          marginHorizontal: getPixel(16),
-        }}>
-        <View style={{height: getHeightPixel(30)}} />
-        <Input value={tag} onChange={onChangeTag} width={getPixel(328)} />
-        <View style={{height: getHeightPixel(30)}} />
-        <GrayText fontSize={`${12 * fontSize}`}>{'- ' + t('tagGuide1')}</GrayText>
-        <View style={{height: getHeightPixel(10)}} />
-        <GrayText fontSize={`${12 * fontSize}`}>{'- ' + t('tagGuide2')}</GrayText>
-        <View style={{height: getHeightPixel(10)}} />
-        <GrayText fontSize={`${12 * fontSize}`}>{'- ' + t('tagGuide3')}</GrayText>
-        <Button
-          content={t('confirm')}
-          width="328px"
-          style={{
-            marginTop: getHeightPixel(380),
-          }}
-          onPress={onPressConfirm}
-        />
-      </View>
-    </View>
-  );
+        if (text) {
+            text.split(' ').forEach(v => {
+                if (v.length > 10) {
+                    AlertButton(t('tagAlert'));
+                    isReg = false;
+                    return;
+                }
+            });
+            if (isReg) {
+                0;
+                setTag(text);
+            }
+        } else {
+            setTag('');
+        }
+    }, []);
+
+    const overlapFind = useCallback(() => {
+        if (tag) {
+            const set = new Set();
+            let find = false;
+            tag.split(' ').forEach(v => {
+                if (set.has(v)) {
+                    setIsOverlap(true);
+                    find = true;
+                    return null;
+                } else {
+                    set.add(v);
+                }
+            });
+            if (!find) {
+                setIsOverlap(false);
+            } else {
+                AlertButton(t('tagOverlap'));
+            }
+        }
+    }, [tag]);
+
+    useEffect(() => {
+        if (params?.tag) {
+            setTag(params.tag);
+        }
+    }, []);
+
+    return (
+        <View>
+            <Header title={t('tagUpdate')} />
+            <View
+                style={{
+                    marginHorizontal: getPixel(16),
+                }}>
+                <View style={{height: getHeightPixel(30)}} />
+                <Input value={tag} onChange={onChangeTag} width={getPixel(328)} onEndEditting={overlapFind} />
+                <View style={{height: getHeightPixel(30)}} />
+                <GrayText fontSize={`${12 * fontSize}`}>{'- ' + t('tagGuide1')}</GrayText>
+                <View style={{height: getHeightPixel(10)}} />
+                <GrayText fontSize={`${12 * fontSize}`}>{'- ' + t('tagGuide2')}</GrayText>
+                <View style={{height: getHeightPixel(10)}} />
+                <GrayText fontSize={`${12 * fontSize}`}>{'- ' + t('tagGuide3')}</GrayText>
+                <Button
+                    content={t('confirm')}
+                    width="328px"
+                    style={{
+                        marginTop: getHeightPixel(380),
+                    }}
+                    onPress={onPressConfirm}
+                />
+            </View>
+        </View>
+    );
 };
 
 export default ProductTag;
 
 const styles = StyleSheet.create({
-  menuView: {
-    width: getPixel(328),
-    marginHorizontal: getPixel(16),
-    height: getHeightPixel(70),
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  menuImage: {
-    marginRight: getPixel(10),
-  },
-  marginRight: {
-    marginRight: getPixel(20),
-  },
-  line: {
-    marginHorizontal: getPixel(16),
-  },
+    menuView: {
+        width: getPixel(328),
+        marginHorizontal: getPixel(16),
+        height: getHeightPixel(70),
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    menuImage: {
+        marginRight: getPixel(10),
+    },
+    marginRight: {
+        marginRight: getPixel(20),
+    },
+    line: {
+        marginHorizontal: getPixel(16),
+    },
 
-  touch: {
-    width: getPixel(288),
-    height: getHeightPixel(50),
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginHorizontal: getPixel(32),
-  },
+    touch: {
+        width: getPixel(288),
+        height: getHeightPixel(50),
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginHorizontal: getPixel(32),
+    },
 });

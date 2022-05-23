@@ -47,6 +47,7 @@ export interface InputProps {
     inputFontSize?: number;
     disabled?: boolean;
     ref?: any;
+    onEndEditting?: () => void;
 }
 
 export interface LineProps {
