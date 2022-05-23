@@ -100,6 +100,7 @@ import {changeUser} from '@/Store/userState';
 import BusinessSignUpForm from './Business/BusinessSignUpForm';
 import PurchaseList from './Profile/PurchaseList';
 import {fontChange} from '@/Store/fontSizeState';
+import ContactUs from './Setting/ContactUs';
 
 const resources = {
     en,
@@ -614,6 +615,10 @@ export const RouterSetting: RouterTypes[] = [
     {
         name: 'PurchaseList',
         component: PurchaseList,
+    },
+    {
+        name: 'ContactUs',
+        component: ContactUs,
     },
 ];
 
