@@ -1,9 +1,11 @@
 import {categoryMenu, tierReverseList} from '@/assets/global/dummy';
-import {BusinessProfileAPi} from '@/Types/API/BusinessTypes';
+import Toast from 'react-native-toast-message';
 import {categoryMenuTypes, tierTypes} from '@/Types/Components/global';
 import i18next, {t} from 'i18next';
 import {Alert, NativeScrollEvent, NativeSyntheticEvent} from 'react-native';
 import {getPixel} from './pixelChange';
+import {createNavigationContainerRef, ParamListBase, useNavigationState} from '@react-navigation/native';
+import {StackNavigationOptions} from '@react-navigation/stack';
 
 export const getHitSlop = (number: number) => {
     return {
@@ -243,4 +245,44 @@ export const refDebounce = (ref: React.MutableRefObject<null | NodeJS.Timer>, co
             } catch (error) {}
         }, count);
     }
+};
+
+export const showToastMessage = (text: string, time = 3000) => {
+    Toast.show({
+        type: 'customToast',
+        position: 'bottom',
+        text1: text,
+        visibilityTime: time,
+        onPress: () => {
+            Toast.hide();
+        },
+        autoHide: true,
+    });
+};
+
+export const getProductDetailNumber = (stack: {
+    routes: {
+        name: string;
+    }[];
+}): 'ProductDetail' | 'ProductDetail1' | 'ProductDetail2' | 'ProductDetail3' | 'ProductDetail4' | 'ProductDetail5' => {
+    const set = new Set();
+    stack.routes.forEach(v => {
+        if (v.name.includes('ProductDetail')) {
+            const result = v.name.split('ProductDetail')[0] === '' ? '0' : v.name.split('ProductDetail')[0];
+            set.add(result);
+
+            return;
+        }
+    });
+
+    const fixArr = ['0', '1', '2', '3', '4', '5'];
+    let result: any = 'ProductDetail';
+    fixArr.find(v => {
+        if (!set.has(v)) {
+            result = v !== '0' ? 'ProductDetail' + v : 'ProductDetail';
+            return result;
+        }
+    });
+    console.log(result);
+    return result;
 };

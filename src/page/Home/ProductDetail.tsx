@@ -1,5 +1,5 @@
 import {Image, NativeScrollEvent, NativeSyntheticEvent, ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from 'react';
 import {BoldText, DarkBlueText, GrayText, MediumText, Text, WhiteText} from '@/Components/Global/text';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {useTranslation} from 'react-i18next';
@@ -26,14 +26,15 @@ import useBoolean from '@/Hooks/useBoolean';
 import useApi, {usePostSend} from '@/Hooks/useApi';
 import {ProduetDetailApiType, ProduetDetailOtherApiType} from '@/Types/Components/HomeTypes';
 import Loading from '@/Components/Global/Loading';
-import {useIsFocused} from '@react-navigation/native';
+import {useIsFocused, useNavigationState} from '@react-navigation/native';
 import AutoHeightImage from 'react-native-auto-height-image';
 import ProductDetailOptionBox from '@/Components/Home/ProductDetailOptionBox';
 
-export default function ProductDetail({navigation, route: {params}}: ProductDetailProps) {
+export const ProductDetail = ({navigation, route: {params}}: ProductDetailProps) => {
     const {t} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
     const {user} = useAppSelector(state => state);
+    const stack = useNavigationState(state => state);
     const ref = useRef<any>(null);
 
     const isFocused = useIsFocused();
@@ -267,13 +268,17 @@ export default function ProductDetail({navigation, route: {params}}: ProductDeta
             setisLike(data.my_like);
         }
     }, [data]);
-    if (isError && !ref.current) {
-        // 에러처리부분
-        ref.current = true;
-        AlertButton(errorMessage);
-        navigation.goBack();
-        return null;
-    }
+    useLayoutEffect(() => {
+        if (!params.pt_idx || !params.pt_cate) {
+            navigation.goBack();
+        }
+    }, []);
+    // if (isError && !ref.current) {
+    //     // 에러처리부분
+    //     ref.current = true;
+    //     AlertButton(errorMessage);
+    //     return null;
+    // }
 
     if ((isLoading && data === null) || data === null || (otherIsLoading && otherData === null)) {
         return <Loading />;
@@ -447,8 +452,9 @@ export default function ProductDetail({navigation, route: {params}}: ProductDeta
             </View>
         );
     }
-}
+};
 
+export default ProductDetail;
 const styles = StyleSheet.create({
     carInfomationLastText: {
         marginTop: getHeightPixel(30),

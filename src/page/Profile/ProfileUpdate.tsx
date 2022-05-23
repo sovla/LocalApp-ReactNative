@@ -5,7 +5,7 @@ import {useAppDispatch, useAppSelector} from '@/Hooks/CustomHook';
 import Header from '@/Components/Profile/Header';
 import {ProfileBackground} from './ProfileHome';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import {changeBirthDate, getHitSlop} from '@/Util/Util';
+import {changeBirthDate, getHitSlop, showToastMessage} from '@/Util/Util';
 import {GrayText, Text, WhiteText} from '@/Components/Global/text';
 import CameraWhiteIcon from '@assets/image/camera_white.png';
 import CopyIcon from '@assets/image/copy.png';
@@ -23,6 +23,7 @@ import {usePostSend} from '@/Hooks/useApi';
 import {changeOptionalUser} from '@/Store/userState';
 import Loading from '@/Components/Global/Loading';
 import ModalPhoto from '@/Components/Business/ModalPhoto';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 interface localUserInfo {
     mt_name: string;
@@ -70,6 +71,10 @@ export default function ProfileUpdate({navigation, route: {params}}: ProfileUpda
     const onChangeUserInfo = <T extends keyof localUserInfo>(key: T, value: localUserInfo[T]) => {
         setUserInfo(prev => ({...prev, [key]: value}));
     };
+    const onPressUID = useCallback(() => {
+        Clipboard.setString(user.mt_uid as string);
+        showToastMessage(t('copyUid'));
+    }, []);
 
     const onPressSave = useCallback(() => {
         sendUserModify().then(res => {
@@ -122,14 +127,14 @@ export default function ProfileUpdate({navigation, route: {params}}: ProfileUpda
                         </TouchableOpacity>
                     </Header>
                     <View style={styles.profileContainer}>
-                        <View>
+                        <TouchableOpacity onPress={() => setIsModalImage(true)}>
                             <View style={styles.profileView}>
                                 <Image source={{uri: image ? image.path : (user.mt_profile as string)}} style={styles.profileImage} />
                             </View>
-                            <TouchableOpacity onPress={() => setIsModalImage(true)}>
+                            <View>
                                 <Image source={CameraWhiteIcon} style={styles.cameraWhiteImage} />
-                            </TouchableOpacity>
-                        </View>
+                            </View>
+                        </TouchableOpacity>
                         <View>
                             <WhiteText fontSize={`${16 * fontSize}`} medium>
                                 {data?.mt_name}
@@ -139,7 +144,7 @@ export default function ProfileUpdate({navigation, route: {params}}: ProfileUpda
                             </GrayText>
                             <View style={styles.uidView}>
                                 <WhiteText fontSize={`${14 * fontSize}`}>NC :{data?.mt_uid}</WhiteText>
-                                <TouchableOpacity style={styles.marginLeft10} hitSlop={getHitSlop(5)}>
+                                <TouchableOpacity onPress={onPressUID} style={styles.marginLeft10} hitSlop={getHitSlop(5)}>
                                     <AutoHeightImage source={CopyIcon} width={getPixel(16)} />
                                 </TouchableOpacity>
                             </View>
@@ -214,7 +219,12 @@ export default function ProfileUpdate({navigation, route: {params}}: ProfileUpda
                         </TouchableOpacity>
                     </View>
                     <Line backgroundColor={Theme.color.gray} height={0.4} width={getPixel(320)} />
-                    <BetweenTextInput leftText={t('profileDetailDate')} rightText={changeBirthDate(data?.mt_birth)} value={userInfo.mt_birth} onChangeText={text => onChangeUserInfo('mt_birth', text)} />
+                    <BetweenTextInput
+                        leftText={t('profileDetailDate')}
+                        rightText={changeBirthDate(data?.mt_birth)}
+                        value={userInfo.mt_birth}
+                        onChangeText={text => onChangeUserInfo('mt_birth', text)}
+                    />
                 </View>
             </KeyboardAwareScrollView>
             <SexPicker ref={pickerRef} select={userInfo.mt_gender} setSelect={text => onChangeUserInfo('mt_gender', text)} />
@@ -254,7 +264,13 @@ export const BetweenTextInput: React.FC<{
                     }}>
                     {leftText}
                 </Text>
-                <TextInput placeholder={rightText} value={value} placeholderTextColor={Theme.color.gray} onChangeText={onChangeText} style={{...rightTextStyle, fontSize: fontSize * 16, fontFamily: Theme.fontWeight.default}} />
+                <TextInput
+                    placeholder={rightText}
+                    value={value}
+                    placeholderTextColor={Theme.color.gray}
+                    onChangeText={onChangeText}
+                    style={{...rightTextStyle, fontSize: fontSize * 16, fontFamily: Theme.fontWeight.default}}
+                />
             </View>
             {isLine && <Line backgroundColor={Theme.color.gray} height={0.4} width={getPixel(320)} />}
         </>

@@ -101,6 +101,10 @@ import BusinessSignUpForm from './Business/BusinessSignUpForm';
 import PurchaseList from './Profile/PurchaseList';
 import {fontChange} from '@/Store/fontSizeState';
 import ContactUs from './Setting/ContactUs';
+import {ProductDetail1, ProductDetail2, ProductDetail3, ProductDetail4, ProductDetail5} from './Home/ProductDetail1';
+import ProductDetailProfile from './Profile/ProductDetailProfile';
+import ProductDetailOther from './Home/ProductDetailOther';
+import ProductDetailSearch from './Home/ProductDetailSearch';
 
 const resources = {
     en,
@@ -304,6 +308,19 @@ export const RouterSetting: RouterTypes[] = [
         name: 'ProductDetail',
         component: ProductDetail,
     },
+    {
+        name: 'ProductDetailProfile',
+        component: ProductDetailProfile,
+    },
+    {
+        name: 'ProductDetailOther',
+        component: ProductDetailOther,
+    },
+    {
+        name: 'ProductDetailSearch',
+        component: ProductDetailSearch,
+    },
+
     {
         name: 'Search',
         component: Search,

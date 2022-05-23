@@ -6,7 +6,7 @@ import Header from '@/Components/Profile/Header';
 import {ProfileBackground} from './ProfileHome';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import EditIcon from '@assets/image/edit_ver.png';
-import {changeBirthDate, getHitSlop} from '@/Util/Util';
+import {changeBirthDate, getHitSlop, showToastMessage} from '@/Util/Util';
 import {GrayText, Text, WhiteText} from '@/Components/Global/text';
 import CameraWhiteIcon from '@assets/image/camera_white.png';
 import CopyIcon from '@assets/image/copy.png';
@@ -18,6 +18,7 @@ import AutoHeightImage from 'react-native-auto-height-image';
 import useApi from '@/Hooks/useApi';
 import {ProfileGetInformationApi} from '@/Types/API/ProfileTypes';
 import Loading from '@/Components/Global/Loading';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 export default function ProfileDetail({navigation}: ProfileDetailProps) {
     const {t} = useTranslation();
@@ -46,6 +47,11 @@ export default function ProfileDetail({navigation}: ProfileDetailProps) {
         navigation.navigate('ProfileTel');
     }, []);
 
+    const onPressUID = useCallback(() => {
+        Clipboard.setString(user.mt_uid as string);
+        showToastMessage(t('copyUid'));
+    }, []);
+
     useEffect(() => {
         if (data) {
             setIsOn(data?.mt_hp_open === 'Y');
@@ -69,7 +75,7 @@ export default function ProfileDetail({navigation}: ProfileDetailProps) {
                         <View style={styles.profileView}>
                             <Image source={{uri: user.mt_profile as string}} style={styles.profileImage} />
                         </View>
-                        <Image source={CameraWhiteIcon} style={styles.cameraWhiteImage} />
+                        {/* <Image source={CameraWhiteIcon} style={styles.cameraWhiteImage} /> */}
                     </View>
                     <View>
                         <WhiteText fontSize={`${16 * fontSize}`} medium>
@@ -80,7 +86,7 @@ export default function ProfileDetail({navigation}: ProfileDetailProps) {
                         </GrayText>
                         <View style={styles.uidView}>
                             <WhiteText fontSize={`${14 * fontSize}`}>NC :{data?.mt_uid}</WhiteText>
-                            <TouchableOpacity style={styles.marginLeft10} hitSlop={getHitSlop(5)}>
+                            <TouchableOpacity onPress={onPressUID} style={styles.marginLeft10} hitSlop={getHitSlop(5)}>
                                 <AutoHeightImage source={CopyIcon} width={getPixel(16)} />
                             </TouchableOpacity>
                         </View>

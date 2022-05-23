@@ -14,9 +14,11 @@ import {Provider} from 'react-redux';
 import store from '@/Store/store';
 import SplashScreen from 'react-native-splash-screen';
 import Geolocation from '@react-native-community/geolocation';
-import {Dimensions, LogBox, Platform} from 'react-native';
+import {Dimensions, GestureResponderEvent, LogBox, Platform, Text, TouchableOpacity, View} from 'react-native';
 import PushNotification, {Importance} from 'react-native-push-notification';
 import useChannelManagement from '@/Hooks/useChannelManagement';
+import Toast, {ToastConfigParams} from 'react-native-toast-message';
+import {WhiteText} from '@/Components/Global/text';
 
 const App = () => {
     useChannelManagement();
@@ -26,9 +28,74 @@ const App = () => {
         }, 1500);
     }, []);
 
+    const toastConfig = {
+        customToast: ({text1, onPress, isVisible, hide, position, show, type, props}: ToastConfigParams<any>) => (
+            <TouchableOpacity
+                onPress={onPress}
+                style={{
+                    width: '92%',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginTop: Platform.OS === 'ios' ? 0 : 0,
+                }}>
+                <View
+                    style={{
+                        width: '100%',
+                        alignItems: 'center',
+                        backgroundColor: 'rgba(22,22,22,0.60)',
+                        height: 60,
+                        justifyContent: 'center',
+                        borderRadius: 17,
+                    }}>
+                    <WhiteText style={{fontSize: 16}}>{text1}</WhiteText>
+                </View>
+            </TouchableOpacity>
+        ),
+        pushToast: ({text1, text2, onPress, props, ...rest}: ToastConfigParams<any>) => (
+            <TouchableOpacity
+                activeOpacity={1}
+                onPress={onPress}
+                style={{
+                    width: '100%',
+                    justifyContent: 'center',
+                    padding: 16,
+                    marginTop: Platform.OS === 'ios' ? 0 : 0,
+                    backgroundColor: '#22222290',
+                }}>
+                <View
+                    style={{
+                        width: '100%',
+                    }}>
+                    <Text
+                        numberOfLines={1}
+                        style={[
+                            {
+                                color: '#fff',
+                                textAlign: 'center',
+                            },
+                        ]}>
+                        {text1}
+                    </Text>
+                    <Text
+                        numberOfLines={2}
+                        style={[
+                            {
+                                color: '#fff',
+                                textAlign: 'center',
+                                marginTop: 10,
+                            },
+                        ]}>
+                        {text2}
+                    </Text>
+                </View>
+            </TouchableOpacity>
+        ),
+    };
+
     return (
         <Provider store={store}>
             <Router />
+            <Toast config={toastConfig} />
         </Provider>
     );
 };

@@ -59,6 +59,26 @@ type Screen = {
         pt_idx: string;
         pt_cate: string;
     };
+    ProductDetailProfile: {
+        pt_idx: string;
+        pt_cate: string;
+    };
+    ProductDetailOther: {
+        pt_idx: string;
+        pt_cate: string;
+    };
+    ProductDetailSearch: {
+        pt_idx: string;
+        pt_cate: string;
+    };
+    ProductDetail4: {
+        pt_idx: string;
+        pt_cate: string;
+    };
+    ProductDetail5: {
+        pt_idx: string;
+        pt_cate: string;
+    };
     Search:
         | {
               category?: categoryMenuTypes['menu'];

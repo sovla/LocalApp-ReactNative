@@ -130,7 +130,7 @@ export default function Search({route: {params}, navigation}: SearchProps): JSX.
     }, []);
 
     const onPressItem = useCallback((idx: string, cate: string) => {
-        navigation.navigate('ProductDetail', {
+        navigation.navigate('ProductDetailSearch', {
             pt_cate: cate,
             pt_idx: idx,
         });

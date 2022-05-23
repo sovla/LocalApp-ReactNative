@@ -70,6 +70,7 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
     const [isFirst, setIsFirst] = useState(false); // 처음 푸터 아래로
     const [isFileLoading, setIsFileLoading] = useState(false);
     const [isBlock, setIsBlock] = useState(false); // 차단 여부
+    const [isScroll, setIsScroll] = useState(false);
 
     const [roomInfo, setRoomInfo] = useState<ChattingRoomInformationApi['T']>(null); // 룸 정보 불러오기
 
@@ -151,7 +152,7 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
             } else {
             }
         },
-        [user.mt_idx, roomInfo?.chat_idx, chattingPage],
+        [user.mt_idx, roomInfo?.chat_idx, chattingPage, isChatLast],
     );
     const onPressLocation = useCallback(() => {
         setIsOn(false);
@@ -369,54 +370,60 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
         },
         [user],
     );
-
-    const _renderItem = useCallback(({item}) => {
-        if (item?.msg_type) {
-            // 유저타입 분별용
-            const _item = item as userChat;
-            const isMy = _item.userIdx === user.mt_idx;
-            if (_item.msg_type === 'location') {
-                return (
-                    <LocationChatting
-                        profileImage={_item.userProfile}
-                        region={{
-                            latitude: _item.lat,
-                            longitude: _item.lng,
-                        }}
-                        date={_item.msg_date}
-                        content={_item.location}
-                        isMy={isMy}
-                        isCheck={_item.msg_show === 'Y' ? 2 : 1}
-                    />
-                );
-            } else if (_item.msg_type === 'file') {
-                return (
-                    <View style={{alignSelf: isMy ? 'flex-end' : 'flex-start', marginVertical: getHeightPixel(20)}}>
-                        <Image
-                            source={{
-                                uri: _item.img,
+    const _renderItem = useCallback(
+        ({item}) => {
+            if (item?.msg_type) {
+                // 유저타입 분별용
+                const _item = item as userChat;
+                const isMy = _item.userIdx === user.mt_idx;
+                if (_item.msg_show === 'N') {
+                    return null;
+                }
+                if (_item.msg_type === 'location') {
+                    return (
+                        <LocationChatting
+                            profileImage={_item.userProfile}
+                            region={{
+                                latitude: _item.lat,
+                                longitude: _item.lng,
                             }}
-                            resizeMode="contain"
-                            style={{
-                                width: getPixel(150),
-                                height: getPixel(150),
-                            }}
+                            date={_item.msg_date}
+                            content={_item.location}
+                            isMy={isMy}
+                            isCheck={_item.msg_show === 'Y' ? 2 : 1}
                         />
-                    </View>
-                );
-            }
+                    );
+                } else if (_item.msg_type === 'file') {
+                    return (
+                        <View style={{alignSelf: isMy ? 'flex-end' : 'flex-start', marginVertical: getHeightPixel(20)}}>
+                            <Image
+                                source={{
+                                    uri: _item.img,
+                                }}
+                                resizeMode="contain"
+                                style={{
+                                    width: getPixel(150),
+                                    height: getPixel(150),
+                                }}
+                            />
+                        </View>
+                    );
+                }
 
-            return (
-                <>
-                    {isMy === false && <OtherChatting profileImage={_item.userProfile} date={_item.msg_date} content={_item.content} />}
-                    {isMy === true && <MyChatting date={_item.msg_date} isCheck={_item.msg_show === 'Y' ? 2 : 1} content={_item.content} />}
-                </>
-            );
-        } else {
-            const _item = item as dateChat;
-            return <ChatDate content={_item.content} />;
-        }
-    }, []);
+                return (
+                    <>
+                        {isMy === false && <OtherChatting profileImage={_item.userProfile} date={_item.msg_date} content={_item.content} />}
+                        {isMy === true && <MyChatting date={_item.msg_date} isCheck={_item.msg_show === 'Y' ? 2 : 1} content={_item.content} />}
+                    </>
+                );
+            } else if (item.idx === '0' && item.userIdx === '0') {
+                const _item = item as dateChat;
+                console.log('date 출력', _item.content, item.msg_idx);
+                return <ChatDate content={_item.content} />;
+            }
+        },
+        [user],
+    );
 
     useEffect(() => {
         if (Channel) {
@@ -567,9 +574,6 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                     ref={flatListRef}
                     data={chattingList?.list}
                     keyExtractor={(item, index) => item.msg_idx + item.location}
-                    // onEndReached={() => {
-                    //     getSendBirdMessage();
-                    // }}
                     onScroll={e => {
                         scrollPosition.current.position = e.nativeEvent.contentOffset.y;
                     }}
@@ -580,10 +584,15 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                     ListHeaderComponent={<View style={{height: getHeightPixel(isOn ? 170 : 20)}}></View>}
                     inverted
                     onEndReached={() => {
-                        console.log('onEndReached');
-                        getChattingListApi();
+                        if (isScroll) {
+                            console.log('onEndReached');
+                            getChattingListApi();
+                        }
                     }}
                     onEndReachedThreshold={1}
+                    onScrollBeginDrag={() => {
+                        setIsScroll(true);
+                    }}
                 />
             </View>
             <View style={{height: getHeightPixel(50)}}></View>
@@ -848,6 +857,7 @@ function getChattingListState(prev: any, res: any, setIsChatLast: any) {
                 count = +v.msg_idx;
             }
         }
+        console.log(map);
         count = 0;
         for (const v of prev.list) {
             if (v?.msg_idx && !map.has(v.msg_idx)) {
@@ -855,8 +865,10 @@ function getChattingListState(prev: any, res: any, setIsChatLast: any) {
                 count = +v.msg_idx;
             } else if (v.msg_idx == null) {
                 map.set(`${count + 0.5}`, v);
+                count += 0.5;
             }
         }
+        console.log(map);
         let resultArray = [];
         for (const [key, value] of map) {
             resultArray.push(
@@ -870,6 +882,7 @@ function getChattingListState(prev: any, res: any, setIsChatLast: any) {
         }
         resultArray.sort((a, b) => a?.msg_idx - b?.msg_idx);
         resultArray.reverse();
+        console.log(resultArray);
         return {
             total: map.size,
             list: resultArray,

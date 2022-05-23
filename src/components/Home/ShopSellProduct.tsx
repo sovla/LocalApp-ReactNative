@@ -6,19 +6,28 @@ import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {BoldText, GrayText} from '../Global/text';
 import {useTranslation} from 'react-i18next';
 import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
-import {getHitSlop} from '@/Util/Util';
+import {getHitSlop, getProductDetailNumber} from '@/Util/Util';
 import {ProduetDetailOtherApiType} from '@/Types/Components/HomeTypes';
+import {useNavigationState} from '@react-navigation/native';
 
 export default function ShopSellProduct({shopName, productList, onPressAllView}: {shopName: string; productList?: ProduetDetailOtherApiType['T']; onPressAllView: () => void}) {
     const {t} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
     const navigation = useAppNavigation();
+    const stack = useNavigationState(state => state);
 
     const onPressItem = useCallback((idx: string, cate: string) => {
-        navigation.replace('ProductDetail', {
-            pt_cate: cate,
-            pt_idx: idx,
-        });
+        if (stack.routes[stack.routes.length - 1].name === 'ProductDetailOther') {
+            navigation.replace('ProductDetailOther', {
+                pt_cate: cate,
+                pt_idx: idx,
+            });
+        } else {
+            navigation.navigate('ProductDetailOther', {
+                pt_cate: cate,
+                pt_idx: idx,
+            });
+        }
     }, []);
     return (
         <View>

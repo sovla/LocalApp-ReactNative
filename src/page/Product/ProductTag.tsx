@@ -1,5 +1,5 @@
-import {StyleSheet, View} from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
+import {StyleSheet, TextInput, View} from 'react-native';
+import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {GrayText} from '@Components/Global/text';
@@ -12,11 +12,13 @@ import {productDummy} from '@/assets/global/dummy';
 import Input from '@/Components/Global/Input';
 import {ProductTagProps} from '@/Types/Screen/Screen';
 import {AlertButton} from '@/Util/Util';
+import Theme from '@/assets/global/Theme';
 
 const ProductTag: React.FC<ProductTagProps> = ({navigation, route: {params}}) => {
     const {t} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
     const [tag, setTag] = useState('');
+    const [tagWord, setTagWord] = useState<string[]>([]);
     const [isOverlap, setIsOverlap] = useState(false);
     const onPressConfirm = useCallback(() => {
         if (!isOverlap) {
@@ -41,7 +43,6 @@ const ProductTag: React.FC<ProductTagProps> = ({navigation, route: {params}}) =>
                 }
             });
             if (isReg) {
-                0;
                 setTag(text);
             }
         } else {
@@ -76,6 +77,14 @@ const ProductTag: React.FC<ProductTagProps> = ({navigation, route: {params}}) =>
         }
     }, []);
 
+    useLayoutEffect(() => {
+        if (tag.includes(' ')) {
+            const arr = tag.split(' ');
+            setTagWord(prev => [...prev, arr[0]]);
+            setTag('');
+        }
+    }, [tag]);
+
     return (
         <View>
             <Header title={t('tagUpdate')} />
@@ -84,7 +93,21 @@ const ProductTag: React.FC<ProductTagProps> = ({navigation, route: {params}}) =>
                     marginHorizontal: getPixel(16),
                 }}>
                 <View style={{height: getHeightPixel(30)}} />
-                <Input value={tag} onChange={onChangeTag} width={getPixel(328)} onEndEditting={overlapFind} />
+                <TextInput
+                    onEndEditing={overlapFind}
+                    placeholder={t('tagPhGuide')}
+                    value={tag}
+                    onChangeText={onChangeTag}
+                    placeholderTextColor={Theme.color.gray}
+                    style={{
+                        borderBottomColor: Theme.color.gray,
+                        borderBottomWidth: 0.4,
+                        width: getPixel(328),
+                        fontSize: 14 * fontSize,
+                        color: Theme.color.black,
+                    }}
+                />
+
                 <View style={{height: getHeightPixel(30)}} />
                 <GrayText fontSize={`${12 * fontSize}`}>{'- ' + t('tagGuide1')}</GrayText>
                 <View style={{height: getHeightPixel(10)}} />

@@ -1,5 +1,5 @@
 import {View, Text, FlatList} from 'react-native';
-import React, {useEffect, useLayoutEffect, useState} from 'react';
+import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
 import Header from '@/Components/LoginSignUp/Header';
 import {useTranslation} from 'react-i18next';
 import {useAppSelector} from '@/Hooks/CustomHook';
@@ -17,7 +17,7 @@ import {brPrice, productTimeSetting, viewCountCheck} from '@/Util/Util';
 import Loading from '@/Components/Global/Loading';
 import {GrayText} from '@/Components/Global/text';
 
-export default function ProfileSellProduct({route: {params}}: ProfileSellProductProps) {
+export default function ProfileSellProduct({route: {params}, navigation}: ProfileSellProductProps) {
     const {t} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
     const {user} = useAppSelector(state => state);
@@ -33,6 +33,16 @@ export default function ProfileSellProduct({route: {params}}: ProfileSellProduct
             sell_status: selectMenu === 'ProfileSellProductComplete' ? 'Y' : 'N',
         },
         {isFirst: false},
+    );
+    const onPressItem = useCallback(
+        (idx: string, cate: string) => {
+            console.log('onPressItem', idx, cate);
+            navigation.navigate('ProductDetailProfile', {
+                pt_idx: idx,
+                pt_cate: cate,
+            });
+        },
+        [navigation],
     );
 
     useEffect(() => {
@@ -61,6 +71,7 @@ export default function ProfileSellProduct({route: {params}}: ProfileSellProduct
                     }}
                     data={data}
                     renderItem={({item, index}) => {
+                        console.log(item);
                         return (
                             <Product
                                 image={
@@ -81,6 +92,7 @@ export default function ProfileSellProduct({route: {params}}: ProfileSellProduct
                                 idx={item.pt_idx}
                                 cate={item.pt_cate}
                                 isLikeShow={false}
+                                onPress={() => onPressItem(item.pt_idx, item.pt_cate)}
                             />
                         );
                     }}

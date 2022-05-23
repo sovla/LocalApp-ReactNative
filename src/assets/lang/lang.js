@@ -502,6 +502,7 @@ export const ko = {
         contactreport: '신고 / 이용제재',
         contacterror: '오류 문의',
         contactother: '기타 문의',
+        copyUid: '복사 되었습니다.',
     },
 };
 export const es = {
