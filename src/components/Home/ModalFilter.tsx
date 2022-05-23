@@ -105,7 +105,6 @@ const ModalFilter: React.FC<ModalFilterProps> = ({onClose, setFilter, filter, is
         }
         setRange([filter?.s_price ?? 0, filter?.e_price ?? 0.5]);
     }, []);
-    console.log(carFilter);
 
     return (
         <View style={styles.dim}>
@@ -259,7 +258,6 @@ const ModalFilter: React.FC<ModalFilterProps> = ({onClose, setFilter, filter, is
                                         containerStyle={styles.containerStyle}
                                         selectedStyle={{backgroundColor: Theme.color.blue_3D}}
                                         onValuesChange={value => {
-                                            console.log(value);
                                             if (Array.isArray(value) && value.length === 2) {
                                                 setCarFilter(prev => ({...prev, s_kilo: value[0], e_kilo: value[1]}));
                                             }

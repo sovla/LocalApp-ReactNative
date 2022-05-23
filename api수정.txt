@@ -3,3 +3,10 @@
 2. 채팅방 정보에 알람 설정, 유저가 상대방 차단 여부, 상대방이 유저 차단 여부, 물품 가격 추가 필요 
 
 3. 채팅방 - 목록 (chat_room_list.php) api last_msg 가 끝 메시지가 아닌 제일 처음 메시지로 전송됨
+
+
+1. chat_room_chatting_delete 채팅방 내용 삭제
+[blind_check] 잘못된 접근입니다. 에러 발생
+jwt: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtdF9pZHgiOiIxNCIsImNoYXRfaWR4IjoiMjgiLCJsYW5nIjoia28ifQ._RGoSApPbdyVyOYC04F7dZ3ltBsey-XIrSu_YKZbemc
+
+2.

@@ -58,15 +58,11 @@ function useApi<T, D>(defaultValue: T, apiPath: string, axiosData?: D, option?: 
                 //   data !== defaultValue && defaultOption.isList && page !== 1,
                 // );
                 if (result.data?.result === 'true') {
-                    console.log(data !== defaultValue && defaultOption.isList && page !== 1 && (_data?.page ? _data?.page !== 1 : true), '리스트 확인용 ');
                     if (data !== defaultValue && defaultOption.isList && page !== 1 && (_data?.page ? _data?.page !== 1 : true)) {
                         // 리스트 인경우
-                        console.log('리스트인경우');
 
                         const {listField} = defaultOption;
                         if (result?.data?.data?.data && typeof defaultOption?.listField === 'string' && listField && listField in data && listField in result.data.data.data) {
-                            console.log('data 리스트 안에 넣기');
-
                             setData((prev: any) => {
                                 if (prev)
                                     return {
@@ -78,7 +74,6 @@ function useApi<T, D>(defaultValue: T, apiPath: string, axiosData?: D, option?: 
                             setData(result.data.data);
                         }
                     } else {
-                        console.log('리스트아닌경우');
                         if (result?.data?.data?.data) {
                             setData(result.data.data.data);
                         } else if (result?.data?.data) {

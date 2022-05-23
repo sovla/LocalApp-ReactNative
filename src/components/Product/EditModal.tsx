@@ -177,7 +177,6 @@ const EditModal: React.FC<EditModalProps> = ({onClose, isBump, item}) => {
                     }}
                     onStartShouldSetResponder={() => {
                         // 모달끄기
-                        console.log('확인');
                         onClose();
                         return false;
                     }}></View>

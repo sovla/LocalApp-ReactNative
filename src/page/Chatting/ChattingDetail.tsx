@@ -516,7 +516,7 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                 <FlatList
                     ref={flatListRef}
                     data={chattingList?.list}
-                    keyExtractor={(item, index) => item?.msg_idx ?? index.toString()}
+                    keyExtractor={(item, index) => item.msg_idx + item.location}
                     // onEndReached={() => {
                     //     getSendBirdMessage();
                     // }}

@@ -47,7 +47,6 @@ export default function ChattingHome() {
     );
 
     const list = selectMenu === 'chatMenu1' ? tradingRoomData?.list : transactionCompletedRoomData?.list;
-
     return (
         <View style={{flex: 1}}>
             <Header />
