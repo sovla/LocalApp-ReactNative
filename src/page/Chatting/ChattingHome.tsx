@@ -14,6 +14,7 @@ import Menu from '@/Components/Profile/Menu';
 import {GrayText} from '@/Components/Global/text';
 import useApi from '@/Hooks/useApi';
 import {ChattingRoomListApi} from '@/Types/API/ChattingTypes';
+import Loading from '@/Components/Global/Loading';
 
 export default function ChattingHome() {
     const navigation = useAppNavigation();
@@ -22,7 +23,7 @@ export default function ChattingHome() {
     const {user} = useAppSelector(state => state);
     const [selectMenu, setSelectMenu] = useState<'chatMenu1' | 'chatMenu2'>('chatMenu1');
 
-    const {data: tradingRoomData} = useApi<ChattingRoomListApi['T'], ChattingRoomListApi['D']>(
+    const {data: tradingRoomData, isLoading: isLoadingRoomList} = useApi<ChattingRoomListApi['T'], ChattingRoomListApi['D']>(
         null,
         'chat_room_list.php',
         {
@@ -33,7 +34,7 @@ export default function ChattingHome() {
             focusRetry: true,
         },
     );
-    const {data: transactionCompletedRoomData} = useApi<ChattingRoomListApi['T'], ChattingRoomListApi['D']>(
+    const {data: transactionCompletedRoomData, isLoading: isLoadingRoomList1} = useApi<ChattingRoomListApi['T'], ChattingRoomListApi['D']>(
         null,
         'chat_room_list.php',
         {
@@ -46,6 +47,10 @@ export default function ChattingHome() {
     );
 
     const list = selectMenu === 'chatMenu1' ? tradingRoomData?.list : transactionCompletedRoomData?.list;
+
+    if (isLoadingRoomList || isLoadingRoomList1) {
+        return <Loading />;
+    }
 
     return (
         <View style={{flex: 1}}>
