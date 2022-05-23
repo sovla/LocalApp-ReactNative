@@ -103,7 +103,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({name, image}) => {
         navigation.navigate('Search', {
             category: name,
         });
-    }, []);
+    }, [name, image]);
 
     return (
         <TouchableOpacity onPress={onPressItem} style={styles.cardContainer}>
