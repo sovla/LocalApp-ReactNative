@@ -21,6 +21,7 @@ import {useAppSelector} from '@/Hooks/CustomHook';
 import {HomeProductListType} from '@/Types/Components/HomeTypes';
 import {useSelector} from 'react-redux';
 import {Text} from '@/Components/Global/text';
+import useUpdateEffect from '@/Hooks/useUpdateEffect';
 
 export default function Home({navigation}: HomeProps): JSX.Element {
     const {t} = useTranslation();
@@ -68,7 +69,7 @@ export default function Home({navigation}: HomeProps): JSX.Element {
             offIsChange();
         }
     }, []);
-    useEffect(() => {
+    useUpdateEffect(() => {
         if (!data && !isLoading) {
             getData();
         }
@@ -89,7 +90,7 @@ export default function Home({navigation}: HomeProps): JSX.Element {
                 }}
                 refreshing={isRefresh}
                 onEndReached={() => {
-                    if (isScroll) getData();
+                    if (isScroll && !isRefresh) getData();
                 }}
                 onScrollBeginDrag={() => {
                     setIsScroll(true);

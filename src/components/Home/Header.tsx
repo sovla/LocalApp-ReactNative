@@ -1,5 +1,5 @@
 import {Image, ImageBackground, Modal, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import BackGroundImage from '@assets/image/BG.png';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
@@ -104,21 +104,30 @@ export default Header;
 export const AlarmButton: React.FC<{
     isChange?: boolean;
 }> = ({isChange}) => {
-    const {t} = useTranslation();
-    const fontSize = useAppSelector(state => state.fontSize.value);
     const {user} = useAppSelector(state => state);
     const navigation = useAppNavigation();
 
-    const {data} = useApi<
+    const {data, getData} = useApi<
         {
             al_check: 'N' | 'Y';
         } | null,
         {
             mt_idx: string;
         }
-    >(null, 'new_alarm_check.php', {
-        mt_idx: user.mt_idx as string,
-    });
+    >(
+        null,
+        'new_alarm_check.php',
+        {
+            mt_idx: user.mt_idx as string,
+        },
+        {isFirst: false},
+    );
+
+    useEffect(() => {
+        if (user.mt_idx) {
+            getData();
+        }
+    }, []);
 
     return (
         <TouchableOpacity

@@ -22,7 +22,6 @@ const CategoryScroll = () => {
     useLayoutEffect(() => {
         (async () => {
             const result = await AsyncStorage.getItem('category');
-            console.log(result, 'result :::');
             if (result && typeof result === 'string') {
                 const category = result.split(',');
 

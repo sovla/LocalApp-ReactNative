@@ -4,7 +4,7 @@ import React, {useCallback, useLayoutEffect, useState} from 'react';
 import ProfileBackGroundImage from '@assets/image/profile_bg.png';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {GrayText, Text} from '@Components/Global/text';
-import {useAppDispatch, useAppSelector} from '@/Hooks/CustomHook';
+import {useAppSelector} from '@/Hooks/CustomHook';
 import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -18,11 +18,13 @@ import {AlertButton, getHitSlop} from '@/Util/Util';
 import CountryPicker from '@/Components/Profile/CountryPicker';
 import {API} from '@/API/API';
 import ModalAuth from '@/Components/LoginSignUp/ModalAuth';
+import {useDispatch} from 'react-redux';
 
 export default function Login({navigation}: LoginProps) {
     const {t, i18n} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
     const {user} = useAppSelector(state => state);
+    const dispatch = useDispatch();
     const [autoLogin, setAutoLogin] = useState<boolean>(false);
     const [isAuthModal, setIsAuthModal] = useState<boolean>(false);
     const [selectNum, setSelectNum] = useState('+55');
@@ -60,15 +62,10 @@ export default function Login({navigation}: LoginProps) {
     }, [selectNum, tel, i18n]);
 
     useLayoutEffect(() => {
-        if (user?.mt_idx) {
+        if (user.mt_idx) {
             navigation.replace('Home');
         }
-
-        return () => {};
     }, [user]);
-    if (user?.mt_idx) {
-        return null;
-    }
 
     return (
         <View style={styles.container}>

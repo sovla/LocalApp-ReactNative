@@ -39,6 +39,7 @@ function useApi<T, D>(defaultValue: T, apiPath: string, axiosData?: D, option?: 
             }
         }
         setIsLoading(true);
+        console.log('apiPath :::', apiPath);
 
         await API.post<
             any,
@@ -52,7 +53,6 @@ function useApi<T, D>(defaultValue: T, apiPath: string, axiosData?: D, option?: 
             >
         >(apiPath, {page: page, ...axiosData, ..._data})
             .then(result => {
-                console.log(apiPath + '::::', result);
                 // console.log(
                 //   'first if',
                 //   data !== defaultValue && defaultOption.isList && page !== 1,
@@ -89,7 +89,6 @@ function useApi<T, D>(defaultValue: T, apiPath: string, axiosData?: D, option?: 
                     }
                 } else {
                     if (result.data?.msg) {
-                        console.log('여기서 에러', result.data.msg);
                         setIsError(true);
                         setErrorMessage(result.data.msg);
                     }

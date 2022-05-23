@@ -110,6 +110,7 @@ const resources = {
 };
 
 const Stack = createStackNavigator<Screen>();
+export const navigationRef = createNavigationContainerRef<Screen>();
 
 const forFade = ({current}: any) => {
     return {
@@ -124,53 +125,6 @@ export default function Router() {
     const [initRoute, setInitRoute] = useState<keyof Screen>('OnBoarding');
     const lang = useAppSelector(state => state.lang.value);
     const dispatch = useAppDispatch();
-
-    const ref = createNavigationContainerRef<Screen>();
-
-    useEffect(() => {
-        (async () => {
-            const authorizationStatus = await messaging().requestPermission();
-            if (authorizationStatus === messaging.AuthorizationStatus.AUTHORIZED || authorizationStatus === messaging.AuthorizationStatus.PROVISIONAL) {
-                if (Platform.OS === 'ios') {
-                    const token = await messaging().getAPNSToken();
-                    if (token) {
-                        console.log('token:::', token);
-                        dispatch(changeToken(token));
-                        API.post('member_auto_login.php', {mt_app_token: token}).then(res => {
-                            if (res.data.result === 'true') {
-                                ref.reset({
-                                    routes: [
-                                        {
-                                            name: 'Home',
-                                        },
-                                    ],
-                                });
-                                dispatch(changeUser(res.data.data.data));
-                            }
-                        });
-                    }
-                } else {
-                    const token = await messaging().getToken();
-                    if (token) {
-                        console.log('token:::', token);
-                        dispatch(changeToken(token));
-                        API.post('member_auto_login.php', {mt_app_token: token}).then(res => {
-                            if (res.data.result === 'true') {
-                                ref.reset({
-                                    routes: [
-                                        {
-                                            name: 'Home',
-                                        },
-                                    ],
-                                });
-                                dispatch(changeUser(res.data.data.data));
-                            }
-                        });
-                    }
-                }
-            }
-        })();
-    }, []);
 
     useEffect(() => {
         // 언어설정
@@ -209,6 +163,36 @@ export default function Router() {
                 setIsLanguageChange(false);
             });
     }, [lang]);
+    useLayoutEffect(() => {
+        (async () => {
+            const authorizationStatus = await messaging().requestPermission();
+            if (authorizationStatus === messaging.AuthorizationStatus.AUTHORIZED || authorizationStatus === messaging.AuthorizationStatus.PROVISIONAL) {
+                if (Platform.OS === 'ios') {
+                    const token = await messaging().getAPNSToken();
+                    if (token) {
+                        console.log('token:::', token);
+                        dispatch(changeToken(token));
+                        API.post('member_auto_login.php', {mt_app_token: token}).then(res => {
+                            if (res.data.result === 'true') {
+                                dispatch(changeUser(res.data.data.data));
+                            }
+                        });
+                    }
+                } else {
+                    const token = await messaging().getToken();
+                    if (token) {
+                        console.log('token:::', token);
+                        dispatch(changeToken(token));
+                        API.post('member_auto_login.php', {mt_app_token: token}).then(res => {
+                            if (res.data.result === 'true') {
+                                dispatch(changeUser(res.data.data.data));
+                            }
+                        });
+                    }
+                }
+            }
+        })();
+    }, []);
 
     useLayoutEffect(() => {
         AsyncStorage.getItem('done')
@@ -240,7 +224,7 @@ export default function Router() {
     }
 
     return (
-        <NavigationContainer ref={ref}>
+        <NavigationContainer ref={navigationRef}>
             <Stack.Navigator initialRouteName={initRoute}>
                 {RouterSetting.map((item, index) => (
                     <Stack.Screen
