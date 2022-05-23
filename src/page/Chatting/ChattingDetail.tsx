@@ -370,6 +370,54 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
         [user],
     );
 
+    const _renderItem = useCallback(({item}) => {
+        if (item?.msg_type) {
+            // 유저타입 분별용
+            const _item = item as userChat;
+            const isMy = _item.userIdx === user.mt_idx;
+            if (_item.msg_type === 'location') {
+                return (
+                    <LocationChatting
+                        profileImage={_item.userProfile}
+                        region={{
+                            latitude: _item.lat,
+                            longitude: _item.lng,
+                        }}
+                        date={_item.msg_date}
+                        content={_item.location}
+                        isMy={isMy}
+                        isCheck={_item.msg_show === 'Y' ? 2 : 1}
+                    />
+                );
+            } else if (_item.msg_type === 'file') {
+                return (
+                    <View style={{alignSelf: isMy ? 'flex-end' : 'flex-start', marginVertical: getHeightPixel(20)}}>
+                        <Image
+                            source={{
+                                uri: _item.img,
+                            }}
+                            resizeMode="contain"
+                            style={{
+                                width: getPixel(150),
+                                height: getPixel(150),
+                            }}
+                        />
+                    </View>
+                );
+            }
+
+            return (
+                <>
+                    {isMy === false && <OtherChatting profileImage={_item.userProfile} date={_item.msg_date} content={_item.content} />}
+                    {isMy === true && <MyChatting date={_item.msg_date} isCheck={_item.msg_show === 'Y' ? 2 : 1} content={_item.content} />}
+                </>
+            );
+        } else {
+            const _item = item as dateChat;
+            return <ChatDate content={_item.content} />;
+        }
+    }, []);
+
     useEffect(() => {
         if (Channel) {
             setQuery(Channel.createPreviousMessageListQuery()); // (4) 해당 채널에서 query 적용 해주기
@@ -443,6 +491,8 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
     const isChatDisable = !Channel || !roomInfo || roomInfo?.other_blind_check === 'Y';
 
     const ref = useRef<null | boolean>(null);
+
+    const list = chattingList?.list;
 
     if (params?.chat_idx == null && roomInfo?.chat_idx == null && chat_idx === '' && !ref.current) {
         ref.current = true;
@@ -523,59 +573,14 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                     onScroll={e => {
                         scrollPosition.current.position = e.nativeEvent.contentOffset.y;
                     }}
-                    renderItem={({item, index}) => {
-                        if (item?.msg_type) {
-                            // 유저타입 분별용
-                            const _item = item as userChat;
-                            const isMy = _item.userIdx === user.mt_idx;
-                            if (_item.msg_type === 'location') {
-                                return (
-                                    <LocationChatting
-                                        profileImage={_item.userProfile}
-                                        region={{
-                                            latitude: _item.lat,
-                                            longitude: _item.lng,
-                                        }}
-                                        date={_item.msg_date}
-                                        content={_item.location}
-                                        isMy={isMy}
-                                        isCheck={_item.msg_show === 'Y' ? 2 : 1}
-                                    />
-                                );
-                            } else if (_item.msg_type === 'file') {
-                                return (
-                                    <View style={{alignSelf: isMy ? 'flex-end' : 'flex-start', marginVertical: getHeightPixel(20)}}>
-                                        <Image
-                                            source={{
-                                                uri: _item.img,
-                                            }}
-                                            resizeMode="contain"
-                                            style={{
-                                                width: getPixel(150),
-                                                height: getPixel(150),
-                                            }}
-                                        />
-                                    </View>
-                                );
-                            }
-
-                            return (
-                                <>
-                                    {isMy === false && <OtherChatting profileImage={_item.userProfile} date={_item.msg_date} content={_item.content} />}
-                                    {isMy === true && <MyChatting date={_item.msg_date} isCheck={_item.msg_show === 'Y' ? 2 : 1} content={_item.content} />}
-                                </>
-                            );
-                        } else {
-                            const _item = item as dateChat;
-                            return <ChatDate content={_item.content} />;
-                        }
-                    }}
-                    initialNumToRender={15}
+                    renderItem={_renderItem}
+                    initialNumToRender={10}
                     maxToRenderPerBatch={10}
-                    windowSize={21}
+                    windowSize={10}
                     ListHeaderComponent={<View style={{height: getHeightPixel(isOn ? 170 : 20)}}></View>}
-                    inverted // 뒤집기
+                    inverted
                     onEndReached={() => {
+                        console.log('onEndReached');
                         getChattingListApi();
                     }}
                     onEndReachedThreshold={1}

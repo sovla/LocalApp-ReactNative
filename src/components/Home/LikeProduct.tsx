@@ -5,7 +5,7 @@ import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import Theme from '@/assets/global/Theme';
 import {DarkBlueText, Text} from '../Global/text';
 import {useAppSelector} from '@/Hooks/CustomHook';
-import dummy from '@assets/image/dummy.png';
+import noneImageSmallIcon from '@assets/image/none_image_s.png';
 import {CheckBoxImage} from '../Global/button';
 import AutoHeightImage from 'react-native-auto-height-image';
 
@@ -70,10 +70,10 @@ const LikeProduct: React.FC<LikeProductProps> = ({title, price, image, isOn, onP
 };
 
 LikeProduct.defaultProps = {
-    image: dummy,
+    image: noneImageSmallIcon,
     status: '',
-    price: 'R$ 24.00',
-    title: '13,000Pa 초강력흡입력 [샤오미] 차량용 무선 핸디 청소기',
+    price: '',
+    title: '',
 };
 
 export default LikeProduct;

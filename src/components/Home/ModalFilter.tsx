@@ -253,6 +253,7 @@ const ModalFilter: React.FC<ModalFilterProps> = ({onClose, setFilter, filter, is
                                         min={0}
                                         markerOffsetY={getHeightPixel(3)}
                                         trackStyle={styles.trackStyle}
+                                        touchDimensions={{height: 200, width: 200, borderRadius: 100, slipDisplacement: 100}}
                                         sliderLength={getPixel(240)}
                                         markerStyle={styles.thumbStyle}
                                         containerStyle={styles.containerStyle}
@@ -472,10 +473,12 @@ const styles = StyleSheet.create({
     },
     thumbStyle: {
         backgroundColor: Theme.color.white,
+
         borderWidth: 1,
         borderColor: Theme.color.whiteGray_B7,
         width: getPixel(16),
         height: getPixel(16),
+        margin: 10,
     },
     trackStyle: {
         backgroundColor: Theme.color.whiteGray_EE,
