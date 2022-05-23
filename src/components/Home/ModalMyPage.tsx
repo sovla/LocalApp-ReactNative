@@ -102,7 +102,13 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
             .then(res => {
                 dispatch(clearUser());
                 onClose();
-                navigation.navigate('Login');
+                navigation.reset({
+                    routes: [
+                        {
+                            name: 'Login',
+                        },
+                    ],
+                });
             });
     }, []);
 

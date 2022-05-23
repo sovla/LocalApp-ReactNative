@@ -370,28 +370,6 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
         [user],
     );
 
-    const downloadFile = useCallback((filePath: string) => {
-        const fileArray = filePath.split('/');
-        const name = fileArray[fileArray.length - 1];
-        RNFetchBlob.config({
-            // add this option that makes response data to be stored as a file,
-            // this is much more performant.
-            addAndroidDownloads: {
-                useDownloadManager: true,
-                notification: true,
-                mime: 'text/plain',
-                path: `${RNFetchBlob.fs.dirs.DownloadDir}/${name}`,
-                mediaScannable: true,
-            },
-        })
-            .fetch('GET', filePath, {
-                //some headers ..
-            })
-            .then(res => {
-                // the temp file path
-                console.log('The file saved to ', res.path());
-            });
-    }, []);
     useEffect(() => {
         if (Channel) {
             setQuery(Channel.createPreviousMessageListQuery()); // (4) 해당 채널에서 query 적용 해주기

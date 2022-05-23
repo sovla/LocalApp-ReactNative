@@ -65,6 +65,7 @@ import {apiResult} from '@/Util/Util';
 import {ChatAlarmSettingApi, ChatBlindSettingApi, ChatHistoryDeleteApi, ChatHistoryExportApi} from '@/Types/API/ChattingTypes';
 import {API} from '@/API/API';
 import useUpdateEffect from '@/Hooks/useUpdateEffect';
+import RNFetchBlob from 'rn-fetch-blob';
 
 const ModalChattingSetting: React.FC<ModalChattingSettingProps> = ({onClose, chatInfo, initData}) => {
     const {t} = useTranslation();
@@ -87,6 +88,29 @@ const ModalChattingSetting: React.FC<ModalChattingSettingProps> = ({onClose, cha
         onPressConfirm: () => {},
         onPressCancle: offIsAlert,
     });
+
+    const downloadFile = useCallback((filePath: string) => {
+        const fileArray = filePath.split('/');
+        const name = fileArray[fileArray.length - 1];
+        RNFetchBlob.config({
+            // add this option that makes response data to be stored as a file,
+            // this is much more performant.
+            addAndroidDownloads: {
+                useDownloadManager: true,
+                notification: true,
+                mime: 'text/plain',
+                path: `${RNFetchBlob.fs.dirs.DownloadDir}/${name}`,
+                mediaScannable: true,
+            },
+        })
+            .fetch('GET', filePath, {
+                //some headers ..
+            })
+            .then(res => {
+                // the temp file path
+                console.log('The file saved to ', res.path());
+            });
+    }, []);
 
     const {PostAPI: alarmSettingApi} = usePostSend<ChatAlarmSettingApi['D'], ChatAlarmSettingApi['T']>('chat_room_push_set.php', {
         mt_idx: user.mt_idx as string,
@@ -129,7 +153,13 @@ const ModalChattingSetting: React.FC<ModalChattingSettingProps> = ({onClose, cha
             title: t('chattingDownloadAlert'),
             content: t('chattingDownloadGuideAlert'),
             onPressConfirm: () => {
-                exportChatHistoryApi().then(apiResult);
+                exportChatHistoryApi()
+                    .then(apiResult)
+                    .then(res => {
+                        if (res?.data) {
+                            downloadFile(res.data[0]);
+                        }
+                    });
                 offIsAlert();
             },
         }));
