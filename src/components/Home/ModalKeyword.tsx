@@ -9,7 +9,7 @@ import Theme from '@/assets/global/Theme';
 import SettingIcon from '@assets/image/setting.png';
 import {CloseIconImage} from '../Global/image';
 import {Button} from '../Global/button';
-import {AlertButton, getHitSlop} from '@/Util/Util';
+import {AlertButton, getHitSlop, showToastMessage} from '@/Util/Util';
 import {usePostSend} from '@/Hooks/useApi';
 
 const ModalKeyword: React.FC<ModalKeywordProps> = ({onClose, keyword}) => {
@@ -32,6 +32,7 @@ const ModalKeyword: React.FC<ModalKeywordProps> = ({onClose, keyword}) => {
             if (res?.result === 'false') {
                 return AlertButton(res.msg);
             } else {
+                showToastMessage(t('toastKeywordEnrolled'));
                 onClose();
             }
         });
@@ -51,8 +52,15 @@ const ModalKeyword: React.FC<ModalKeywordProps> = ({onClose, keyword}) => {
 
                 <View style={styles.keywordContentView}>
                     {/* <Text fontSize={`${20 * fontSize}`}>{`'${keyword}'`}</Text> */}
-                    <Text fontSize={`${20 * fontSize}`}>{`'${keyword}'`}</Text>
-                    <Text fontSize={`${20 * fontSize}`}>{t('searchModalKeyword')}</Text>
+                    <Text fontSize={`${20 * fontSize}`} bold textAlign="center">{`'${keyword}'`}</Text>
+                    <Text
+                        fontSize={`${20 * fontSize}`}
+                        style={{
+                            letterSpacing: getPixel(-2),
+                        }}
+                        textAlign="center">
+                        {t('searchModalKeyword')}
+                    </Text>
                 </View>
 
                 <Button onPress={onPressEnrolled} width="278px" height="40px" content={t('searchModalButton')} style={{marginBottom: getHeightPixel(40)}} />
@@ -86,6 +94,6 @@ const styles = StyleSheet.create({
     keywordContentView: {
         marginVertical: getHeightPixel(35),
         alignItems: 'center',
-        width: getPixel(270),
+        width: getPixel(290),
     },
 });

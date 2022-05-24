@@ -512,6 +512,7 @@ export const ko = {
         contactTypeAlert: '문의 유형을 선택해 주세요.',
         contactEmailAlert: '답변 받을 이메일 주소를 입력해 주세요.',
         contactContentAlert: '문의 내용을 작성해 주세요.',
+        toastKeywordEnrolled: '키워드 등록 완료',
     },
 };
 export const es = {

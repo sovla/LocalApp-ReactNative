@@ -355,7 +355,7 @@ const ModalFilter: React.FC<ModalFilterProps> = ({onClose, setFilter, filter, is
                                                 <View
                                                     key={item.name}
                                                     style={{
-                                                        width: getPixel(100),
+                                                        width: getPixel(120),
                                                     }}>
                                                     <CheckBox
                                                         setIsOn={() => {
