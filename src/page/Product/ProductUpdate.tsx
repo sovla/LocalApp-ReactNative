@@ -352,7 +352,7 @@ export default function ProductUpdate({route: {params}}: ProductUpdateProps) {
                                             }}
                                             placeholder={t('pricePh')}
                                             placeholderTextColor={Theme.color.gray}
-                                            keyboardType="numbers-and-punctuation"
+                                            keyboardType="number-pad"
                                             onChangeText={text => {
                                                 onChangeProduct('price', text);
                                             }}

@@ -9,23 +9,47 @@
  */
 
 import Router from './src/Page/Router';
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {Provider} from 'react-redux';
 import store from '@/Store/store';
 import SplashScreen from 'react-native-splash-screen';
 import Geolocation from '@react-native-community/geolocation';
-import {Dimensions, GestureResponderEvent, LogBox, Platform, Text, TouchableOpacity, View} from 'react-native';
+import {BackHandler, Dimensions, GestureResponderEvent, Keyboard, LogBox, Platform, Text, TouchableOpacity, View} from 'react-native';
 import PushNotification, {Importance} from 'react-native-push-notification';
 import useChannelManagement from '@/Hooks/useChannelManagement';
 import Toast, {ToastConfigParams} from 'react-native-toast-message';
 import {WhiteText} from '@/Components/Global/text';
+import {showToastMessage} from '@/Util/Util';
+import {t} from 'i18next';
 
 const App = () => {
+    const backRef = useRef<NodeJS.Timeout | null>(null);
     useChannelManagement();
+
     useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', () => {
+            if (backRef.current == null) {
+                showToastMessage(t('exitApp'), 1000);
+                backRef.current = setTimeout(() => {
+                    backRef.current = null;
+                }, 1000);
+                return true;
+            } else {
+                BackHandler.exitApp();
+                return true;
+            }
+        });
+
         setTimeout(() => {
             SplashScreen.hide();
         }, 1500);
+
+        return () => {
+            BackHandler.removeEventListener('hardwareBackPress', () => {
+                backRef.current = null;
+                return true;
+            });
+        };
     }, []);
 
     const toastConfig = {

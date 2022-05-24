@@ -8,7 +8,7 @@ import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {Toggle} from '@/Components/Global/button';
 import Theme from '@/assets/global/Theme';
 import {CloseIconImage} from '@/Components/Global/image';
-import {AlertButton, apiResult, getHitSlop} from '@/Util/Util';
+import {AlertButton, apiResult, getHitSlop, showToastMessage} from '@/Util/Util';
 import useApi, {usePostSend} from '@/Hooks/useApi';
 import {KeywordAlarmAPi, KeywordAlarmCheckAPi} from '@/Types/Components/HomeTypes';
 import Loading from '@/Components/Global/Loading';
@@ -74,9 +74,14 @@ export default function KeywordAlarm() {
     }, []);
 
     const onSubmit = useCallback(() => {
+        if (!keyword.length) {
+            AlertButton(t('noneKeyword'));
+            return;
+        }
         PostAPI()
             .then(apiResult)
             .then(res => {
+                showToastMessage(t('toastKeyword'));
                 getData();
                 setKeyword('');
             });
@@ -86,6 +91,7 @@ export default function KeywordAlarm() {
         deletePostAPI({kt_idx})
             .then(apiResult)
             .then(res => {
+                showToastMessage(t('toastKeywordDelete'));
                 getData();
             });
     }, []);

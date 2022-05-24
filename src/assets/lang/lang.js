@@ -504,6 +504,10 @@ export const ko = {
         contactother: '기타 문의',
         copyUid: '복사 되었습니다.',
         toastContact: '문의가 등록 되었습니다.',
+        noneKeyword: '키워드를 입력해주세요.',
+        toastKeyword: '키워드 등록 완료',
+        toastKeywordDelete: '키워드 제거 완료',
+        exitApp: "'뒤로'버튼을 한번 더 누르면 종료됩니다.",
     },
 };
 export const es = {
