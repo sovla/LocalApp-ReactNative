@@ -139,7 +139,7 @@ export default function Login({navigation}: LoginProps) {
                             marginTop: getHeightPixel(25),
                         }}>
                         <Text color={Theme.color.whiteBlack_53} fontSize={`${12 * fontSize}`} letterSpacing={'0px'}>
-                            {t('businessSignUpGuide3')}
+                            {t('loginGuide6')}
                         </Text>
                         <TouchableOpacity onPress={onPressSignUp} hitSlop={getHitSlop(5)} style={styles.marginLeft}>
                             <Text fontSize={`${12 * fontSize}`} color={Theme.color.blue_3D}>

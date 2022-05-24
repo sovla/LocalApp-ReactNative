@@ -29,6 +29,9 @@ export default function ShopSellProduct({shopName, productList, onPressAllView}:
             });
         }
     }, []);
+    if (productList == null) {
+        return null;
+    }
     return (
         <View>
             <View style={styles.shopView}>

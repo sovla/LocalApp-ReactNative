@@ -1,8 +1,4 @@
 
 
 
-1. chat_room_chatting_delete 채팅방 내용 삭제
-[blind_check] 잘못된 접근입니다. 에러 발생
-jwt: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtdF9pZHgiOiIxNCIsImNoYXRfaWR4IjoiMjgiLCJsYW5nIjoia28ifQ._RGoSApPbdyVyOYC04F7dZ3ltBsey-XIrSu_YKZbemc
-
-2. sell_profile_product_list.php  pt_cate가 null 로 넘어옴
+1.member_join.php 회원 가입후 회원 정보 그대로 리턴 필요
