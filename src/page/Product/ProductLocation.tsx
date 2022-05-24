@@ -34,7 +34,7 @@ const ProductLocation = ({navigation, route: {params}}: ProductLocationProps) =>
     const onSubmit = useCallback(() => {
         const config: any = {
             method: 'get',
-            url: `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${text}&types=establishment&location=37.76999%2C-122.44696&radius=500&key=AIzaSyAbfTo68JkJSdEi9emDHyMfGl7vxjYD704&sessionToken=${token}`,
+            url: `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${text}&types=establishment&key=AIzaSyAbfTo68JkJSdEi9emDHyMfGl7vxjYD704&sessionToken=${token}`,
             headers: {},
         };
         axios(config)

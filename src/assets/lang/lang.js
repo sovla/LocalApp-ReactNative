@@ -515,6 +515,8 @@ export const ko = {
         contactContentAlert: '문의 내용을 작성해 주세요.',
         toastKeywordEnrolled: '키워드 등록 완료',
         tagPhGuide: '# 태그를 입력해주세요 (최대 5개)',
+        locationSetting: '위치 설정',
+        addressPh: '주소를 검색해주세요',
     },
 };
 export const es = {

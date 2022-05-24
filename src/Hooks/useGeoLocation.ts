@@ -23,6 +23,7 @@ const useGeoLocation = (
     useLayoutEffect(() => {
         if (!initValue)
             Geolocation.getCurrentPosition(info => {
+                console.log(info, 'geoLocation');
                 setRegion({
                     latitude: info.coords.latitude,
                     longitude: info.coords.longitude,

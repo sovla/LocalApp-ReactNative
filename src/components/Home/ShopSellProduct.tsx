@@ -1,12 +1,11 @@
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, TouchableOpacity, StyleSheet} from 'react-native';
 import React, {useCallback} from 'react';
-import Product from './Product';
 import ProductList from './ProductList';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {BoldText, GrayText} from '../Global/text';
 import {useTranslation} from 'react-i18next';
 import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
-import {getHitSlop, getProductDetailNumber} from '@/Util/Util';
+import {getHitSlop} from '@/Util/Util';
 import {ProduetDetailOtherApiType} from '@/Types/Components/HomeTypes';
 import {useNavigationState} from '@react-navigation/native';
 

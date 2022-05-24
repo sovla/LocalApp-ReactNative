@@ -143,7 +143,7 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
 
             if (res.data?.result === 'true') {
                 setIsChatListFirst(false);
-                setChattingList(prev => getChattingListState(prev, res, setIsChatLast));
+                setChattingList(prev => getChattingListState(prev, res, setIsChatLast, page as number));
                 if (page === 1) {
                     setChattingPage(2);
                 } else {
@@ -572,7 +572,7 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                 <FlatList
                     ref={flatListRef}
                     data={chattingList?.list}
-                    keyExtractor={(item, index) => item.msg_idx + item.location}
+                    keyExtractor={(item, index) => index.toString()}
                     onScroll={e => {
                         scrollPosition.current.position = e.nativeEvent.contentOffset.y;
                     }}
@@ -846,46 +846,16 @@ function dummyMessageChange(res: {data: {msg_idx: any}}) {
     };
 }
 
-function getChattingListState(prev: any, res: any, setIsChatLast: any) {
-    const map = new Map();
+function getChattingListState(prev: any, res: any, setIsChatLast: any, page: number) {
     if (prev?.list && res.data?.data?.data?.list && Array.isArray(prev?.list) && Array.isArray(res.data?.data?.data?.list)) {
-        let count = 0;
-        for (const v of res.data.data.data.list) {
-            if (v?.msg_idx) {
-                map.set(v.msg_idx, v);
-                count = +v.msg_idx;
-            }
+        if (page === 1) {
+            return res.data.data.data;
+        } else {
+            return {
+                total: res.data.data.data.total,
+                list: [...prev.list, ...res.data.data.data.list],
+            };
         }
-        console.log(map);
-        count = 0;
-        for (const v of prev.list) {
-            if (v?.msg_idx && !map.has(v.msg_idx)) {
-                map.set(v.msg_idx, v);
-                count = +v.msg_idx;
-            } else if (v.msg_idx == null) {
-                map.set(`${count + 0.5}`, v);
-                count += 0.5;
-            }
-        }
-        console.log(map);
-        let resultArray = [];
-        for (const [key, value] of map) {
-            resultArray.push(
-                value?.msg_idx
-                    ? value
-                    : {
-                          ...value,
-                          msg_idx: key,
-                      },
-            );
-        }
-        resultArray.sort((a, b) => a?.msg_idx - b?.msg_idx);
-        resultArray.reverse();
-        console.log(resultArray);
-        return {
-            total: map.size,
-            list: resultArray,
-        };
     } else if (Array.isArray(res.data?.data?.data?.list)) {
         return res.data.data.data;
     } else {

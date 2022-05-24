@@ -289,6 +289,7 @@ type Screen = {
     CarDisplacement: StackScreenProps<Screen> | undefined;
     PurchaseList: StackScreenProps<Screen> | undefined;
     ContactUs: undefined;
+    LocationSetting: undefined;
 };
 
 export default Screen;
@@ -377,3 +378,4 @@ export type BlockListProps = StackScreenProps<Screen, 'BlockList'>;
 export type CarDisplacementProps = StackScreenProps<Screen, 'CarDisplacement'>;
 export type PurchaseListProps = StackScreenProps<Screen, 'PurchaseList'>;
 export type ContactUsProps = StackScreenProps<Screen, 'ContactUs'>;
+export type LocationSettingProps = StackScreenProps<Screen, 'LocationSetting'>;

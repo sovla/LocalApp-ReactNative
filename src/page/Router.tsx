@@ -101,10 +101,10 @@ import BusinessSignUpForm from './Business/BusinessSignUpForm';
 import PurchaseList from './Profile/PurchaseList';
 import {fontChange} from '@/Store/fontSizeState';
 import ContactUs from './Setting/ContactUs';
-import {ProductDetail1, ProductDetail2, ProductDetail3, ProductDetail4, ProductDetail5} from './Home/ProductDetail1';
 import ProductDetailProfile from './Profile/ProductDetailProfile';
 import ProductDetailOther from './Home/ProductDetailOther';
 import ProductDetailSearch from './Home/ProductDetailSearch';
+import LocationSetting from './OnBoard/LocationSetting';
 
 const resources = {
     en,
@@ -201,9 +201,7 @@ export default function Router() {
     useLayoutEffect(() => {
         AsyncStorage.getItem('done')
             .then(result => {
-                if (result === 'AppPermission') {
-                    setInitRoute(result);
-                } else if (result === 'Login') {
+                if (result === 'AppPermission' || result === 'LocationSetting' || result === 'Login') {
                     setInitRoute(result);
                 }
             })
@@ -249,9 +247,6 @@ export default function Router() {
 
 const withScrollView = (WrappedComponent: any) => {
     return (props: any) => {
-        if (props.route.name === 'ChattingDetail') {
-            return <WrappedComponent {...props} />;
-        }
         return (
             <>
                 <SafeAreaView style={{flex: 0, backgroundColor: '#fff'}} />
@@ -620,6 +615,10 @@ export const RouterSetting: RouterTypes[] = [
     {
         name: 'ContactUs',
         component: ContactUs,
+    },
+    {
+        name: 'LocationSetting',
+        component: LocationSetting,
     },
 ];
 

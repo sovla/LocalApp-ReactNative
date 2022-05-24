@@ -82,10 +82,10 @@ function useApi<T, D>(defaultValue: T, apiPath: string, axiosData?: D, option?: 
                     }
                     if (defaultOption.isList && !_data?.page) {
                         setPage(prev => prev + 1);
-                        setTotalPage(result?.data?.data?.data?.total_page);
+                        setTotalPage(result?.data?.data?.data?.total_page ?? result?.data?.data?.data?.tptal_page);
                     } else if (defaultOption.isList && _data?.page) {
                         setPage(_data.page + 1);
-                        setTotalPage(result?.data?.data?.data?.total_page);
+                        setTotalPage(result?.data?.data?.data?.total_page ?? result?.data?.data?.data?.tptal_page);
                     }
                 } else {
                     if (result.data?.msg) {
