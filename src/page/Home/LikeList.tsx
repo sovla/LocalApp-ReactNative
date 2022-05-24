@@ -42,6 +42,10 @@ export default function LikeList({navigation}: LikeListProps) {
     });
 
     const onPressDelete = () => {
+        if (!deleteList.length) {
+            setIsEdit(false);
+            return null;
+        }
         PostAPI().then(res => {
             if (res?.result === 'false' && res?.msg) {
                 return AlertButton(res.msg);
