@@ -495,7 +495,7 @@ export const ko = {
         contactUsTitle: '문의 하기',
         contactUsGuide1: '문의 유형을 선택해 주세요.',
         contactUsGuide2: '답변 받을 이메일 주소를 입력해 주세요',
-        contactUsGuide3: '문의 내용을 작석해 주세요.\n(1,000자 이내)',
+        contactUsGuide3: '문의 내용을 작성해 주세요.\n(1,000자 이내)',
         contactUsGuide4: '5MG이내의 직접 촬영하신\n이미지를 등록해 주세요.',
         contactuser: '회원정보 / 이용 문의',
         contactad: '광고 문의',
@@ -509,6 +509,9 @@ export const ko = {
         toastKeywordDelete: '키워드 제거 완료',
         exitApp: "'뒤로'버튼을 한번 더 누르면 종료됩니다.",
         noneAlarmDelete: '삭제 가능한 알림이 없습니다.',
+        contactTypeAlert: '문의 유형을 선택해 주세요.',
+        contactEmailAlert: '답변 받을 이메일 주소를 입력해 주세요.',
+        contactContentAlert: '문의 내용을 작성해 주세요.',
     },
 };
 export const es = {

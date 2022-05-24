@@ -58,7 +58,8 @@ import CameraGrayIcon from '@assets/image/camera_gray.png';
 import ModalContact from '@/Components/Setting/ModalContact';
 import ModalPhoto from '@/Components/Business/ModalPhoto';
 import {usePostSend} from '@/Hooks/useApi';
-import {apiResult, showToastMessage} from '@/Util/Util';
+import {AlertButton, apiResult, showToastMessage} from '@/Util/Util';
+import {object, string, number} from 'yup';
 
 const ContactUs = ({navigation}: ContactUsProps) => {
     const {t} = useTranslation();
@@ -109,10 +110,23 @@ const ContactUs = ({navigation}: ContactUsProps) => {
             onChangeContact('image', image);
             setIsPhotoModal(false);
         },
+
         [],
     );
 
-    const onPressComplete = useCallback(() => {
+    const onPressComplete = useCallback(async () => {
+        if (contact.type == null) {
+            AlertButton(t('contactTypeAlert'));
+            return;
+        }
+        if (contact.email.length === 0) {
+            AlertButton(t('contactEmailAlert'));
+            return;
+        }
+        if (contact.content.length === 0) {
+            AlertButton(t('contactContentAlert'));
+            return;
+        }
         PostAPI()
             .then(apiResult)
             .then(res => {
