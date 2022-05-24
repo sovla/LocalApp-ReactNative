@@ -50,16 +50,19 @@ import QuetionIcon from '@assets/image/quetion.png';
 import AnswerIcon from '@assets/image/answer.png';
 import {FAQItemProps} from '@/Types/Components/SettingTypes';
 import WebView from 'react-native-webview';
+import Loading from '@/Components/Global/Loading';
 
 export default function PrivacyPolicy() {
     const {t} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
+    const [isLoading, setIsLoading] = useState(true);
     return (
         <View
             style={{
                 flex: 1,
             }}>
             <Header title={t('PrivacyPolicyTitle')} />
+            {isLoading && <Loading isAbsolute backgroundColor="#fff0" />}
             {/* <View
                     style={{
                         width: getPixel(328),
@@ -79,7 +82,7 @@ export default function PrivacyPolicy() {
                     </Text>
                 </View> */}
             <View style={{flex: 1}}>
-                <WebView source={{uri: 'https://dmonster1786.cafe24.com/webview/agree_privacy.php'}} />
+                <WebView source={{uri: 'https://dmonster1786.cafe24.com/webview/agree_privacy.php'}} onLoadEnd={() => setIsLoading(false)} />
             </View>
         </View>
     );
