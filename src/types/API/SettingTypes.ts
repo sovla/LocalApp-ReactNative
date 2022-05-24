@@ -10,3 +10,17 @@ export interface sendAuthNumApi {
     mt_idx: string;
     passcode: string;
 }
+
+export interface FAQApi {
+    T:
+        | {
+              [key: string]: {
+                  title: string;
+                  content: string;
+              };
+          }[]
+        | null;
+    D: {
+        search_txt: string;
+    };
+}
