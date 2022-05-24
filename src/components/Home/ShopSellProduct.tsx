@@ -29,7 +29,7 @@ export default function ShopSellProduct({shopName, productList, onPressAllView}:
             });
         }
     }, []);
-    if (productList == null) {
+    if (productList == null || (Array.isArray(productList) && productList.length === 0)) {
         return null;
     }
     return (
