@@ -29,6 +29,7 @@ import Loading from '@/Components/Global/Loading';
 import {useIsFocused, useNavigationState} from '@react-navigation/native';
 import AutoHeightImage from 'react-native-auto-height-image';
 import ProductDetailOptionBox from '@/Components/Home/ProductDetailOptionBox';
+import {tierReverseList} from '@/assets/global/dummy';
 
 export const ProductDetail = ({navigation, route: {params}}: ProductDetailProps) => {
     const {t} = useTranslation();
@@ -285,7 +286,7 @@ export const ProductDetail = ({navigation, route: {params}}: ProductDetailProps)
     } else {
         const title = data.pt_title;
         const location = `${data.pt_location_detail} ${data.pt_location} / - ${data.dist}km`;
-        const classAndTimeText = `${data.pt_grade} / ${productTimeSetting(data?.pt_time, data?.pt_time_type)}`;
+        const classAndTimeText = `${tierReverseList[+data.pt_grade].ProductDetailName} / ${productTimeSetting(data?.pt_time, data?.pt_time_type)}`;
         const viewCount = viewCountCheck(data?.view_count ?? 0);
         const likeCount = viewCountCheck(data?.like_count ?? 0);
         const content = data.pt_detail;

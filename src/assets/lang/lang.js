@@ -513,6 +513,7 @@ export const ko = {
         contactEmailAlert: '답변 받을 이메일 주소를 입력해 주세요.',
         contactContentAlert: '문의 내용을 작성해 주세요.',
         toastKeywordEnrolled: '키워드 등록 완료',
+        tagPhGuide: '# 태그를 입력해주세요 (최대 5개)',
     },
 };
 export const es = {
