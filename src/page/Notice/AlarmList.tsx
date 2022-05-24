@@ -15,7 +15,7 @@ import {AlarmListProps} from '@/Types/Screen/Screen';
 import {useIsFocused} from '@react-navigation/native';
 import useApi, {usePostSend} from '@/Hooks/useApi';
 import {AlarmListApi, AlarmType, KeywordAlarmListApi, KeywordAlarmType} from '@/Types/API/NoticeTypes';
-import {apiResult, brPrice, productTimeSetting, viewCountCheck} from '@/Util/Util';
+import {apiResult, brPrice, productTimeSetting, showToastMessage, viewCountCheck} from '@/Util/Util';
 import {ModalAlertViewNoneTitle} from '@/Components/Chatting/ModalChattingSetting';
 import EditIcon from '@assets/image/edit.png';
 import {GrayText} from '@/Components/Global/text';
@@ -65,8 +65,13 @@ export default function AlarmList({route: {params}}: AlarmListProps) {
     const onPressDelete = useCallback(() => {
         if (isDelete) {
             setIsAlert(true);
+        } else {
+            if ((selectMenu === 'keywordAlarm' && keywordList && keywordList.list.length > 0) || (selectMenu === 'alarm' && alarmList && alarmList.list.length > 0)) {
+                setIsDelete(true);
+            } else {
+                showToastMessage(t('noneAlarmDelete'));
+            }
         }
-        setIsDelete(true);
     }, [isDelete]);
     const onPressAlarm = useCallback((al_idx: string) => {
         navigation.navigate('AlarmDetail', {al_idx});

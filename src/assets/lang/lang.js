@@ -508,6 +508,7 @@ export const ko = {
         toastKeyword: '키워드 등록 완료',
         toastKeywordDelete: '키워드 제거 완료',
         exitApp: "'뒤로'버튼을 한번 더 누르면 종료됩니다.",
+        noneAlarmDelete: '삭제 가능한 알림이 없습니다.',
     },
 };
 export const es = {
