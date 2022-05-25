@@ -3,6 +3,7 @@ import Header from '@/Components/LoginSignUp/Header';
 import {useAppSelector} from '@/Hooks/CustomHook';
 import {ModalPhotoProps} from '@/Types/Components/BusinessTypes';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
+import {AlertButton} from '@/Util/Util';
 import {Text, WhiteText} from '@Components/Global/text';
 import Photo from '@Components/LoginSignUp/Photo';
 import CameraRoll from '@react-native-community/cameraroll';
@@ -35,6 +36,10 @@ export default function ModalPhoto({onClose, count = 1, returnFn}: ModalPhotoPro
         });
     };
     const onPressComplete = useCallback(() => {
+        if (selectNumber.length === 0) {
+            AlertButton(t('noneModalPhotoImage'));
+            return;
+        }
         const _imageArray = selectNumber
             .map(v => imageArray[v - 2])
             .map(v => {

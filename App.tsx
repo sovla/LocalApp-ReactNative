@@ -8,19 +8,17 @@
  * @format
  */
 
-import Router from './src/Page/Router';
-import React, {useEffect, useRef} from 'react';
-import {Provider} from 'react-redux';
-import store from '@/Store/store';
-import SplashScreen from 'react-native-splash-screen';
-import Geolocation from '@react-native-community/geolocation';
-import {BackHandler, Dimensions, GestureResponderEvent, Keyboard, LogBox, Platform, Text, TouchableOpacity, View} from 'react-native';
-import PushNotification, {Importance} from 'react-native-push-notification';
-import useChannelManagement from '@/Hooks/useChannelManagement';
-import Toast, {ToastConfigParams} from 'react-native-toast-message';
 import {WhiteText} from '@/Components/Global/text';
+import useChannelManagement from '@/Hooks/useChannelManagement';
+import store from '@/Store/store';
 import {showToastMessage} from '@/Util/Util';
 import {t} from 'i18next';
+import React, {useEffect, useRef} from 'react';
+import {BackHandler, Platform, Text, TouchableOpacity, View} from 'react-native';
+import SplashScreen from 'react-native-splash-screen';
+import Toast, {ToastConfigParams} from 'react-native-toast-message';
+import {Provider} from 'react-redux';
+import Router from './src/Page/Router';
 
 const App = () => {
     const backRef = useRef<NodeJS.Timeout | null>(null);
@@ -61,6 +59,7 @@ const App = () => {
                     justifyContent: 'center',
                     alignItems: 'center',
                     marginTop: Platform.OS === 'ios' ? 0 : 0,
+                    zIndex: 1000,
                 }}>
                 <View
                     style={{
@@ -85,6 +84,7 @@ const App = () => {
                     padding: 16,
                     marginTop: Platform.OS === 'ios' ? 0 : 0,
                     backgroundColor: '#22222290',
+                    zIndex: 1000,
                 }}>
                 <View
                     style={{

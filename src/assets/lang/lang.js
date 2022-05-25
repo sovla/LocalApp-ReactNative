@@ -517,6 +517,7 @@ export const ko = {
         tagPhGuide: '# 태그를 입력해주세요 (최대 5개)',
         locationSetting: '위치 설정',
         addressPh: '주소를 검색해주세요',
+        noneModalPhotoImage: '이미지를 선택해 주세요.',
     },
 };
 export const es = {
