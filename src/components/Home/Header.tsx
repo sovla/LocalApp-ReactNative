@@ -10,6 +10,7 @@ import NoticeEmptyBlackIcon from '@assets/image/notice_empty_black.png';
 import NoticeEmptyWhiteIcon from '@assets/image/notice_empty_white.png';
 import NoticeWhiteIcon from '@assets/image/notice_white.png';
 import TrianglePinkIcon from '@assets/image/triangle_pink.png';
+import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Image, ImageBackground, Modal, StyleSheet, TouchableOpacity, View} from 'react-native';
@@ -99,6 +100,7 @@ export const AlarmButton: React.FC<{
 }> = ({isChange}) => {
     const {user} = useAppSelector(state => state);
     const navigation = useAppNavigation();
+    const isFocused = useIsFocused();
 
     const {data, getData} = useApi<
         {
@@ -120,7 +122,7 @@ export const AlarmButton: React.FC<{
         if (user.mt_idx) {
             getData();
         }
-    }, []);
+    }, [isFocused]);
 
     return (
         <TouchableOpacity

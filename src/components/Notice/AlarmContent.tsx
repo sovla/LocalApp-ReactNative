@@ -14,6 +14,7 @@ const AlarmContent: React.FC<AlarmContentProps> = ({title, date, isDelete, onPre
     return (
         <View style={styles.conatiner}>
             <TouchableOpacity
+                disabled={onPress == null && !isDelete}
                 onPress={() => {
                     if (isDelete) {
                         onPressDelete();

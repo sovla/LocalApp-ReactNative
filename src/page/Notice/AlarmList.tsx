@@ -1,26 +1,24 @@
-import {FlatList, Image, Modal, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
-
-import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
-import {useTranslation} from 'react-i18next';
-import AutoHeightImage from 'react-native-auto-height-image';
-
-import Header from '@/Components/Profile/Header';
-import EditBlackIcon from '@assets/image/edit_black.png';
-import TrashBlackIcon from '@assets/image/trash_black.png';
-import Menu from '@/Components/Profile/Menu';
+import {ModalAlertViewNoneTitle} from '@/Components/Chatting/ModalChattingSetting';
+import Loading from '@/Components/Global/Loading';
+import {GrayText} from '@/Components/Global/text';
 import AlarmContent from '@/Components/Notice/AlarmContent';
-import {AlarmListProps} from '@/Types/Screen/Screen';
-import {useIsFocused} from '@react-navigation/native';
+import Header from '@/Components/Profile/Header';
+import Menu from '@/Components/Profile/Menu';
+import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import useApi, {usePostSend} from '@/Hooks/useApi';
 import {AlarmListApi, AlarmType, KeywordAlarmListApi, KeywordAlarmType} from '@/Types/API/NoticeTypes';
+import {AlarmListProps} from '@/Types/Screen/Screen';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {apiResult, brPrice, productTimeSetting, showToastMessage, viewCountCheck} from '@/Util/Util';
-import {ModalAlertViewNoneTitle} from '@/Components/Chatting/ModalChattingSetting';
 import EditIcon from '@assets/image/edit.png';
-import {GrayText} from '@/Components/Global/text';
+import EditBlackIcon from '@assets/image/edit_black.png';
+import TrashBlackIcon from '@assets/image/trash_black.png';
+import {useIsFocused} from '@react-navigation/native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {FlatList, Image, Modal, StyleSheet, TouchableOpacity, View} from 'react-native';
+import AutoHeightImage from 'react-native-auto-height-image';
 import AlarmProduct from './AlarmProduct';
-import Loading from '@/Components/Global/Loading';
 
 export default function AlarmList({route: {params}}: AlarmListProps) {
     const {t} = useTranslation();
@@ -64,7 +62,11 @@ export default function AlarmList({route: {params}}: AlarmListProps) {
 
     const onPressDelete = useCallback(() => {
         if (isDelete) {
-            setIsAlert(true);
+            if (deleteList.length === 0) {
+                setIsDelete(false);
+            } else {
+                setIsAlert(true);
+            }
         } else {
             if ((selectMenu === 'keywordAlarm' && keywordList && keywordList.list.length > 0) || (selectMenu === 'alarm' && alarmList && alarmList.list.length > 0)) {
                 setIsDelete(true);
@@ -72,7 +74,7 @@ export default function AlarmList({route: {params}}: AlarmListProps) {
                 showToastMessage(t('noneAlarmDelete'));
             }
         }
-    }, [isDelete]);
+    }, [isDelete, selectMenu, keywordList, alarmList, deleteList]);
     const onPressAlarm = useCallback((al_idx: string) => {
         navigation.navigate('AlarmDetail', {al_idx});
     }, []);
