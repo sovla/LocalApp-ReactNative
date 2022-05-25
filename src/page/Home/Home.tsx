@@ -1,27 +1,25 @@
-import {View, ScrollView, Modal, TouchableOpacity, StyleSheet, NativeScrollEvent, NativeSyntheticEvent, FlatList} from 'react-native';
-import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
-import Header from '@/Components/Home/Header';
-import CategoryScroll from '@/Components/Home/CategoryScroll';
-import HomeList from '@/Components/Home/HomeList';
 import Theme from '@/assets/global/Theme';
+import Loading from '@/Components/Global/Loading';
+import CategoryScroll from '@/Components/Home/CategoryScroll';
 import Footer from '@/Components/Home/Footer';
-import Location from '@/Components/Modal/Location';
-import ProductList from '@/Components/Home/ProductList';
-import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import AutoHeightImage from 'react-native-auto-height-image';
-import useBoolean from '@/Hooks/useBoolean';
-import UploadModal from '@/Components/Home/UploadModal';
-import {useTranslation} from 'react-i18next';
-import {HomeProps} from '@/Types/Screen/Screen';
+import Header from '@/Components/Home/Header';
+import HomeList from '@/Components/Home/HomeList';
 import ModalPopup from '@/Components/Home/ModalPopup';
-import {useFocusEffect, useIsFocused} from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import useApi from '@/Hooks/useApi';
+import ProductList from '@/Components/Home/ProductList';
+import UploadModal from '@/Components/Home/UploadModal';
 import {useAppSelector} from '@/Hooks/CustomHook';
-import {HomeProductListType} from '@/Types/Components/HomeTypes';
-import {useSelector} from 'react-redux';
-import {Text} from '@/Components/Global/text';
+import useApi from '@/Hooks/useApi';
+import useBoolean from '@/Hooks/useBoolean';
 import useUpdateEffect from '@/Hooks/useUpdateEffect';
+import {HomeProductListType} from '@/Types/Components/HomeTypes';
+import {HomeProps} from '@/Types/Screen/Screen';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useIsFocused} from '@react-navigation/native';
+import React, {useCallback, useLayoutEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {FlatList, Modal, NativeScrollEvent, NativeSyntheticEvent, StyleSheet, TouchableOpacity, View} from 'react-native';
+import AutoHeightImage from 'react-native-auto-height-image';
 
 export default function Home({navigation}: HomeProps): JSX.Element {
     const {t} = useTranslation();
@@ -81,6 +79,7 @@ export default function Home({navigation}: HomeProps): JSX.Element {
     return (
         <View style={{flex: 1, backgroundColor: Theme.color.whiteGray_F6}}>
             <Header isChange={isChange} />
+            {isLoading && <Loading isAbsolute />}
             <FlatList
                 onScroll={onScroll}
                 onEndReachedThreshold={1}

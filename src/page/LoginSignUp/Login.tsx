@@ -1,23 +1,20 @@
-import {Image, ImageBackground, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useCallback, useLayoutEffect, useState} from 'react';
-
-import ProfileBackGroundImage from '@assets/image/profile_bg.png';
-import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import {GrayText, Text} from '@Components/Global/text';
-import {useAppSelector} from '@/Hooks/CustomHook';
-import {useTranslation} from 'react-i18next';
-import Theme from '@/assets/global/Theme';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-
-import {Button, CheckBoxImage} from '@/Components/Global/button';
-import Line from '@/Components/Global/Line';
-import {LoginProps} from '@/Types/Screen/Screen';
-
-import Input from '@/Components/Global/Input';
-import {AlertButton, getHitSlop} from '@/Util/Util';
-import CountryPicker from '@/Components/Profile/CountryPicker';
 import {API} from '@/API/API';
+import Theme from '@/assets/global/Theme';
+import {Button, CheckBoxImage} from '@/Components/Global/button';
+import Input from '@/Components/Global/Input';
+import Line from '@/Components/Global/Line';
 import ModalAuth from '@/Components/LoginSignUp/ModalAuth';
+import CountryPicker from '@/Components/Profile/CountryPicker';
+import {useAppSelector} from '@/Hooks/CustomHook';
+import {LoginProps} from '@/Types/Screen/Screen';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
+import {AlertButton, getHitSlop} from '@/Util/Util';
+import ProfileBackGroundImage from '@assets/image/profile_bg.png';
+import {GrayText, Text} from '@Components/Global/text';
+import React, {useCallback, useLayoutEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {Image, ImageBackground, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useDispatch} from 'react-redux';
 
 export default function Login({navigation}: LoginProps) {
@@ -149,7 +146,7 @@ export default function Login({navigation}: LoginProps) {
                     </View>
                 </View>
             </KeyboardAwareScrollView>
-            {isAuthModal && <ModalAuth onPressRetry={onPressLogin} tel={tel} selectNum={selectNum} onClose={() => setIsAuthModal(false)}></ModalAuth>}
+            {isAuthModal && <ModalAuth onPressRetry={onPressLogin} tel={tel} selectNum={selectNum} onClose={() => setIsAuthModal(false)} autoLogin={autoLogin} />}
         </View>
     );
 }

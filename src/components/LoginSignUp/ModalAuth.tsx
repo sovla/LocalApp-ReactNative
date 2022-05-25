@@ -13,8 +13,9 @@ import {useTranslation} from 'react-i18next';
 import {Modal, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import Loading from '../Global/Loading';
 
-export default function ModalAuth({onClose, onPressRetry, tel, selectNum, isBusiness = false}: ModalAuthProps) {
+export default function ModalAuth({onClose, onPressRetry, tel, selectNum, isBusiness = false, autoLogin}: ModalAuthProps) {
     const {t, i18n} = useTranslation();
     const {
         fontSize: {value: fontSize},
@@ -28,6 +29,8 @@ export default function ModalAuth({onClose, onPressRetry, tel, selectNum, isBusi
 
     const [count, setCount] = useState(120);
     const [authNum, setAuthNum] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+
     const onPressNext = useCallback(async () => {
         // if (!(count > 0)) {
         //   return AlertButton(t('authAlert1'));
@@ -35,12 +38,13 @@ export default function ModalAuth({onClose, onPressRetry, tel, selectNum, isBusi
         if (authNum.length !== 6) {
             return AlertButton(t('authAlert2'));
         }
+        setIsLoading(true);
         const result = await API.post(isBusiness ? 'member_busi_check.php' : 'member_login.php', {
             jct_country: selectNum.replace('+', ''),
             jct_hp: tel,
             lang: i18n.language,
             passcode: authNum,
-            mt_app_token: token,
+            mt_app_token: autoLogin ? token : undefined,
         });
         if (!isBusiness) {
             if (result.data.result === 'true') {
@@ -58,12 +62,14 @@ export default function ModalAuth({onClose, onPressRetry, tel, selectNum, isBusi
                 AlertButton(result.data?.msg);
             }
         }
+        setIsLoading(false);
     }, [authNum, count, isBusiness]);
     useInterval(() => {
         if (count > 0) setCount(prev => prev - 1);
     }, 1000);
     return (
         <Modal transparent onRequestClose={onClose}>
+            {isLoading && <Loading isAbsolute backgroundColor="#0003" />}
             <TouchableWithoutFeedback onPress={onClose}>
                 <View style={styles.container}>
                     <TouchableWithoutFeedback>

@@ -217,7 +217,7 @@ export default function Search({route: {params}, navigation}: SearchProps): JSX.
     return (
         <View style={styles.mainContainer}>
             <SearchHeader keyword={selectKeyword ?? undefined} text={searchText} setText={setSearchText} onPressCloseKeyword={onPressCloseKeyword} onSubmitEditing={onSubmitEditing} />
-
+            {isLoading && <Loading isAbsolute />}
             <FlatList
                 data={searchData.list}
                 contentContainerStyle={
