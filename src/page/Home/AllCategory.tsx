@@ -58,11 +58,11 @@ const AllCategory = () => {
 
     const [isMore, setIsMore] = useState<boolean>(false);
 
-    const {data: popularList} = useApi<
-        // 인기 검색어
-        PopularSearchTextApi['T'],
-        PopularSearchTextApi['D']
-    >([], 'search_keyword_list.php');
+    // const {data: popularList} = useApi<
+    //     // 인기 검색어
+    //     PopularSearchTextApi['T'],
+    //     PopularSearchTextApi['D']
+    // >([], 'search_keyword_list.php');
 
     const onPressCategory = useCallback(item => {
         navigation.navigate('Search', {
@@ -120,7 +120,7 @@ const AllCategory = () => {
                     </>
                 )}
 
-                <Line height={getHeightPixel(10)} />
+                {/* <Line height={getHeightPixel(10)} />
 
                 <View style={styles.popularContainer}>
                     <Text fontSize={`${18 * fontSize}`} medium>
@@ -140,7 +140,7 @@ const AllCategory = () => {
                             </TouchableOpacity>
                         ))}
                     </View>
-                </View>
+                </View> */}
             </KeyboardAwareScrollView>
         </View>
     );
