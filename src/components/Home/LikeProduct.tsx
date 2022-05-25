@@ -1,13 +1,13 @@
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import Theme from '@/assets/global/Theme';
+import {useAppSelector} from '@/Hooks/CustomHook';
 import {LikeProductProps} from '@/Types/Components/HomeTypes';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import Theme from '@/assets/global/Theme';
-import {DarkBlueText, Text} from '../Global/text';
-import {useAppSelector} from '@/Hooks/CustomHook';
 import noneImageSmallIcon from '@assets/image/none_image_s.png';
-import {CheckBoxImage} from '../Global/button';
+import React from 'react';
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import AutoHeightImage from 'react-native-auto-height-image';
+import {CheckBoxImage} from '../Global/button';
+import {DarkBlueText, Text} from '../Global/text';
 
 const LikeProduct: React.FC<LikeProductProps> = ({title, price, image, isOn, onPressItem, isEdit, isSelectEdit, onPress, idx, categoryNum, isBusiness}) => {
     const fontSize = useAppSelector(state => state.fontSize.value);

@@ -46,7 +46,7 @@ export default function ReportDetail({
     const [text, setText] = useState<string>('');
     const [selectMenu, setSelectMenu] = useState<string>('0');
     const naviState = useNavigationState(state => state);
-    const {PostAPI} = usePostSend<ReportApi>('product_decar.php', {
+    const {PostAPI} = usePostSend<ReportApi, any>('product_decar.php', {
         mt_idx: user.mt_idx as string,
         dl_type: reportType === 'prohibited' ? 'P' : reportType === 'scam' ? 'S' : 'M',
         pt_idx: pt_idx,

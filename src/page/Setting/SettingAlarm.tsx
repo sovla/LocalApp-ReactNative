@@ -33,7 +33,7 @@ export default function SettingAlarm() {
     const [isShow, setIsShow] = useState(user.mt_pushcon === 'Y');
     const [channerId, setChannerId] = useState<channerId['type']>('default');
 
-    const {PostAPI: setSetting} = usePostSend<setAlramPushApi>('member_message_modify.php', {
+    const {PostAPI: setSetting} = usePostSend<setAlramPushApi, any>('member_message_modify.php', {
         mt_idx: user.mt_idx as string,
         mt_message: messageAlarm ? 'Y' : 'N',
         mt_message_id: channerId,

@@ -1,4 +1,4 @@
-import {Dimensions, Modal, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
+import {Modal, StyleSheet, TouchableOpacity, View} from 'react-native';
 import React, {useState} from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
@@ -13,7 +13,6 @@ import Line from '@/Components/Global/Line';
 import {Shadow} from 'react-native-shadow-2';
 import {useDispatch} from 'react-redux';
 import {fontChange, fontSizeState} from '@/Store/fontSizeState';
-import useUpdateEffect from '@/Hooks/useUpdateEffect';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function SettingChatting() {

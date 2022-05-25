@@ -1,21 +1,18 @@
-import {Modal, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
-import React, {useCallback, useState} from 'react';
-
-import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import {GrayText, Text} from '@Components/Global/text';
-import {useAppDispatch, useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
-import {useTranslation} from 'react-i18next';
-import Theme from '@/assets/global/Theme';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import Header from '@/Components/LoginSignUp/Header';
-import {Button} from '@/Components/Global/button';
-import {TextInput} from 'react-native-gesture-handler';
-
-import {AlertButton, timer} from '@/Util/Util';
-import {ModalAuthProps} from '@/Types/Components/LoginSignUpTypes';
-import useInterval from '@/Hooks/useInterval';
 import {API} from '@/API/API';
-import {changeUser, userState} from '@/Store/userState';
+import Theme from '@/assets/global/Theme';
+import {Button} from '@/Components/Global/button';
+import {useAppDispatch, useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
+import useInterval from '@/Hooks/useInterval';
+import {changeUser} from '@/Store/userState';
+import {ModalAuthProps} from '@/Types/Components/LoginSignUpTypes';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
+import {AlertButton, timer} from '@/Util/Util';
+import {GrayText, Text} from '@Components/Global/text';
+import React, {useCallback, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {Modal, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
+import {TextInput} from 'react-native-gesture-handler';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 export default function ModalAuth({onClose, onPressRetry, tel, selectNum, isBusiness = false}: ModalAuthProps) {
     const {t, i18n} = useTranslation();

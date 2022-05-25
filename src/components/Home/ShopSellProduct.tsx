@@ -1,13 +1,13 @@
-import {View, TouchableOpacity, StyleSheet} from 'react-native';
-import React, {useCallback} from 'react';
-import ProductList from './ProductList';
-import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import {BoldText, GrayText} from '../Global/text';
-import {useTranslation} from 'react-i18next';
 import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
-import {getHitSlop} from '@/Util/Util';
 import {ProduetDetailOtherApiType} from '@/Types/Components/HomeTypes';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
+import {getHitSlop} from '@/Util/Util';
 import {useNavigationState} from '@react-navigation/native';
+import React, {useCallback} from 'react';
+import {useTranslation} from 'react-i18next';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {BoldText, GrayText} from '../Global/text';
+import ProductList from './ProductList';
 
 export default function ShopSellProduct({shopName, productList, onPressAllView}: {shopName: string; productList?: ProduetDetailOtherApiType['T']; onPressAllView: () => void}) {
     const {t} = useTranslation();

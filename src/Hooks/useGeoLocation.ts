@@ -1,6 +1,6 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React, {useLayoutEffect, useState} from 'react';
 import Geolocation from '@react-native-community/geolocation';
+import {useLayoutEffect, useState} from 'react';
+import {StyleSheet} from 'react-native';
 
 const useGeoLocation = (
     initValue?:

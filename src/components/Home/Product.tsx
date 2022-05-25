@@ -1,18 +1,18 @@
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
+import Theme from '@/assets/global/Theme';
+import {useAppSelector} from '@/Hooks/CustomHook';
+import {usePostSend} from '@/Hooks/useApi';
 import {ProductLike, ProductProps} from '@/Types/Components/HomeTypes';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import Theme from '@/assets/global/Theme';
-import {DarkBlueText, GrayText, MediumText, Text, WhiteText} from '../Global/text';
-import {useAppSelector} from '@/Hooks/CustomHook';
-import LocationIcon from '@assets/image/map-marker.png';
-import ViewIcon from '@assets/image/view.png';
-import LikeIcon from '@assets/image/heart.png';
-import LikeEmptyIcon from '@assets/image/unlike.png';
-import LikeFillIcon from '@assets/image/love_pink.png';
-import dummy from '@assets/image/dummy.png';
 import {getHitSlop, strEmptyCheck} from '@/Util/Util';
-import {usePostSend} from '@/Hooks/useApi';
+import dummy from '@assets/image/dummy.png';
+import LikeIcon from '@assets/image/heart.png';
+import LikeFillIcon from '@assets/image/love_pink.png';
+import LocationIcon from '@assets/image/map-marker.png';
+import LikeEmptyIcon from '@assets/image/unlike.png';
+import ViewIcon from '@assets/image/view.png';
+import React, {useCallback, useEffect, useState} from 'react';
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {DarkBlueText, GrayText, MediumText, Text, WhiteText} from '../Global/text';
 
 const Product: React.FC<ProductProps> = ({title, location, time, viewCount, likeCount, price, image, isLike, status, isList, isBorder, onPress, idx, cate, isLikeShow = true}) => {
     const fontSize = useAppSelector(state => state.fontSize.value);

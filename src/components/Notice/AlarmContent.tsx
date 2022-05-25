@@ -1,14 +1,12 @@
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React from 'react';
-
+import Theme from '@/assets/global/Theme';
+import {useAppSelector} from '@/Hooks/CustomHook';
+import {AlarmContentProps} from '@/Types/Components/NoticeTypes';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {GrayText, Text} from '@Components/Global/text';
-import {useAppSelector} from '@/Hooks/CustomHook';
+import React from 'react';
 import {useTranslation} from 'react-i18next';
-import Theme from '@/assets/global/Theme';
-
-import {AlarmContentProps} from '@/Types/Components/NoticeTypes';
-import {CheckBox, CheckBoxImage} from '../Global/button';
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {CheckBoxImage} from '../Global/button';
 
 const AlarmContent: React.FC<AlarmContentProps> = ({title, date, isDelete, onPress, image, isOn, onPressDelete}) => {
     const {t} = useTranslation();

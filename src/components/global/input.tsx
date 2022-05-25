@@ -1,12 +1,11 @@
-import {StyleSheet, TextInput, View} from 'react-native';
-import React, {useState} from 'react';
 import Theme from '@/assets/global/Theme';
-import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import {RedText, Text} from './text';
-import {useTranslation} from 'react-i18next';
 import {useAppSelector} from '@/Hooks/CustomHook';
 import {InputProps} from '@/Types/Components/global';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
+import React, {useState} from 'react';
+import {StyleSheet, TextInput, View} from 'react-native';
 import {Box} from './container';
+import {RedText} from './text';
 
 export default function Input({
     value,

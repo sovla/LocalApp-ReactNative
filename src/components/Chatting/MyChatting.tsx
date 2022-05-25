@@ -1,13 +1,11 @@
-import {Image, StyleSheet, View} from 'react-native';
-import React from 'react';
-
+import Theme from '@/assets/global/Theme';
+import {useAppSelector} from '@/Hooks/CustomHook';
+import {MyChattingProps} from '@/Types/Components/ChattingTypes';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {Text, WhiteText} from '@Components/Global/text';
-import {useAppSelector} from '@/Hooks/CustomHook';
+import React from 'react';
 import {useTranslation} from 'react-i18next';
-import Theme from '@/assets/global/Theme';
-
-import {MyChattingProps} from '@/Types/Components/ChattingTypes';
+import {Image, StyleSheet, View} from 'react-native';
 
 const MyChatting: React.FC<MyChattingProps> = ({date, content, isCheck}) => {
     const {t} = useTranslation();

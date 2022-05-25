@@ -1,4 +1,4 @@
-import {Dimensions, StatusBar} from 'react-native';
+import {Dimensions} from 'react-native';
 
 export default function pixelChange(px?: string) {
     // By Junhan. 폰 사이즈별 px 단위를 변경해서 리턴하는 펑션 11-16

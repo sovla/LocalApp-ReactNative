@@ -1,11 +1,9 @@
 import {categoryMenu, tierReverseList} from '@/assets/global/dummy';
-import Toast from 'react-native-toast-message';
 import {categoryMenuTypes, tierTypes} from '@/Types/Components/global';
 import i18next, {t} from 'i18next';
 import {Alert, NativeScrollEvent, NativeSyntheticEvent} from 'react-native';
+import Toast from 'react-native-toast-message';
 import {getPixel} from './pixelChange';
-import {createNavigationContainerRef, ParamListBase, useNavigationState} from '@react-navigation/native';
-import {StackNavigationOptions} from '@react-navigation/stack';
 
 export const getHitSlop = (number: number) => {
     return {

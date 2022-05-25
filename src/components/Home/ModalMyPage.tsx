@@ -1,31 +1,29 @@
-import {Dimensions, Image, StyleSheet, TouchableOpacity, View, ViewStyle} from 'react-native';
-import React, {useCallback} from 'react';
-
-import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import {GrayText, Text} from '@Components/Global/text';
-import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
-import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
-import {ModalMyPageProps} from '@/Types/Components/HomeTypes';
-import {SlideRightModal} from './ModalFilter';
-import BackBlackBoxIcon from '@assets/image/back_black_box.png';
-import DummyProfileImage from '@assets/image/dummy_profile.png';
-import Line from '../Global/Line';
-
-import AnnouncementIcon from '@assets/image/announcement.png';
-import NoticeColorIcon from '@assets/image/notice_color.png';
-import StoreIcon from '@assets/image/store.png';
-import DocumentIcon from '@assets/image/document.png';
-import PurchaseListIcon from '@assets/image/purchase_list.png';
-import CategoryColorIcon from '@assets/image/category_color.png';
-import NoticeOn from '@assets/image/notice_on.png';
-import SettingsIcon from '@assets/image/settings.png';
-import ServiceCenterIcon from '@assets/image/service_center.png';
+import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import {usePostSend} from '@/Hooks/useApi';
-import {LogoutAPi} from '@/Types/API/HomeTypes';
-import {AlertButton, apiResult} from '@/Util/Util';
-import {useDispatch} from 'react-redux';
 import {clearUser} from '@/Store/userState';
+import {LogoutAPi} from '@/Types/API/HomeTypes';
+import {ModalMyPageProps} from '@/Types/Components/HomeTypes';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
+import {apiResult} from '@/Util/Util';
+import AnnouncementIcon from '@assets/image/announcement.png';
+import BackBlackBoxIcon from '@assets/image/back_black_box.png';
+import CategoryColorIcon from '@assets/image/category_color.png';
+import DocumentIcon from '@assets/image/document.png';
+import DummyProfileImage from '@assets/image/dummy_profile.png';
+import NoticeColorIcon from '@assets/image/notice_color.png';
+import NoticeOn from '@assets/image/notice_on.png';
+import PurchaseListIcon from '@assets/image/purchase_list.png';
+import ServiceCenterIcon from '@assets/image/service_center.png';
+import SettingsIcon from '@assets/image/settings.png';
+import StoreIcon from '@assets/image/store.png';
+import {GrayText, Text} from '@Components/Global/text';
+import React, {useCallback} from 'react';
+import {useTranslation} from 'react-i18next';
+import {Dimensions, Image, StyleSheet, TouchableOpacity, View, ViewStyle} from 'react-native';
+import {useDispatch} from 'react-redux';
+import Line from '../Global/Line';
+import {SlideRightModal} from './ModalFilter';
 
 const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
     const {t} = useTranslation();

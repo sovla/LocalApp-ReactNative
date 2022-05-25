@@ -1,18 +1,18 @@
-import {View, StyleSheet, TextInput, Image, ScrollView, TouchableOpacity} from 'react-native';
-import React, {useCallback, useState} from 'react';
-import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import Theme from '@/assets/global/Theme';
-import {BoldText, GrayText, MediumText, Text} from '../Global/text';
-import {useTranslation} from 'react-i18next';
 import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
-import SearchIcon from '@assets/image/search.png';
-import MyLocationIcon from '@assets/image/my-location.png';
-import CloseIcon from '@assets/image/close.png';
-import {AlertButton, getHitSlop} from '@/Util/Util';
-import CloseBlackIcon from '@assets/image/close_black.png';
-import {Shadow} from 'react-native-shadow-2';
 import useApi, {usePostSend} from '@/Hooks/useApi';
 import {LocationChangeApi, LocationListApi, locationListItem} from '@/Types/API/HomeTypes';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
+import {AlertButton, getHitSlop} from '@/Util/Util';
+import CloseIcon from '@assets/image/close.png';
+import CloseBlackIcon from '@assets/image/close_black.png';
+import MyLocationIcon from '@assets/image/my-location.png';
+import SearchIcon from '@assets/image/search.png';
+import React, {useCallback, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {Image, ScrollView, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
+import {Shadow} from 'react-native-shadow-2';
+import {BoldText, GrayText, MediumText, Text} from '../Global/text';
 
 export default function Location({offIsModal}: {offIsModal: any}): JSX.Element {
     const {t} = useTranslation();

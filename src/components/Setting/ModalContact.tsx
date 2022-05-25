@@ -1,15 +1,12 @@
-import {Animated, Modal, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useEffect, useRef} from 'react';
-
+import Line from '@/Components/Global/Line';
+import {useAppSelector} from '@/Hooks/CustomHook';
+import {ContactType, ModalContactProps} from '@/Types/Components/SettingTypes';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {Text} from '@Components/Global/text';
-import {useAppSelector} from '@/Hooks/CustomHook';
+import React, {useEffect, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
-
-import Line from '@/Components/Global/Line';
+import {Animated, Modal, PanResponder, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Shadow} from 'react-native-shadow-2';
-import {ContactType, ModalContactProps} from '@/Types/Components/SettingTypes';
-import {PanResponder} from 'react-native';
 
 const ModalContact: React.FC<ModalContactProps> = ({onClose, onPressItem}) => {
     const {t} = useTranslation();

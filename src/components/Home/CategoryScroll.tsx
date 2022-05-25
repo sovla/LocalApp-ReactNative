@@ -1,15 +1,15 @@
-import {FlatList, Image, NativeScrollEvent, NativeSyntheticEvent, ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from 'react';
-import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {categoryMenu} from '@/assets/global/dummy';
-import {CategoryCardProps} from '@/Types/Components/HomeTypes';
-import {Text} from '../Global/text';
-import {useTranslation} from 'react-i18next';
-import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import Theme from '@/assets/global/Theme';
+import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
+import {CategoryCardProps} from '@/Types/Components/HomeTypes';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {onScrollSlide} from '@/Util/Util';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useIsFocused} from '@react-navigation/native';
+import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {FlatList, Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Text} from '../Global/text';
 
 const CategoryScroll = () => {
     const isFocused = useIsFocused();

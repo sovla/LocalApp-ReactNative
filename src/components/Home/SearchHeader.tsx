@@ -1,18 +1,17 @@
-import {Image, ImageBackground, StyleSheet, TextInput, Touchable, TouchableOpacity, View} from 'react-native';
-import BackGroundImage from '@assets/image/BG.png';
-import React from 'react';
-import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import BackWhiteIcon from '@assets/image/back_white.png';
-import {useTranslation} from 'react-i18next';
-import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import Theme from '@/assets/global/Theme';
-import SearchBlackIcon from '@assets/image/search_black.png';
-import CloseGrayIcon from '@assets/image/close_gray.png';
-import CloseBlackIcon from '@assets/image/close_black.png';
+import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import {SearchHeaderProps} from '@/Types/Components/HomeTypes';
-import {Text} from '../Global/text';
-import AutoHeightImage from 'react-native-auto-height-image';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {getHitSlop} from '@/Util/Util';
+import BackWhiteIcon from '@assets/image/back_white.png';
+import BackGroundImage from '@assets/image/BG.png';
+import CloseBlackIcon from '@assets/image/close_black.png';
+import SearchBlackIcon from '@assets/image/search_black.png';
+import React from 'react';
+import {useTranslation} from 'react-i18next';
+import {Image, ImageBackground, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
+import AutoHeightImage from 'react-native-auto-height-image';
+import {Text} from '../Global/text';
 
 const SearchHeader: React.FC<SearchHeaderProps> = ({text, setText, keyword, onPressCloseKeyword, onSubmitEditing}) => {
     const {t} = useTranslation();

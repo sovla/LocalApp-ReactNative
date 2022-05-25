@@ -1,12 +1,12 @@
-import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
+import {StyleSheet, Text, View} from 'react-native';
 
 const AlertModal = () => {
-  return (
-    <View>
-      <Text>AlertModal</Text>
-    </View>
-  );
+    return (
+        <View>
+            <Text>AlertModal</Text>
+        </View>
+    );
 };
 
 export default AlertModal;

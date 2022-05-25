@@ -1,6 +1,6 @@
-import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
+import React from 'react';
+import {ActivityIndicator, StyleSheet, View} from 'react-native';
 
 const Loading: React.FC<{
     isAbsolute?: boolean;

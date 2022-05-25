@@ -1,10 +1,10 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React, {Fragment} from 'react';
-import Product from './Product';
-import {getPixel} from '@/Util/pixelChange';
 import {ProductListProps} from '@/Types/Components/HomeTypes';
+import {getPixel} from '@/Util/pixelChange';
 import {brPrice, productTimeSetting, viewCountCheck} from '@/Util/Util';
 import {t} from 'i18next';
+import React, {Fragment} from 'react';
+import {View} from 'react-native';
+import Product from './Product';
 
 const ProductList: React.FC<ProductListProps> = ({isList, list, isBorder, onPressItem}) => {
     return (

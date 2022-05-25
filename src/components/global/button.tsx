@@ -2,10 +2,9 @@ import Theme from '@/assets/global/Theme';
 import {useAppSelector} from '@/Hooks/CustomHook';
 import pixelChange, {getHeightPixel, getPixel, pixelHeightChange} from '@/Util/pixelChange';
 import {getHitSlop} from '@/Util/Util';
-import {t} from 'i18next';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Image, StyleSheet, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import {CheckBoxImageProps, CheckBoxProps, DefaultButtonProps, ToggleProps} from 'Types/Components/global';
 import {Text} from './text';
@@ -79,7 +78,7 @@ export const CheckBoxImage: React.FC<CheckBoxImageProps> = ({isOn, isBox, isBlue
 
 export const Toggle: React.FC<ToggleProps> = ({isOn, setIsOn, width = getPixel(40), height = getPixel(22)}) => {
     const onToggle = () => {
-        if (setIsOn) setIsOn(prev => !prev);
+        if (setIsOn) setIsOn((prev: boolean) => !prev);
     };
     return (
         <TouchableOpacity disabled={setIsOn == null} onPress={onToggle} hitSlop={getHitSlop(5)}>

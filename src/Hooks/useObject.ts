@@ -1,4 +1,4 @@
-import {Dispatch, SetStateAction, useCallback, useState} from 'react';
+import {Dispatch, SetStateAction, useState} from 'react';
 
 function useObject<T>(defaultValue: T): [T, Dispatch<SetStateAction<T>>, <K extends keyof T>(key: K, value: T[K]) => void] {
     const [value, setValue] = useState<T>(defaultValue);

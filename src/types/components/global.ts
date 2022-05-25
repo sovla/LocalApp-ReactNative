@@ -1,6 +1,4 @@
-import React from 'react';
 import {GestureResponderEvent, TextInputProps, TextProps, TouchableOpacityProps, ViewStyle} from 'react-native';
-import {AnyStyledComponent} from 'styled-components';
 
 export interface DefaultButtonProps extends TouchableOpacityProps {
     width?: string;
@@ -75,7 +73,7 @@ export interface CheckBoxImageProps {
 }
 
 export interface ToggleProps {
-    setIsOn?: (value: boolean) => void;
+    setIsOn?: any;
     isOn: boolean;
     width?: number;
     height?: number;

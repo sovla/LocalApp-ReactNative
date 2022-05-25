@@ -1,24 +1,21 @@
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
-
-import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import {GrayText, Text} from '@Components/Global/text';
-import {useAppSelector} from '@/Hooks/CustomHook';
-import {useTranslation} from 'react-i18next';
-import Theme from '@/assets/global/Theme';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import AutoHeightImage from 'react-native-auto-height-image';
-
-import Header from '@/Components/LoginSignUp/Header';
-import {Button, CheckBoxImage} from '@/Components/Global/button';
 import {openingHoursInit, TimeList} from '@/assets/global/dummy';
-import ArrowDownGrayIcon from '@assets/image/arrow_down_gray.png';
-
-import {openingHoursTypes} from '@/Types/Components/global';
-import {Picker} from '@react-native-picker/picker';
-import {BusinessOpeningHoursProps} from '@/Types/Screen/Screen';
-import {useIsFocused} from '@react-navigation/native';
+import Theme from '@/assets/global/Theme';
+import {Button, CheckBoxImage} from '@/Components/Global/button';
+import Header from '@/Components/LoginSignUp/Header';
+import {useAppSelector} from '@/Hooks/CustomHook';
 import {BusinessOpenListApiData} from '@/Types/API/BusinessTypes';
+import {openingHoursTypes} from '@/Types/Components/global';
+import {BusinessOpeningHoursProps} from '@/Types/Screen/Screen';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
+import ArrowDownGrayIcon from '@assets/image/arrow_down_gray.png';
+import {GrayText, Text} from '@Components/Global/text';
+import {Picker} from '@react-native-picker/picker';
+import {useIsFocused} from '@react-navigation/native';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import AutoHeightImage from 'react-native-auto-height-image';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 export default function BusinessOpeningHours({navigation, route: {params}}: BusinessOpeningHoursProps) {
     const {t} = useTranslation();

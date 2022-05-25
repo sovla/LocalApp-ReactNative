@@ -1,28 +1,20 @@
-import {View, StyleSheet, Image, TouchableOpacity} from 'react-native';
-import React, {Dispatch, SetStateAction, useCallback, useState} from 'react';
-import {useTranslation} from 'react-i18next';
-import {useAppDispatch, useAppSelector} from '@/Hooks/CustomHook';
-import Header from '@/Components/Profile/Header';
-import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import EditIcon from '@assets/image/edit_ver.png';
-import {AlertButton, getHitSlop, showToastMessage} from '@/Util/Util';
-import {GrayText, Text, WhiteText} from '@/Components/Global/text';
-import CameraWhiteIcon from '@assets/image/camera_white.png';
-
-import StoreIcon from '@assets/image/store.png';
-import AdIcon from '@assets/image/ad.png';
-import AutoHeightImage from 'react-native-auto-height-image';
-import CopyIcon from '@assets/image/copy.png';
-import ArrowRightIcon from '@assets/image/arrow_right.png';
 import Theme from '@/assets/global/Theme';
-import {StackScreenProps} from '@react-navigation/stack';
-import Screen from 'Types/Screen/Screen';
-import ImageCropPicker from 'react-native-image-crop-picker';
+import {GrayText, WhiteText} from '@/Components/Global/text';
+import Header from '@/Components/Profile/Header';
+import {useAppDispatch, useAppSelector} from '@/Hooks/CustomHook';
 import {usePostSend} from '@/Hooks/useApi';
+import {changeProfileImage} from '@/Store/userState';
 import {BusinessPhotoChangeApi} from '@/Types/API/BusinessTypes';
-import ModalPhoto from './ModalPhoto';
-import {changeProfileImage, changeUser} from '@/Store/userState';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
+import {AlertButton, getHitSlop, showToastMessage} from '@/Util/Util';
+import CameraWhiteIcon from '@assets/image/camera_white.png';
+import CopyIcon from '@assets/image/copy.png';
 import Clipboard from '@react-native-clipboard/clipboard';
+import React, {useCallback, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import AutoHeightImage from 'react-native-auto-height-image';
+import ModalPhoto from './ModalPhoto';
 
 const BusinessProfileHeader: React.FC<{
     title?: string;

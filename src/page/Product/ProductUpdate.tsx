@@ -2,8 +2,8 @@ import {Image, ScrollView, StyleSheet, TextInput, TouchableOpacity, View} from '
 import React, {useCallback, useEffect, useState} from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import {GrayText, Text} from '@Components/Global/text';
-import {useAppNavigation, useAppSelector, useCallbackNavigation} from '@/Hooks/CustomHook';
+import {Text} from '@Components/Global/text';
+import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
 import AutoHeightImage from 'react-native-auto-height-image';
@@ -15,7 +15,7 @@ import {Button, CheckBoxImage} from '@/Components/Global/button';
 import Line from '@/Components/Global/Line';
 import {categoryMenu, productDummy} from '@/assets/global/dummy';
 import CameraImage from '@/Components/Product/CameraImage';
-import {AlertButton, brPrice, findCategory, findTier, getHitSlop, reverseFindCategory, reverseFindTier} from '@/Util/Util';
+import {AlertButton, findCategory, findTier, getHitSlop, reverseFindCategory, reverseFindTier} from '@/Util/Util';
 import {categoryMenuTypes, ProductTypes} from '@/Types/Components/global';
 import {ProductUpdateProps} from '@/Types/Screen/Screen';
 import {useIsFocused} from '@react-navigation/native';
@@ -24,7 +24,6 @@ import TitleInput from '@/Components/Product/TitleInput';
 import useApi, {usePostSend} from '@/Hooks/useApi';
 import {CarFuelApi} from '@/Types/API/CarTypes';
 import {ProductInfoApi} from '@/Types/API/ProductTypes';
-import Product from '@/Components/Home/Product';
 import Loading from '@/Components/Global/Loading';
 
 // 삽니다 수량 없이

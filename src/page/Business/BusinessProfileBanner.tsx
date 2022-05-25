@@ -1,23 +1,22 @@
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useCallback, useLayoutEffect, useState} from 'react';
-import Header from '@/Components/LoginSignUp/Header';
-import {t} from 'i18next';
-import {useTranslation} from 'react-i18next';
-import {useAppSelector} from '@/Hooks/CustomHook';
-import {GrayText, Text} from '@/Components/Global/text';
-import Line from '@/Components/Global/Line';
-import CameraGrayIcon from '@assets/image/camera_gray.png';
-import AutoHeightImage from 'react-native-auto-height-image';
-import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import Theme from '@/assets/global/Theme';
-import {Button} from '@/Components/Global/button';
-import {BusinessProfileBannerProps} from '@/Types/Screen/Screen';
-import useApi, {usePostSend} from '@/Hooks/useApi';
 import ModalPhoto from '@/Components/Business/ModalPhoto';
-import DeleteBlackIcon from '@assets/image/delete_black.png';
-import {AlertButton} from '@/Util/Util';
+import {Button} from '@/Components/Global/button';
+import Line from '@/Components/Global/Line';
 import Loading from '@/Components/Global/Loading';
+import {GrayText, Text} from '@/Components/Global/text';
+import Header from '@/Components/LoginSignUp/Header';
+import {useAppSelector} from '@/Hooks/CustomHook';
+import useApi, {usePostSend} from '@/Hooks/useApi';
 import {BusinessBannerApi} from '@/Types/API/BusinessTypes';
+import {BusinessProfileBannerProps} from '@/Types/Screen/Screen';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
+import {AlertButton} from '@/Util/Util';
+import CameraGrayIcon from '@assets/image/camera_gray.png';
+import DeleteBlackIcon from '@assets/image/delete_black.png';
+import React, {useCallback, useLayoutEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import AutoHeightImage from 'react-native-auto-height-image';
 
 export default function BusinessProfileBanner({navigation}: BusinessProfileBannerProps) {
     const {t} = useTranslation();

@@ -1,13 +1,13 @@
 import Theme from '@/assets/global/Theme';
 import {Text} from '@/Components/Global/text';
-import {createNavigationContainerRef, NavigationContainer, NavigationContainerRef} from '@react-navigation/native';
+import {createNavigationContainerRef, NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import React, {RefObject, Suspense, useEffect, useLayoutEffect, useRef, useState} from 'react';
-import {SafeAreaView, View, ActivityIndicator, StyleSheet, Dimensions, Platform} from 'react-native';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
+import {SafeAreaView, View, StyleSheet, Platform} from 'react-native';
 
 import i18n from 'i18next';
-import {initReactI18next, useTranslation} from 'react-i18next';
+import {initReactI18next} from 'react-i18next';
 import {en, ko, es, br} from '@/assets/lang/lang';
 import {useAppDispatch, useAppSelector} from '@/Hooks/CustomHook';
 import Screen from '@/Types/Screen/Screen';

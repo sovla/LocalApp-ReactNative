@@ -1,9 +1,9 @@
-import {FlatList, NativeSyntheticEvent, StyleSheet, TextInput, TextInputSubmitEditingEventData, TouchableOpacity, View} from 'react-native';
+import {FlatList, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
 import React, {useEffect} from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {GrayText, Text} from '@Components/Global/text';
-import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
+import {useAppSelector} from '@/Hooks/CustomHook';
 import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
 import AutoHeightImage from 'react-native-auto-height-image';
@@ -15,7 +15,6 @@ import MyLocationIcon from '@assets/image/my_location.png';
 import {useCallback} from 'react';
 import axios from 'axios';
 import {useState} from 'react';
-import useGeocoding from '@/Hooks/useGeocoding';
 import {ProductLocationProps} from '@/Types/Screen/Screen';
 
 const ProductLocation = ({navigation, route: {params}}: ProductLocationProps) => {

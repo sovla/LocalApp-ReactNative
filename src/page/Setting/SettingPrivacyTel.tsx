@@ -24,7 +24,7 @@ export default function SettingPrivacyTel({navigation}: SignUpTelProps) {
     const {mt_idx} = useAppSelector(state => state.user);
     const [tel, setTel] = useState('');
     const [selectNum, setSelectNum] = useState('+55');
-    const {PostAPI: getAuthNum} = usePostSend<getAuthNumApi>('member_hp_change.php', {
+    const {PostAPI: getAuthNum} = usePostSend<getAuthNumApi, any>('member_hp_change.php', {
         mt_idx: mt_idx as string,
         jct_country: selectNum.replace('+', ''),
         jct_hp: tel,
@@ -40,7 +40,7 @@ export default function SettingPrivacyTel({navigation}: SignUpTelProps) {
                     jct_hp: tel,
                 });
                 setTimeout(() => {
-                    AlertButton(res?.data);
+                    AlertButton(res?.data); // 인증번호 나타내는것 | 추후에 제거필요
                 }, 100);
             }
         });

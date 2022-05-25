@@ -1,20 +1,20 @@
-import {Image, Modal, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
-import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import Theme from '@/assets/global/Theme';
-import {Text} from '../Global/text';
-import HomeOnIcon from '@/assets/image/home_color.png';
-import HomeOffIcon from '@/assets/image/home_gray.png';
-import FavoriteOnIcon from '@/assets/image/favorite_color.png';
-import FavoriteOffIcon from '@/assets/image/favorite_gray.png';
 import ChatOnIcon from '@/assets/image/chat_color.png';
 import ChatOffIcon from '@/assets/image/chat_gray.png';
+import FavoriteOnIcon from '@/assets/image/favorite_color.png';
+import FavoriteOffIcon from '@/assets/image/favorite_gray.png';
+import HomeOnIcon from '@/assets/image/home_color.png';
+import HomeOffIcon from '@/assets/image/home_gray.png';
 import ProfileOnIcon from '@/assets/image/profile_color.png';
 import ProfileOffIcon from '@/assets/image/profile_gray.png';
-import {FooterProps, MenuBoxProps} from '@/Types/Components/HomeTypes';
-import {useTranslation} from 'react-i18next';
 import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
+import {FooterProps, MenuBoxProps} from '@/Types/Components/HomeTypes';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
+import React, {useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {Image, Modal, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Shadow} from 'react-native-shadow-2';
+import {Text} from '../Global/text';
 import ModalMyPage from './ModalMyPage';
 
 const Footer: React.FC<FooterProps> = ({menu}) => {

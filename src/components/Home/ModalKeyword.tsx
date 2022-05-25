@@ -1,16 +1,17 @@
-import {StyleSheet, Image, View, TouchableWithoutFeedback, TouchableOpacity} from 'react-native';
-import React from 'react';
-import {Text} from '../Global/text';
-import {useTranslation} from 'react-i18next';
+import Theme from '@/assets/global/Theme';
 import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
+import {usePostSend} from '@/Hooks/useApi';
+import {KeywordListAddApi} from '@/Types/API/HomeTypes';
 import {ModalKeywordProps} from '@/Types/Components/HomeTypes';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import Theme from '@/assets/global/Theme';
-import SettingIcon from '@assets/image/setting.png';
-import {CloseIconImage} from '../Global/image';
-import {Button} from '../Global/button';
 import {AlertButton, getHitSlop, showToastMessage} from '@/Util/Util';
-import {usePostSend} from '@/Hooks/useApi';
+import SettingIcon from '@assets/image/setting.png';
+import React from 'react';
+import {useTranslation} from 'react-i18next';
+import {Image, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
+import {Button} from '../Global/button';
+import {CloseIconImage} from '../Global/image';
+import {Text} from '../Global/text';
 
 const ModalKeyword: React.FC<ModalKeywordProps> = ({onClose, keyword}) => {
     const {t} = useTranslation();
@@ -18,8 +19,8 @@ const ModalKeyword: React.FC<ModalKeywordProps> = ({onClose, keyword}) => {
     const {user} = useAppSelector(state => state);
     const navigation = useAppNavigation();
 
-    const {PostAPI} = usePostSend('keyword_list_add.php', {
-        mt_idx: user.mt_idx,
+    const {PostAPI} = usePostSend<KeywordListAddApi, any>('keyword_list_add.php', {
+        mt_idx: user.mt_idx as string,
         keyword: keyword,
     });
 

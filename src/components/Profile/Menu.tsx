@@ -1,11 +1,11 @@
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import React from 'react';
-import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import Theme from '@/assets/global/Theme';
-import {Text} from '../Global/text';
-import {MenuProps} from '@/Types/Components/ProfileTypes';
 import {useAppSelector} from '@/Hooks/CustomHook';
+import {MenuProps} from '@/Types/Components/ProfileTypes';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
+import React from 'react';
 import {useTranslation} from 'react-i18next';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Text} from '../Global/text';
 
 const Menu: React.FC<MenuProps> = ({menuList, selectMenu, setSelectMenu}) => {
     const {t, i18n} = useTranslation();

@@ -1,21 +1,19 @@
-import {Animated, Easing, Image, PanResponder, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
-import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from 'react';
-import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import Theme from '@/assets/global/Theme';
-import {GrayText, MediumText, Text, WhiteText} from '@/Components/Global/text';
 import Line from '@/Components/Global/Line';
-import {useTranslation} from 'react-i18next';
+import {GrayText, MediumText, Text, WhiteText} from '@/Components/Global/text';
 import {useAppSelector} from '@/Hooks/CustomHook';
-
-import CloseBlackIcon from '@assets/image/close_black.png';
 import {ModalFilterProps, ProductState, SearchApi} from '@/Types/Components/HomeTypes';
-import {CheckBox} from '../Global/button';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {Slider as MSlider} from '@miblanchard/react-native-slider';
-import {getHitSlop, refDebounce} from '@/Util/Util';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
+import {getHitSlop} from '@/Util/Util';
+import CloseBlackIcon from '@assets/image/close_black.png';
 import ResetIcon from '@assets/image/reset.png';
 import SelectBlueIcon from '@assets/image/select_blue.png';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
+import React, {useEffect, useRef, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {Animated, Image, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {CheckBox} from '../Global/button';
 
 export type FilterMenuTypes = 'searchModalSortItem1' | 'searchModalSortItem2' | 'searchModalSortItem3' | 'searchModalSortItem4';
 

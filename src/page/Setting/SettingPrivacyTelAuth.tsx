@@ -22,13 +22,13 @@ export default function SettingPrivacyTelAuth({navigation, route: {params}}: Set
     const [authNum, setAuthNum] = useState('');
     const [count, setCount] = useState(120);
 
-    const {PostAPI: getAuthNum} = usePostSend<getAuthNumApi>('member_hp_change.php', {
+    const {PostAPI: getAuthNum} = usePostSend<getAuthNumApi, any>('member_hp_change.php', {
         mt_idx: mt_idx as string,
         jct_country: params.jct_country,
         jct_hp: params.jct_hp,
     });
 
-    const {PostAPI: sendAuthNum} = usePostSend<sendAuthNumApi>('member_hp_change_check.php', {
+    const {PostAPI: sendAuthNum} = usePostSend<sendAuthNumApi, any>('member_hp_change_check.php', {
         mt_idx: mt_idx as string,
         jct_country: params.jct_country,
         jct_hp: params.jct_hp,

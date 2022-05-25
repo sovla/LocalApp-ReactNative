@@ -1,16 +1,14 @@
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useCallback, useState} from 'react';
-
-import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import {GrayText, Text} from '@Components/Global/text';
-import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
-import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
-
-import Header from '@/Components/LoginSignUp/Header';
 import {Toggle} from '@/Components/Global/button';
 import Line from '@/Components/Global/Line';
+import Header from '@/Components/LoginSignUp/Header';
+import {useAppSelector} from '@/Hooks/CustomHook';
 import {SettingPrivacyProps} from '@/Types/Screen/Screen';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
+import {GrayText, Text} from '@Components/Global/text';
+import React, {useCallback, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 
 export default function SettingPrivacy({navigation}: SettingPrivacyProps) {
     const {t} = useTranslation();

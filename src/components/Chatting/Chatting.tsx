@@ -1,10 +1,10 @@
-import {View, Image, StyleSheet} from 'react-native';
-import React from 'react';
-import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {GrayText, Text} from '@/Components/Global/text';
-import {useTranslation} from 'react-i18next';
 import {useAppSelector} from '@/Hooks/CustomHook';
 import {ChattingProps} from '@/Types/Components/ChattingTypes';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
+import React from 'react';
+import {useTranslation} from 'react-i18next';
+import {Image, StyleSheet, View} from 'react-native';
 import AutoHeightImage from 'react-native-auto-height-image';
 
 const Chatting: React.FC<ChattingProps> = ({image, title, content, date, isBuy, userName, isBusiness}) => {

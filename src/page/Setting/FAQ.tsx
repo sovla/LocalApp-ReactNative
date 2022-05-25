@@ -37,6 +37,13 @@ export default function FAQ() {
                   .flat()
             : [];
 
+    const list:
+        | {
+              title: string;
+              content: string;
+          }[]
+        | null = data != null ? Object.values(data[menu])[0] : null;
+
     return (
         <View>
             <Header title={t('FAQTitle')} />
@@ -110,7 +117,7 @@ export default function FAQ() {
                         />
                     </>
                 }
-                data={data != null ? Object.values(data[menu])[0] : []}
+                data={list}
                 renderItem={({item, index}) => {
                     return <FAQItem setSelect={() => setSelectNumber(prev => (prev > 0 ? 0 : index + 1))} isSelect={selectNumber === index + 1} title={item.title} answer={item.content} />;
                 }}

@@ -1,16 +1,14 @@
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import React from 'react';
-
-import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import {WhiteText} from '@Components/Global/text';
 import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
-import {useTranslation} from 'react-i18next';
 import {ModalUploadModalProps} from '@/Types/Components/HomeTypes';
-import AutoHeightImage from 'react-native-auto-height-image';
-
-import WriteIcon from '@assets/image/write.png';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import ProductListIcon from '@assets/image/product_list.png';
 import UploadWhiteIcon from '@assets/image/upload_white.png';
+import WriteIcon from '@assets/image/write.png';
+import {WhiteText} from '@Components/Global/text';
+import React from 'react';
+import {useTranslation} from 'react-i18next';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import AutoHeightImage from 'react-native-auto-height-image';
 
 const UploadModal: React.FC<ModalUploadModalProps> = ({onClose}) => {
     const {t} = useTranslation();

@@ -17,7 +17,7 @@ export interface FAQApi {
               [key: string]: {
                   title: string;
                   content: string;
-              };
+              }[];
           }[]
         | null;
     D: {

@@ -1,9 +1,7 @@
 import {API} from '@/API/API';
 import {useIsFocused} from '@react-navigation/native';
-import {Axios, AxiosResponse} from 'axios';
-import {Dispatch, SetStateAction, useCallback, useEffect, useState} from 'react';
-import {check, RESULTS} from 'react-native-permissions';
-import useBoolean from './useBoolean';
+import {AxiosResponse} from 'axios';
+import {useCallback, useEffect, useState} from 'react';
 interface optionTypes {
     isFirst?: boolean; // isFocused 로 실행 여부
     focusRetry?: boolean; // 해당 페이지에 접근할때마다 실행여부

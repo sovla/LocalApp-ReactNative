@@ -3,7 +3,7 @@ import React from 'react';
 
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {Text} from '@Components/Global/text';
-import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
+import {useAppSelector} from '@/Hooks/CustomHook';
 import {useTranslation} from 'react-i18next';
 
 import {Button} from '@/Components/Global/button';

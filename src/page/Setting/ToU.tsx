@@ -1,13 +1,10 @@
-import {View} from 'react-native';
-import React, {useState} from 'react';
-
-import {useAppSelector} from '@/Hooks/CustomHook';
-import {useTranslation} from 'react-i18next';
-
-import Header from '@/Components/LoginSignUp/Header';
-
-import WebView from 'react-native-webview';
 import Loading from '@/Components/Global/Loading';
+import Header from '@/Components/LoginSignUp/Header';
+import {useAppSelector} from '@/Hooks/CustomHook';
+import React, {useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {View} from 'react-native';
+import WebView from 'react-native-webview';
 
 export default function ToU() {
     const {t} = useTranslation();

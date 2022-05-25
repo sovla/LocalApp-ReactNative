@@ -1,8 +1,7 @@
 import axios from 'axios';
-import jwt_encode from 'jwt-encode';
-import jwtDecode from 'jwt-decode';
-import {Platform} from 'react-native';
 import i18next from 'i18next';
+import jwt_encode from 'jwt-encode';
+import {Platform} from 'react-native';
 
 const SECRETKEY = 'AAAAUV9vLXY:APA91bHklBUTeYmzfdYLVhpYEa8irZKGWSq8PXQkD6nMXSkreECmUr_-iFhy7ZJauagMU7w8GgkdjbF5i2IPrEx-W6JGeHYBBp1NNvd73H34IqUBUNvCdS0wj1ZXs__CRjh_j1NikOPP';
 

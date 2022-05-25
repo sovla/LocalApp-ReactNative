@@ -1,31 +1,24 @@
-import {Image, ImageBackground, Modal, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
-
-import BackGroundImage from '@assets/image/BG.png';
-import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import LocationWhiteIcon from '@assets/image/location_white.png';
-import SearchIcon from '@assets/image/search_white.png';
-import MenuIcon from '@assets/image/bar_white.png';
-import AlarmIcon from '@assets/image/notice_white.png';
-import {Box, RowBox} from '../Global/container';
-import {Text, WhiteText} from '../Global/text';
-import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
-import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
-import TrianglePinkIcon from '@assets/image/triangle_pink.png';
-import {HeaderProps} from '@/Types/Components/HomeTypes';
-import Location from '../Modal/Location';
-import useBoolean from '@/Hooks/useBoolean';
-import ModalFilter from './ModalFilter';
-import ModalMyPage from './ModalMyPage';
-import AutoHeightImage from 'react-native-auto-height-image';
-import ArrowDownWhiteIcon from '@assets/image/arrow_down_white.png';
+import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import useApi from '@/Hooks/useApi';
+import useBoolean from '@/Hooks/useBoolean';
+import {HeaderProps} from '@/Types/Components/HomeTypes';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
+import BackGroundImage from '@assets/image/BG.png';
 import NoticeBlackIcon from '@assets/image/notice_black.png';
 import NoticeEmptyBlackIcon from '@assets/image/notice_empty_black.png';
-import NoticeWhiteIcon from '@assets/image/notice_white.png';
 import NoticeEmptyWhiteIcon from '@assets/image/notice_empty_white.png';
+import NoticeWhiteIcon from '@assets/image/notice_white.png';
+import TrianglePinkIcon from '@assets/image/triangle_pink.png';
+import React, {useEffect} from 'react';
+import {useTranslation} from 'react-i18next';
+import {Image, ImageBackground, Modal, StyleSheet, TouchableOpacity, View} from 'react-native';
+import AutoHeightImage from 'react-native-auto-height-image';
 import FastImage from 'react-native-fast-image';
+import {Box, RowBox} from '../Global/container';
+import {Text, WhiteText} from '../Global/text';
+import Location from '../Modal/Location';
+import ModalMyPage from './ModalMyPage';
 
 const Header: React.FC<HeaderProps> = ({isChange}) => {
     const {t} = useTranslation();

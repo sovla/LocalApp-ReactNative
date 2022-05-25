@@ -1,19 +1,17 @@
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
-
-import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import {GrayText, Text} from '@Components/Global/text';
-import {useAppDispatch, useAppSelector} from '@/Hooks/CustomHook';
-import {useTranslation} from 'react-i18next';
-import AutoHeightImage from 'react-native-auto-height-image';
-
-import BangGrayIcon from '@assets/image/bang_gray.png';
-import Header from '@/Components/LoginSignUp/Header';
+import {languageList} from '@/assets/global/dummy';
 import {Button, CheckBoxImage} from '@/Components/Global/button';
 import Line from '@/Components/Global/Line';
-import i18next from 'i18next';
-import {languageList} from '@/assets/global/dummy';
+import Header from '@/Components/LoginSignUp/Header';
+import {useAppDispatch, useAppSelector} from '@/Hooks/CustomHook';
 import {changeLang} from '@/Store/langState';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
+import BangGrayIcon from '@assets/image/bang_gray.png';
+import {GrayText, Text} from '@Components/Global/text';
+import i18next from 'i18next';
+import React, {useCallback, useLayoutEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import AutoHeightImage from 'react-native-auto-height-image';
 
 export default function SettingLanguage() {
     const {t} = useTranslation();

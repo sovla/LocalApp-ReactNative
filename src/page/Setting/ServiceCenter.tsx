@@ -1,16 +1,14 @@
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {Fragment} from 'react';
-
-import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import {Text} from '@Components/Global/text';
-import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
-import {useTranslation} from 'react-i18next';
-import AutoHeightImage from 'react-native-auto-height-image';
-
-import Header from '@/Components/LoginSignUp/Header';
 import Line from '@/Components/Global/Line';
+import Header from '@/Components/LoginSignUp/Header';
+import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import Screen from '@/Types/Screen/Screen';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import ArrowRightIcon from '@assets/image/arrow_right.png';
+import {Text} from '@Components/Global/text';
+import React, {Fragment} from 'react';
+import {useTranslation} from 'react-i18next';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import AutoHeightImage from 'react-native-auto-height-image';
 
 export default function ServiceCenter() {
     const {t} = useTranslation();

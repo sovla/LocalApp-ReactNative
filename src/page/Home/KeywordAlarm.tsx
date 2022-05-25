@@ -13,6 +13,7 @@ import useApi, {usePostSend} from '@/Hooks/useApi';
 import {KeywordAlarmAPi, KeywordAlarmCheckAPi} from '@/Types/Components/HomeTypes';
 import Loading from '@/Components/Global/Loading';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {KeywordListAddApi} from '@/Types/API/HomeTypes';
 
 export default function KeywordAlarm() {
     const {t} = useTranslation();
@@ -46,8 +47,8 @@ export default function KeywordAlarm() {
         },
     );
 
-    const {PostAPI} = usePostSend('keyword_list_add.php', {
-        mt_idx: user.mt_idx,
+    const {PostAPI} = usePostSend<KeywordListAddApi, any>('keyword_list_add.php', {
+        mt_idx: user.mt_idx as string,
         keyword: keyword,
     });
 

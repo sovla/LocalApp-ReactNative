@@ -1,19 +1,17 @@
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useEffect} from 'react';
-
-import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import {DarkBlueText, Text} from '@Components/Global/text';
-import {useAppSelector} from '@/Hooks/CustomHook';
-import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
-import AutoHeightImage from 'react-native-auto-height-image';
-
-import MoreIcon from '@assets/image/more.png';
-import {ProductWhiteBoxProps} from '@/Types/Components/ProductTypes';
+import {useAppSelector} from '@/Hooks/CustomHook';
 import useBoolean from '@/Hooks/useBoolean';
+import {ProductWhiteBoxProps} from '@/Types/Components/ProductTypes';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
+import MoreIcon from '@assets/image/more.png';
+import {DarkBlueText, Text} from '@Components/Global/text';
+import React, {useEffect} from 'react';
+import {useTranslation} from 'react-i18next';
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import AutoHeightImage from 'react-native-auto-height-image';
+import {CheckBoxImage} from '../Global/button';
 import EditModal from './EditModal';
 import ModalReviewRequest from './ModalReviewRequest';
-import {CheckBoxImage} from '../Global/button';
 
 const ProductWhiteBox: React.FC<ProductWhiteBoxProps> = ({title = '', price = '', image, isComplete, selectMenu, item, setIsChange, isDelete, onPress, isOn}) => {
     const {t} = useTranslation();

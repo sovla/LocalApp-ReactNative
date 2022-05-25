@@ -1,28 +1,17 @@
-import {Image, ImageBackground, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useCallback, useState} from 'react';
-
-import ProfileBackGroundImage from '@assets/image/profile_bg.png';
-import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import {GrayText, Text, WhiteText} from '@Components/Global/text';
-import {useAppSelector} from '@/Hooks/CustomHook';
-import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-
 import {Button} from '@/Components/Global/button';
 import Line from '@/Components/Global/Line';
-import {BusinessSignUpProps} from '@/Types/Screen/Screen';
-
-import Header from '@/Components/Profile/Header';
-import CommunicationImage from '@assets/image/communication.png';
-import Input from '@/Components/Global/Input';
-import {AlertButton} from '@/Util/Util';
-import CountryPicker from '@/Components/Profile/CountryPicker';
+import {useAppSelector} from '@/Hooks/CustomHook';
 import {usePostSend} from '@/Hooks/useApi';
-import ModalAuth from '@/Components/LoginSignUp/ModalAuth';
+import {BusinessSignUpProps} from '@/Types/Screen/Screen';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
+import {AlertButton} from '@/Util/Util';
 import BackWhiteIcon from '@assets/image/back_white.png';
+import {Text} from '@Components/Global/text';
+import React, {useCallback, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import AutoHeightImage from 'react-native-auto-height-image';
-import {API} from '@/API/API';
 
 export default function BusinessSignUp({navigation}: BusinessSignUpProps) {
     const {t} = useTranslation();

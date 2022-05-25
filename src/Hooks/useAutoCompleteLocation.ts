@@ -1,6 +1,6 @@
-import {StyleSheet} from 'react-native';
-import {useCallback, useLayoutEffect, useRef, useState} from 'react';
 import axios from 'axios';
+import {useCallback, useRef, useState} from 'react';
+import {StyleSheet} from 'react-native';
 import {useAppSelector} from './CustomHook';
 import useDebounce from './useDebounce';
 

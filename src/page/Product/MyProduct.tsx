@@ -1,23 +1,21 @@
-import {FlatList, ImageBackground, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
-
-import BackGroundImage from '@assets/image/BG.png';
-import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import {GrayText, WhiteText} from '@Components/Global/text';
-import {useAppSelector} from '@/Hooks/CustomHook';
-import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
-import AutoHeightImage from 'react-native-auto-height-image';
-
-import TrashWhiteIcon from '@assets/image/trash_white.png';
-import BackWhiteIcon from '@assets/image/back_white.png';
-import Menu from '@/Components/Profile/Menu';
 import ProductWhiteBox from '@/Components/Product/ProductWhiteBox';
-import {MyProductProps} from '@/Types/Screen/Screen';
+import Menu from '@/Components/Profile/Menu';
+import {useAppSelector} from '@/Hooks/CustomHook';
 import useApi, {usePostSend} from '@/Hooks/useApi';
 import {ProductFinishListApi, ProductSaleListApi} from '@/Types/API/ProductTypes';
+import {MyProductProps} from '@/Types/Screen/Screen';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {AlertButton, AlertButtons, brPrice} from '@/Util/Util';
+import BackWhiteIcon from '@assets/image/back_white.png';
+import BackGroundImage from '@assets/image/BG.png';
+import TrashWhiteIcon from '@assets/image/trash_white.png';
+import {GrayText, WhiteText} from '@Components/Global/text';
 import {useIsFocused} from '@react-navigation/native';
+import React, {useCallback, useLayoutEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {FlatList, ImageBackground, StyleSheet, TouchableOpacity, View} from 'react-native';
+import AutoHeightImage from 'react-native-auto-height-image';
 
 const MyProduct: React.FC<MyProductProps> = ({navigation}) => {
     const {t} = useTranslation();
@@ -39,13 +37,13 @@ const MyProduct: React.FC<MyProductProps> = ({navigation}) => {
         },
         {isFirst: false},
     );
-    const {data: finishList, getData: getFinishList} = useApi<ProductFinishListApi['T'], ProductFinishListApi['D']>(
+    const {data: finishList, getData: getFinishList} = useApi<ProductFinishListApi['T'], ProductFinishListApi['D']>( // 작업전
         null,
         'sell_product_finish_list.php',
         {
             mt_idx: user.mt_idx as string,
         },
-        {isFirst: false},
+        {isFirst: true},
     );
 
     const {PostAPI: deleteApi} = usePostSend('sell_product_delete_arr.php', {
@@ -183,7 +181,19 @@ const MyProduct: React.FC<MyProductProps> = ({navigation}) => {
                         </>
                     }
                     renderItem={({item, index}) => {
-                        return <ProductWhiteBox isDelete={isDelete} selectMenu={selectMenu} isComplete={selectMenu === 'ProfileSellProductComplete'} title={item.pt_title} price={brPrice(item.pt_price)} item={item} image={item.pt_file} setIsChange={setIsChange} />;
+                        return (
+                            // 작업전
+                            <ProductWhiteBox
+                                isDelete={isDelete}
+                                selectMenu={selectMenu}
+                                isComplete={selectMenu === 'ProfileSellProductComplete'}
+                                title={item.pt_title}
+                                price={brPrice(item.pt_price)}
+                                item={item}
+                                image={item.pt_file}
+                                setIsChange={setIsChange}
+                            />
+                        );
                     }}
                 />
             )}

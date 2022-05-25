@@ -1,14 +1,13 @@
-import {ImageBackground, StyleSheet, TouchableOpacity} from 'react-native';
-import React, {useState} from 'react';
-
-import BackGroundImage from '@assets/image/BG.png';
+import Theme from '@/assets/global/Theme';
+import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
+import BackGroundImage from '@assets/image/BG.png';
+import React, {useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {ImageBackground, StyleSheet, TouchableOpacity} from 'react-native';
+import AutoHeightImage from 'react-native-auto-height-image';
 import {RowBox} from '../Global/container';
 import {WhiteText} from '../Global/text';
-import {useAppSelector, useAppNavigation} from '@/Hooks/CustomHook';
-import {useTranslation} from 'react-i18next';
-import Theme from '@/assets/global/Theme';
-import AutoHeightImage from 'react-native-auto-height-image';
 import {AlarmButton} from '../Home/Header';
 
 const Header: React.FC = () => {

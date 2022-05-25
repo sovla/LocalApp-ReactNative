@@ -1,22 +1,17 @@
-import {Platform, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
-
-import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import {Text, RedText} from '@Components/Global/text';
-import {useAppSelector} from '@/Hooks/CustomHook';
-import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
-
-import {Button, CheckBoxImage} from '@/Components/Global/button';
-import Line from '@/Components/Global/Line';
-
-import {AppPermissionProps} from '@Types/Screen/Screen';
-
-import {request, PERMISSIONS, requestMultiple, checkNotifications, checkMultiple} from 'react-native-permissions';
-import messaging from '@react-native-firebase/messaging';
-import AutoHeightImage from 'react-native-auto-height-image';
+import {Button} from '@/Components/Global/button';
+import {useAppSelector} from '@/Hooks/CustomHook';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {AlertButton} from '@/Util/Util';
+import {Text} from '@Components/Global/text';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import messaging from '@react-native-firebase/messaging';
+import {AppPermissionProps} from '@Types/Screen/Screen';
+import React, {useCallback} from 'react';
+import {useTranslation} from 'react-i18next';
+import {Platform, StyleSheet, TouchableOpacity, View} from 'react-native';
+import AutoHeightImage from 'react-native-auto-height-image';
+import {PERMISSIONS, requestMultiple} from 'react-native-permissions';
 
 const AndroidPermission = [
     PERMISSIONS.ANDROID.READ_SMS,

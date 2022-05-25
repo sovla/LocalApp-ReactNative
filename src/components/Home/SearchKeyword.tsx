@@ -1,14 +1,14 @@
-import {View, Image, TouchableOpacity, StyleSheet} from 'react-native';
-import React from 'react';
-import {MediumText, Text} from '@/Components/Global/text';
-import {useTranslation} from 'react-i18next';
-import {useAppSelector} from '@/Hooks/CustomHook';
-import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import Theme from '@/assets/global/Theme';
 import Line from '@/Components/Global/Line';
+import {MediumText, Text} from '@/Components/Global/text';
+import {useAppSelector} from '@/Hooks/CustomHook';
+import {SearchKeywordProps} from '@/Types/Components/HomeTypes';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import BellIcon from '@assets/image/bell.png';
 import filterIcon from '@assets/image/filter.png';
-import {SearchKeywordProps} from '@/Types/Components/HomeTypes';
+import React from 'react';
+import {useTranslation} from 'react-i18next';
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 
 const SearchKeyword: React.FC<SearchKeywordProps> = ({onPressFilter, onPressKeyword}) => {
     const {t} = useTranslation();

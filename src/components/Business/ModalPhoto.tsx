@@ -1,18 +1,14 @@
-import {FlatList, Image, Modal, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
-
+import Theme from '@/assets/global/Theme';
+import Header from '@/Components/LoginSignUp/Header';
+import {useAppSelector} from '@/Hooks/CustomHook';
+import {ModalPhotoProps} from '@/Types/Components/BusinessTypes';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {Text, WhiteText} from '@Components/Global/text';
-import {useAppSelector} from '@/Hooks/CustomHook';
-import {useTranslation} from 'react-i18next';
-import Theme from '@/assets/global/Theme';
-
-import Header from '@/Components/LoginSignUp/Header';
-import {ProductPhotoProps} from '@/Types/Screen/Screen';
-
-import CameraRoll from '@react-native-community/cameraroll';
 import Photo from '@Components/LoginSignUp/Photo';
-import {ModalPhotoProps} from '@/Types/Components/BusinessTypes';
+import CameraRoll from '@react-native-community/cameraroll';
+import React, {useCallback, useLayoutEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {FlatList, Image, Modal, StyleSheet, TouchableOpacity, View} from 'react-native';
 
 export default function ModalPhoto({onClose, count = 1, returnFn}: ModalPhotoProps) {
     const {t} = useTranslation();

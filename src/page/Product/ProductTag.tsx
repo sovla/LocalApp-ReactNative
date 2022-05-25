@@ -8,8 +8,6 @@ import {useTranslation} from 'react-i18next';
 
 import Header from '@/Components/LoginSignUp/Header';
 import {Button} from '@/Components/Global/button';
-import {productDummy} from '@/assets/global/dummy';
-import Input from '@/Components/Global/Input';
 import {ProductTagProps} from '@/Types/Screen/Screen';
 import {AlertButton} from '@/Util/Util';
 import Theme from '@/assets/global/Theme';

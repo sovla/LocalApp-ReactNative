@@ -3,23 +3,23 @@ import type {RootState} from './store';
 
 // Define a type for the slice state
 interface langState {
-  value: string;
+    value: string;
 }
 
 // Define the initial state using that type
 const initialState: langState = {
-  value: 'ko',
+    value: 'ko',
 };
 
 export const langSlice = createSlice({
-  name: 'lang',
-  // `createSlice` will infer the state type from the `initialState` argument
-  initialState,
-  reducers: {
-    changeLang: (state, action: PayloadAction<string>) => {
-      state.value = action.payload;
+    name: 'lang',
+    // `createSlice` will infer the state type from the `initialState` argument
+    initialState,
+    reducers: {
+        changeLang: (state, action: PayloadAction<string>) => {
+            state.value = action.payload;
+        },
     },
-  },
 });
 
 export const {changeLang} = langSlice.actions;

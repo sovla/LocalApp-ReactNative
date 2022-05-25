@@ -1,13 +1,11 @@
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useCallback, useState} from 'react';
-
+import Theme from '@/assets/global/Theme';
+import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
+import {LocationChattingProps} from '@/Types/Components/ChattingTypes';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {Text} from '@Components/Global/text';
-import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
+import React, {useCallback, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import Theme from '@/assets/global/Theme';
-
-import {LocationChattingProps} from '@/Types/Components/ChattingTypes';
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 
 const LocationChatting: React.FC<LocationChattingProps> = ({date, content, isCheck, isMy, region, profileImage}) => {
     const {t} = useTranslation();
