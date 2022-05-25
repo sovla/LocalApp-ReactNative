@@ -134,7 +134,7 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
             if (res.data?.result === 'true') {
                 setIsChatListFirst(false);
                 setChattingList(prev => getChattingListState(prev, res, setIsChatLast, page as number));
-                if (page === 1) {
+                if (_page === 1) {
                     setChattingPage(2);
                 } else {
                     setChattingPage(prev => prev + 1);
@@ -383,17 +383,36 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                     );
                 } else if (_item.msg_type === 'file') {
                     return (
-                        <View style={{alignSelf: isMy ? 'flex-end' : 'flex-start', marginVertical: getHeightPixel(20)}}>
-                            <Image
-                                source={{
-                                    uri: _item.img,
-                                }}
-                                resizeMode="contain"
-                                style={{
-                                    width: getPixel(150),
-                                    height: getPixel(150),
-                                }}
-                            />
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                justifyContent: 'flex-end',
+                                alignItems: 'flex-end',
+                                marginVertical: getHeightPixel(20),
+                                marginHorizontal: getPixel(16),
+                            }}>
+                            {isMy && (
+                                <View style={{flexDirection: 'row', alignItems: 'center', marginRight: getPixel(10)}}>
+                                    <Image
+                                        source={_item.msg_show === 'N' ? require('@assets/image/check.png') : require('@assets/image/check_double.png')}
+                                        style={{
+                                            width: getPixel(24),
+                                            height: getPixel(24),
+                                        }}
+                                    />
+                                    <Text color="#59636C" fontSize={`${10 * fontSize}`}>
+                                        {_item.msg_date}
+                                    </Text>
+                                </View>
+                            )}
+                            <View style={{alignSelf: isMy ? 'flex-end' : 'flex-start', borderRadius: 12, overflow: 'hidden'}}>
+                                <AutoHeightImage
+                                    source={{
+                                        uri: _item.img,
+                                    }}
+                                    width={getPixel(245)}
+                                />
+                            </View>
                         </View>
                     );
                 }
