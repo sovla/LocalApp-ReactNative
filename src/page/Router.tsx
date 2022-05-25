@@ -225,7 +225,7 @@ export default function Router() {
 
     return (
         <NavigationContainer ref={navigationRef}>
-            <Stack.Navigator initialRouteName={'LocationSetting'}>
+            <Stack.Navigator initialRouteName={initRoute}>
                 {RouterSetting.map((item, index) => (
                     <Stack.Screen
                         name={item.name}

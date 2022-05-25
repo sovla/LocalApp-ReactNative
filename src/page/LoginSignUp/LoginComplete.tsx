@@ -37,9 +37,16 @@ export default function LoginComplete({navigation}: LoginCompleteProps) {
 
     useLayoutEffect(() => {
         if (!user.mt_lat || !user.mt_lng || !user.mt_location) {
+            // 유저정보중 지역이 없을경우 ?
             (async () => {
                 const locationString = await AsyncStorage.getItem('location');
-                const location = locationString ? JSON.parse(locationString) : '';
+                const location = locationString
+                    ? JSON.parse(locationString)
+                    : {
+                          city: 'Bom Retiro',
+                          lat: -23.5279688,
+                          lng: -46.6365761,
+                      };
 
                 LocationChangeSendApi({
                     mt_location: location.city,
@@ -57,10 +64,7 @@ export default function LoginComplete({navigation}: LoginCompleteProps) {
                 );
             })();
         }
-
-        return () => {};
     }, [user]);
-
     return (
         <View style={styles.mainContainer}>
             <Box>
