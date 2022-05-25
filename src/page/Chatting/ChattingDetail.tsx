@@ -1,48 +1,38 @@
-import {Image, ImageBackground, Keyboard, StyleSheet, TouchableOpacity, View, TextInput, Platform, FlatList, KeyboardAvoidingView, Dimensions} from 'react-native';
-import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from 'react';
-
-import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import {DarkBlueText, Text, WhiteText} from '@Components/Global/text';
-import {useAppSelector} from '@/Hooks/CustomHook';
-import {useTranslation} from 'react-i18next';
+import {API} from '@/API/API';
 import Theme from '@/assets/global/Theme';
-import useBoolean from '@/Hooks/useBoolean';
-import {KeyboardAwareFlatList} from 'react-native-keyboard-aware-scroll-view';
-import AutoHeightImage from 'react-native-auto-height-image';
-
-import BackWhiteIcon from '@assets/image/back_white.png';
-import {ChattingDetailProps} from '@/Types/Screen/Screen';
-
-import ChattingBgImage from '@assets/image/chatting_bg.png';
-
-import SearchWhiteIcon from '@assets/image/search_white.png';
-import MoreWhiteIcon from '@assets/image/more_white.png';
-import StoreWhiteIcon from '@assets/image/store_white.png';
-import {apiResult, brPrice, getHitSlop} from '@/Util/Util';
-import OtherChatting from '@/Components/Chatting/OtherChatting';
+import ModalPhoto from '@/Components/Business/ModalPhoto';
 import ChatDate from '@/Components/Chatting/ChatDate';
-import MyChatting from '@/Components/Chatting/MyChatting';
-import ProductChatting from '@/Components/Chatting/ProductChatting';
-import SendGrayIcon from '@assets/image/send_gray.png';
-import PlusMenuIcon from '@assets/image/plus_menu.png';
-import GalleryPurpleIcon from '@assets/image/gallery_purple.png';
-import CameraSkyIcon from '@assets/image/camera_sky.png';
-import LocationOrangeIcon from '@assets/image/location_orange.png';
 import LocationChatting from '@/Components/Chatting/LocationChatting';
 import ModalChattingSetting from '@/Components/Chatting/ModalChattingSetting';
-import SendBird from 'sendbird';
-import messaging from '@react-native-firebase/messaging';
-import ModalPhoto from '@/Components/Business/ModalPhoto';
-import ImageCropPicker from 'react-native-image-crop-picker';
-import {useIsFocused, useRoute} from '@react-navigation/native';
-import useApi, {usePostSend} from '@/Hooks/useApi';
-import {ChattingDetailListApi, ChattingRoomInformationApi, ChattingSendApi, dateChat, userChat} from '@/Types/API/ChattingTypes';
-import {Axios, AxiosResponse} from 'axios';
-import {API} from '@/API/API';
-import RNFetchBlob from 'rn-fetch-blob';
-import useUpdateEffect from '@/Hooks/useUpdateEffect';
-import {CALLBACK_TYPE} from 'react-native-gesture-handler/lib/typescript/handlers/gestures/gesture';
+import MyChatting from '@/Components/Chatting/MyChatting';
+import OtherChatting from '@/Components/Chatting/OtherChatting';
 import Loading from '@/Components/Global/Loading';
+import {useAppSelector} from '@/Hooks/CustomHook';
+import {usePostSend} from '@/Hooks/useApi';
+import useBoolean from '@/Hooks/useBoolean';
+import {ChattingDetailListApi, ChattingRoomInformationApi, ChattingSendApi, dateChat, userChat} from '@/Types/API/ChattingTypes';
+import {ChattingDetailProps} from '@/Types/Screen/Screen';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
+import {apiResult, getHitSlop} from '@/Util/Util';
+import BackWhiteIcon from '@assets/image/back_white.png';
+import CameraSkyIcon from '@assets/image/camera_sky.png';
+import ChattingBgImage from '@assets/image/chatting_bg.png';
+import GalleryPurpleIcon from '@assets/image/gallery_purple.png';
+import LocationOrangeIcon from '@assets/image/location_orange.png';
+import MoreWhiteIcon from '@assets/image/more_white.png';
+import PlusMenuIcon from '@assets/image/plus_menu.png';
+import SearchWhiteIcon from '@assets/image/search_white.png';
+import StoreWhiteIcon from '@assets/image/store_white.png';
+import {DarkBlueText, Text, WhiteText} from '@Components/Global/text';
+import messaging from '@react-native-firebase/messaging';
+import {useIsFocused, useRoute} from '@react-navigation/native';
+import {AxiosResponse} from 'axios';
+import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {FlatList, Image, ImageBackground, Keyboard, Platform, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
+import AutoHeightImage from 'react-native-auto-height-image';
+import ImageCropPicker from 'react-native-image-crop-picker';
+import SendBird from 'sendbird';
 
 export default function ChattingDetail({navigation, route: {params}}: ChattingDetailProps) {
     const {t} = useTranslation();
@@ -176,7 +166,6 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                     animated,
                 });
     };
-
     const messageSend = async (
         type?: 'location' | 'text' | undefined,
         message?:
@@ -192,6 +181,7 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
         if ((chatting.length === 0 && type === 'text') || IsSendChat || loading.messageSend) {
             return;
         }
+        setChatting('');
         setLoading(prev => ({...prev, messageSend: true}));
 
         const params = new sb.UserMessageParams();
@@ -201,7 +191,7 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
             params.message = chatting;
             params.customType = 'text';
             // 채팅인경우
-            setChatting(''); // text 인경우
+            // text 인경우
             setChattingList(dummyMessageAdd(params, user));
 
             await sendChatApi({
@@ -252,10 +242,11 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                     console.log('보낸 메시지 에러', error);
                 }
                 scrollToEnd(false);
+                setLoading(prev => ({...prev, messageSend: false}));
+
                 // setChatList(prev => [...prev, message]);
             });
         }
-        setLoading(prev => ({...prev, messageSend: false}));
     };
 
     const fileSend = async (images: {path: string; mime: string}[]) => {

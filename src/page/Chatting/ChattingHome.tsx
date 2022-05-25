@@ -1,20 +1,18 @@
-import {View, FlatList, Touchable, TouchableOpacity, StyleSheet} from 'react-native';
-import React, {useState} from 'react';
-import Header from '@/Components/Chatting/Header';
-import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import dummy from '@assets/image/dummy.png';
-import Line from '@/Components/Global/Line';
 import Theme from '@/assets/global/Theme';
-import {ChattingProps} from '@/Types/Components/ChattingTypes';
 import Chatting from '@/Components/Chatting/Chatting';
-import Footer from '@/Components/Home/Footer';
-import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
-import {useTranslation} from 'react-i18next';
-import Menu from '@/Components/Profile/Menu';
+import Header from '@/Components/Chatting/Header';
+import Line from '@/Components/Global/Line';
+import Loading from '@/Components/Global/Loading';
 import {GrayText} from '@/Components/Global/text';
+import Footer from '@/Components/Home/Footer';
+import Menu from '@/Components/Profile/Menu';
+import {useAppNavigation, useAppSelector} from '@/Hooks/CustomHook';
 import useApi from '@/Hooks/useApi';
 import {ChattingRoomListApi} from '@/Types/API/ChattingTypes';
-import Loading from '@/Components/Global/Loading';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
+import React, {useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 
 export default function ChattingHome() {
     const navigation = useAppNavigation();
@@ -32,6 +30,8 @@ export default function ChattingHome() {
         },
         {
             focusRetry: true,
+            isFirst: true,
+            firstLoading: true,
         },
     );
     const {data: transactionCompletedRoomData, isLoading: isLoadingRoomList1} = useApi<ChattingRoomListApi['T'], ChattingRoomListApi['D']>(
@@ -43,6 +43,8 @@ export default function ChattingHome() {
         },
         {
             focusRetry: true,
+            isFirst: true,
+            firstLoading: true,
         },
     );
 
@@ -52,7 +54,7 @@ export default function ChattingHome() {
             <Header />
             <View style={{height: getHeightPixel(20)}} />
             <Menu menuList={['chatMenu1', 'chatMenu2']} selectMenu={selectMenu} setSelectMenu={setSelectMenu} />
-            {((isLoadingRoomList && !tradingRoomData) || (isLoadingRoomList1 && !transactionCompletedRoomData)) && <Loading isAbsolute backgroundColor="#0003" />}
+            {((isLoadingRoomList && !tradingRoomData) || (isLoadingRoomList1 && !transactionCompletedRoomData)) && <Loading isAbsolute />}
             <FlatList
                 data={list}
                 renderItem={({item, index}) => {
@@ -87,9 +89,11 @@ export default function ChattingHome() {
                 }}
                 ListEmptyComponent={
                     <View style={styles.emptyView}>
-                        <GrayText medium fontSize={`${14 * fontSize}`}>
-                            {t('noneChatHistory')}
-                        </GrayText>
+                        {!isLoadingRoomList && !isLoadingRoomList1 && (
+                            <GrayText medium fontSize={`${14 * fontSize}`}>
+                                {t('noneChatHistory')}
+                            </GrayText>
+                        )}
                     </View>
                 }
                 style={{

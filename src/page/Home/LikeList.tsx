@@ -1,18 +1,19 @@
-import {View, ImageBackground, StyleSheet, Image, TouchableOpacity, FlatList} from 'react-native';
-import React, {useCallback, useState} from 'react';
-import BackGroundImage from '@assets/image/BG.png';
-import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import BackWhiteIcon from '@assets/image/back_white.png';
-import {GrayText, WhiteText} from '@/Components/Global/text';
-import {useTranslation} from 'react-i18next';
-import {useAppSelector} from '@/Hooks/CustomHook';
-import LikeProduct from '@/Components/Home/LikeProduct';
 import Theme from '@/assets/global/Theme';
+import Loading from '@/Components/Global/Loading';
+import {GrayText, WhiteText} from '@/Components/Global/text';
 import Footer from '@/Components/Home/Footer';
-import {AlertButton, brPrice, getHitSlop} from '@/Util/Util';
-import {LikeListProps} from '@/Types/Screen/Screen';
+import LikeProduct from '@/Components/Home/LikeProduct';
+import {useAppSelector} from '@/Hooks/CustomHook';
 import useApi, {usePostSend} from '@/Hooks/useApi';
 import {LikeApiTypes, LikeListType} from '@/Types/Components/HomeTypes';
+import {LikeListProps} from '@/Types/Screen/Screen';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
+import {AlertButton, brPrice, getHitSlop} from '@/Util/Util';
+import BackWhiteIcon from '@assets/image/back_white.png';
+import BackGroundImage from '@assets/image/BG.png';
+import React, {useCallback, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {FlatList, Image, ImageBackground, StyleSheet, TouchableOpacity, View} from 'react-native';
 
 export default function LikeList({navigation}: LikeListProps) {
     const {t} = useTranslation();
@@ -33,6 +34,7 @@ export default function LikeList({navigation}: LikeListProps) {
         {
             isList: true,
             listField: 'list',
+            firstLoading: true,
         },
     );
 
@@ -126,6 +128,7 @@ export default function LikeList({navigation}: LikeListProps) {
 
     return (
         <View style={{flex: 1, backgroundColor: Theme.color.whiteGray_F7}}>
+            {isLoading && <Loading isAbsolute />}
             <ImageBackground style={styles.headerContainer} source={BackGroundImage}>
                 <View style={styles.headerLeftView}>
                     <TouchableOpacity
@@ -182,9 +185,11 @@ export default function LikeList({navigation}: LikeListProps) {
                 }}
                 ListEmptyComponent={
                     <View style={{flex: 1, paddingTop: getHeightPixel(250), alignItems: 'center'}}>
-                        <GrayText medium fontSize={`${14 * fontSize}`}>
-                            {t('noneLikeList')}
-                        </GrayText>
+                        {!isLoading && (
+                            <GrayText medium fontSize={`${14 * fontSize}`}>
+                                {t('noneLikeList')}
+                            </GrayText>
+                        )}
                     </View>
                 }
             />

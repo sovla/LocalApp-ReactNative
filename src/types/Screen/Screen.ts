@@ -1,5 +1,5 @@
 import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
-import {categoryMenuTypes, openingHoursTypes, ProductTypes, tierTypes} from '../Components/global';
+import {categoryMenuTypes, openingHoursTypes, tierTypes} from '../Components/global';
 
 type BusinessTime = {
     busi_all_open?: 'Y' | 'N';
