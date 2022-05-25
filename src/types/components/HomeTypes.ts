@@ -1,6 +1,5 @@
-import {FilterMenuTypes} from '@/Components/Home/ModalFilter';
 import {FilterState} from '@/Page/Home/Search';
-import React, {Dispatch, SetStateAction} from 'react';
+import React from 'react';
 import {GestureResponderEvent} from 'react-native';
 import {categoryMenuTypes, ModalProps} from './global';
 
@@ -321,17 +320,32 @@ export interface SearchApi {
         total_page?: number;
         list: ProductApiTypes[] | [];
     };
-    D: {
-        mt_idx: string;
-        search_txt: string;
-        page?: number;
-        category?: number;
-        order?: 0 | 1 | 2 | 3; //  정렬(0:최신순, 1 가격 높, 2:가격 낮, 3: 거리순)
-        s_price?: number;
-        e_price?: number;
-        grade?: string;
-        pt_fin?: 'Y' | 'N';
-    };
+    D:
+        | {
+              mt_idx: string;
+              search_txt: string;
+              page?: number;
+              category?: number;
+              order?: 0 | 1 | 2 | 3; //  정렬(0:최신순, 1 가격 높, 2:가격 낮, 3: 거리순)
+              s_price?: number;
+              e_price?: number;
+              grade?: string;
+              pt_fin?: 'Y' | 'N';
+          }
+        | {
+              mt_idx: string;
+              page?: number;
+              category?: number;
+              search_txt: string;
+              brand?: string;
+              model?: string;
+              s_price?: number;
+              e_price?: number;
+              s_year?: number;
+              e_year?: number;
+              s_kilo?: number;
+              e_kilo?: number;
+          };
 }
 
 export interface RecentSearchTextApi {

@@ -1,7 +1,10 @@
 import Theme from '@/assets/global/Theme';
 import Line from '@/Components/Global/Line';
-import {GrayText, MediumText, Text, WhiteText} from '@/Components/Global/text';
+import {MediumText, Text, WhiteText} from '@/Components/Global/text';
 import {useAppSelector} from '@/Hooks/CustomHook';
+import useApi from '@/Hooks/useApi';
+import useObject from '@/Hooks/useObject';
+import {CarBrandAPi} from '@/Types/API/CarTypes';
 import {ModalFilterProps, ProductState, SearchApi} from '@/Types/Components/HomeTypes';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import {getHitSlop} from '@/Util/Util';
@@ -9,7 +12,8 @@ import CloseBlackIcon from '@assets/image/close_black.png';
 import ResetIcon from '@assets/image/reset.png';
 import SelectBlueIcon from '@assets/image/select_blue.png';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
-import React, {useEffect, useRef, useState} from 'react';
+import {Picker} from '@react-native-picker/picker';
+import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Animated, Image, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -18,6 +22,8 @@ import {CheckBox} from '../Global/button';
 export type FilterMenuTypes = 'searchModalSortItem1' | 'searchModalSortItem2' | 'searchModalSortItem3' | 'searchModalSortItem4';
 
 const ModalFilter: React.FC<ModalFilterProps> = ({onClose, setFilter, filter, isVehicle, isCar}) => {
+    const BrandRef = useRef<any>();
+    const ModelRef = useRef<any>();
     const [selectFilter, setSelectFilter] = useState<FilterMenuTypes>('searchModalSortItem1');
     const [productState, setProductState] = useState<ProductState>({
         newProduct: false,
@@ -27,7 +33,14 @@ const ModalFilter: React.FC<ModalFilterProps> = ({onClose, setFilter, filter, is
     });
     const [range, setRange] = useState([0, 5000000]);
 
-    const [carFilter, setCarFilter] = useState({
+    const [carFilter, setCarFilter, onChangeCarFilter] = useObject<{
+        brand: null | string;
+        model: null | string;
+        s_year: number;
+        e_year: number;
+        s_kilo: number;
+        e_kilo: number;
+    }>({
         brand: null,
         model: null,
         s_year: 1950,
@@ -62,6 +75,16 @@ const ModalFilter: React.FC<ModalFilterProps> = ({onClose, setFilter, filter, is
         },
     ];
 
+    const {data: brand, getData: getBrand} = useApi<CarBrandAPi['T'], CarBrandAPi['D']>(
+        null,
+        isCar ? 'car_brand.php' : 'auto_brand.php',
+        {search_txt: ''},
+        {
+            isFirst: false,
+        },
+    );
+    const {data: model, getData: getModel} = useApi<CarBrandAPi['T'], CarBrandAPi['D']>(null, isCar ? 'car_model.php' : 'auto_model.php', {search_txt: ''}, {isFirst: false});
+
     const onPressApply = () => {
         onClose();
         setFilter((prev: Omit<SearchApi, 'mt_idx' | 'search_txt' | 'page' | 'category'>) => ({
@@ -78,6 +101,7 @@ const ModalFilter: React.FC<ModalFilterProps> = ({onClose, setFilter, filter, is
                 .join('')
                 .split('')
                 .join(','),
+            ...carFilter,
         }));
     };
 
@@ -102,6 +126,21 @@ const ModalFilter: React.FC<ModalFilterProps> = ({onClose, setFilter, filter, is
             });
         }
         setRange([filter?.s_price ?? 0, filter?.e_price ?? 0.5]);
+        setCarFilter({
+            brand: filter?.brand ?? null,
+            model: filter?.model ?? null,
+            e_kilo: filter?.e_kilo ?? 900000,
+            e_year: filter?.e_year ?? new Date().getFullYear(),
+            s_kilo: filter?.s_kilo ?? 0,
+            s_year: filter?.s_year ?? 1950,
+        });
+    }, []);
+
+    useLayoutEffect(() => {
+        if (isVehicle) {
+            getModel();
+            getBrand();
+        }
     }, []);
 
     return (
@@ -136,8 +175,10 @@ const ModalFilter: React.FC<ModalFilterProps> = ({onClose, setFilter, filter, is
                                     <Text medium fontSize={`${18 * fontSize}`}>
                                         {t('carBrand')}
                                     </Text>
-                                    <TouchableOpacity onPress={() => {}} style={styles.pickerTouch}>
-                                        <GrayText fontSize={`${14 * fontSize}`}>{t('unSelected')}</GrayText>
+                                    <TouchableOpacity onPress={() => BrandRef?.current && BrandRef.current.focus()} style={styles.pickerTouch}>
+                                        <Text color={carFilter.brand ? Theme.color.black : Theme.color.gray} fontSize={`${14 * fontSize}`}>
+                                            {carFilter.brand ?? t('unSelected')}
+                                        </Text>
                                         <Image source={SelectBlueIcon} style={styles.selectImage} />
                                     </TouchableOpacity>
                                 </View>
@@ -146,8 +187,10 @@ const ModalFilter: React.FC<ModalFilterProps> = ({onClose, setFilter, filter, is
                                     <Text medium fontSize={`${18 * fontSize}`}>
                                         {t('pt_model')}
                                     </Text>
-                                    <TouchableOpacity onPress={() => {}} style={styles.pickerTouch}>
-                                        <GrayText fontSize={`${14 * fontSize}`}>{t('unSelected')}</GrayText>
+                                    <TouchableOpacity onPress={() => ModelRef?.current && ModelRef.current.focus()} style={styles.pickerTouch}>
+                                        <Text color={carFilter.model ? Theme.color.black : Theme.color.gray} fontSize={`${14 * fontSize}`}>
+                                            {carFilter.model ?? t('unSelected')}
+                                        </Text>
                                         <Image source={SelectBlueIcon} style={styles.selectImage} />
                                     </TouchableOpacity>
                                 </View>
@@ -387,6 +430,40 @@ const ModalFilter: React.FC<ModalFilterProps> = ({onClose, setFilter, filter, is
                     </TouchableOpacity>
                 </View>
             </SlideRightModal>
+            {brand && Array.isArray(brand.list) && (
+                <Picker
+                    ref={BrandRef}
+                    style={{
+                        display: 'none',
+                    }}
+                    selectedValue={carFilter.brand}
+                    onValueChange={itemValue => onChangeCarFilter('brand', itemValue as string)}>
+                    {brand.list.map(v => {
+                        if ('cc_idx' in v) {
+                            return <Picker.Item label={v.cc_title} value={v.cc_title} />;
+                        } else {
+                            return <Picker.Item label={v.ac_title} value={v.ac_title} />;
+                        }
+                    })}
+                </Picker>
+            )}
+            {model && Array.isArray(model.list) && (
+                <Picker
+                    ref={ModelRef}
+                    style={{
+                        display: 'none',
+                    }}
+                    selectedValue={carFilter.model}
+                    onValueChange={itemValue => onChangeCarFilter('model', itemValue as string)}>
+                    {model.list.map(v => {
+                        if ('cc_idx' in v) {
+                            return <Picker.Item label={v.cc_title} value={v.cc_title} />;
+                        } else {
+                            return <Picker.Item label={v.ac_title} value={v.ac_title} />;
+                        }
+                    })}
+                </Picker>
+            )}
         </View>
     );
 };

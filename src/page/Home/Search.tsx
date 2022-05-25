@@ -1,38 +1,40 @@
-import {View, Image, ScrollView, TouchableOpacity, StyleSheet, Modal, FlatList} from 'react-native';
-import React, {Fragment, useCallback, useEffect, useState} from 'react';
-import SearchHeader from '@/Components/Home/SearchHeader';
-import {GrayText, MediumText, Text} from '@/Components/Global/text';
-import {useTranslation} from 'react-i18next';
-import {useAppSelector} from '@/Hooks/CustomHook';
-import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import {PopularSearchTextApi, RecentAllDeleteApi, RecentDeleteApi, RecentSearchTextApi, SearchApi, SearchLogApi} from '@/Types/Components/HomeTypes';
-
-import SearchKeyword from '@/Components/Home/SearchKeyword';
-
 import Theme from '@/assets/global/Theme';
-import MenuOffIcon from '@assets/image/menu_ver.png';
-import MenuOnIcon from '@assets/image/menu_ver1.png';
-import ProductList from '@/Components/Home/ProductList';
-import ModalFilter from '../../Components/Home/ModalFilter';
-import useBoolean from '@/Hooks/useBoolean';
-import ModalKeyword from '@/Components/Home/ModalKeyword';
-import CloseBlackIcon from '@assets/image/close_black.png';
-import {SearchProps} from '@/Types/Screen/Screen';
-import {categoryMenuTypes} from '@/Types/Components/global';
-import {useIsFocused} from '@react-navigation/native';
-import useApi from '@/Hooks/useApi';
-import useUpdateEffect from '@/Hooks/useUpdateEffect';
-import useStateCallback from '@/Hooks/useStateCallback';
-import Loading from '@/Components/Global/Loading';
-import {AlertButton, brPrice, findCategory, productTimeSetting, viewCountCheck} from '@/Util/Util';
 import {CheckBoxImage} from '@/Components/Global/button';
+import Loading from '@/Components/Global/Loading';
+import {GrayText, MediumText, Text} from '@/Components/Global/text';
+import ModalKeyword from '@/Components/Home/ModalKeyword';
 import Product from '@/Components/Home/Product';
+import SearchHeader from '@/Components/Home/SearchHeader';
+import SearchKeyword from '@/Components/Home/SearchKeyword';
+import {useAppSelector} from '@/Hooks/CustomHook';
+import useApi from '@/Hooks/useApi';
+import useBoolean from '@/Hooks/useBoolean';
+import useObject from '@/Hooks/useObject';
+import useStateCallback from '@/Hooks/useStateCallback';
+import useUpdateEffect from '@/Hooks/useUpdateEffect';
+import {categoryMenuTypes} from '@/Types/Components/global';
+import {PopularSearchTextApi, RecentAllDeleteApi, RecentDeleteApi, RecentSearchTextApi, SearchApi, SearchLogApi} from '@/Types/Components/HomeTypes';
+import {SearchProps} from '@/Types/Screen/Screen';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
+import {AlertButton, brPrice, findCategory, productTimeSetting, viewCountCheck} from '@/Util/Util';
+import CloseBlackIcon from '@assets/image/close_black.png';
+import {useIsFocused} from '@react-navigation/native';
+import React, {Fragment, useCallback, useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {FlatList, Image, Modal, StyleSheet, TouchableOpacity, View} from 'react-native';
+import ModalFilter from '../../Components/Home/ModalFilter';
 
 export interface FilterState {
     order: undefined | 0 | 1 | 2 | 3;
     s_price: undefined | number;
     e_price: undefined | number;
     grade: undefined | string;
+    brand?: string;
+    model?: string;
+    s_year?: number;
+    e_year?: number;
+    s_kilo?: number;
+    e_kilo?: number;
 }
 
 export default function Search({route: {params}, navigation}: SearchProps): JSX.Element {
@@ -49,12 +51,20 @@ export default function Search({route: {params}, navigation}: SearchProps): JSX.
 
     const [searchText, setSearchText] = useStateCallback<string>(''); // 검색 텍스트
     const [selectKeyword, setSelectKeyword] = useStateCallback<categoryMenuTypes['menu'] | null | undefined>(null); // 선택 키워드
-    const [filter, setFilter] = useState<FilterState>({
+    const [filter, setFilter] = useObject<FilterState>({
         order: undefined,
         s_price: 0,
         e_price: 5000000,
         grade: undefined,
+        brand: undefined,
+        e_kilo: undefined,
+        e_year: undefined,
+        model: undefined,
+        s_kilo: undefined,
+        s_year: undefined,
     });
+
+    const isVehicle = selectKeyword === 'car' || selectKeyword === 'motorcycle' || params?.category === 'car' || params?.category === 'motorcycle';
 
     const {
         data: recentList,
@@ -93,7 +103,7 @@ export default function Search({route: {params}, navigation}: SearchProps): JSX.
         {
             list: [],
         },
-        'product_normal_list.php',
+        isVehicle ? 'product_auto_list.php' : 'product_normal_list.php',
         {
             mt_idx: user.mt_idx as string,
             search_txt: searchText,
@@ -364,15 +374,7 @@ export default function Search({route: {params}, navigation}: SearchProps): JSX.
             />
             {isFilter && (
                 <Modal visible={isFilter} transparent onRequestClose={offIsFilter}>
-                    {isFilter && (
-                        <ModalFilter
-                            onClose={offIsFilter}
-                            setFilter={setFilter}
-                            filter={filter}
-                            isVehicle={selectKeyword === 'car' || selectKeyword === 'motorcycle'}
-                            isCar={selectKeyword === 'car'}
-                        />
-                    )}
+                    {isFilter && <ModalFilter onClose={offIsFilter} setFilter={setFilter} filter={filter} isVehicle={isVehicle} isCar={selectKeyword === 'car'} />}
                 </Modal>
             )}
             {isKeyword && (
