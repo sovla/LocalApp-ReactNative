@@ -31,10 +31,10 @@ export interface FilterState {
     grade: undefined | string;
     brand?: string;
     model?: string;
-    s_year?: number;
-    e_year?: number;
-    s_kilo?: number;
-    e_kilo?: number;
+    s_year: number;
+    e_year: number;
+    s_kilo: number;
+    e_kilo: number;
 }
 
 export default function Search({route: {params}, navigation}: SearchProps): JSX.Element {
@@ -57,11 +57,11 @@ export default function Search({route: {params}, navigation}: SearchProps): JSX.
         e_price: 5000000,
         grade: undefined,
         brand: undefined,
-        e_kilo: undefined,
-        e_year: undefined,
+        e_kilo: 900000,
+        e_year: new Date().getFullYear(),
         model: undefined,
-        s_kilo: undefined,
-        s_year: undefined,
+        s_kilo: 0,
+        s_year: 1950,
     });
 
     const isVehicle = selectKeyword === 'car' || selectKeyword === 'motorcycle' || params?.category === 'car' || params?.category === 'motorcycle';
@@ -110,6 +110,7 @@ export default function Search({route: {params}, navigation}: SearchProps): JSX.
             ...filter,
             category: findCategory(selectKeyword),
             pt_fin: isSale ? 'N' : 'Y',
+            e_year: filter.e_year + 1,
         },
         {isFirst: false, isList, listField: 'list'},
     );

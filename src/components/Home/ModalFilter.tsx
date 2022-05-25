@@ -34,15 +34,15 @@ const ModalFilter: React.FC<ModalFilterProps> = ({onClose, setFilter, filter, is
     const [range, setRange] = useState([0, 5000000]);
 
     const [carFilter, setCarFilter, onChangeCarFilter] = useObject<{
-        brand: null | string;
-        model: null | string;
+        brand: undefined | string;
+        model: undefined | string;
         s_year: number;
         e_year: number;
         s_kilo: number;
         e_kilo: number;
     }>({
-        brand: null,
-        model: null,
+        brand: undefined,
+        model: undefined,
         s_year: 1950,
         e_year: new Date().getFullYear(),
         s_kilo: 0,
@@ -109,6 +109,14 @@ const ModalFilter: React.FC<ModalFilterProps> = ({onClose, setFilter, filter, is
         setRange([0, 5000000]);
         setSelectFilter('searchModalSortItem1');
         setProductState({newProduct: false, Reaper: false, used: false, forParts: false});
+        setCarFilter({
+            brand: undefined,
+            model: undefined,
+            s_year: 1950,
+            e_year: new Date().getFullYear(),
+            s_kilo: 0,
+            e_kilo: 900000,
+        });
     };
 
     useEffect(() => {
@@ -127,8 +135,8 @@ const ModalFilter: React.FC<ModalFilterProps> = ({onClose, setFilter, filter, is
         }
         setRange([filter?.s_price ?? 0, filter?.e_price ?? 0.5]);
         setCarFilter({
-            brand: filter?.brand ?? null,
-            model: filter?.model ?? null,
+            brand: filter?.brand,
+            model: filter?.model,
             e_kilo: filter?.e_kilo ?? 900000,
             e_year: filter?.e_year ?? new Date().getFullYear(),
             s_kilo: filter?.s_kilo ?? 0,
