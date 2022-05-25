@@ -1,25 +1,22 @@
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useCallback, useLayoutEffect} from 'react';
-
+import Theme from '@/assets/global/Theme';
+import {Button} from '@/Components/Global/button';
+import Line from '@/Components/Global/Line';
+import {useAppSelector} from '@/Hooks/CustomHook';
+import useAutoCompleteLocation from '@/Hooks/useAutoCompleteLocation';
+import useGeocoding, {getReverseGeoCoding} from '@/Hooks/useGeocoding';
+import useGeoLocation from '@/Hooks/useGeoLocation';
+import {LocationSettingProps} from '@/Types/Screen/Screen';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import LocationGrayBoxIcon from '@assets/image/location_gray_box.png';
 import SearchIcon from '@assets/image/search.png';
 import {GrayText, Text} from '@Components/Global/text';
-import {useAppSelector} from '@/Hooks/CustomHook';
-import {useTranslation} from 'react-i18next';
-import Theme from '@/assets/global/Theme';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-
-import {Button} from '@/Components/Global/button';
-import Line from '@/Components/Global/Line';
-import {LocationSettingProps} from '@/Types/Screen/Screen';
-import {TextInput} from 'react-native-gesture-handler';
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import useAutoCompleteLocation from '@/Hooks/useAutoCompleteLocation';
-import useGeoLocation from '@/Hooks/useGeoLocation';
-import useGeocoding from '@/Hooks/useGeocoding';
 import axios from 'axios';
+import React, {Fragment, useCallback, useLayoutEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {TextInput} from 'react-native-gesture-handler';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const LocationSetting = ({navigation}: LocationSettingProps) => {
     const {t} = useTranslation();
@@ -29,18 +26,52 @@ const LocationSetting = ({navigation}: LocationSettingProps) => {
     const {region, isLoading, setRegion} = useGeoLocation();
     const {city, detail, isLoading: isGeocodingLoading, location, locationName} = useGeocoding(region);
 
-    const onPressItem = useCallback(
-        async (placeId: string) => {
-            const res = await axios.get('https://maps.googleapis.com/maps/api/place/details/json', {
-                params: {
-                    place_id: placeId,
-                    sessiontoken: token,
-                    key: 'AIzaSyAbfTo68JkJSdEi9emDHyMfGl7vxjYD704',
-                },
-            });
+    const [isCurrentLocation, setIsCurrentLocation] = useState(false);
 
-            if (res.data?.status === 'OK') {
-                console.log(res.data.result.geometry.location);
+    const onPressItem = useCallback(
+        async (placeId?: string | undefined) => {
+            if (placeId) {
+                const res = await axios.get('https://maps.googleapis.com/maps/api/place/details/json', {
+                    params: {
+                        place_id: placeId,
+                        sessiontoken: token,
+                        key: 'AIzaSyAbfTo68JkJSdEi9emDHyMfGl7vxjYD704',
+                    },
+                });
+
+                if (res.data?.status === 'OK') {
+                    const {
+                        city: _city,
+                        detail: _detail,
+                        locationName: _locationName,
+                    } = await getReverseGeoCoding({
+                        latitude: res.data.result.geometry.location.lat,
+                        longitude: res.data.result.geometry.location.lng,
+                    });
+                    AsyncStorage.setItem(
+                        'location',
+                        JSON.stringify({
+                            lat: res.data.result.geometry.location.lat,
+                            lng: res.data.result.geometry.location.lng,
+                            city: _city,
+                            detail: _detail,
+                            locationName: _locationName,
+                        }),
+                    );
+                    onPressNext();
+                }
+            } else {
+                AsyncStorage.setItem(
+                    'location',
+                    JSON.stringify({
+                        lat: region.latitude,
+                        lng: region.longitude,
+                        city,
+                        detail,
+                        locationName,
+                    }),
+                );
+                onPressNext();
             }
         },
         [token],
@@ -64,6 +95,12 @@ const LocationSetting = ({navigation}: LocationSettingProps) => {
             }
         })();
     }, []);
+
+    useLayoutEffect(() => {
+        if (isCurrentLocation) {
+            setIsCurrentLocation(false);
+        }
+    }, [text]);
     return (
         <>
             <View style={styles.mainContainer}>
@@ -84,18 +121,40 @@ const LocationSetting = ({navigation}: LocationSettingProps) => {
                             placeholderTextColor={Theme.color.gray}
                         />
                     </View>
-                    <View style={styles.imageView}>
+                    <TouchableOpacity onPress={() => setIsCurrentLocation(true)} style={styles.imageView}>
                         <Image source={require('@assets/image/my_location.png')} resizeMode="contain" style={styles.image} />
                         <Text fontSize={`${12 * fontSize}`} medium>
                             {t('nowLocation')}
                         </Text>
-                    </View>
+                    </TouchableOpacity>
                     <Line isGray style={{marginTop: getHeightPixel(15)}} width={getPixel(288)} />
                     <Line height={getHeightPixel(5)} width={getPixel(288)} />
+                    {isCurrentLocation && (
+                        <>
+                            <TouchableOpacity style={{flexDirection: 'row', paddingVertical: getHeightPixel(14)}} onPress={() => onPressItem()}>
+                                <Image
+                                    source={LocationGrayBoxIcon}
+                                    style={{
+                                        width: getPixel(20),
+                                        height: getPixel(20),
+                                        marginRight: getPixel(12),
+                                        marginTop: getHeightPixel(3),
+                                    }}
+                                    resizeMode="contain"
+                                />
+                                <View>
+                                    <Text fontSize={`${16 * fontSize}`}>{city}</Text>
+                                    <GrayText fontSize={`${12 * fontSize}`}>{detail}</GrayText>
+                                </View>
+                            </TouchableOpacity>
+                            <Line isGray />
+                        </>
+                    )}
                     {Array.isArray(locationList) &&
-                        locationList.map((v: any) => {
+                        !isCurrentLocation &&
+                        locationList.map((v: any, index) => {
                             return (
-                                <>
+                                <Fragment key={index}>
                                     <TouchableOpacity style={{flexDirection: 'row', paddingVertical: getHeightPixel(14)}} onPress={() => onPressItem(v.place_id)}>
                                         <Image
                                             source={LocationGrayBoxIcon}
@@ -113,7 +172,7 @@ const LocationSetting = ({navigation}: LocationSettingProps) => {
                                         </View>
                                     </TouchableOpacity>
                                     <Line isGray />
-                                </>
+                                </Fragment>
                             );
                         })}
                     <View style={{flex: 1, justifyContent: 'flex-end'}}>

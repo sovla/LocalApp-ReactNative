@@ -1,4 +1,5 @@
-import {useState} from 'react';
+import Geolocation from '@react-native-community/geolocation';
+import {useLayoutEffect, useState} from 'react';
 import {StyleSheet} from 'react-native';
 
 const useGeoLocation = (
@@ -18,24 +19,24 @@ const useGeoLocation = (
             longitude: -46.6365761,
         },
     );
-    const [isLoading, setIsLoading] = useState(false);
-    // useLayoutEffect(() => {
-    //     if (!initValue)
-    //         Geolocation.getCurrentPosition(info => {
-    //             console.log(info, 'geoLocation');
-    //             setRegion({
-    //                 latitude: info.coords.latitude,
-    //                 longitude: info.coords.longitude,
-    //             });
-    //             setIsLoading(false);
-    //         });
+    const [isLoading, setIsLoading] = useState(true);
+    useLayoutEffect(() => {
+        if (!initValue)
+            Geolocation.getCurrentPosition(info => {
+                console.log(info, 'geoLocation');
+                setRegion({
+                    latitude: info.coords.latitude,
+                    longitude: info.coords.longitude,
+                });
+                setIsLoading(false);
+            });
 
-    //     if (initValue) {
-    //         setIsLoading(false);
-    //     }
+        if (initValue) {
+            setIsLoading(false);
+        }
 
-    //     return () => {};
-    // }, []);
+        return () => {};
+    }, []);
     return {isLoading, region, setRegion};
 };
 
