@@ -79,7 +79,7 @@ export default function Home({navigation}: HomeProps): JSX.Element {
     return (
         <View style={{flex: 1, backgroundColor: Theme.color.whiteGray_F6}}>
             <Header isChange={isChange} />
-            {isLoading && <Loading isAbsolute />}
+            {isLoading && !data && <Loading isAbsolute />}
             <FlatList
                 onScroll={onScroll}
                 onEndReachedThreshold={1}

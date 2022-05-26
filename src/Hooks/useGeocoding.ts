@@ -37,9 +37,9 @@ function useGeocoding(region: {latitude: number; longitude: number} | null) {
                     latlng: `${region.latitude},${region.longitude}`,
                     key: 'AIzaSyAbfTo68JkJSdEi9emDHyMfGl7vxjYD704',
                     language: geoLanguage(
-                        'br', //i18n.language
+                        'kr', //i18n.language
                     ),
-                    result_type: 'route|sublocality_level_1|administrative_area_level_2|administrative_area_level_1|country',
+                    result_type: '',
                 },
                 headers: {},
             };
@@ -58,7 +58,7 @@ function useGeocoding(region: {latitude: number; longitude: number} | null) {
         }
     }, [region]);
     useEffect(() => {
-        refDebounce(refTimer, 50, onSearchLocation);
+        refDebounce(refTimer, 100, onSearchLocation);
     }, [region]);
     useEffect(() => {}, [location]);
 
@@ -67,28 +67,60 @@ function useGeocoding(region: {latitude: number; longitude: number} | null) {
     let detail = '';
 
     if (location !== null && Array.isArray(location.results)) {
-        type locationDataKey = 'route' | 'sublocality_level_1' | 'administrative_area_level_2' | 'administrative_area_level_1' | 'country';
-        const findItemList: locationDataKey[] = ['route', 'sublocality_level_1', 'administrative_area_level_2', 'administrative_area_level_1', 'country'];
-        const locationData = {
+        interface locationDataKey {
+            route: string;
+            sublocality_level_1: string;
+            administrative_area_level_4: string;
+            administrative_area_level_3: string;
+            administrative_area_level_2: string;
+            administrative_area_level_1: string;
+            country: string;
+            locality: string;
+            sublocality: string;
+            sublocality_level_2: string;
+            sublocality_level_3: string;
+        }
+
+        const findItemList: Array<keyof locationDataKey> = [
+            'route',
+            'sublocality_level_1',
+            'administrative_area_level_4',
+            'administrative_area_level_3',
+            'administrative_area_level_2',
+            'administrative_area_level_1',
+            'country',
+            'locality',
+            'sublocality',
+            'sublocality_level_2',
+            'sublocality_level_3',
+        ];
+        const locationData: locationDataKey = {
             route: '',
             sublocality_level_1: '',
+            administrative_area_level_4: '',
+            administrative_area_level_3: '',
             administrative_area_level_2: '',
             administrative_area_level_1: '',
             country: '',
+            locality: '',
+            sublocality: '',
+            sublocality_level_2: '',
+            sublocality_level_3: '',
         };
 
         for (const result of location.results) {
             for (const address of result.address_components) {
                 for (const type of address.types) {
                     if (findItemList.find(v => type === v)) {
-                        locationData[type as locationDataKey] = type !== 'administrative_area_level_1' ? address.long_name + ' ' : address.short_name;
+                        locationData[type as keyof locationDataKey] = type !== 'administrative_area_level_1' ? address.long_name + ' ' : address.short_name;
                     }
                 }
             }
         }
         locationName = locationData.sublocality_level_1 + locationData.administrative_area_level_2 + locationData.administrative_area_level_1 + locationData.country;
         detail = locationData.route + locationData.sublocality_level_1 + locationData.administrative_area_level_2 + locationData.administrative_area_level_1;
-        city = locationData.sublocality_level_1;
+        city = locationData?.sublocality_level_1?.length > 0 ? locationData.sublocality_level_1 : locationData.locality;
+        console.log(locationData);
     }
 
     return {location, detail, city, locationName, isLoading};
@@ -104,9 +136,9 @@ export async function getReverseGeoCoding(region: {latitude: number; longitude: 
             latlng: `${region.latitude},${region.longitude}`,
             key: 'AIzaSyAbfTo68JkJSdEi9emDHyMfGl7vxjYD704',
             language: geoLanguage(
-                'br', //i18n.language
+                'kr', //i18n.language
             ),
-            result_type: 'route|sublocality_level_1|administrative_area_level_2|administrative_area_level_1|country',
+            result_type: 'street_address',
         },
         headers: {},
     };

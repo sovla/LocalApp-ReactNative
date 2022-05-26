@@ -40,21 +40,21 @@ const Map: React.FC<{
     useEffect(() => {
         ref.current?.showCallout();
     }, [markerInfo, lineLength]);
-    const timerCount = 1;
+    const timerCount = 7;
 
     const onRegionChange = useCallback(region => {
-        if (setRegion) setRegion(region);
+        // if (setRegion) setRegion(region);
         // return;
 
-        // if (debounceRef?.current) {
-        //     clearTimeout(debounceRef.current);
-        //     debounceRef.current = null;
-        //     debounceRef.current = setTimeout(() => {
-        //         setRegion(region);
-        //     }, timerCount);
-        // } else {
-        //     debounceRef.current = setTimeout(() => {}, timerCount);
-        // }
+        if (debounceRef?.current) {
+            clearTimeout(debounceRef.current);
+            debounceRef.current = null;
+            debounceRef.current = setTimeout(() => {
+                setRegion && setRegion(region);
+            }, timerCount);
+        } else {
+            debounceRef.current = setTimeout(() => {}, timerCount);
+        }
     }, []);
 
     const _onPressMarker = () => {
@@ -68,8 +68,8 @@ const Map: React.FC<{
         <MapView
             style={{flex: 1}}
             initialRegion={{...region, latitudeDelta: 0.003, longitudeDelta: 0.003}}
+            onRegionChangeComplete={region => onRegionChange(region)}
             onRegionChange={onRegionChange}
-            onPress={e => console.log(e.nativeEvent.coordinate)}
             zoomControlEnabled
             mapType="standard"
             showsUserLocation>
