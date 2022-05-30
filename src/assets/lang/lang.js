@@ -518,6 +518,10 @@ export const ko = {
         locationSetting: '위치 설정',
         addressPh: '주소를 검색해주세요',
         noneModalPhotoImage: '이미지를 선택해 주세요.',
+        businessBannerSave: '광고 배너 저장 완료',
+        businessSaveComplete: '비즈니스 프로필 변경 완료',
+        photoSave: '사진 저장 완료',
+        profileSaveComplete: '프로필 변경 완료',
     },
 };
 export const es = {

@@ -10,7 +10,7 @@ import useApi, {usePostSend} from '@/Hooks/useApi';
 import {BusinessBannerApi} from '@/Types/API/BusinessTypes';
 import {BusinessProfileBannerProps} from '@/Types/Screen/Screen';
 import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import {AlertButton} from '@/Util/Util';
+import {AlertButton, showToastMessage} from '@/Util/Util';
 import CameraGrayIcon from '@assets/image/camera_gray.png';
 import DeleteBlackIcon from '@assets/image/delete_black.png';
 import React, {useCallback, useLayoutEffect, useState} from 'react';
@@ -39,7 +39,7 @@ export default function BusinessProfileBanner({navigation}: BusinessProfileBanne
         mt_idx: user.mt_idx as string,
     });
 
-    const {PostAPI} = usePostSend('member_busi_banner_reg.php', {
+    const {PostAPI, isLoading: isSaveLoading} = usePostSend('member_busi_banner_reg.php', {
         mt_idx: user.mt_idx as string,
         busi_banner_del: deleteImage.join(','),
         busi_banner: imageArray,
@@ -51,6 +51,7 @@ export default function BusinessProfileBanner({navigation}: BusinessProfileBanne
             if (res?.result === 'false' && res.msg) {
                 AlertButton(res.msg);
             } else {
+                showToastMessage(t('businessBannerSave'));
                 navigation.goBack();
             }
         });
@@ -82,7 +83,7 @@ export default function BusinessProfileBanner({navigation}: BusinessProfileBanne
                 flex: 1,
             }}>
             <Header title={t('businessProfileBannerTitle')} />
-            {(isLoading || !imageArray) && <Loading isAbsolute />}
+            {(isLoading || !imageArray || isSaveLoading) && <Loading isAbsolute />}
             <View style={styles.bannerView}>
                 <Text
                     fontSize={`${20 * fontSize}`}

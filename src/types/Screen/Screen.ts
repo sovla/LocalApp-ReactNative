@@ -154,7 +154,14 @@ type Screen = {
         sell_type: '0' | '1';
     };
     BusinessProfileMenu: StackScreenProps<Screen> | undefined;
-    BusinessProfileSetting: BusinessTime | undefined;
+    BusinessProfileSetting:
+        | {
+              location: string;
+              pt_location_detail: string;
+              pt_lat: number;
+              pt_lng: number;
+          }
+        | undefined;
     BusinessProfileBanner: StackScreenProps<Screen> | undefined;
     BusinessSignUp: StackScreenProps<Screen> | undefined;
     BusinessSignUpForm:
@@ -239,7 +246,7 @@ type Screen = {
     ProductTier: StackScreenProps<Screen> | undefined;
     ProductLocation:
         | {
-              navigate: 'BusinessSignUpForm';
+              navigate: 'BusinessSignUpForm' | 'BusinessProfileSetting';
           }
         | undefined;
     Setting: StackScreenProps<Screen> | undefined;

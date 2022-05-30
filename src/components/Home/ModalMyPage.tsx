@@ -172,8 +172,7 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
                     <ImageWithView image={ServiceCenterIcon} content={t('modalMyPageServiceCenter')} onPress={onPressServiceCenter} />
                     <View style={styles.touchBlockView}></View>
                 </View>
-                <TouchableOpacity
-                    onPress={onPressLogout}
+                <View
                     style={[
                         styles.loginView,
                         Dimensions.get('window').height > 800
@@ -184,17 +183,19 @@ const ModalMyPage: React.FC<ModalMyPageProps> = ({onClose}) => {
                                   height: getHeightPixel(83),
                               },
                     ]}>
-                    <Image
-                        source={isLogin ? require('@assets/image/logout.png') : require('@assets/image/login.png')}
-                        style={{
-                            width: getPixel(20),
-                            height: getPixel(20),
-                        }}
-                    />
-                    <Text fontSize={`${18 * fontSize}`} bold color={Theme.color.blue_3D} style={{marginLeft: getPixel(10)}}>
-                        {isLogin ? t('modalMyPageLogout') : t('modalMyPageLogin')}
-                    </Text>
-                </TouchableOpacity>
+                    <TouchableOpacity onPress={onPressLogout} style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <Image
+                            source={isLogin ? require('@assets/image/logout.png') : require('@assets/image/login.png')}
+                            style={{
+                                width: getPixel(20),
+                                height: getPixel(20),
+                            }}
+                        />
+                        <Text fontSize={`${18 * fontSize}`} bold color={Theme.color.blue_3D} style={{marginLeft: getPixel(10)}}>
+                            {isLogin ? t('modalMyPageLogout') : t('modalMyPageLogin')}
+                        </Text>
+                    </TouchableOpacity>
+                </View>
             </SlideRightModal>
         </View>
     );

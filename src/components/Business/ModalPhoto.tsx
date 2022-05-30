@@ -15,20 +15,20 @@ export default function ModalPhoto({onClose, count = 1, returnFn}: ModalPhotoPro
     const {t} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
     const [imageArray, setImageArray] = useState<any>([]);
-    const [number, setNumber] = useState<number>(1000);
+    const [number, setNumber] = useState<number>(100);
     const [selectNumber, setSelectNumber] = useState<number[]>([]);
     const getPhotos = () => {
         CameraRoll.getPhotos({
             mimeTypes: ['image/jpeg'], // 타입지정
-            first: number, // 1000 여개 사진을 가져온다
+            first: number, // 500 여개 사진을 가져온다
         }).then(value => {
             setImageArray(value.edges);
             // 이미지 배열에 넣고
 
             setNumber((prev: number) => {
-                // 다음 페이지가 있으면 1000 페이지더
+                // 다음 페이지가 있으면 500 페이지더
                 if (value.page_info.has_next_page) {
-                    return prev + 1000;
+                    return prev + 100;
                 } else {
                     return prev; // 없으면 그대로
                 }
@@ -59,15 +59,12 @@ export default function ModalPhoto({onClose, count = 1, returnFn}: ModalPhotoPro
         if (returnFn) returnFn(_imageArray);
     }, [selectNumber, imageArray]);
 
+    const set = new Set();
+    selectNumber.forEach(v => set.add(v));
+
     const _renderItem = useCallback(
         ({item, index}) => {
-            const select = selectNumber.findIndex(v => {
-                if (v > index + 1 || v < index + 1) {
-                    return null;
-                } else {
-                    return v;
-                }
-            });
+            const select = set.has(index + 1) ? selectNumber.findIndex(v => v === index + 1) : -1;
 
             const onPress =
                 select === -1
@@ -116,10 +113,10 @@ export default function ModalPhoto({onClose, count = 1, returnFn}: ModalPhotoPro
                 </TouchableOpacity>
             );
         },
-        [selectNumber, imageArray],
+        [selectNumber, imageArray.length],
     );
 
-    const keyExtractor = useCallback((item, index) => index.toString(), []);
+    const keyExtractor = useCallback((item, index) => item?.node?.timestamp?.toString() ?? index.toString(), []);
 
     useLayoutEffect(() => {
         getPhotos();
@@ -152,7 +149,7 @@ export default function ModalPhoto({onClose, count = 1, returnFn}: ModalPhotoPro
                     onEndReached={() => {
                         getPhotos();
                     }}
-                    onEndReachedThreshold={0.3}
+                    onEndReachedThreshold={1}
                     renderItem={_renderItem}
                     maxToRenderPerBatch={25}
                     initialNumToRender={25}

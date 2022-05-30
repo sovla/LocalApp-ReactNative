@@ -1,29 +1,27 @@
-import {View, StyleSheet, Image, TouchableOpacity, TextStyle, TextInput} from 'react-native';
-import React, {useCallback, useRef, useState} from 'react';
-import {useTranslation} from 'react-i18next';
-import {useAppDispatch, useAppSelector} from '@/Hooks/CustomHook';
-import Header from '@/Components/Profile/Header';
-import {ProfileBackground} from './ProfileHome';
-import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import {changeBirthDate, getHitSlop, showToastMessage} from '@/Util/Util';
-import {GrayText, Text, WhiteText} from '@/Components/Global/text';
-import CameraWhiteIcon from '@assets/image/camera_white.png';
-import CopyIcon from '@assets/image/copy.png';
-import Line from '@/Components/Global/Line';
 import Theme from '@/assets/global/Theme';
+import ModalPhoto from '@/Components/Business/ModalPhoto';
 import {Toggle} from '@/Components/Global/button';
-import {ProfileUpdateProps} from '@/Types/Screen/Screen';
-import AutoHeightImage from 'react-native-auto-height-image';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import ArrowDownIcon from '@assets/image/arrow_down.png';
+import Line from '@/Components/Global/Line';
+import Loading from '@/Components/Global/Loading';
+import {GrayText, Text, WhiteText} from '@/Components/Global/text';
+import Header from '@/Components/Profile/Header';
 import SexPicker from '@/Components/Profile/SexPicker';
-import {Picker} from '@react-native-picker/picker';
-import {useEffect} from 'react';
+import {useAppDispatch, useAppSelector} from '@/Hooks/CustomHook';
 import {usePostSend} from '@/Hooks/useApi';
 import {changeOptionalUser} from '@/Store/userState';
-import Loading from '@/Components/Global/Loading';
-import ModalPhoto from '@/Components/Business/ModalPhoto';
+import {ProfileUpdateProps} from '@/Types/Screen/Screen';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
+import {changeBirthDate, getHitSlop, showToastMessage} from '@/Util/Util';
+import ArrowDownIcon from '@assets/image/arrow_down.png';
+import CameraWhiteIcon from '@assets/image/camera_white.png';
+import CopyIcon from '@assets/image/copy.png';
 import Clipboard from '@react-native-clipboard/clipboard';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {Image, StyleSheet, TextInput, TextStyle, TouchableOpacity, View} from 'react-native';
+import AutoHeightImage from 'react-native-auto-height-image';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {ProfileBackground} from './ProfileHome';
 
 interface localUserInfo {
     mt_name: string;
@@ -87,6 +85,7 @@ export default function ProfileUpdate({navigation, route: {params}}: ProfileUpda
                         mt_profile: image ? (image?.path as string) : user.mt_profile,
                     }),
                 );
+                showToastMessage(t('profileSaveComplete'));
                 navigation.navigate('ProfileDetail');
             }
         });

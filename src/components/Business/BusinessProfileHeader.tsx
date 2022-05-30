@@ -17,8 +17,8 @@ import AutoHeightImage from 'react-native-auto-height-image';
 import ModalPhoto from './ModalPhoto';
 
 const BusinessProfileHeader: React.FC<{
-    title?: string;
-    isUpdate?: boolean;
+    title?: string; // 헤더 명
+    isUpdate?: boolean; //
 }> = ({title, isUpdate = true}) => {
     const {t} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
@@ -48,6 +48,7 @@ const BusinessProfileHeader: React.FC<{
             } else {
                 dispatch(changeProfileImage(image[0].path));
                 setImage(null);
+                showToastMessage(t('photoSave'));
             }
         });
         setIsModalPhoto(false);

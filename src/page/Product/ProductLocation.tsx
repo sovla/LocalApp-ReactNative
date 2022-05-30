@@ -1,21 +1,18 @@
-import {FlatList, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
-import React, {useEffect} from 'react';
-
-import {getHeightPixel, getPixel} from '@/Util/pixelChange';
-import {GrayText, Text} from '@Components/Global/text';
-import {useAppSelector} from '@/Hooks/CustomHook';
-import {useTranslation} from 'react-i18next';
 import Theme from '@/assets/global/Theme';
-import AutoHeightImage from 'react-native-auto-height-image';
-
-import Header from '@/Components/LoginSignUp/Header';
 import Line from '@/Components/Global/Line';
+import Loading from '@/Components/Global/Loading';
+import Header from '@/Components/LoginSignUp/Header';
+import {useAppSelector} from '@/Hooks/CustomHook';
+import {ProductLocationProps} from '@/Types/Screen/Screen';
+import {getHeightPixel, getPixel} from '@/Util/pixelChange';
 import LocationGrayIcon from '@assets/image/location_gray.png';
 import MyLocationIcon from '@assets/image/my_location.png';
-import {useCallback} from 'react';
+import {GrayText, Text} from '@Components/Global/text';
 import axios from 'axios';
-import {useState} from 'react';
-import {ProductLocationProps} from '@/Types/Screen/Screen';
+import React, {useCallback, useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {FlatList, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
+import AutoHeightImage from 'react-native-auto-height-image';
 
 const ProductLocation = ({navigation, route: {params}}: ProductLocationProps) => {
     const {t} = useTranslation();
@@ -29,6 +26,7 @@ const ProductLocation = ({navigation, route: {params}}: ProductLocationProps) =>
 
     const [locationList, setLocationList] = useState<any>([]);
     const [text, setText] = useState('Bom retiro');
+    const [isSearchLoading, setIsSearchLoading] = useState(false);
 
     const onSubmit = useCallback(() => {
         const config: any = {
@@ -51,7 +49,11 @@ const ProductLocation = ({navigation, route: {params}}: ProductLocationProps) =>
     useEffect(() => {
         onSubmit();
     }, [text]);
+    useEffect(() => {
+        return () => setIsSearchLoading(false);
+    }, []);
     const onPress = useCallback(main_text => {
+        setIsSearchLoading(true);
         const config: any = {
             method: 'get',
             url: `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${main_text}&inputtype=textquery&locationbias=circle%3A2000%4047.6918452%2C-122.2226413&fields=formatted_address%2Cname%2Crating%2Copening_hours%2Cgeometry&key=AIzaSyAbfTo68JkJSdEi9emDHyMfGl7vxjYD704&sessionToken=${token}`,
@@ -63,7 +65,7 @@ const ProductLocation = ({navigation, route: {params}}: ProductLocationProps) =>
                 if (response.data.status === 'OK') {
                     const item = response.data.candidates[0];
 
-                    if (params?.navigate === 'BusinessSignUpForm') {
+                    if (params?.navigate === 'BusinessSignUpForm' || params?.navigate === 'BusinessProfileSetting') {
                         navigation.navigate(params.navigate, {
                             location: item?.name as string,
                             pt_location_detail: item?.formatted_address as string,
@@ -82,12 +84,16 @@ const ProductLocation = ({navigation, route: {params}}: ProductLocationProps) =>
             })
             .catch(function (error) {
                 console.log(error);
+            })
+            .finally(() => {
+                setIsSearchLoading(false);
             });
     }, []);
 
     return (
         <View>
-            <Header title={t('tradingLocationUpdate')} />
+            {isSearchLoading && <Loading isAbsolute backgroundColor="#0003" />}
+            <Header title={params?.navigate ? t('businessProfileSettingShopAddress') : t('tradingLocationUpdate')} />
             <FlatList
                 data={locationList}
                 ListHeaderComponent={
