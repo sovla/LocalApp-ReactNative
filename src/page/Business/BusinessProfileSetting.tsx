@@ -19,7 +19,6 @@ import PhoneBlueIcon from '@assets/image/phone_blue.png';
 import WebIcon from '@assets/image/web.png';
 import WhatsappBlueIcon from '@assets/image/whatsapp_blue.png';
 import {useIsFocused} from '@react-navigation/native';
-import {StackScreenProps} from '@react-navigation/stack';
 import {BusinessProfileInfoAPi, BusinessSignUpApi} from '@Types/API/BusinessTypes';
 import {useFormik} from 'formik';
 import React, {useCallback, useEffect, useState} from 'react';
@@ -28,11 +27,11 @@ import {StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
 import AutoHeightImage from 'react-native-auto-height-image';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useDispatch} from 'react-redux';
-import Screen from 'Types/Screen/Screen';
+import {BusinessProfileSettingProps} from 'Types/Screen/Screen';
 import {BetweenText} from '../Profile/ProfileDetail';
 import {ProfileBackground} from '../Profile/ProfileHome';
 
-export default function BusinessProfileSetting({navigation, route: {params}}: StackScreenProps<Screen, 'BusinessProfileSetting'>) {
+export default function BusinessProfileSetting({navigation, route: {params}}: BusinessProfileSettingProps) {
     const {t} = useTranslation();
     const fontSize = useAppSelector(state => state.fontSize.value);
     const isFocused = useIsFocused();

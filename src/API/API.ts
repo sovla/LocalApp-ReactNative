@@ -27,7 +27,7 @@ const formFormatter = (data: any, isIndex = false) => {
 };
 
 export const API = axios.create({
-    baseURL: baseURL,
+    baseURL,
     timeout: 3000,
     timeoutErrorMessage: '시간초과',
     headers: {
@@ -50,11 +50,11 @@ export const API = axios.create({
                 lang: i18next.language,
             };
         }
-        console.log('formData :::', cloneData);
+        LOGON && console.log('formData :::', cloneData);
         if (typeof data?.imageField === 'string') {
             // 이미지 필드에 문자열 하나만 있는 경우
             const field = data.imageField; // 해당 필드명
-            console.log('field:::', field);
+            LOGON && console.log('field:::', field);
 
             let cloneData = Object.assign({}, data);
             //  객체복사
@@ -116,7 +116,7 @@ export const API = axios.create({
                       debug_jwt: JWT_TOKEN,
                   },
         );
-        if (LOGON) console.log('formData result :::\n', result);
+        LOGON && console.log('formData result :::\n', result);
         return result;
     },
     transformResponse: (data?: string) => {
@@ -130,10 +130,10 @@ export const API = axios.create({
             if (jsonParseData.result === 'true') {
                 // const jwtDecodeData: any = jwtDecode(jsonParseData?.data);
 
-                if (LOGON) console.log('API Result Success :::\n', jsonParseData);
+                LOGON && console.log('API Result Success :::\n', jsonParseData);
                 return jsonParseData;
             } else {
-                if (LOGON) console.log('API Result Failed :::', jsonParseData);
+                LOGON && console.log('API Result Failed :::', jsonParseData);
                 return jsonParseData;
             }
         } catch (error) {
@@ -158,7 +158,7 @@ export const API = axios.create({
 //   //  data = args , field 이미지가 들어갈 이름
 
 //   try {
-//     if (LOGON) console.log('data :::', data);
+//    LOGON && console.log('data :::', data);
 
 //     let cloneData = Object.assign({}, data);
 //     //  객체복사
@@ -233,14 +233,14 @@ export const API = axios.create({
 //           secretKey: SECRETKEY,
 //           ...imageResultObject,
 //         });
-//     if (LOGON) console.log('formData:::', formData);
+//    LOGON && console.log('formData:::', formData);
 //     const response = await axios.post(`${baseURL}${url}`, formData, {
 //       'Content-Type': 'application/x-www-form-urlencoded',
 //     });
-//     if (LOGON) console.log('response:::', response);
+//    LOGON && console.log('response:::', response);
 
 //     return response;
 //   } catch (error) {
-//     if (LOGON) console.log('API Error :::', error);
+//    LOGON && console.log('API Error :::', error);
 //   }
 // };

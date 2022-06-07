@@ -2,6 +2,7 @@ import {API} from '@/API/API';
 import {useIsFocused} from '@react-navigation/native';
 import {AxiosResponse} from 'axios';
 import {useCallback, useEffect, useState} from 'react';
+import {unstable_batchedUpdates} from 'react-native';
 interface optionTypes {
     isFirst?: boolean; // isFocused 로 실행 여부
     focusRetry?: boolean; // 해당 페이지에 접근할때마다 실행여부
@@ -19,19 +20,21 @@ function useApi<T, D>(defaultValue: T, apiPath: string, axiosData?: D, option?: 
         listField: 'list',
         ...option,
     };
-    const [data, setData] = useState<T>(defaultValue);
-    const [isLoading, setIsLoading] = useState(defaultOption.firstLoading);
-    const [isError, setIsError] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
-    const [isComplete, setisComplete] = useState(false);
-    const [page, setPage] = useState(1);
-    const [totalPage, setTotalPage] = useState(1);
+    const [data, setData] = useState<T>(defaultValue); // 데이터
+    const [isLoading, setIsLoading] = useState(defaultOption.firstLoading); // 로딩
+    const [isError, setIsError] = useState(false); //에러
+    const [errorMessage, setErrorMessage] = useState(''); // 에러메시지
+    const [isComplete, setisComplete] = useState(false); // 처음 성공 여부
+    const [page, setPage] = useState(1); // 페이지
+    const [totalPage, setTotalPage] = useState(1); // 토탈페이지
 
     const isFocused = useIsFocused();
 
     const getData = async (_data?: any) => {
         if (defaultOption.isList && page > totalPage) {
+            // isList < 배열 형식으로 데이터가 들어올때 페이지가 넘기면
             if (_data?.page) {
+                // 근데 getData에 page 값이 따로 존재하면 return 안시키기
             } else {
                 return;
             }
@@ -51,10 +54,6 @@ function useApi<T, D>(defaultValue: T, apiPath: string, axiosData?: D, option?: 
             >
         >(apiPath, {page: page, ...axiosData, ..._data})
             .then(result => {
-                // console.log(
-                //   'first if',
-                //   data !== defaultValue && defaultOption.isList && page !== 1,
-                // );
                 if (result.data?.result === 'true') {
                     if (data !== defaultValue && defaultOption.isList && page !== 1 && (_data?.page ? _data?.page !== 1 : true)) {
                         // 리스트 인경우
@@ -108,14 +107,16 @@ function useApi<T, D>(defaultValue: T, apiPath: string, axiosData?: D, option?: 
         }
     }, [isFocused]);
 
-    const reset = async () => {
-        await setPage(1);
-        await setTotalPage(1);
-        await setisComplete(false);
-        await setData(defaultValue);
-        await setErrorMessage('');
-        await setIsLoading(false);
-        await setIsError(false);
+    const reset = () => {
+        unstable_batchedUpdates(() => {
+            setPage(1);
+            setTotalPage(1);
+            setisComplete(false);
+            setData(defaultValue);
+            setErrorMessage('');
+            setIsLoading(false);
+            setIsError(false);
+        });
     };
 
     return {
@@ -132,7 +133,8 @@ function useApi<T, D>(defaultValue: T, apiPath: string, axiosData?: D, option?: 
 
 export default useApi;
 
-export const usePostSend = <D, T extends any>(apiPath: string, apiData: NonNullable<D>) => {
+export const usePostSend = <D, T = any>(apiPath: string, apiData: NonNullable<D>) => {
+    // useApi랑 차이
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');

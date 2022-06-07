@@ -7,7 +7,7 @@ import {AlertButton} from '@/Util/Util';
 import {Text, WhiteText} from '@Components/Global/text';
 import Photo from '@Components/LoginSignUp/Photo';
 import CameraRoll from '@react-native-community/cameraroll';
-import React, {useCallback, useLayoutEffect, useState} from 'react';
+import React, {useCallback, useLayoutEffect, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {FlatList, Image, Modal, StyleSheet, TouchableOpacity, View} from 'react-native';
 
@@ -59,8 +59,11 @@ export default function ModalPhoto({onClose, count = 1, returnFn}: ModalPhotoPro
         if (returnFn) returnFn(_imageArray);
     }, [selectNumber, imageArray]);
 
-    const set = new Set();
-    selectNumber.forEach(v => set.add(v));
+    const set = useMemo(() => {
+        const set = new Set();
+        selectNumber.forEach(v => set.add(v));
+        return set;
+    }, [selectNumber]);
 
     const _renderItem = useCallback(
         ({item, index}) => {
