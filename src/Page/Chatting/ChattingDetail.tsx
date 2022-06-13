@@ -75,6 +75,11 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
     const [isChatLast, setIsChatLast] = useState(false);
     const [isChatListFirst, setIsChatListFirst] = useState(true);
 
+    const [isSearch, setIsSearch] = useState(false);
+
+    const [searchList, setSearchList] = useState<any[]>([]);
+    const [searchCount, setSearchCount] = useState<number>(0);
+
     const flatListRef = useRef<FlatList>(null);
     const scrollPosition = useRef({
         position: 0,
@@ -149,7 +154,7 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
         navigation.navigate('ChattingLocation');
     }, []);
     const onPressSearch = useCallback(() => {
-        navigation.navigate('Search');
+        setIsSearch(true);
     }, []);
     const onPressShopIcon = useCallback(() => {
         if (roomInfo)
@@ -361,6 +366,46 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
         },
         [user],
     );
+
+    const onSearchHandle = (text: string) => {
+        const filterText = chattingList?.list.filter(v => {
+            if (v.msg_idx && v.msg_type === 'text') {
+                return v.content.includes(text);
+            }
+        });
+
+        if (filterText?.length) {
+            setSearchList(filterText);
+            flatListRef.current?.scrollToItem({
+                animated: true,
+                item: filterText[0],
+                viewPosition: 1,
+            });
+            setSearchCount(1);
+        }
+    };
+
+    const onPressSearchUp = () => {
+        if (searchList.length > searchCount) {
+            flatListRef.current?.scrollToItem({
+                animated: true,
+                item: searchList[searchCount + 1],
+                viewPosition: 1,
+            });
+            setSearchCount(prev => prev + 1);
+        }
+    };
+    const onPressSearchDown = () => {
+        if (searchCount > 0) {
+            flatListRef.current?.scrollToItem({
+                animated: true,
+                item: searchList[searchCount - 1],
+                viewPosition: 1,
+            });
+            setSearchCount(prev => prev - 1);
+        }
+    };
+
     const _renderItem = useCallback(
         ({item}) => {
             if (item?.msg_type) {
@@ -503,6 +548,10 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
             setIsBlock(roomInfo.other_blind_check === 'Y'); // 상대방이 날 차단 한 경우 메세지 전송 안됌
         }
     }, [roomInfo]);
+    useLayoutEffect(() => {
+        setSearchList([]);
+        setSearchCount(0);
+    }, [isSearch]);
 
     const isChatDisable = !Channel || !roomInfo || roomInfo?.other_blind_check === 'Y';
 
@@ -536,17 +585,86 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                         </TouchableOpacity>
                         <WhiteText bold fontSize={`${16 * fontSize}`} style={styles.marginLeft}></WhiteText>
                     </View>
-                    <View style={styles.rowCenter}>
-                        <TouchableOpacity onPress={onPressShopIcon} hitSlop={getHitSlop(5)} style={styles.marginRight}>
-                            <AutoHeightImage width={getPixel(18)} source={StoreWhiteIcon} />
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={onPressSearch} hitSlop={getHitSlop(5)} style={styles.marginRight}>
-                            <AutoHeightImage width={getPixel(20)} source={SearchWhiteIcon} />
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={onIsSetting} hitSlop={getHitSlop(5)}>
-                            <AutoHeightImage width={getPixel(20)} source={MoreWhiteIcon} />
-                        </TouchableOpacity>
-                    </View>
+                    {!isSearch && (
+                        <View style={styles.rowCenter}>
+                            <TouchableOpacity onPress={onPressShopIcon} hitSlop={getHitSlop(5)} style={styles.marginRight}>
+                                <AutoHeightImage width={getPixel(18)} source={StoreWhiteIcon} />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={onPressSearch} hitSlop={getHitSlop(5)} style={styles.marginRight}>
+                                <AutoHeightImage width={getPixel(20)} source={SearchWhiteIcon} />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={onIsSetting} hitSlop={getHitSlop(5)}>
+                                <AutoHeightImage width={getPixel(20)} source={MoreWhiteIcon} />
+                            </TouchableOpacity>
+                        </View>
+                    )}
+                    {isSearch && (
+                        <View style={styles.rowCenter}>
+                            <TouchableOpacity
+                                style={{
+                                    position: 'absolute',
+                                    left: getPixel(7),
+                                    top: getHeightPixel(5),
+                                    zIndex: 100,
+                                }}>
+                                <AutoHeightImage width={getPixel(16)} source={require('@assets/image/search_black.png')} />
+                            </TouchableOpacity>
+                            <TextInput
+                                style={{
+                                    width: getPixel(294),
+                                    minHeight: 31,
+                                    height: getHeightPixel(31),
+                                    backgroundColor: Theme.color.white,
+                                    borderRadius: 30,
+                                    paddingLeft: getPixel(25),
+                                }}
+                                onEndEditing={event => {
+                                    onSearchHandle(event.nativeEvent.text);
+                                }}
+                            />
+                            {searchList.length > 0 && (
+                                <>
+                                    <View
+                                        style={{
+                                            zIndex: 100,
+                                            position: 'absolute',
+                                            right: 25,
+                                            top: 15,
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                        }}>
+                                        <Text>
+                                            {searchCount}/{searchList.length}
+                                        </Text>
+                                        <TouchableOpacity
+                                            onPress={onPressSearchUp}
+                                            style={{
+                                                marginRight: getPixel(5),
+                                            }}>
+                                            <Image
+                                                style={{
+                                                    width: getPixel(20),
+                                                    height: getPixel(20),
+                                                }}
+                                                source={require('@assets/image/arrow_up_box.png')}
+                                                resizeMode="contain"
+                                            />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={onPressSearchDown}>
+                                            <Image
+                                                style={{
+                                                    width: getPixel(20),
+                                                    height: getPixel(20),
+                                                }}
+                                                source={require('@assets/image/arrow_down_box.png')}
+                                                resizeMode="contain"
+                                            />
+                                        </TouchableOpacity>
+                                    </View>
+                                </>
+                            )}
+                        </View>
+                    )}
                 </ImageBackground>
             </View>
             <View style={styles.productHeaderView}>
