@@ -375,34 +375,40 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
         });
 
         if (filterText?.length) {
-            setSearchList(filterText);
-            flatListRef.current?.scrollToItem({
-                animated: true,
-                item: filterText[0],
-                viewPosition: 1,
-            });
-            setSearchCount(1);
+            try {
+                setSearchList(filterText);
+                flatListRef.current?.scrollToItem({
+                    animated: true,
+                    item: filterText[0],
+                    viewPosition: 1,
+                });
+                setSearchCount(0);
+            } catch (error) {}
         }
     };
 
     const onPressSearchUp = () => {
-        if (searchList.length > searchCount) {
-            flatListRef.current?.scrollToItem({
-                animated: true,
-                item: searchList[searchCount + 1],
-                viewPosition: 1,
-            });
-            setSearchCount(prev => prev + 1);
+        if (searchList.length > searchCount + 1) {
+            try {
+                flatListRef.current?.scrollToItem({
+                    animated: true,
+                    item: searchList[searchCount + 1],
+                    viewPosition: 1,
+                });
+                setSearchCount(prev => prev + 1);
+            } catch (error) {}
         }
     };
     const onPressSearchDown = () => {
         if (searchCount > 0) {
-            flatListRef.current?.scrollToItem({
-                animated: true,
-                item: searchList[searchCount - 1],
-                viewPosition: 1,
-            });
-            setSearchCount(prev => prev - 1);
+            try {
+                flatListRef.current?.scrollToItem({
+                    animated: true,
+                    item: searchList[searchCount - 1],
+                    viewPosition: 1,
+                });
+                setSearchCount(prev => prev - 1);
+            } catch (error) {}
         }
     };
 
@@ -629,12 +635,14 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                                             zIndex: 100,
                                             position: 'absolute',
                                             right: 25,
-                                            top: 15,
+                                            top: 0,
+                                            height: getHeightPixel(31),
+                                            minHeight: 31,
                                             flexDirection: 'row',
                                             alignItems: 'center',
                                         }}>
-                                        <Text>
-                                            {searchCount}/{searchList.length}
+                                        <Text fontSize={`${fontSize * 16}px`}>
+                                            {searchCount + 1}/{searchList.length}
                                         </Text>
                                         <TouchableOpacity
                                             onPress={onPressSearchUp}
@@ -643,8 +651,8 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                                             }}>
                                             <Image
                                                 style={{
-                                                    width: getPixel(20),
-                                                    height: getPixel(20),
+                                                    width: getPixel(15),
+                                                    height: getPixel(15),
                                                 }}
                                                 source={require('@assets/image/arrow_up_box.png')}
                                                 resizeMode="contain"
@@ -653,8 +661,8 @@ export default function ChattingDetail({navigation, route: {params}}: ChattingDe
                                         <TouchableOpacity onPress={onPressSearchDown}>
                                             <Image
                                                 style={{
-                                                    width: getPixel(20),
-                                                    height: getPixel(20),
+                                                    width: getPixel(15),
+                                                    height: getPixel(15),
                                                 }}
                                                 source={require('@assets/image/arrow_down_box.png')}
                                                 resizeMode="contain"
